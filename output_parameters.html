@@ -1,0 +1,494 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>TiRiFiC - Output Parameters</title>
+<!-- define european ISO charset -->
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<!-- favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<!-- include style -->
+<link rel="stylesheet" type="text/css" href="layout.css">
+<!--[if IE]>
+<link rel="stylesheet" type="text/css" href="layout_ie.css">
+<![endif]-->
+</head>
+  <body>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  HEADER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="hdr">
+<div class="t">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="tr">
+<div id="lh-col-white">
+<!-- <h1 class="hdrle"> -->
+<img class="tir" src="tirlogo.gif" alt="TiRiFiC logo"/> 
+<!-- </h1> -->
+</div>
+<div id="rh-col-white">
+<h1 class="hdr"> Output Parameters </h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  LINKS   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="lh-col">
+<div class="tli">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trli">
+<a class="button" href="index.html">HOME</a>
+<a class="button" href="input_and_syntax.html">Input and Syntax</a>
+<a class="button" href="modelling_strategy.html">Modelling Strategy</a>
+<a class="button" href="model_geometry.html">Model Geometry</a>
+<!-- <a class="button" href="model_parameters.html">Model Parameters</a> -->
+<a class="button" href="model_fitting.html">Model Fitting</a>
+<!-- <a class="button" href="fitting_parameters.html">Fitting Parameters</a> -->
+<a class="button" href="output.html">Output</a>
+<!-- <a class="button" href="output_parameters.html">Output Parameters</a> -->
+<a class="button" href="parameter_index.html">Parameter Index</a>
+<a class="button" href="examples.html">Examples</a>
+<a class="button" href="gui.html">GUI</a>
+<a class="button" href="bugs_and_development.html">Bugs and Development</a>
+<a class="button" href="download_and_installation.html">Download and Installation</a>
+<a class="button" href="contact_and_feedback.html">Contact and Feedback</a>
+<a class="button" href="credits.html">Credits</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********   BODY   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="rh-col">
+<div class="tbody">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trbo">
+<div id="team">
+<p class="paremph">
+      The goal of <span id="nam"
+      style="font-variant:small-caps">wnshs</span> is to pave the path
+      towards the scientific exploit of a shallow all-sky
+      H<span style="font-size:0.5em;">&nbsp;</span><span style="font-family:serif;font-variant:small-caps">i</span> survey, its domain being the Northern
+      hemisphere, which is accessible through the <a target="_blank"
+      href="http://www.astron.nl/general/apertif/apertif">Apertif</a>
+      PAF system mounted at the <a target="_blank"
+      href="http://www.astron.nl/radio-observatory/astronomers/wsrt-astronomers">WSRT</a>.
+</p>
+<h3>Team organisation</h3>
+</div>
+<p class="par">
+      Being the Northern shallow H<span style="font-size:0.5em;">&nbsp;</span><span style="font-family:serif;font-variant:small-caps">i</span> survey
+      with a wide field radio telescope, <span id="nam"
+      style="font-variant:small-caps">wnshs</span> will work closely
+      together with it complementary Southern survey <a target="_blank"
+      href="http://www.atnf.csiro.au/research/WALLABY/"><span id="nam"
+      style="font-variant:small-caps">wallaby</span></a>. Many of the
+      science drivers are identical, and <span id="nam"
+      style="font-variant:small-caps">wnshs</span> and <a
+      target="_blank"
+      href="http://www.atnf.csiro.au/research/WALLABY/"><span id="nam"
+      style="font-variant:small-caps">wallaby</span></a> will make a
+      maximum use of the obvious synergies to make both surveys an
+      outstanding success and to finally provide one
+      all-sky H<span style="font-size:0.5em;">&nbsp;</span><span style="font-family:serif;font-variant:small-caps">i</span> survey accessible to the
+      public.
+</p>
+<p class="par">
+      To provide this accessibility involves an effort on various
+      levels. Together with the <a target="_blank"
+      href="http://www.astron.nl/general/apertif/apertif">Apertif</a>
+      team, <span id="nam"
+      style="font-variant:small-caps">wnshs</span> will be actively
+      engaged in the production of high-quality low-level data
+      products (i.e. data cubes) and higher level data products
+      (catalogues, moment maps, ...). <span id="nam"
+      style="font-variant:small-caps">wnshs</span> aims at defining
+      and exploring the science the survey will make possible and at
+      delivering the necessary scientific data analysis software.
+</p>
+<p class="par">
+      To provide a physical proximity to <a target="_blank"
+      href="http://www.astron.nl/general/apertif/apertif">Apertif</a>,
+      the survey is coordinated from <a target="_blank"
+      href="http://www.astron.nl">ASTRON</a>. <span id="nam"
+      style="font-variant:small-caps">wnshs</span> is in the course of
+      defining working groups focusing on the various technical- and
+      scientific aspects of the survey, largely orientating on the
+      structure of <a target="_blank"
+      href="http://www.atnf.csiro.au/research/WALLABY/"><span id="nam"
+      style="font-variant:small-caps">wallaby</span></a>. While we
+      expect a large overlap of the <span id="nam"
+      style="font-variant:small-caps">wnshs</span> and <a
+      target="_blank"
+      href="http://www.atnf.csiro.au/research/WALLABY/"><span id="nam"
+      style="font-variant:small-caps">wallaby</span></a> working
+      groups, <span id="nam"
+      style="font-variant:small-caps">wnshs</span> will concentrate
+      the group coordination towards the Northern hemisphere. A close
+      collaboration of <span id="nam"
+      style="font-variant:small-caps">wnshs</span> and <a
+      target="_blank"
+      href="http://www.atnf.csiro.au/research/WALLABY/"><span id="nam"
+      style="font-variant:small-caps">wallaby</span></a> working
+      groups will enable us to maximise the output of both efforts in
+      the Northern and Southern hemisphere.
+</p>
+<p class="par">
+      <span id="nam" style="font-variant:small-caps">wnshs</span> is
+      currently in the phase of being structured, and defining its prime science targets. 
+<!-- gathering
+      members. 
+      The active participation of the community is requested, so please send us your comments.
+      and every interested astronomer is invited to <b><a
+      href="joining.html">sign up as a survey member</a></b>.
+-->
+</p>
+<p class="par">
+<center>
+<TABLE BORDER="1" rules="all" cellpadding="5" summary="WNSHS coordinators">
+<CAPTION><font size="+2"> <span id="nam" style="font-variant:small-caps">wnshs</span></font><br>Survey coordinators.<font size="-2"><br>&nbsp;</font></caption>
+<!--	  <TR>
+	    <TH ALIGN="CENTER" colspan="2" rules="none"> <font size="+2"> <span id="nam" style="font-variant:small-caps">wnshs</span> </font></TD>
+	  </TR> -->
+
+	  <TR rules="cols">
+	    <TD ALIGN="left">   Gyula J&oacute;zsa (PI)                                     </TD>
+	    <TD ALIGN="left"> ASTRON                                         </TD>
+	  </TR>
+	  <TR>
+	    <TD ALIGN="left">   Virginia Kilborn                                     </TD>
+		<TD ALIGN="left"> Swinburne Univ.                                         </TD>
+	  </TR>
+	  <TR>
+	    <TD ALIGN="left">   Paolo Serra                                     </TD>
+		<TD ALIGN="left"> ASTRON                                         </TD>
+	  </TR>
+	  <TR>
+	    <TD ALIGN="left">  Lister Staveley-Smith                                     </TD>
+		<TD ALIGN="left"> Univ. Western Australia (ICRAR)                  </TD>
+	  </TR>
+	  <TR>
+	    <TD ALIGN="left">  Baerbel Koribalski                                     </TD>
+		<TD ALIGN="left"> ATNF                  </TD>
+	  </TR>
+	  <TR>
+	    <TD ALIGN="left">  Tom Oosterloo                                    </TD>
+		<TD ALIGN="left"> ASTRON                  </TD>
+	  </TR>
+
+</TABLE>
+</center>
+</p>
+<div id="technical">
+<h3>Technical details</h3>
+</div>
+<p class="par">
+      <!--We aim at a Northern sky H<span style="font-size:0.5em;">&nbsp;</span><span style="font-family:serif;font-variant:small-caps">i</span> survey with
+      the <a target="_blank"
+      href="http://www.astron.nl/radio-observatory/astronomers/wsrt-astronomers">WSRT</a>
+      and <a target="_blank"
+      href="http://www.astron.nl/general/apertif/apertif">Apertif</a>
+      that will be complemented by <a target="_blank"
+      href="http://www.atnf.csiro.au/research/WALLABY/"><span id="nam"
+      style="font-variant:small-caps">wallaby</span></a> to provide a
+      public, uniform, all-sky H<span style="font-size:0.5em;">&nbsp;</span><span style="font-family:serif;font-variant:small-caps">i</span> survey. -->
+<a
+      target="_blank"
+      href="http://www.atnf.csiro.au/research/WALLABY/"><span id="nam"
+      style="font-variant:small-caps">wallaby</span></a> will cover
+      the sky at declinations
+      -90&deg;&nbsp;&ge;;&nbsp;&delta;&nbsp;&ge;&nbsp;30&deg;. To
+      provide a good alignment of both surveys, an overlap of 1 <a
+      target="_blank"
+      href="http://www.astron.nl/general/apertif/apertif">Apertif</a>
+      field-of-view is required. <span id="nam"
+      style="font-variant:small-caps">wnshs</span> will hence observe
+      the complete sky with declinations of
+      27&deg;&nbsp;&ge;&nbsp;&delta;&nbsp;&ge;&nbsp;90&deg;.
+</p>
+<p class="par">
+      To mosaic this area (11262 square degrees), ~1410 pointings are
+      required. With the smallest provided frequency resolution and
+      the full bandwidth (frequency range 1130-1430 MHz, divided into
+      16384 channels, corresponding to ~4&nbsp;km&nbsp;s<sup>-1</sup>
+      velocity resolution), a full match of <span id="nam"
+      style="font-variant:small-caps">wnshs</span> and <a
+      target="_blank"
+      href="http://www.atnf.csiro.au/research/WALLABY/"><span id="nam"
+      style="font-variant:small-caps">wallaby</span></a> is achieved.
+</p>
+<p class="par">
+      An integration time of 4&nbsp;h per pointing, resulting in a
+      line sensitivity of 0.64&nbsp;mJy&nbsp;beam<sup>-1</sup> (at
+      30&Prime; resolution) and 0.53&nbsp;mJy&nbsp;beam<sup>-1</sup>
+      (at 13&Prime; resolution) per 100&nbsp;kHz (5.5 channels) would
+      provide a match of <span id="nam"
+      style="font-variant:small-caps">wnshs</span> and <a
+      target="_blank"
+      href="http://www.atnf.csiro.au/research/WALLABY/"><span id="nam"
+      style="font-variant:small-caps">wallaby</span></a> in
+      sensitivity, and requires a total on-source survey time of
+      5,630&nbsp;h. The currently favoured strategy, however, is to
+      integrate for a full WSRT synthesis (i.e., 12&nbsp;h per
+      pointing). The enhancement of the survey sensitivity (0.37 and
+      0.31 &nbsp;mJy&nbsp;beam<sup>-1</sup> 100&nbsp;kHz at 30&Prime;
+      and 13&Prime; resolution, respectively) by a factor of 1.7 opens
+      new research windows and leads to a significant increase in the
+      <a href="science_goals.html">science</a>- and legacy output of
+      the survey. The required on-source survey time in this mode is
+      16,900 h.
+</p>
+<p class="par">
+      The standard <a target="_blank" href="http://www.astron.nl/radio-observatory/astronomers/wsrt-astronomers">WSRT</a> maxi-short configuration has been proven in many H<span style="font-size:0.5em;">&nbsp;</span><span style="font-family:serif;font-variant:small-caps">i</span> observations to be the best telescope configuration for our aims.
+</p>
+<p class="par">
+      The following table summarises the technical characteristics of <span id="nam" style="font-variant:small-caps">wnshs</span>:
+
+<center>
+
+  <TABLE BORDER="1" rules="rows" padding="1" summary="WNSHS survey parameters">
+<CAPTION><font size="+2"> <span id="nam" style="font-variant:small-caps">wnshs</span></font><br>Survey paramters. In brackets: parameters for 30&Prime; resolution instead of 13&Prime;. In parentheses: parameters for 4&nbsp;h integration per pointing instead of 12&nbsp;h.<font size="-2"><br>&nbsp;</font></caption>
+<!--	  <TR>
+	    <TH ALIGN="CENTER" colspan="3" rules="none"> <font size="+2"> <span id="nam" style="font-variant:small-caps">wnshs</span> </font></TD>
+	  </TR> -->
+
+	  <TR>
+	    <TD ALIGN="left">   WSRT with APERTIF                                      </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+		<TD ALIGN="left"> 12 25-m dishes                                         </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   field-of-view                                          </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 8                                                      </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   configuration                                          </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> maxi-short                                             </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   shortest baseline                                      </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 36&nbsp;m                                                 </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   maximum baseline                                       </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 2700&nbsp;m                                                   </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   angular resolution (at z&nbsp;=&nbsp;0)                </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 13&Prime; (30&Prime;)                                  </TD> 
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   sky coverage                                           </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 27&deg;&nbsp;&ge;&nbsp;&delta;&nbsp;&ge;&nbsp;90&deg; </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   number of pointings                                    </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 1410                                                   </TD>
+	  </TR>
+	  
+	  <TR>
+	    <TD ALIGN="left">   integration time per pointing                           </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 12&nbsp;h [4&nbsp;h]                                        </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   observing mode                                          </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> full synthesis [mosaicking]                               </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   total observing time                                    </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left">  16900&nbsp;h [5630&nbsp;h] + calibration                              </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   frequency range                                         </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 1130&nbsp;MHz - 1430&nbsp;MHz                            </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   redshift range                                          </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 0 - 0.26                                                </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   velocity range (cz)                                         </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> from -2,000&nbsp;km&nbsp;s<sup>-1</sup> to +77,000&nbsp;km&nbsp;s<sup>-1</sup> </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   bandwidth                                               </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 300&nbsp;MHz                                            </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   number of channels                                      </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 16384                                                   </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   frequency resolution                                    </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 18.3&nbsp;kHz&nbsp;channel<sup>-1</sup>                </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   velocity resolution                                     </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 3.9&nbsp;km&nbsp;s<sup>-1</sup> - 4.6&nbsp;km&nbsp;s<sup>-1</sup> </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   rms sensitivity (for  = 50 K, 0.1 MHz)                  </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 0.3&nbsp;mJy (0.4&nbsp;mJy) [0.5&nbsp;mJy (0.6&nbsp;mJy)]                                    </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   rms sensitivity (for  = 50 K, one channel)              </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left">  0.7&nbsp;mJy (0.9&nbsp;mJy) [1.2&nbsp;mJy  (1.5&nbsp;mJy)] </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   noise uniformity over FoV                               </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 10% - 25%                                                 </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   number of cubes per field (Stokes I)                    </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 2, one high, (one low) resolution                       </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   image size                                              </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 2300&times;2300 (1100&times;1100)                       </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   cell size                                               </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 4.5&Prime; (10&Prime;)                                  </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   time resolution                                         </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 30&nbsp;s                                                  </TD>
+	  </TR>
+
+<!--	  <TR>
+	    <TD ALIGN="left">   dynamic range (continuum)                               </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 10<sup>4</sup>                                           </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   dynamic range (spectral)                                </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 10<sup>5</sup>                                          </TD>
+	  </TR>
+-->
+	  <TR>
+	    <TD ALIGN="left">   correlations                                            </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> Full Stokes                                             </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   total storage (Visibilities)                            </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 1470&nbsp;TB [490&nbsp;TB]                                 </TD>
+	  </TR>
+
+	  <TR>
+	    <TD ALIGN="left">   total storage (Stokes-I cubes)                          </TD>
+	    <TD ALIGN="left"> &nbsp;                                           </TD>
+<TD ALIGN="left"> 600&nbsp;TB                                                </TD>
+	  </TR>
+
+ </TABLE>
+      </center>
+    </p></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  FOOTER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="footer">
+
+<!-- Created: Fri Apr 13 2007 -->
+<!-- hhmts start -->
+Last modified: Wed Feb 25 15:31:08 SAST 2015
+<!-- hhmts end -->
+<br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
+</div>
+  </body>
+</html>

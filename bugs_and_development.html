@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>TiRiFiC - Bugs and Development</title>
+<!-- define european ISO charset -->
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<!-- favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<!-- include style -->
+<link rel="stylesheet" type="text/css" href="layout.css">
+<!--[if IE]>
+<link rel="stylesheet" type="text/css" href="layout_ie.css">
+<![endif]-->
+</head>
+  <body>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  HEADER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="hdr">
+<div class="t">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="tr">
+<div id="lh-col-white">
+<!-- <h1 class="hdrle"> -->
+<img class="tir" src="tirlogo.gif" alt="TiRiFiC logo"/> 
+<!-- </h1> -->
+</div>
+<div id="rh-col-white">
+<h1 class="hdr"> Bugs and Development </h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  LINKS   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="lh-col">
+<div class="tli">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trli">
+<a class="button" href="index.html">HOME</a>
+<a class="button" href="input_and_syntax.html">Input and Syntax</a>
+<a class="button" href="modelling_strategy.html">Modelling Strategy</a>
+<a class="button" href="model_geometry.html">Model Geometry</a>
+<!-- <a class="button" href="model_parameters.html">Model Parameters</a> -->
+<a class="button" href="model_fitting.html">Model Fitting</a>
+<!-- <a class="button" href="fitting_parameters.html">Fitting Parameters</a> -->
+<a class="button" href="output.html">Output</a>
+<!-- <a class="button" href="output_parameters.html">Output Parameters</a> -->
+<a class="button" href="parameter_index.html">Parameter Index</a>
+<a class="button" href="examples.html">Examples</a>
+<a class="button" href="gui.html">GUI</a>
+<a class="button" href="bugs_and_development.html">Bugs and Development</a>
+<a class="button" href="download_and_installation.html">Download and Installation</a>
+<a class="button" href="contact_and_feedback.html">Contact and Feedback</a>
+<a class="button" href="credits.html">Credits</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********   BODY   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="rh-col">
+<div class="tbody">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trbo">
+<p class="paremph">
+Here, we provide a list of bugs and future development for TiRiFiC. Please do not hesitate to <a href="mailto:jozsa@astron.nl">report bugs</a> that are not listed below. If you want to shift the solution of an issue or some development plan up in our (hidden) priority list (because you need this thing working), do not hesitate to <a href="mailto:jozsa@astron.nl">contact us</a>, and we will see what we can do. Suggestions for future development are also welcome, if not found represented here.
+</p>
+
+<p>
+<center>
+  <table style="align:center" BORDER="1" rules="all" cellpadding="5" summary="TiRiFiC web page">
+    <tr>
+      <td ALIGN="left">
+        Contents:
+        <ul class="par" style="list-style-type:none;padding-left:0em;margin-top:0px;margin-bottom:0px;">
+          <li><a href="#Known bugs">Known bugs</a></li>
+          <li><a href="#Nuisances">Nuisances</a></li>
+          <li><a href="#Future development">Future development</a></li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+</center>
+</p>
+
+<h3><a name="Known bugs">Known bugs</a></h3>
+<p>
+<center>
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Category</td>
+    <td align="center">Short description</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left">Output</td>
+    <td align="center">Table output not confirmed</td>
+    <td align="left">The <a href=output.html#TABLE=">TABLE=</a> output has to be tested and to be confirmed. Currently, we do not know if the output is reliable. Most users, however, do not use this output to access fitted parameters, but the output default file with the parameter <a href=output.html#TIRDEF=">TIRDEF=</a></td>
+  </tr>
+  <tr>
+    <td align="left">Output</td>
+    <td align="center">Tiltogram output not confirmed</td>
+    <td align="left">The <a href=output.html#TILT=">TILT=</a> tiltogram output is unreliable and needs to be revised and confirmed.</td>
+  </tr>
+  <tr>
+    <td align="left">Output</td>
+    <td align="center">Inclinogram output not confirmed</td>
+    <td align="left">The <a href=output.html#INCLINO=">INCLINO=</a> inclinogram output is unreliable and needs to be revised and confirmed.</td>
+  </tr>
+</table>
+</center>
+</p>
+
+<h3><a name="Nuisances">Nuisances</a></h3>
+<p>
+<center>
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Category</td>
+    <td align="center">Short description</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left">Output</td>
+    <td align="center">Default file output to be refined</td>
+    <td align="left">The <a href=output.html#=">TIRDEF=</a> output is not faulty, but may be rearranged here and there.</a></td>
+  </tr>
+</table>
+</center>
+</p>
+
+<h3><a name="Future development">Future development</a></h3>
+<p>
+<center>
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Category</td>
+    <td align="center">Short description</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left">Geometrical parameters</td>
+    <td align="center">Higher order warp modes in spherical description</td>
+    <td align="left">For heavily warped galaxies, the cylindrical description of higher-order warp modes might be insufficient, an alternative description might be welcome.</td>
+  </tr>
+  <tr>
+    <td align="left">Geometrical parameters</td>
+    <td align="center">True orbit ellipticity</td>
+    <td align="left">An implementation of elliptical orbits is planned.</td>
+  </tr>
+  <tr>
+    <td align="left">Geometrical parameters</td>
+    <td align="center">Alternative parameter descriptions</td>
+    <td align="left">An alternative description of the disk geometry might be necessary for low resolution objects. This is being investigated.</td>
+  </tr>
+  <tr>
+    <td align="left">Fitting</td>
+    <td align="center">Minimisers</td>
+    <td align="left">The minimisation schemes in TiRiFiC are a known weakness. Therefore, implementation and testing of better minimisation algorithms has highest priority.</td>
+  </tr>
+  <tr>
+    <td align="left">Fitting</td>
+    <td align="center">Regularisation</td>
+    <td align="left">The regularisation scheme provided for TiRiFiC does not deliver the desired results. Hence, alternatives are being investigated.</td>
+  </tr>
+  <tr>
+    <td align="left">Fitting</td>
+    <td align="center">Pipeline</td>
+    <td align="left">Currently TiRiFiC is usable in a semi-automated way. A fully automated TiRiFiC pipeline is being developed in the scope of <a
+href="http://www.astron.nl/~jozsa/wnshs/">WNSHS</a> and <a href="http://www.atnf.csiro.au/research/WALLABY/">WALLABY</a>, mainly by <a href="http://www.astro.rub.de/kamphuis/">Peter Kamphuis</a>.</td>
+  </tr>
+</table>
+</center>
+</p>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  FOOTER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="footer">
+
+<!-- Created: Fri Apr 13 2007 -->
+<!-- hhmts start -->
+Last modified: Wed Feb 25 15:31:08 SAST 2015
+<!-- hhmts end -->
+<br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
+</div>
+  </body>
+</html>

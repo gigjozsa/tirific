@@ -1,0 +1,276 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>TiRiFiC - Input and Syntax</title>
+<!-- define european ISO charset -->
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<!-- favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<!-- include style -->
+<link rel="stylesheet" type="text/css" href="layout.css">
+<!--[if IE]>
+<link rel="stylesheet" type="text/css" href="layout_ie.css">
+<![endif]-->
+</head>
+  <body>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  HEADER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="hdr">
+<div class="t">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="tr">
+<div id="lh-col-white">
+<!-- <h1 class="hdrle"> -->
+<img class="tir" src="tirlogo.gif" alt="TiRiFiC logo"/> 
+<!-- </h1> -->
+</div>
+<div id="rh-col-white">
+<h1 class="hdr"> Input and Syntax </h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  LINKS   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="lh-col">
+<div class="tli">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trli">
+<a class="button" href="index.html">HOME</a>
+<a class="button" href="input_and_syntax.html">Input and Syntax</a>
+<a class="button" href="modelling_strategy.html">Modelling Strategy</a>
+<a class="button" href="model_geometry.html">Model Geometry</a>
+<!-- <a class="button" href="model_parameters.html">Model Parameters</a> -->
+<a class="button" href="model_fitting.html">Model Fitting</a>
+<!-- <a class="button" href="fitting_parameters.html">Fitting Parameters</a> -->
+<a class="button" href="output.html">Output</a>
+<!-- <a class="button" href="output_parameters.html">Output Parameters</a> -->
+<a class="button" href="parameter_index.html">Parameter Index</a>
+<a class="button" href="examples.html">Examples</a>
+<a class="button" href="gui.html">GUI</a>
+<a class="button" href="bugs_and_development.html">Bugs and Development</a>
+<a class="button" href="download_and_installation.html">Download and Installation</a>
+<a class="button" href="contact_and_feedback.html">Contact and Feedback</a>
+<a class="button" href="credits.html">Credits</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********   BODY   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="rh-col">
+<div class="tbody">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trbo">
+<p class="paremph">
+TiRiFiC is (currently) available as a standalone command line task (from v2.2.0 on) and as a <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> task (ending with v2.1.5). In both cases, the syntax is similar to the common <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> syntax, while the input methods of the standalone version are more flexible. The task can basically be called from any environment as a common binary with argiments entered in the command line or in a default file (which can be named after the user's fashion).
+</p>
+<p>
+<center>
+<TABLE style="align:center" BORDER="1" rules="all" cellpadding="5" summary="TiRiFiC web page">
+   <TR>
+     <TD ALIGN="left">
+Contents:
+<ul class="par" style="list-style-type:none;padding-left:0em;margin-top:0px;margin-bottom:0px;">
+<li><a href="#I/O in the standalone version">I/O in the standalone version</a></li>
+  <ul class="par" style="list-style-type:none;padding-left:2em;margin-top:0px;margin-bottom:0px;">
+  <li><a href="Keyword-valuelist pairs">Keyword-valuelist pairs</a></li>
+  <li><a href="Default files">Default files</a></li>
+  <li><a href="Numbers and number lists">Numbers and number lists</a></li>
+  <li><a href="Switching to interactive mode">Switching to interactive mode</a></li>
+  </ul>
+<li><a href="#I/O in the GIPSY versions">I/O in the GIPSY versions</a></li>
+<li><a href="#Summary of parameters described here">Summary of parameters described here</a></li>
+</ul>
+</td>
+</tr>
+</table>
+</center>
+</p>
+
+<h3><a name="I/O in the standalone version">I/O in the standalone version</a></h3>
+<h4><a name="Keyword-valuelist pairs">Keyword-valuelist pairs</a></h4>
+<p class="par">
+TiRiFiC gets invoked by calling the tirific binary (to be found after compilation in the bin directory) followed by command line arguments. The user provides a list of keyword - valuelist pairs. Separator of keywords and valuelists is the '=' symbol. Separator of single strings are all whitespaces and the '=' symbol. The string before a '=' symbol is always a keyword (parameter name), the stings after the '=' symbol until the next keyword are the stringlist belonging to the keyword. Multiple occurances of a keyword are allowed, but only the first one gets evaluated and the later ones get ignored.
+</p>
+<p class="par">
+The '#'-symbol defines a comment. Text (including the '=' symbol) in-between two '#'-symbols or text starting with a '#' symbol and ending with a newline ('\n') is ignored. keyword - valuelist pairs with unknown keywords are ignored (this can be used to enter a comment, as long as the text does not contain the '=' symbol).
+</p>
+<p class="par">
+The list of strings ('stringlist') belonging to a keyword is then furtherly interpreted and translated into numbers, strings etc., depending on the parameter.
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp; > tirific miau key1= val11 val12 key2 = val21 val22 val23 key3=key4=val41 # blabalbalsf # oops key5 = val51 # end
+</p>
+<p class="par">
+invokes TiRiFiC with
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp; the text 'miau' being ignored,<br>
+&nbsp;&nbsp;&nbsp; the valuelist val11 val12 belonging to keyword key1,<br>
+&nbsp;&nbsp;&nbsp; the valuelist val21 val22 val23 belonging to keyword key2,<br>
+&nbsp;&nbsp;&nbsp; an empty valuelist belonging to keyword key3,<br>
+&nbsp;&nbsp;&nbsp; the valuelist val41 oops belonging to keyword key4,<br>
+&nbsp;&nbsp;&nbsp; the text '# blabalbalsf #' being ignored,<br>
+&nbsp;&nbsp;&nbsp; the valuelist val51 belonging to keyword key5,<br>
+&nbsp;&nbsp;&nbsp; the text '# end' being ignored.<br>
+</p>
+<h4><a name="Default files">Default files</a></h4>
+
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><a name="DEFFILE"><b>DEFFILE</b></a></td>
+    <td align="center">I/O (not required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Name of default file </td>
+  </tr>
+</table>
+<p class="par">
+The parameter <a href="input_and_syntax.html#DEFFILE">DEFFILE</a>, which may be specified on the command line defines the name of a "default" file. To provide the input of parameters to TiRiFiC, the command line will be evaluated first, and then the content of the default file, following the same syntax (if the user specifies DEFFILE = tirific.def, this is equivalent to providing a default file in <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a>).
+</p>
+<h4><a name="Numbers and number lists">Numbers and number lists</a></h4>
+<p class="par">
+Numbers and lists of numbers are entered as strings in decimal format. For lists of numbers, TiRiFiC allows for the shortcut
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp; a:b:c   ,
+</p>
+<p class="par">
+which is equivalent to a list of numbers starting with a, incrementing with c, and not exceeding b.
+</p>
+<p class="par">
+Examples:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp; PAR = 0:6:2 is equivalent to PAR = 0 2 4 6<br>
+&nbsp;&nbsp;&nbsp; PAR = 0:-6:-2 is equivalent to PAR = 0 -2 -4 -6<br>
+&nbsp;&nbsp;&nbsp; PAR = 0.3:0.8:0.2 is equivalent to PAR = 0.3 0.5 0.7<br>
+&nbsp;&nbsp;&nbsp; PAR = 1.9 20 0.3:0.8:0.2 5 is equivalent to PAR = 1.9 20.0 &nbsp;&nbsp; 0.3 0.5 0.7 &nbsp;&nbsp; 5.0<br>
+</p>
+<p class="par">
+There are parameters whose syntax deviates from these rules. If this is the case, the syntax is expressively described together with the parameters.
+</p>
+<h4><a name="Switching to interactive mode">Switching to interactive mode</a></h4>
+
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><a name="PROMPT"><b>PROMPT</b></a></td>
+    <td align="center">I/O (not required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Prompt on error (1: yes, 0: no)? </td>
+  </tr>
+</table>
+<p class="par">
+By default, any parameter that is required by TiRiFiC but not entered or that is entered in the wrong way, leads to a termimation of the program. It is possible to switch to an interactive mode by setting the parameter <a href="input_and_syntax.html#PROMPT">PROMPT</a> = 1. If <a href="input_and_syntax.html#PROMPT">PROMPT</a> = 1, the user will be asked on error to re-specify a valuelist, if it was not entered but required or if it contained errors. Parameters entered in this interactive mode have always the highest preference. This is important, if the user chooses to run TiRiFiC in a mode in which the input is repeated more than once (parameter <a href="model_fitting.html#RESTARTNAME">RESTARTNAME</a>).
+</p>
+
+<h3><a name="I/O in the GIPSY versions">I/O in the <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> versions</a></h3>
+<p class="par">
+Please notice that only the standalone version of TiRiFiC is being developed and supported. The status of the <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> version is frozen at version 2.1.5. A list of parameters that are not supported in the <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> version</a> can be found in the section <a href="parameter_index.html">Parameter Index</a>.
+</p>
+<p class="par">
+In the the <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> version the input methods and the input syntax largely follow the <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> conventions. An introduction to <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a>, its syntax, and input methods can be found <a href="http://www.astro.rug.nl/~gipsy/general/getstarted.html">here</a> and <a href="http://www.astro.rug.nl/~gipsy/hermes/tasks.html#usrinp">here</a>. An exception to the rule are the more complex input variants for the specification of the fitting process and interpolation. A description of those is given in the section <a href="fitting_parameters.html">Fitting Parameters</a>.
+</p>
+<p class="par">
+<a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> requests the user to enter parameters interactively unless a so-called default file is provided by the user and stored in the place where <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> is started. The number of parameters to be provided for TiRiFiC is somewhat on the large side, such that, to keep an overview, it is highly recommendable to work with default files which can be edited using the editor of choice. An example default file is provided in the section <a href="examples.html">Examples</a>. Such files should be stored in the place where your input data cube resides, which should be identical to the directory from where you start <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> (and TiRiFiC).
+</p>
+<hr>
+<p>
+<a name="Summary of parameters described here">
+<center>
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+<tr> <td colspan="4" align="center">Parameters described here </td> </tr>
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="modelling_strategy.html#DEFFILE"><b>DEFFILE</b></a></td>
+    <td align="center">I/O (not required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Name of default file </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="modelling_strategy.html#PROMPT"><b>PROMPT</b></a></td>
+    <td align="center">I/O (not required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Prompt on error (1: yes, 0: no)? </td>
+  </tr>
+</table>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  FOOTER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="footer">
+
+<!-- Created: Fri Apr 13 2007 -->
+<!-- hhmts start -->
+Last modified: Wed Feb 25 15:31:08 SAST 2015
+<!-- hhmts end -->
+<br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
+</div>
+  </body>
+</html>

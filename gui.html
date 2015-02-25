@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>TiRiFiC - GUI</title>
+<!-- define european ISO charset -->
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<!-- favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<!-- include style -->
+<link rel="stylesheet" type="text/css" href="layout.css">
+<!--[if IE]>
+<link rel="stylesheet" type="text/css" href="layout_ie.css">
+<![endif]-->
+</head>
+  <body>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  HEADER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="hdr">
+<div class="t">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="tr">
+<div id="lh-col-white">
+<!-- <h1 class="hdrle"> -->
+<img class="tir" src="tirlogo.gif" alt="TiRiFiC logo"/> 
+<!-- </h1> -->
+</div>
+<div id="rh-col-white">
+<h1 class="hdr"> GUI </h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  LINKS   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="lh-col">
+<div class="tli">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trli">
+<a class="button" href="index.html">HOME</a>
+<a class="button" href="input_and_syntax.html">Input and Syntax</a>
+<a class="button" href="modelling_strategy.html">Modelling Strategy</a>
+<a class="button" href="model_geometry.html">Model Geometry</a>
+<!-- <a class="button" href="model_parameters.html">Model Parameters</a> -->
+<a class="button" href="model_fitting.html">Model Fitting</a>
+<!-- <a class="button" href="fitting_parameters.html">Fitting Parameters</a> -->
+<a class="button" href="output.html">Output</a>
+<!-- <a class="button" href="output_parameters.html">Output Parameters</a> -->
+<a class="button" href="parameter_index.html">Parameter Index</a>
+<a class="button" href="examples.html">Examples</a>
+<a class="button" href="gui.html">GUI</a>
+<a class="button" href="bugs_and_development.html">Bugs and Development</a>
+<a class="button" href="download_and_installation.html">Download and Installation</a>
+<a class="button" href="contact_and_feedback.html">Contact and Feedback</a>
+<a class="button" href="credits.html">Credits</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********   BODY   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="rh-col">
+<div class="tbody">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trbo">
+<p class="paremph">
+Former versions of TiRiFiC came with a convenient graphical user-interface, which could unfortunately not be maintained, and is today incompatible with the (updated) libraries it depends on. As a first substitute, we provide on this page a TiRiFiC default file editor, programmed and kindly made available by <a href="http://www.astron.nl/~heald/">George Heald</a>. As the name suggests, the software is a GUI to edit TiRiFiC default files. Users should be familiar with TiRiFiC.
+</p>
+
+<p>
+<center>
+  <table style="align:center" BORDER="1" rules="all" cellpadding="5" summary="TiRiFiC web page">
+    <tr>
+      <td ALIGN="left">
+        Contents:
+        <ul class="par" style="list-style-type:none;padding-left:0em;margin-top:0px;margin-bottom:0px;">
+          <li><a href="#TiRiFiC default file editor download and installation">TiRiFiC default file editor download and installation</a></li>
+          <li><a href="#TiRiFiC default file editor brief description">TiRiFiC default file editor brief description</a></li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+</center>
+</p>
+
+<h3><a name="TiRiFiC default file editor download and installation">TiRiFiC default file editor download and installation</a></h3>
+<p>
+<center>
+<b>BEFORE DOWNLOADING SOFTWARE FROM THIS WEB PAGE, READ <a href="disclaimer.html">THIS DISCLAIMER</a>!</b>
+</center>
+</p>
+<p class="par">
+Download the file <a href="tiredit.py">tiredit.py</a> to a directory pathtodirectory, enter the directory and make it executable:
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+> chmod +x tiredit.py
+</pre>
+<p class="par">
+The python file tiredit.py can be saved somewhere in your <a href="http://en.wikipedia.org/wiki/PATH_%28variable%29">PATH</a> so that you can easily run it from any directory. It requires python as well as the python packages called <a href="http://numpy.scipy.org/">numpy</a>, <a href="http://matplotlib.sourceforge.net/">matplotlib</a> (version >= 1.0 seems to be necessary), and <a href="http://wiki.python.org/moin/TkInter">Tkinter</a>. These are quite standard. The program can be started by typing "pathtodirectory/tiredit.py" or, if the directory is in the <a href="http://en.wikipedia.org/wiki/PATH_%28variable%29">PATH</a> variable, by typing "tiredit.py".
+</p>
+
+
+
+<h3><a name="TiRiFiC default file editor brief description">TiRiFiC default file editor brief description</a></h3>
+<p>
+  <table align="center" width="927" border="0" cellpadding="0">
+    <tr>
+      <td width="30" align="left"><img src="gui_screenshot1.gif" width="450"></td>
+      <td width="30" align="left">&nbsp;</td>
+      <td width="30" align="left"><img src="gui_screenshot2.gif" width="450"></td>
+    </tr>
+    <tr>
+      <td width="700" height="10" align="left" colspan=3><i>Fig. 1:
+       TiRiFiC default file editor, screenshots. Left: after starting the editor. Right: after loading a default file and choosing a parameter</i></td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;</td>
+    </tr>
+  </table>
+</p>
+
+<p class="par">
+When you run tiredit.py, you will see a window like the one shown to the left in Fig. 1. In this window, you should:
+</p>
+<ol class="par">
+    <li>Enter the name of a def file that you want to modify (use the "Browse" button to easily select a file)</li>
+    <li>Click "Read file"</li>
+    <li>Select a parameter that you want to edit from the dropdown menu</li>
+    <li>Click "Plot values"</li>
+    <li>Move points around as you like (see the image to the right in Fig. 1, which shows an edit in progress; note that the dashed line will remain fixed so that you can remember what the parameter looked like originally)</li>
+    <li>When you are happy, change the output def file name if you want to (again you can use the "Browse" button to select a location and filename), and click "Write output .def"</li>
+    <li>If you want to modify other parameters, repeat steps 3-6 (you have to do "Write output .def" each time to apply your changes, but you can use the same output file name at every step)</li>
+    <li>A new def file can be opened as in steps (1) and (2), but the changes that you have made to parameters in previous steps will not be in memory anymore (they will be saved on disk if you have written output def files)</li>
+    <li>Close the window and admire your new default file(s)</li>
+</ol>
+<p class="par">
+Please <a href="mailto:jozsa@astron.nl">let us know</a> if you run into any bugs.
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  FOOTER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="footer">
+
+<!-- Created: Fri Apr 13 2007 -->
+<!-- hhmts start -->
+Last modified: Wed Feb 25 15:31:08 SAST 2015
+<!-- hhmts end -->
+<br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
+</div>
+  </body>
+</html>

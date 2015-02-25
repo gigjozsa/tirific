@@ -1,0 +1,1556 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>TiRiFiC - Model Fitting</title>
+<!-- define european ISO charset -->
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<!-- favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<!-- include style -->
+<link rel="stylesheet" type="text/css" href="layout.css">
+<!--[if IE]>
+<link rel="stylesheet" type="text/css" href="layout_ie.css">
+<![endif]-->
+</head>
+  <body>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  HEADER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="hdr">
+<div class="t">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="tr">
+<div id="lh-col-white">
+<!-- <h1 class="hdrle"> -->
+<img class="tir" src="tirlogo.gif" alt="TiRiFiC logo"/> 
+<!-- </h1> -->
+</div>
+<div id="rh-col-white">
+<h1 class="hdr"> Model Fitting </h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  LINKS   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="lh-col">
+<div class="tli">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trli">
+<a class="button" href="index.html">HOME</a>
+<a class="button" href="input_and_syntax.html">Input and Syntax</a>
+<a class="button" href="modelling_strategy.html">Modelling Strategy</a>
+<a class="button" href="model_geometry.html">Model Geometry</a>
+<!-- <a class="button" href="model_parameters.html">Model Parameters</a> -->
+<a class="button" href="model_fitting.html">Model Fitting</a>
+<!-- <a class="button" href="fitting_parameters.html">Fitting Parameters</a> -->
+<a class="button" href="output.html">Output</a>
+<!-- <a class="button" href="output_parameters.html">Output Parameters</a> -->
+<a class="button" href="parameter_index.html">Parameter Index</a>
+<a class="button" href="examples.html">Examples</a>
+<a class="button" href="gui.html">GUI</a>
+<a class="button" href="bugs_and_development.html">Bugs and Development</a>
+<a class="button" href="download_and_installation.html">Download and Installation</a>
+<a class="button" href="contact_and_feedback.html">Contact and Feedback</a>
+<a class="button" href="credits.html">Credits</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********   BODY   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="rh-col">
+<div class="tbody">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trbo">
+<p class="paremph">
+<table align="right" width="350" border="0" cellpadding="0">
+  <tr>
+    <td>&nbsp;&nbsp;</td>
+    <td width="30" align="right"><img src="flow_diagram_2.gif" width="350"></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td width="350" height="10" align="right"><i>Fig. 1: TiRiFiC model construction and fitting</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;&nbsp;</td>
+  </tr>
+</table>
+The fitting strategies implemented in TiRiFiC are introduced in this section.
+</p>
+<p class="par">
+The flow diagram (Fig. 1) to the right shows how TiRiFiC is expanded to enable the user not only to construct simulated
+observations, but also to automatically adjust model parameters to fit the simulated observation to an input observation. With this, in TiRiFiC we attempt to go qualitatively beyond the possibilities of the
+<a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> routine <a
+href="http://www.astro.rug.nl/~gipsy/tsk/galmod.dc1">galmod</a>.
+</p>
+<p class="par">
+ While the basic functionality is implemented, and automated fitting with TiRiFiC has successfully been applied to paramtrise galaxies, there is certainly much room for improvement. The difficulty is to find a minimising algorithm, which is able to converge quickly, dealing with a complex &chi;<sup>2</sup>-landscape with a generally high number of parameters, a limited available amount of model calculations (since, after all optimisation for speed, the construction of one model still takes significantly longer than a &micro;s), and without analytic (partial) derivatives. So far, two of several tested fitting methods yielded acceptable results.
+</p>
+<p>
+<center>
+<TABLE style="align:center" BORDER="1" rules="all" cellpadding="5" summary="TiRiFiC web page">
+   <TR>
+     <TD ALIGN="left">
+Contents:
+<ul class="par" style="list-style-type:none;padding-left:0em;margin-top:0px;margin-bottom:0px;">
+<li><a href="model_fitting.html#Fitting strategy">Fitting strategy</a></li>
+  <ul class="par" style="list-style-type:none;padding-left:2em;margin-top:0px;margin-bottom:0px;">
+  <li><a href="model_fitting.html#General fitting concept">General fitting concept</a></li>
+  <li><a href="model_fitting.html#Goodness-of-fit evaluation: basic">Goodness-of-fit evaluation: basic</a></li>
+  <li><a href="model_fitting.html#Goodness-of-fit evaluation: boundary conditions">Goodness-of-fit evaluation: boundary conditions</a></li>
+  <li><a href="model_fitting.html#Goodness-of-fit evaluation: blanked pixels">Goodness-of-fit evaluation: blanked pixels</a></li>
+  <li><a href="model_fitting.html#Implemented fitting algorithms">Implemented fitting algorithms</a></li>
+  </ul>
+<li><a href="model_fitting.html#Fitting parameters">Fitting parameters</a></li>
+<ul class="par" style="list-style-type:none;padding-left:2em;margin-top:0px;margin-bottom:0px;">
+<li><a href="model_fitting.html#Fitting expressions, groups, and parameters">Fitting expressions, groups, and parameters</a></li>
+<li><a href="model_fitting.html#Fitting mode">Fitting mode</a></li>
+<li><a href="model_fitting.html#Defining fitting groups">Defining fitting groups</a></li>
+<li><a href="model_fitting.html#Indexing parameters">Indexing parameters</a></li>
+<li><a href="model_fitting.html#Fitting parameters for fitting groups">Fitting parameters for fitting groups</a></li>
+<li><a href="model_fitting.html#Global fitting parameters">Global fitting parameters</a></li>
+<li><a href="model_fitting.html#Outliers and noise weighting">Outliers and noise weighting</a></li>
+<li><a href="model_fitting.html#Regularisation">Regularisation</a></li>
+</ul>
+<li><a href="model_fitting.html#Restarting TiRiFiC">Restarting TiRiFiC</a></li>
+<li><a href="model_fitting.html#Summary fitting parameters">Summary fitting parameters</a></li>
+</ul>
+</td>
+</tr>
+</table>
+</center>
+</p>
+
+<h3><a name="Fitting strategy">Fitting strategy</a></h3>
+
+
+
+<h4><a name="General fitting concept">General fitting concept</a></h4>
+<p class="par">
+The aim of the fitting process in TiRiFiC is to adjust a subset of the <a href="model_geometry.html">geometrical parameters</a> with the goal to optimise a simulated observation such that the simulated observation optimally matches a real (input) observation. The measure adopted to numerically determine the model quality is the &chi;<sup>2</sup>, altered by defining boundary conditions (minimum and maximum values for a parameter, regularisation schemes). The TiRiFiC optimisation aims at the minimisation of the &chi;<sup>2</sup>. 
+</p>
+<p class="par">
+As far as possible, the fitting routines in TiRiFiC are kept separate from the model generation. This means that the fitting parameters, passed to the fitting routine are normalised (with a normalisation factor provided by the user through the parameter <a href="model_fitting.html#MINDELTA">MINDELTA</a>) to then be varied as dimensionless quantities on a regular grid. The parameters visible to the fitting routine are not necessarily mapped to single <a href="model_geometry.html">geometrical parameters</a> parameters, but the user has the possibility to automatically adjust single geometrical parameters at given radii via linear linear interpolation between fitted quantities, and to group geometrical parameters to be fitted at the same time, in which case only one representative fitting variable is visible to the fitting routine. In other words, such a fitting group appears to the minimising routine as one parameter and automatically adjusted parameters are not visible at all for the fitting routine. Grouping and interpolation is controled by the the parameters <a href="model_fitting.html#VARY">VARY</a> and <a href="model_fitting.html#VARINDX">VARINDX</a>.
+</p>
+<p class="par">
+In the following sections, we discuss the &chi;<sup>2</sup> evaluation including the implementation of boundary conditions altering the &chi;<sup>2</sup>, to then describe the implemented fitting algorithms. Finally, the fitting parameters are described in detail.
+</p>
+
+
+
+<h4><a name="Goodness-of-fit evaluation: basic">Goodness-of-fit evaluation: basic</a></h4>
+<p class="par">
+As a measure of the quality of a fit, TiRiFiC calculates the &chi;<sup>2</sup> and with that, in principle, the relative
+probability of two models.
+The chisquare calculation before taking into account boundary conditions is determined by the <a href="model_fitting.html#WEIGHT">WEIGHT</a> and the <a href="model_fitting.html#RMS">RMS</a>
+parameters. The &chi;<sup>2</sup> calculates with
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="2"> (1)&nbsp;&nbsp;&nbsp; </td> 
+        <td nowrap valign="top"> &chi;<sup>2</sup>  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top">  &Sigma;<sub>i</sub> (<i>m</i><sub>i</sub>-<i>o</i><sub>i</sub>)<sup>2</sup>&middot;<i>&sigma;</i><sup>-2</sup><sub>i</sub> <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="2" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;, where</td> 
+      </tr>
+      <tr>
+        <td nowrap valign="top">  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top">  &Sigma;<sub>i</sub> (<i>m</i><sub>i</sub>-<i>o</i><sub>i</sub>)<sup>2</sup>&middot;<i>w</i><sup>-1</sup><sub>i</sub> <sup>&nbsp;</sup></td>
+      </tr>
+     </table>
+  </center>
+</p>
+<p class="par">
+i is an index over all pixels, (<i>m</i><sub>i</sub>) is the model data cube and
+(<i>o</i><sub>i</sub>) the observed data cube, (<i>&sigma;</i><sub>i</sub>) the (pixel-dependent) noise, and (<i>w</i><sub>i</sub>) the corresponding weighting function. If no quantisation noise is assumed, then
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="1"> (2)&nbsp;&nbsp;&nbsp; </td> 
+        <td nowrap valign="top"> <i>&sigma;</i><sub>i</sub>  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top">  <i>&sigma;</i><sub>rms</sub> <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="1" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;, where</td> 
+      </tr>
+      <tr>
+        <td nowrap valign="top">  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top">  RMS <sup>&nbsp;</sup></td>
+      </tr>
+     </table>
+  </center>
+</p>
+<p class="par">
+<i>&sigma;</i><sub>rms</sub> is the rms noise in the original datacube and asked
+for with the parameter <a href="model_fitting.html#RMS">RMS</a> in the same units as the input data cube (Jy beam<sup>-1</sup>). As the model data cube is the result of a Monte-Carlo integration and before gridding consists of discrete point sources, this assumption is not true and we have to set
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="1"> (3)&nbsp;&nbsp;&nbsp; </td> 
+        <td nowrap valign="top"> <i>w</i><sub>i</sub>  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top">  <i>&sigma;</i><sup>2</sup><sub>rms</sub>+<i>&sigma;</i><sub>q</sub><sup>2</sup><sub>i</sub> <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="1" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;,</td> 
+      </tr>
+      <tr>
+        <td nowrap valign="top">   <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top">  RMS<sup>2</sup>+<i>&sigma;</i><sub>q</sub><sup>2</sup><sub>i</sub> <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="1" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;,</td> 
+      </tr>
+     </table>
+  </center>
+</p>
+<p class="par">
+(<i>&sigma;</i><sub>q&nbsp;i</sub>) being the (pixel-dependent) quantisation noise.
+<i>&sigma;</i>&prime;<sub>q&nbsp;i</sub>, the quantisation noise evaluated for a pixel with the index i containing n<sub>i</sub> pointsources of total flux
+<a href="model_geometry.html#CFLUX">CFLUX</a> (specified by the user) in the model cube <i>before convolution</i> (<i>m</i>&prime;<sub>i</sub>), is given by
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="3"> (4)&nbsp;&nbsp;&nbsp; </td> 
+        <td nowrap valign="top"> <i>&sigma;</i>&prime;<sub>q&nbsp;i</sub>  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top"> n<sup>1/2</sup><sub>i</sub>&middot;CFLUX <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;. </td> 
+      </tr>
+      <tr>
+        <td nowrap valign="top">  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top">  (<i>m</i>&prime;<sub>i</sub>&middot;CFLUX<sup>-1</sup>)<sup>1/2</sup>&middot;CFLUX <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td nowrap valign="top">  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top">  (<i>m</i>&prime;<sub>i</sub>&middot;CFLUX)<sup>1/2</sup> <sup>&nbsp;</sup></td>
+      </tr>
+     </table>
+  </center>
+</p>
+<p class="par">
+If <i>g</i><sub>i</sub> is the discretised version of the <a href="model_geometry#Instrumental function"> instrumental convolution kernel</a> (a 3D Gaussian), then the quantisation noise <i>&sigma;</i><sub>q&nbsp;i</sub> in the
+convolved map is given by
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="3"> (5)&nbsp;&nbsp;&nbsp; </td> 
+        <td nowrap valign="top"> <i>&sigma;</i><sub>q&nbsp;i</sub>  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top"> (&Sigma;<sub>j</sub> <i>g</i><sup>2</sup><sub>i-j</sub>&middot;<i>&sigma;</i>&prime;<sup>2</sup><sub>q&nbsp;j</sub>)<sup>1/2</sup>    <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;, </td> 
+      </tr>
+      <tr>
+        <td nowrap valign="top">  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top">  (&Sigma;<sub>j</sub> <i>g</i><sup>2</sup><sub>i-j</sub>&middot;<i>m</i><sub>j</sub>&middot;CFLUX)<sup>1/2</sup> <sup>&nbsp;</sup></td>
+      </tr>
+     </table>
+  </center>
+</p>
+<p class="par">
+which is equivalent to a convolution with a convolution with a Gaussian of with an increased dispersion by a factor of 2<sup>1/2</sup> in every direction (not taking into account the 
+normalisation). TiRiFiC can hence calculate the weight map
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="3"> (6)&nbsp;&nbsp;&nbsp; </td> 
+        <td nowrap valign="top"> <i>w</i><sub>i</sub>  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top"> <i>&sigma;</i><sup>2</sup><sub>rms</sub> + <i>&sigma;</i><sup>2</sup><sub>q&nbsp;i</sub>    <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp; via FFT </td> 
+      </tr>
+      <tr>
+        <td nowrap valign="top">   <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top"> RMS<sup>2</sup> + <i>&sigma;</i><sup>2</sup><sub>q&nbsp;i</sub>    <sup>&nbsp;</sup></td>
+      </tr>
+     </table>
+  </center>
+</p>
+<p class="par">
+to perform a &chi;<sup>2</sup> evaluation taking into account quantisation noise. It is, however, a larger
+computational effort to do so, and the user might be inclined to
+modify the goodness-of-fit evaluation, which is why in TiRiFiC we introduce the weight parameter
+<a href="model_fitting.html#WEIGHT">WEIGHT</a>, to calculate the weight map following the equation
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="3"> (7)&nbsp;&nbsp;&nbsp; </td> 
+        <td nowrap valign="top"> <i>w</i><sub>i</sub>  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top"> (<i>&sigma;</i><sup>2</sup><sub>rms</sub>&middot;WEIGHT<sup>2</sup> + <i>&sigma;</i><sup>2</sup><sub>q&nbsp;i</sub>)&middot;WEIGHT<sup>-2</sup>    <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;. </td> 
+      </tr>
+      <tr>
+        <td nowrap valign="top">   <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top"> (RMS<sup>2</sup>&middot;WEIGHT<sup>2</sup> + <i>&sigma;</i><sup>2</sup><sub>q&nbsp;i</sub>)&middot;WEIGHT<sup>-2</sup>    <sup>&nbsp;</sup></td>
+      </tr>
+     </table>
+  </center>
+</p>
+<p class="par">
+In case of a vanishing weight parameter (<a href="model_fitting.html#WEIGHT">WEIGHT</a> 0.0), the weight map
+has the constant pixel values RMS<sup>2</sup>. In this case it will not be calculated
+resulting in a higher computing speed. If set to 1.0, the correct noise will be
+evaluated, including the quantisation noise. We kept the parameter to be variable between the two discrete cases to
+give the user a weighting scheme at hand. With an increasing
+weight parameter, the emphasis will be more and more taken away from
+the high-quantisation-noise (and high emission) regions towards the regions of low
+emission.
+</p>
+<p class="par">
+Again, specifying a nonzero <a href="model_fitting.html#WEIGHT">WEIGHT</a> parameter instructs TiRiFiC to perform two convolutions per model calculation (one for the model itself, one for the weight map), requiring 1.5 times to 1.7 times the amount of reserved memory. The user might therefore be inclined to estimate the quantisation noise before he or she includes the quantisation noise in the &chi;<sup>2</sup> calculation. This is possible by constructing, without fitting, a model that consists of the input model disk(s) and in addition a further disk for which the surface brightness is chosen to be the negative of the surface brightness of the originally intended model. With that, one subtracts a model from exactly the same model, which is however generated using different random-numbers. Hence, the result is a data cube with quantisation noise only, enhanced by a factor of 2<sup>1/2</sup>.
+</p>
+<p class="par">
+Notice that, to provide a good approximation of the quantisation noise, it is required that the point source flux is approximately the same for all point sources of the model. This condition is violated, if the user specifies different cloud fluxes for different disks. The parameters <a href=model_geometry.html#CFLUX">CFLUX</a> and <a href=model_geometry.html#CFLUX_i">CFLUX_i</a> (i = 2, 3, ...) should therefore have the same value, if with non-vanishing <a href="model_fitting.html#WEIGHT">WEIGHT</a> parameter the quantisation noise is taken into account in the &chi;<sup>2</sup> evaluation.
+</p>
+
+
+
+<h4><a name="Goodness-of-fit evaluation: boundary conditions">Goodness-of-fit evaluation: boundary conditions</a></h4>
+
+<p class="par">
+Boundary conditions to a TiRiFiC model are user-defined methods to influence the structure of a best-fit model by providing priors. In TiRiFiC, these boundary conditions are implemented by increasing the &chi;<sup>2</sup> before it is passed to the minimising algorithm. The user has the possibility to <a href="model_fitting.html#outliers">i) penalise a model extending (partly) beyond the input data cube</a>, <a href="model_fitting.html#regularisation">ii) regularise the solution by penalising user-defined harmonic amplitudes</a>, <a href="model_fitting.html#minmax">iii) provide minima and maxima to the fitting parameters</a>. We will discuss the implementation of these possibilities here. 
+</p>
+<p class="par">
+<b><a name="outliers">Suppressing outliers:</a></b> TiRiFiC constructs a cloud of point sources, which may (partly) fall
+out of the boundaries of the (input) data cube. Pointsources falling
+outside the data cube boundaries shall be called outliers. Without taking any measures,
+outliers are not included in the chisquare evaluation. In
+principle, especially if the user wants to analyse a marginally
+detected disk, this may lead to the effect that a numerically
+favourable solution (with a lower &chi;<sup>2</sup>) consists of
+shifting the model outside the data cube. Any optimisation algorithm will then provide exactly this, probably unwanted, solution.
+
+ To optionally prevent this effect, the parameter <a href="model_fitting.html#PENALTY">PENALTY</a>
+is introduced in TiRiFiC. TiRiFiC counts the number of pointsources that lie
+outside the data cube. Each of those pointsources is then treated roughly
+like a pointsource for which the input datacube has a value of 0, and
+for which no other pointsources occupy the same pixels. By default
+this means that for every outlier a value
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="3"> (8)&nbsp;&nbsp;&nbsp; </td> 
+        <td nowrap valign="top"> &Delta;&chi;<sup>2</sup>  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top"> CFLUX&middot;(&pi;/2)<sup>1/2</sup>&middot;&sigma;<sup>2</sup><sub>maj</sub>&middot;&sigma;<sup>2</sup><sub>min</sub>&middot;<i>&sigma;</i><sup>-2</sup><sub>rms</sub>    <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;, </td> 
+      </tr>
+      <tr>
+        <td nowrap valign="top">   <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top"> CFLUX&middot;(&pi;/2)<sup>1/2</sup>&middot;(ln(256))<sup>-1</sup>BMAJ<sup>2</sup>&middot;BMIN<sup>2</sup>&middot;RMS<sup>-2</sup>    <sup>&nbsp;</sup></td>
+      </tr>
+     </table>
+  </center>
+</p>
+<p class="par">
+with &sigma;<sub>maj</sub> &sigma;<sub>min</sub> being the dispersions of the spatial part of the instrumental convolving function, is <i>added</i> to the &chi;<sup>2</sup>. As this is in any case an estimate, the
+quantisation noise is not taken into account in this calculation . By setting the
+parameter <a href="model_fitting.html#PENALTY">PENALTY</a>, the user controls this requirement to the model via
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="3"> (9)&nbsp;&nbsp;&nbsp; </td> 
+        <td nowrap valign="top"> &Delta;&chi;<sup>2</sup>  <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top"> PENALTY&middot;CFLUX&middot;(&pi;/2)<sup>1/2</sup>&middot;&sigma;<sup>2</sup><sub>maj</sub>&middot;&sigma;<sup>2</sup><sub>min</sub>&middot;<i>&sigma;</i><sup>-2</sup><sub>rms</sub>    <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;. </td> 
+      </tr>
+      <tr>
+        <td nowrap valign="top">   <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top"> PENALTY&middot;CFLUX&middot;(&pi;/2)<sup>1/2</sup>&middot;(ln(256))<sup>-1</sup>BMAJ<sup>2</sup>&middot;BMIN<sup>2</sup>&middot;RMS<sup>-2</sup>    <sup>&nbsp;</sup></td>
+      </tr>
+     </table>
+  </center>
+</p>
+<p class="par">
+If for an example the user does not wish to influence the fitting process by penalising outliers, then the user
+sets <a href="model_fitting.html#PENALTY">PENALTY</a> 0. If the user wants to suppress outliers at any cost,
+then the user choses <a href="model_fitting.html#PENALTY">PENALTY</a> 100000 or <a href="model_fitting.html#PENALTY">PENALTY</a>100000000 (maybe even <a href="model_fitting.html#PENALTY">PENALTY</a>100000001). Usually, a model converges quite quickly to resemble an observed disk, also without specifying a non-zero <a href="model_fitting.html#PENALTY">PENALTY</a>, but it is recommended to keep <a href="model_fitting.html#PENALTY">PENALTY</a> 1.
+</p>
+<p class="par">
+<b><a name="regularisation">Regularisation via harmonic components:</a></b> the tilted-ring model is a highly idealised model of a disk appearing in nature, e.g. a galactic disk. Therefore, it occasionally happens that, while a tilted-ring model with a well-defined &chi;<sup>2</sup>-minimum in parameter space can be found, it appears as an unphysical solution. An example is a best-fit solution in which the rotation curve shows small-scale periodic variations. Apparently, in this best-fit solution the tilted-ring model is optimised to include surface-brightness- or local velocity variations that are not inherent to the tilted-ring model (e.g. holes or expanding shells in dwarf galaxies are notorious to have such an effect). One way to address this issue is to try to include these variations in the model, another way might be to enforce a smoother, more "physical" solution by penalising such variations. In TiRiFiC, a first attempt to address the issue is made by giving the user the possibility to suppress higher-order harmonics in the parametrisation. So far, this did not prove a very successful method, while it has also not been tested very much. For completeness, and to encourage the interested reader to experiment, we describe the implemented method here, while other possibilities for a regularisation will be implemented in the future.
+</p>
+<p class="par">
+Any given radially dependent parametrisation {PAR(RADI<sub>j</sub>)}<sub>j =
+  1,...,m</sub> at given nodes (rings) {RADI<sub>j</sub>}<sub>j =
+  1,...,m</sub> provided by the user or changed during the fitting
+  process (see section <a href="model_geometry.html#Radial nodes and parameter discretisation">Radial nodes and parameter discretisation</a>) can be transformed into a (finite) Fourier series
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="3"> (9)&nbsp;&nbsp;&nbsp; </td> 
+        <td nowrap valign="top"> PAR(RADI<sub>j</sub>) <sup>&nbsp;</sup></td> 
+        <td valign="top" > = <sup>&nbsp;</sup></td> 
+        <td valign="top"> a<sub>0</sub> + &Sigma;<sub>k = 1, ... , <i>floor</i>(m/2)</sub> a<sub>k</sub>&middot;cos((2&pi;&middot;k&middot;j-&alpha;<sub>k</sub>)&middot;m<sup>-1</sup>) <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;.</td> 
+      </tr>
+     </table>
+  </center>
+</p>
+<p class="par">
+The <i>floor</i> operation has the meaning of rounding down. If m is even, then the highest order phase &alpha;<sub><i>floor</i>(m/2)</sub> is necessarily 0, such that any number of m parameters has always the same number of amplitude-phase combinations in the corresponding Fourier decomposition. A high frequency variation of a parameter series will lead to a higher value of the highest order amplitude a<sub><i>floor</i>(m/2)</sub> in the Fourier decomposition. The idea to regularise the fitting process and hence to suppress such wiggles in the fitting process is to penalise high order (or user-chosen) amplitudes above a certain value in the Fourier decomposition of a radially dependent paramter series. This is the principle behind the currently implemented regularisation scheme offered in TiRiFiC.
+</p>
+<p class="par">
+With the parameter <a href="model_fitting.html#REGPARA">REGPARA</a>, the user specifies a (comma-separated) list of radially dependent parameters (<a href="model_fitting.html#REGPARA">syntax</a>) that are foreseen for a regularisation. Any subset of the radially dependent parameteters described in the section <a href="model_geometry.html">Model geometry</a> can be specified. If the model has of a number of <a
+  href="model_geometry.html#NUR">NUR</a> m nodes (rings), then for each radially dependent parameter group {PAR(RADI<sub>j</sub>)}<sub>j = 1, ..., m</sub> a subset {PAR(RADI<sub>l</sub>)}<sub>l 
+  &isin; S</sub>, with S &sube; {1, ..., m} of the complete number of parameters {PAR(RADI<sub>j</sub>)}<sub>j 
+  = 1,...,m</sub> can be chosen. This subset of paramters is then transformed to a set {PAR&prime;(RADI<sub>j</sub>)}<sub>j 
+  = 1,...,m</sub>, with the "missing" parameters calculated via linear interpolation. After that, the series (PAR&prime;<sub>j</sub>) is Fourier-tranformed to calculate the Fourier amplitudes {a<sub>k</sub>}<sub>k = 0, ..., <i>floor</i>(m/2)</sub>. The user has now the possibility to define two sets of orders (indices) of Fourier amplitudes per parameter group specified with <a href="model_fitting.html#REGPARA">REGPARA</a> to define a ratio r of (sums of) Fourier amplitudes. The amplitudes with the orders entered with the keyword <a href="model_fitting.html#REGDENO">REGDENO</a> are summed up to build a denominator, the amplitudes with the orders entered through the keyword <a href="model_fitting.html#REGNUME">REGNUME</a> are summed up to become the numerator of that ratio. Alternatively, a constant denominator can be specified with the keyword <a href="model_fitting.html#REGAMPD">REGAMPD</a>. Assuming that the user specifies the highest-order amplitudes for the numerator (e.g. <i>floor</i>(m/2) only), and all available order amplitudes or a constant number for the denominator, the ratio r is a measure of the strength of the highest-frequency variations of the given parameter with radius, compared to all other Fourier amplitudes or to a fixed number. Following the remarks above, it is possibly desirable to suppress these highest modes by penalising a high ratio r in the fitting process. The user defines per parameter group given in <a href="model_fitting.html#REGPARA">REGPARA</a> a threshold REGTHRE through a list passed with the parameter <a href="model_fitting.html#REGTHRE">REGTHRE</a>, a width REGWIDT through the list <a href="model_fitting.html#REGWIDT">REGWIDT</a>, an amplitude REGAMPL with the list <a href="model_fitting.html#REGAMPL">REGAMPL</a>, and an increment REGASTE for the amplitude per <a href="model_fitting.html#Implemented fitting algorithms">fitting loop</a> (the number of repetitions of a fitting process) with the list  <a href="model_fitting.html#REGASTE">REGASTE</a>. Then, an increment &Delta;&chi;<sup>2</sup>, to be added to the &chi;<sup>2</sup> is calculated via
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="3"> <a name="(10)">(10)</a>&nbsp;&nbsp;&nbsp; </td> 
+        <td nowrap rowspan="3">  &Delta;&chi;<sup>2</sup> <sup>&nbsp;</sup></td> 
+        <td nowrap rowspan="3"> = <sup>&nbsp;</sup></td> 
+        <td valign="top"> 0 <sup>&nbsp;</sup></td>
+        <td valign="top"> if <sup>&nbsp;</sup></td>
+        <td valign="top"> r &le; REGTHRE <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;, with</td> 
+      </tr>
+      <tr>
+        <td valign="top"> (r - REGTHRE)&middot;(REGAMPL + loops&middot;REGASTE)&middot;REGWIDT<sup>-1</sup> <sup>&nbsp;</sup></td>
+        <td valign="top"> if <sup>&nbsp;</sup></td>
+        <td valign="top"> REGTHRE < r < REGTHRE+REGWIDT <sup>&nbsp;</sup></td>
+      </tr>
+       <tr>
+        <td valign="top"> REGAMPL + loops&middot;REGASTE <sup>&nbsp;</sup></td>
+        <td valign="top"> if <sup>&nbsp;</sup></td>
+        <td valign="top"> REGTHRE + REGWIDT &le; r <sup>&nbsp;</sup></td>
+      </tr>
+    </table>
+  </center>
+</p>
+<p class="par">
+loops being the number of finished fitting loops. With that, the user has the possibility to increasingly penalise high-frequency variations in a parametrisation. The <a href="model_fitting.html#REGPARA">syntax is discussed below</a>.
+</p>
+
+<p class="par">
+<b><a name="minmax">Minima and maxima for fitting parameters:</a></b> minima and maxima for fitting parameters are defined in the context of parametrising the fitting process (see <a href="model_fitting.html#Fitting parameters">see here</a>). The very simplistic approach is to multiply the &chi;<sup>2</sup> after taking into account <a href="model_fitting.html#outliers">outliers</a> by a factor of OUTRANGEFAC whenever a parameter leaves the specified range between the user-specified values <a href="model_fitting.html#PARMAX">PARMAX</a> and <a href="model_fitting.html#PARMIN">PARMIN</a> during a fitting process. The factor OUTRANGEFAC is currently hardcoded to be 10.0. <a href="mailto:jozsa@astron.nl">On request</a> (should be well motivated), we can introduce a corresponding input parameter into TiRiFiC.
+</p>
+
+
+
+<h4><a name="Implemented fitting algorithms">Implemented fitting algorithms</a></h4>
+<p class="par">
+While a small number of fitting methods have been tested, no ideal
+solution has been found yet. As mentioned above, TiRiFiC would ideally
+use a fast global minimum search algorithm which is able to cope with
+a large number of parameters, a complex &chi;<sup>2</sup> landscape,
+the absense of analytic derivatives, which would also be able to
+deliver a cross-correlation matrix and statistical errors. <b><i>Any
+suggestions to approach a solution to this issue, the more concrete (even coded
+suggestions..?) the better, are <a
+href="mailto:jozsa@astron.nl">highly welcome</a>.</i></b> The
+currently implemented minimising algortithms are working locally only
+and do not provide any statistical error estimates (which, however,
+are only expected to be relevant for marginally resolved
+objects, where the statistical errors dominate over the deviations of the observed objects from the tilted-ring symmetry). Currently, a quite rough initial guess, followed by a
+user-controlled sequence of automated minimisations, mostly lead to a reasonable
+result. We are working on three ways to solve the issue, wrapping such a sequence into a
+completely automated process using the currently implemented
+minimisation algorithms, testing alternative minimisers, and reducing the number of parameters by providing functional forms of the single parameters.
+</p>
+
+<p class="par">
+With the keyword <model_fitting.html#FITMODE">FITMODE</a> the user can formally choose between three possible minimising techniques: a golden-section nested-intervals approach (<model_fitting.html#FITMODE">FITMODE</a> 1), a slightly modified version of the same algorithm (<model_fitting.html#FITMODE">FITMODE</a> 2), and a Nelder-Mead downhill simplex algorithm (<model_fitting.html#FITMODE">FITMODE</a> 2).
+</p>
+
+<p class="par">
+<b><a name="generic minimum-finder">Generic approach for minimum-finders:</a></b>
+with the exception of the golden-section algorith with <a href="model_fitting.html#FITMODE">FITMODE</a> 1, the approach for the minimum finders is generalised (which is a slightly too big word, given that three minimisers are implemented; but more will follow). 
+</p>
+
+<p class="par">
+A TiRiFiC minimum finder is provided with a set of fitting parameters as specified by the keywords <a href="model_fitting.html#VARY">VARY</a> and <a href="model_fitting.html#VARINDX">VARINDX</a>. Each fitting parameter as seen by the minimum finder is a representative of a fitting group of <a href="model_geometry.html">geometrical parameters</a> of the TiRiFiC tilted-ring model, normalised by a factor which is provided with the keyword <a href="model_fitting.html#MINDELTA">MINDELTA</a>, and with start values mapped to the origin of the fitting grid. While the fitting parameters are tied to different physical quantities, and hence a change of their numerical values of can have a quite different effect, the minimising algorithms hence see (depending on the sensible choice of <a href="model_fitting.html#MINDELTA">MINDELTA</a> by the user) all fitting parameters on roughly the same scale, with the input fitting parameters mapped to the origin of the fitting grid (if the physical value is the one provided with <a href="model_fitting.html#MINDELTA">MINDELTA</a>, the fitting algorithm sees "1").
+</p>
+
+<p class="par">
+Any minimising algorithm in TiRiFiC will move through a number of iterations of models to finish a loop of iterations, after which it will then start the next loop, until a stopping condition is meat. The definition of an iteration and a loop is different from minimising algorithm to minimising algorithm, and will be specified in detail in the description of the single minimisers. In TiRiFiC, the user specifies the maximum number of loops with the keyword <a href="model_fitting.html#LOOPS">LOOPS</a>, the maximum total number of iterations with the keyword <a href="model_fitting.html#MAXITER">MAXITER</a>, and the maximum number of model calculations per iteration with the keyword <a href="model_fitting.html#CALLITE">CALLITE</a>, thus defining boundary stopping conditions for the minimisers.
+</p>
+
+<p class="par">
+The currently implemented fitting algorithms are local search algorithms, which require a search direction. This is provided through the keywords <a href="model_fitting.html#MODERATE">MODERATE</a>, <a href="model_fitting.html#DELSTART">DELSTART</a>, and <a href="model_fitting.html#DELEND">DELEND</a>. With <a href="model_fitting.html#DELSTART">DELSTART</a>, the user provides a search direction or a start stepwidth for each fitting parameter at the beginning of the first loop. With <a href="model_fitting.html#MODERATE">MODERATE</a> the user provides for each parameter the number of loops, for which the start stepwidth (start direction) varies linearly between the start stepwidths  <a href="model_fitting.html#DELSTART">DELSTART</a> and <a href="model_fitting.html#DELEND">DELEND</a>. Starting with loop number loop = 1, the start stepwidth sw in each loop for each fitting parameter is given by
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="2"> (11)&nbsp;&nbsp;&nbsp; </td> 
+        <td nowrap rowspan="3">  sw <sup>&nbsp;</sup></td> 
+        <td nowrap rowspan="3"> = <sup>&nbsp;</sup></td> 
+        <td valign="top"> DELSTART+(loop-1)&middot;(DELSTART - DELEND)/MODERATE <sup>&nbsp;</sup></td>
+        <td valign="top"> if <sup>&nbsp;</sup></td>
+        <td valign="top"> loop &le; MODERATE <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="2" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;, such that</td> 
+      </tr>
+      <tr>
+        <td valign="top"> DELEND <sup>&nbsp;</sup></td>
+        <td valign="top"> if <sup>&nbsp;</sup></td>
+        <td valign="top"> loop > MODERATE <sup>&nbsp;</sup></td>
+      </tr>
+    </table>
+  </center>
+</p>
+<p class="par">
+the final start step width provided in <a href="model_fitting.html#DELEND">DELEND</a> for each loop is reached after MODERATE+1 loops. Internally, the start step widths are normalised using the normalisation as provided by <a href="model_fitting.html#MINDELTA">MINDELTA</a>, but the user provides them in the same units as the <a href="model_geometry.html">geometrical parameters</a>. Again, with <a href="model_fitting.html#MODERATE">MODERATE</a> the user specifies an interpolation interval for the start stepwidth in loops for each fitting parameter.
+</p>
+
+<p class="par">
+Each TiRiFiC minimiser (with the exception of the golden-section algorithm with <a href="model_fitting.html#FITMODE">FITMODE</a> 1) calculates a "size" of the current iteration process. A stopping condition (for a loop) is given by the minimum size in units of the grid specified with the parameter <a href="model_fitting.html#MINDELTA">MINDELTA</a>. This minimum size is provided by the single number <a href="model_fitting.html#SIZE">SIZE</a>. Whether after meeting the stopping condition the algorithm continues with fitting or not depends on the specific minimising algorithm.
+</p>
+<p class="par">
+<b><a name="golden section">Golden-section method:</a></b> the golden section algorithm (see e.g. <a href="http://apps.nrbook.com/c/index.html">Press et al. 1992</a>, chap. 10.1, page 397) is a
+simple way to find a local minimum in parameter space, originally thought for a minimum search in one parameter only. In TiRiFiC, we implement what most text books expressively advise against (see e.g. <a href="http://apps.nrbook.com/c/index.html">Press et al. 1992</a>, chap. 10.5, page 412), a sequential fitting of all fitting parameters making use of the golden-section method. In TiRiFiC, this algorithm is selected with choosing <a href="model_fitting.html#FITMODE">FITMODE</a> 1 or <a href="model_fitting.html#FITMODE">FITMODE</a> 2. With <a href="model_fitting.html#FITMODE">FITMODE</a> 2, the algorithm is embedded as a <a href="model_fitting.html#generic minimum-finder">generic minimiser</a>, with <a href="model_fitting.html#FITMODE">FITMODE</a> 1 a former concept is kept, mainly to provide consistency with former versions of TiRiFiC.
+</p>
+<p class="par">
+Sequentially, a nested intervals minimisation of the &chi;<sup>2</sup> is performed for each parameter, to either stop when all parameters have been iterated, or to start the process again with the first fitting parameter. A series of iteration processes for
+all specified parameters is being referred to as a loop. In a nested-intervals iteration, the
+stepwidth is varied by changing the search direction and/or
+multiplication with a factor. Defining w = (3-5<sup>1/2</sup>)/2, this factor is given by 
+(1-w)w<sup>-1</sup> &approx; 1.62 when enlargening the stepwidth or by 
+w/(1-w) &approx; 0.62
+when reducing the stepwidth. The start step width for each loop and each fitting parameter is
+controlled by the keywords <a href="model_fitting.html#MODERATE">MODERATE</a>, <a href="model_fitting.html#DELSTART">DELSTART</a>, and <a href="model_fitting.html#DELEND">DELEND</a> (see sections <a href="model_fitting.html#Fitting parameters">Fitting parameters</a> and <a href="model_fitting.html#generic minimum-finder">Generic approach for minimum-finders</a>). 
+</p>
+<p class="par">
+The
+user has various possibilities to define a stopping condition for the minimum search and controlling its accuracy. On the level of the iteration process for a single fitting parameter, two conditions are provided to switch to the next fitting parameter. First, the user specifies the maximum number of steps (model calculations) for each nested intervals process (minimising the &chi;<sup>2</sup> for one fitting parameter, with the keywords <a href="model_fitting.html#MODERATE">MODERATE</a>, <a href="model_fitting.html#ITESTART">ITESTART</a>,
+<a href="model_fitting.html#ITEEND">ITEEND</a> if <a href="model_fitting.html#FITMODE">FITMODE</a> 1, with the keyword <a href="model_fitting.html#CALLITE">CALLITE</a> if <a href="model_fitting.html#FITMODE">FITMODE</a> 2). In the case of <a href="model_fitting.html#FITMODE">FITMODE</a> 1, the maximum number of models generated in an iteration is calculated in the same matter as the start stepwidths (see <a href="model_fitting.html#generic minimum-finder">Generic approach for minimum-finders</a>). Second, the user specifies a minimum stepwidth at
+which the algorithm steps out of the nested-intervals process for the current fitting parameter. This minimum stepwidth is provided by the user with the parameter list <a href="model_fitting.html#MINDELTA">MINDELTA</a>.
+</p>
+<p class="par">
+At the end of each iterative nested-intervals process for each parameter, the algorithm checks, whether it is
+still "satisfied" with the results. The minimising algorithm will not be satisfied, if it
+has not been before. If is has been satisfied, it will stay so, if<br> 
+i)   the maximum number of iterations (models) for a parameter have been reached (only for <a href="model_fitting.html#FITMODE">FITMODE</a> 1),<br>
+ii) the parameter hasn't changed by more than an absolute value (list <a href="model_fitting.html#SATDELT">SATDELT</a> if <a href="model_fitting.html#FITMODE">FITMODE</a> 1, <a href="model_fitting.html#MINDELTA">MINDELTA</a> times <a href="model_fitting.html#SIZE">SIZE</a> if <a href="model_fitting.html#FITMODE">FITMODE</a> 2)
+with respect to it's value at the start of the iterative process in each loop. Hence, for <a href="model_fitting.html#FITMODE">FITMODE</a> 2, the size is the maximum absolute deviation of the fitting parameters, normalised with the values given in the list <a href="model_fitting.html#MINDELTA">MINDELTA</a>, from the values derived in the previous loop. To use the size as a stopping condition for <a href="model_fitting.html#FITMODE">FITMODE</a> 2, the number of loops <a href="model_fitting.html#LOOPS">LOOPS</a> has to be greater than 2.
+</p>
+<p class="par">
+If the golden section algorithm encounters a situation where at the end of a loop it is
+still satisfied, it stops iterating and returns with the current solution for the fitting parameters as the minimum position. If it is not satisfied, the
+satisfaction flag will be set again to "satisfied", and a new loop is
+started, until the number <a href="model_fitting.html#LOOPS">LOOPS</a> of loops is reached or until the algorithm
+is satisfied at the end of a loop. As mentioned <a href="model_fitting.html#generic minimum-finder">above</a>, for <a href="model_fitting.html#FITMODE">FITMODE</a> 2 a further stopping condition is defined by defining the maximum number of model calculations with the parameter <a href="model_fitting.html#MAXITE">MAXITE</a>. <b>Please note that <a href="model_fitting.html#FITMODE">FITMODE</a> 1 is deprecated and currently being kept for consistency with older TiRiFiC versions, and will be removed at some point.</b>
+</p>
+<p class="par">
+<b><a name="simplex">The simplex algorithm:</a></b> with <a href="model_fitting.html#FITMODE">FITMODE</a> 3, the user chooses a variant of the Nelder-Mead (1965) downhill simplex algorithm as a minimiser, as implemented in the <a href="http://www.gnu.org/s/gsl/">GNU scientific library (GSL)</a> (method: <a href="http://www.gnu.org/s/gsl/manual/html_node/Multimin-Algorithms-without-Derivatives.html">gsl_multimin_fminimizer_nmsimplex2</a>). All fitting parameters enter the algorithm as described in the section <a href="model_fitting.html#generic minimum-finder">generic minimisers</a>. The general simplex technique is well described in <a href="http://apps.nrbook.com/c/index.html">Press et al. 1992</a> (chap. 10.4, page 408) and based on the principle to evaluate a function at the vertices of a simplex (a multidimensional triangle), then iteratively shrinking and moving the simplex as better points are found until the size of the simplex is below a given size. For the specific implementation in the <a href="http://www.gnu.org/s/gsl/">GSL</a>, we refer to <a href="http://www.gnu.org/s/gsl/manual/html_node/Multimin-Algorithms-without-Derivatives.html">the description of the implemented GSL library function</a>. 
+</p>
+<p class="par">
+Specific to the algorithm is the definition of the size. After normalising with the with the values given in the list <a href="model_fitting.html#MINDELTA">MINDELTA</a>, the size of the simplex is given by the root mean square (<a href="http://en.wikipedia.org/wiki/Root_mean_square">rms</a>) of the distances between the vertices of the simplex and its barycenter. Thus, if  <a href="model_fitting.html#SIZE">SIZE</a> 1, the single parameters are on average (rms) minimised to an accuracy given by the values given in the list <a href="model_fitting.html#MINDELTA">MINDELTA</a>. The starting point of the algorithm is a simplex with the vertices
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;(0, 0, ..., 0), (sw<sub>1</sub> MINDELTA<sup>-1</sup><sub>1</sub>, 0, ..., 0), (0,sw<sub>2</sub> MINDELTA<sup>-1</sup><sub>2</sub>, ..., 0 ), ..., (0, 0, ..., sw<sub>n</sub> MINDELTA<sup>-1</sup><sub>n</sub>),
+</p>
+<p class="par">
+ where sw is given in eq. (11), and MINDELTA<sub>i</sub> is the normalisation given in the parameter list <a href="model_fitting.html#MINDELTA">MINDELTA</a>. The parameter <a href="model_fitting.html#CALLITE">CALLITE</a> is ignored for this minimisation mode, since an iteration is ill (not) defined. A loop is a complete minimisation run, and the number of loops given by the parameter <a href="model_fitting.html#LOOPS">LOOPS</a> is the number of repeated iterations, no stopping condition applies to step out of the minimisation process before that number of loops has been performed, apart from the maximum number of model calculations <a href="model_fitting.html#CALLITE">CALLITE</a>. For each loop, the results from the previous loop are adopted as the initial guess.
+</p>
+<p class="par">
+<b><a name="simplex">Future minimisers:</a></b> 
+The inclined reader will remark that the number of implemented minimisers is quite small and not expressively modern. This weak point is being worked on at speed. One other point the reader might want to point out is that e.g. in <a href="http://apps.nrbook.com/c/index.html">Press et al.</a> (1992, chap. 10.5, page 412) a local minimisation method is outlined, which also works without derivatives, and which should be easily implemented as an alternative to the golden-section method. We will do so, but we are not really optimistic that this will enhance the speed of TiRiFiC when fitting. The simple reason is that for a model calculation, TiRiFiC updates only point sources influenced by a parameter change. This means that if e.g. only one geometrical parameter is fitted, also only two rings are updated before the &chi;<sup>2</sup> is calculated. Minimisation methods that are more efficient in terms of iterations, however, mostly use linear combinations of the fitting parameters. This means that in most cases, all fitting parameters are changed in each iteration, which will lead to a completely new model calculation, and is consecutively longer. We might expect a higher stability of the fitting process, though.
+</p>
+<h4><a name="Goodness-of-fit evaluation: blanked pixels">Goodness-of-fit evaluation: blanked pixels</a></h4>
+<p class="par">
+It is possible to blank and ignore single pixels in the goodness-of-fit evaluation. In the <b>standalone version</b>, pixels which have a value of NaN (standard blanked pixels in <a href="http://en.wikipedia.org/wiki/FITS">FLEXIBLE IMAGE TRANSPORT SYSTEM (FITS)</a>) are ignored. In the <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> versions (up to 2.1.5), any pixel with a value below -1024 is ignored.
+</p>
+
+<h3><a name="Fitting parameters">Fitting parameters</a></h3>
+<h4><a name="Fitting expressions, groups, and parameters">Fitting expressions, groups, and parameters</a></h4>
+<p class="par">
+To define the syntax to direct TiRiFiC to optimise certain geometrical parameters, we make the following distinctions:
+</p>
+<p class="par">
+<b><a href="model_geometry.html">Geometrical parameters</a></b> are parameters that describe a TiRiFiC model.
+</p>
+<p class="par">
+<b>A fitting group</b> is a group of <a href="model_geometry.html">geometrical parameters</a> that is optimised synchronously. In the fitting process each <a href="model_geometry.html">geometrical parameter</a> in a fitting group is changed by the same amount. This means that only if the input parameters are identical, the output parameters are identical after a fitting process. A fitting group appears only as one fitting parameter to a minimising algrorithm. A fitting group contains at least one <a href="model_geometry.html">geometrical parameter</a>
+</p>
+<p class="par">
+<b>A fitting parameter</b> is a representative of a fitting group that is passed to the minimising routines (and oprimised).
+</p>
+<p class="par">
+<b>A fitting expression</b> defines one or more fitting groups. A comma-separated list of fitting expressions is passed to TiRiFiC with the keyword <a href="model_fitting.html#VARY">VARY</a>.
+</p>
+
+
+<hr>
+<h4><a name="Fitting mode">Fitting mode</a></h4>
+<a name="FITMODE">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>FITMODE</b></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Fitting mode, 1: Golden Section, old fashion, 2: Golden Section, 3: Simplex </td>
+  </tr>
+</table>
+</a>
+<p class="par">
+With <a href="model_fitting.html#FITMODE">FITMODE</a>, the user specifies the minimising algorithm used for TiRiFiC if parameter optimisation is desired. 1: Golden Section, old fashion, 2: Golden Section, 3: Simplex. The fitting methods are described in detail <a href="#Implemented fitting algorithms">in this paragraph</a>.
+</p>
+
+
+<hr>
+<h4><a name="Defining fitting groups">Defining fitting groups</a></h4>
+<a name="VARY">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>VARY</b></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center">&nbsp</td>
+    <td align="left">Specification of fitting parameters</td>
+  </tr>
+</table>
+</a>
+<p class="par">
+With <a href="model_fitting.html#VARY">VARY</a>, the user provides a comma-separated list of "fitting expressions", which define fitting groups of <a href="model_geometry.html">geometrical parameters</a>. Each fitting group is treated by the minimising algorithms as a single parameter. <a href="model_fitting.html#VARY">VARY</a> has to appear as a TiRiFiC input parameter, but can be left empty.
+</p>
+<p class="par">
+Each fitting expression consists of an optional leading "!", and a list of geometrical parameter names, each of which is optionally followed by a list of node numbers. The names of the geometrical parameters are identical to the parameter names specified in the section <a href="model_geometry.html">model geometry</a>, but without the trailing "=", and refer to the corresponding geometrical parameters.
+</p>
+<p class="par">
+<b>Basic syntax:</b>
+</p>
+<p class="par">
+The fitting expression
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td nowrap valign="top">VARY=  <sup>&nbsp;</sup></td> 
+        <td valign="top" > &nbsp <sup>&nbsp;</sup></td> 
+        <td valign="top"> ..., PAR<sub>1</sub> r<sub>11</sub> r<sub>12</sub> ... r<sub>1l</sub> PAR<sub>2</sub> r<sub>21</sub> r<sub>22</sub> ... r<sub>2m</sub> ... PAR<sub>k</sub> r<sub>k1</sub> r<sub>k2</sub> ... r<sub>kn</sub>, ... <sup>&nbsp;</sup></td>
+      </tr>
+     </table>
+  </center>
+</p>
+<p class="par">
+defines a fitting group consisting of the geometrical parameters PAR<sub>1</sub> at the radial nodes r<sub>11</sub> r<sub>12</sub> ... r<sub>1l</sub>, PAR<sub>2</sub> at the radial nodes r<sub>21</sub> r<sub>22</sub> ... r<sub>2m</sub>, and so on, and PAR<sub>k</sub> at the radial nodes r<sub>k1</sub> r<sub>k2</sub> ... r<sub>kn</sub>. The radial nodes are given as integers, with 1 corresponding to the first radial node (first ring, with radius 0 arcsec), and a maximum of <a href="model_geometry.html#Radial nodes and parameter discretisationq">NUR</a>. The user hence specifies a list of <a href="model_geometry.html">geometrical parameters</a> at given ring radii RADI<sub>r</sub> (see <a href="model_geometry.html#Radial nodes and parameter discretisation">here</a>), which are optimised as one parameter. The relative differences of input parameters within a fitting group are not changed during the fitting process. If one of the paramters within a fitting group is set to <i>x</i> in the model specification, and another parameter is set to <i>y</i>, then after the fitting process, the result will be optimised parameters with values <i>x</i>+<i>a</i> and <i>y</i>+<i>a</i>, where a is the same for both parameters. If, of course both input parameters are the same <i>x</i> = <i>y</i>, their optimised values will be equal, too.
+</p>
+<p class="par">
+Example 1:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;VARY= VROT 1, VROT 2, VROT 3, VROT 4, VROT 5, XPOS 1 2 3 4 5 6 7
+</p>
+<p class="par">
+Here six fitting expressions are specified. Each fitting expression describes one fitting group. The rotation velocities of nodes (rings) 1 to 5 are fitted independently, one by one, while the central right ascension of nodes (rings) 1 to 7 is fitted as one single parameter. If hence <a href="model_geometry#NUR">NUR</a> 7, the complete disk is shifted as a whole in right ascension during the fitting process. 
+</p>
+<p class="par">
+<b><a name="Abbrevations for ring numbers"><b>Abbrevations for ring numbers</b></a></b>
+</p>
+<p class="par">
+Making use of the ":" symbol, the abbrevations for specifying nodes (rings)
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td nowrap > PAR k:l:m <sup>&nbsp;</sup></td> 
+        <td nowrap > transforms to <sup>&nbsp;</sup></td> 
+        <td valign="top"> PAR k k+m k+2&middot;m ... k+i&middot;m<sup>&nbsp;</sup></td>
+        <td valign="top">, <sup>&nbsp;</sup></td>
+        <td valign="top">k+i&middot;m &le; l  &and; k+(i+1)&middot;m > l  <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td nowrap > PAR k:l: <sup>&nbsp;</sup></td> 
+        <td nowrap > transforms to <sup>&nbsp;</sup></td> 
+        <td valign="top"> PAR k:l:1 <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td nowrap > PAR k::m <sup>&nbsp;</sup></td> 
+        <td nowrap > transforms to <sup>&nbsp;</sup></td> 
+        <td valign="top"> PAR 1:<a href="model_geometry.html#NUR">NUR</a>:m <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td nowrap > PAR :l:m <sup>&nbsp;</sup></td> 
+        <td nowrap > transforms to <sup>&nbsp;</sup></td> 
+        <td valign="top"> PAR 1:l:m <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td nowrap > PAR k:: <sup>&nbsp;</sup></td> 
+        <td nowrap > transforms to <sup>&nbsp;</sup></td> 
+        <td valign="top"> PAR 1:<a href="model_geometry.html#NUR">NUR</a>:1 <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td nowrap > PAR :l: <sup>&nbsp;</sup></td> 
+        <td nowrap > transforms to <sup>&nbsp;</sup></td> 
+        <td valign="top"> PAR 1:l:1 <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td nowrap > PAR ::m <sup>&nbsp;</sup></td> 
+        <td nowrap > transforms to <sup>&nbsp;</sup></td> 
+        <td valign="top"> PAR 1:<a href="model_geometry.html#NUR">NUR</a>:m <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td nowrap > PAR :: <sup>&nbsp;</sup></td> 
+        <td nowrap > transforms to <sup>&nbsp;</sup></td> 
+        <td valign="top"> PAR 1:<a href="model_geometry.html#NUR">NUR</a>:1 <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td nowrap > PAR k:l <sup>&nbsp;</sup></td> 
+        <td nowrap > transforms to <sup>&nbsp;</sup></td> 
+        <td valign="top"> PAR k:l:1 <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+      </tr>
+        <td nowrap > PAR :l <sup>&nbsp;</sup></td> 
+        <td nowrap > transforms to <sup>&nbsp;</sup></td> 
+        <td valign="top"> PAR 1:l:1 <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+      </tr>
+      </tr>
+        <td nowrap > PAR k: <sup>&nbsp;</sup></td> 
+        <td nowrap > transforms to <sup>&nbsp;</sup></td> 
+        <td valign="top"> PAR k:<a href="model_geometry.html#NUR">NUR</a>:1 <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+      </tr>
+      </tr>
+        <td nowrap > PAR : <sup>&nbsp;</sup></td> 
+        <td nowrap > transforms to <sup>&nbsp;</sup></td> 
+        <td valign="top"> PAR 1:<a href="model_geometry.html#NUR">NUR</a>:1 <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+      </tr>
+      </tr>
+        <td nowrap > PAR  <sup>&nbsp;</sup></td> 
+        <td nowrap > transforms to <sup>&nbsp;</sup></td> 
+        <td valign="top"> PAR 1:<a href="model_geometry.html#NUR">NUR</a>:1 <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+        <td valign="top">  <sup>&nbsp;</sup></td>
+      </tr>
+    </table>
+  </center>
+</p>
+<p class="par">
+are valid. <a href="model_geometry.html#NUR">NUR</a> is the total number of nodes (rings). TiRiFiC will return an error message if the expression expands into integers outside the interval [1,<a href="model_geometry.html#NUR">NUR</a>].
+</p>
+<p class="par">
+Example 2:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;VARY= VROT 1, VROT 2, VROT 3, VROT 4, VROT 5:7, XPOS 1:7
+</p>
+<p class="par">
+Here six fitting expressions are specified. Each fitting expression describes one fitting group. The rotation velocities of nodes (rings) 1 to 4 are fitted independently, one by one, the rotation velocity of rings 5, 6, and 7 is fitted as one single parameter, and the central right ascension of nodes (rings) 1 to 7 (1, 2, 3, 4, 5, 6, 7) is fitted as one single parameter. If hence <a href="model_geometry#NUR">NUR</a> 7, the complete disk is shifted as a whole in right ascension during the fitting process.
+</p>
+<p class="par">
+<b>Expanding fitting expressions into multiple groups</b>
+</p>
+<p class="par">
+Making use of the "!" symbol as the first symbol within a fitting expression (whitespaces are ignored), multiple fitting groups can be defined with one fitting expression. An expression
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;VARY= ..., ! PAR<sub>1</sub> r<sub>11</sub> r<sub>12</sub> ... r<sub>1l</sub> PAR<sub>2</sub> r<sub>21</sub> r<sub>22</sub> ... r<sub>2m</sub> ... PAR<sub>k</sub> r<sub>k1</sub> r<sub>k2</sub> ... r<sub>kn</sub>, ...
+</p>
+<p class="par">
+defines a number of s fitting groups, each at a specific ring number q<sub>i</sub>
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;Group 1: PAR&prime;<sub>11</sub> q<sub>1</sub> PAR&prime;<sub>12</sub> q<sub>1</sub> ... PAR&prime;<sub>1t<sub>1</sub></sub> q<sub>2</sub><br>
+&nbsp;&nbsp;&nbsp;Group 2: PAR&prime;<sub>21</sub> q<sub>2</sub> PAR&prime;<sub>22</sub> q<sub>2</sub> ... PAR&prime;<sub>2t<sub>2</sub></sub> q<sub>2</sub><br>
+&nbsp;&nbsp;&nbsp;... <br>
+&nbsp;&nbsp;&nbsp;Group s: PAR&prime;<sub>s1</sub> q<sub>s</sub> PAR&prime;<sub>s2</sub> q<sub>2</sub> ... PAR&prime;<sub>st<sub>s</sub></sub> q<sub>s</sub>,<br>
+ where s is the number of differing node (ring) numbers in the set {r<sub>ij</sub>} = {q<sub>1</sub, q<sub>2</sub>, ..., q<sub>s</sub>}. The geometrical parameter names PAR&prime;<sub>ij</sub> in each of the fitting groups are identical to the PAR<sub>o</sub> within the range of ring (radial) numbers specified following the parameter name in the fitting expression.
+</p>
+<p class="par">
+Parameters at specific nodes as defined in <a href="model_fitting.html#VARINDX">VARINDX</a> to be ignored in the <a href="model_geometry.html">geometrical model</a> are ignored in every fitting expression.
+</p>
+<p class="par">
+Example 3:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;VARY= ! VROT 1:4, VROT 5:7, XPOS 1:7
+</p>
+<p class="par">
+Here three fitting expressions are specified. The first fitting expression describes four fitting groups:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;Group 1: VROT 1<br>
+&nbsp;&nbsp;&nbsp;Group 2: VROT 2<br>
+&nbsp;&nbsp;&nbsp;Group 3: VROT 3<br>
+&nbsp;&nbsp;&nbsp;Group 4: VROT 4
+</p>
+<p class="par">
+The second and third expression describe the fitting groups
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;Group 5: VROT 5 6 7<br>
+&nbsp;&nbsp;&nbsp;Group 6: XPOS 1 2 3 4 5 6 7
+</p>
+<p class="par">
+As in example 2, the rotation velocities of nodes (rings) 1 to 4 are fitted independently, one by one, the rotation velocity of rings 5, 6, and 7 is fitted as one single parameter, and the central right ascension of nodes (rings) 1 to 7 (1, 2, 3, 4, 5, 6, 7) is fitted as one single parameter. If hence <a href="model_geometry#NUR">NUR</a> 7, the complete disk is shifted as a whole in right ascension during the fitting process. The reader will notice that the given expression is shortened making use of the "!" operator.
+</p>
+<p class="par">
+Example 4:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;VARY= ! VROT 1:4 VROT_2 1:4, ! VROT 5:7, ! VROT_2 5:7<br>
+</p>
+<p class="par">
+Here three fitting expressions are specified. The first fitting expression describes four fitting groups:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;Group 1: VROT 1 VROT_2 1<br>
+&nbsp;&nbsp;&nbsp;Group 2: VROT 2 VROT_2 2<br>
+&nbsp;&nbsp;&nbsp;Group 3: VROT 3 VROT_2 3<br>
+&nbsp;&nbsp;&nbsp;Group 4: VROT 4 VROT_2 4
+</p>
+<p class="par">
+The second expressions describes three fitting groups:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;Group 5: VROT 5<br>
+&nbsp;&nbsp;&nbsp;Group 6: VROT 6<br>
+&nbsp;&nbsp;&nbsp;Group 7: VROT 7
+</p>
+<p class="par">
+The third expression describes three fitting groups:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;Group 6: VROT_2 5<br>
+&nbsp;&nbsp;&nbsp;Group 7: VROT_2 6<br>
+&nbsp;&nbsp;&nbsp;Group 8: VROT_2 7
+</p>
+<p class="par">
+Let us assume that VROT and VROT_2 describe the rotation velocities of a receding and an approaching half of a disk (which can be achieved by specyfying <a href="model_geometry.html#AZkP">AZ1P</a> 0, <a href="model_geometry.html#AZkW">AZ1W</a>180, <a href="model_geometry.html#AZkP_i">AZ1P_2</a> 180, <a href="model_geometry.html#AZkW_i">AZ1W_2</a>180, and not fitting those parameters). Then, the short expression above tells TiRiFiC to optimise the rotation velocity independently for each node number. For the radial nodes 1-4, however, the rotation velocity of the approaching side is optimised synchronously with the rotation velocity of the receding side (the rotation velocity is identical for nodes 1-4 after the fitting process, if it has been before). For nodes 5-7, the rotation velocities of approaching- and receding side are fitted independently of each other (the rotation velocity is expected to differ for nodes 5-7 after the fitting process).
+</p>
+
+
+<hr>
+<h4><a name="Indexing parameters">Indexing parameters</a></h4>
+<a name="VARINDX">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>VARINDX</b></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center">&nbsp</td>
+    <td align="left">List of radial nodes to be ignored for a given parameter name</td>
+  </tr>
+</table>
+</a>
+<p class="par">
+With <a href="model_fitting.html#VARINDX">VARINDX</a>, the user defines a set of parameters at specific nodes, which are furtherly not provided by the user any more or fitted, but which are the result of a radial linear interpolation (or extrapolation) of the parameters at the next radial nodes that are not listed in <a href="model_fitting.html#VARINDX">VARINDX</a>. If<br>
+VARY= ... PAR r ... <br>
+and the list does not contain r-i and r+j as the first neighbouring radii for which the parameter is not "indexed", then<br>
+PAR(RADI<sub>r</sub>) = PAR(RADI<sub>r-i</sub>)+RADI<sub>r</sub>&cdot;(PAR(RADI<sub>r+j</sub>)-PAR(RADI<sub>r-i</sub>)(RADI<sub>r+j</sub>-RADI<sub>r-i</sub>)<sup>-1</sup>   .<br>
+If an interpolation is not possible (because there is no neighbouring radius not indexed), then a parameter takes the value of the next parameter not on the index list. It is an error to put all radial nodes on the index for a given parameter.
+</p>
+<p class="par">
+Any specification of indexed parameters in the input of geometrical parameters is ignored. The same <a href="model_fitting.html#Abbrevations for ring numbers">abbrevations for ring numbers</a> as for the <a href="model_fitting.html#VARY">VARY</a> keyword are valid. The parameter <a href="model_fitting.html#VARINDX">VARINDX</a> has to be provided to TiRiFiC, but can be left empty (in which case no parameter is indexed).
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+Let's assume that <a href="model_geometry.html#NUR">NUR</a> 7. Then
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;VARINDX= PA 1:3 VROT  3 5:6 PA 6 7
+</p>
+<p class="par">
+defines that for the initial model, and during the fitting process, the position angle of radial nodes 1 to 3 has always the same value as the position angle of radial node (ring) 4, the value of the rotation velocity of ring 3 is always the result of a radial interpolation between the rotation velocity at nodes 2 and 4, the rotation velocities at radial nodes 5 and 6 are the result of a radial linear interpolation between the rotation velocities at radial nodes (rings) 4 and 7. Finally, the position angle at nodes 6 and 7 always have the same value as the position angle at the radial node 5.
+</p>
+
+
+
+<hr>
+<h4><a name="Fitting parameters for fitting groups">Fitting parameters for fitting groups</a></h4>
+<a name="PARMAX">
+<a name="PARMIN">
+<a name="MODERATE">
+<a name="DELSTART">
+<a name="DELEND">
+<a name="ITESTART">
+<a name="ITEEND">
+<a name="SATDELT">
+<a name="MINDELTA">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>PARMAX</b></td>
+    <td align="center">Fitting</td>
+    <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
+    <td align="left">Fitting constraint: maxima</td>
+  </tr>
+  <tr>
+    <td align="left"><b>PARMIN</b></td>
+    <td align="center">Fitting</td>
+    <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
+    <td align="left">Fitting constraint: maxima</td>
+  </tr>
+  <tr>
+    <td align="left"><b>MODERATE</b></td>
+    <td align="center">Fitting</td>
+    <td align="center">&nbsp;</a></td>
+    <td align="left">Loops to interpolate between fit parameters</td>
+  </tr>
+  <tr>
+    <td align="left"><b>DELSTART</b></td>
+    <td align="center">Fitting</td>
+    <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
+    <td align="left">Start stepwidth for first fitting loop</td>
+  </tr>
+  <tr>
+    <td align="left"><b>DELEND</b></td>
+    <td align="center">Fitting</td>
+    <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
+    <td align="left">Stepwidth for <a href="model_fitting.html#MODERATE">MODERATE</a>th and later fitting loop</td>
+  </tr>
+  <tr>
+    <td align="left"><b>ITESTART</b></td>
+    <td align="center">Fitting</td>
+    <td align="center">&nbsp;</td>
+    <td align="left">Maximum number of model generations for first fitting loop (only FITMODE= 1)</td>
+  </tr>
+  <tr>
+    <td align="left"><b>ITEEND</b></td>
+    <td align="center">Fitting</td>
+    <td align="center">&nbsp;</td>
+    <td align="left">Maximum number of model generations for <a href="model_fitting.html#MODERATE">MODERATE</a>th and later fitting loop (only FITMODE= 1)</td>
+  </tr>
+  <tr>
+    <td align="left"><b>SATDELT</b></td>
+    <td align="center">Fitting</td>
+    <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</td>
+    <td align="left">Define stopping condition after a loop (only FITMODE= 1)</td>
+  </tr>
+  <tr>
+    <td align="left"><b>MINDELTA</b></td>
+    <td align="center">Fitting</td>
+    <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</td>
+    <td align="left">Fitting grid normalisation (minimal stepwidth)</td>
+  </tr>
+</table>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+<p class="par">
+With any of the keywords 
+<a href="model_fitting.html#PARMAX">PARMAX</a>,
+<a href="model_fitting.html#PARMIN">PARMIN</a>,
+<a href="model_fitting.html#MODERATE">MODERATE</a>,
+<a href="model_fitting.html#DELSTART">DELSTART</a>,
+<a href="model_fitting.html#DELEND">DELEND</a>,
+<a href="model_fitting.html#ITESTART">ITESTART</a>,
+<a href="model_fitting.html#ITEEND">ITEEND</a>,
+<a href="model_fitting.html#SATDELT">SATDELT</a>, and
+<a href="model_fitting.html#MINDELTA">MINDELTA</a>, the user provides a list of values with as many elements as (comma-separated) fitting expressions are given for the <a href="model_fitting.html#VARY">VARY</a> keyword. Whitespaces are used as separator.
+</p>
+<p class="par">
+With <a href="model_fitting.html#PARMAX">PARMAX</a> and
+<a href="model_fitting.html#PARMIN">PARMIN</a>, for each fitting expression provided with <a href="model_fitting.html#VARY">VARY</a>, a maximum and a minimum are defined, which serve as constraints in the fitting process, <a href="model_fitting.html#minmax">as described above</a>. The given values are in the same units as the first geometrical parameters appearing in each fitting expressions of the  <a href="model_fitting.html#VARY">VARY</a> list. The minimum and the maximum are defined per fitting expression and are valid for all fitting groups defined in one fitting expression.
+</p>
+<p class="par">
+With <a href="model_fitting.html#MODERATE">MODERATE</a>, the user specifies the number of loops for each fitting expression provided with <a href="model_fitting.html#VARY">VARY</a>, that are run before the start stepwidth <a href="model_fitting.html#DELEND">DELEND</a> (given in the units of the first geometrical parameter provided in the corresponding fitting expression in the <a href="model_fitting.html#VARY">VARY</a> list) is reached, initially starting with the start stepwidth <a href="model_fitting.html#DELEND">DELEND</a> (given in the units of the first geometrical parameter provided in the corresponding fitting expression in the <a href="model_fitting.html#VARY">VARY</a> list), and the maximum number of constructed models per iteration has reached <a href="model_fitting.html#ITEEND">ITEEND</a>, initially starting with <a href="model_fitting.html#ITESTART">ITESTART</a>. <a href="model_fitting.html#ITESTART">ITESTART</a> and <a href="model_fitting.html#ITEEND">ITEEND</a> are only used if <a href="model_fitting.html#FITMODE">FITMODE</a> 1. A detailed description can be <a href="model_fitting.html#generic minimum-finder">can be found here</a>.
+</p>
+<p class="par">
+For each fitting expression provided with <a href="model_fitting.html#VARY">VARY</a>, the user provides a maximal deviation of the fitting parameters from their values in the previous loop as a stopping condition with the keyword <a href="model_fitting.html#SATDELT">SATDELT</a>. This is only valid for <a href="model_fitting.html#FITMODE">FITMODE</a> 1. For other minimising algorithms, this parameter is replaced by the global <a href="model_fitting.html#SIZE">SIZE</a> parameter.
+</p>
+<p class="par">
+<a href="model_fitting.html#MINDELTA">MINDELTA</a> provides the normalisation for the fitting algorithms, or a minimum stepwidth. If <a href="model_fitting.html#FITMODE">FITMODE</a> 1 or <a href="model_fitting.html#FITMODE">FITMODE</a> 2, then these numbers (again as many as fitting expressions are given in the <a href="model_fitting.html#VARY">VARY</a> list define the minimum step width in one nested intervals minimisation step. If <a href="model_fitting.html#FITMODE">FITMODE</a> 2,3, then <a href="model_fitting.html#MINDELTA">MINDELTA</a> provides the parameter normalisation, and the <a href="model_fitting.html#SIZE">SIZE</a> parameter which provides a global stopping condition referst to this grid.
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;VARY=     ! VROT 1:7, PA 1:7, INCL 1:7<br>
+&nbsp;&nbsp;&nbsp;PARMAX=          300     360        90<br>
+&nbsp;&nbsp;&nbsp;PARMIN=           50     180        60<br>
+&nbsp;&nbsp;&nbsp;MODERATE=          3       3         2<br>
+&nbsp;&nbsp;&nbsp;DELSTART=          2       2         1<br>
+&nbsp;&nbsp;&nbsp;DELEND=            1       1       0.5<br>
+&nbsp;&nbsp;&nbsp;ITESTART=         70      70        60<br>
+&nbsp;&nbsp;&nbsp;ITEEND=           70      70        80<br>
+&nbsp;&nbsp;&nbsp;SATDELT=         0.2     0.2       0.3<br>
+&nbsp;&nbsp;&nbsp;MINDELTA=        0.1     0.1      0.15
+</p>
+<p class="par">
+With <a href="model_fitting.html#VARY">VARY</a>, three fitting expressions define 9 fitting groups. For the first expression (fitting groups 1-7), rotational velocities larger than 300 km&nbsp;s<sup>-1</sup> will result in an increased &chi;<sup>2</sup>, and rotational velocities of less than 50 km&nbsp;s<sup>-1</sup> will result in an increased &chi;<sup>2</sup>, for each fitting group at the radial nodes 1-7. The second expression in the <a href="model_fitting.html#VARY">VARY</a> list defines one fitting group. If within this group, any position angle gets above 360&deg; or below 180&deg; during the fitting process, an increased &chi;<sup>2</sup> will be the result. The third expression in the <a href="model_fitting.html#VARY">VARY</a> list defines one fitting group. If within this group, any inclination gets above 90&deg; or below 60&deg; during the fitting process, an increased &chi;<sup>2</sup> will be the result. At the beginning of the fitting process the start stepwidth is 2 km&nbsp;s<sup>-1</sup> for the first seven fitting groups, 2&deg; for the eighth fitting group, and 1&deg; for the ninth fitting group. After two loops have passed, the starting stepwidth for the ninth fitting group (third fitting expression) becomes 0.5&deg;. After three loops are finished, the starting stepwidth for fitting groups 1-7 have reached a value of 1 km&nbsp;s<sup>-1</sup> and the starting stepwidth of the 8th fitting group becomes 1&deg;. If <a href="model_fitting.html#FITMODE">FITMODE</a> 1, in each nested-intervals iteration, maximally 70 model calculations are performed for fitting groups 1-7 and 8. For fitting group 9, 60 model calculations are maximally performed in each iteration at the beginning of the fitting process, and 80 after 2 loops. If <a href="model_fitting.html#FITMODE">FITMODE</a> 1, the fitting procedure stops, if after any loop the model has not changed in the rotation velocities of rings 1-7 by more than 0.2 km&nbsp;s<sup>-1</sup>, in position angle of rings 1-7 by more than 0.2&deg;, and in inclination by more than 0.3&deg;. The grid normalisation or the minimum step width in a nested intervals minimisation process is 0.1 km&nbsp;s<sup>-1</sup> for fitting groups 1-7, 0.1&deg; for fitting group 8, and 0.15&deg; for fitting group 9.
+</p>
+
+
+
+<hr>
+<h4><a name="Global fitting parameters">Global fitting parameters</a></h4>
+<a name="LOOPS">
+<a name="SIZE">
+<a name="MAXITER">
+<a name="CALLITE">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>LOOPS</b></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> (Maximum) number of repeated major fitting loops </td>
+  </tr>
+  <tr>
+    <td align="left"><b>SIZE</b></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left">Stopping size of the minimisation process (one number, in units of <a href="model_fitting.html#MINDELTA">MINDELTA</a>)  </td>
+  </tr>
+  <tr>
+    <td align="left"><b>MAXITER</b></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Maximum number of model calculations per iteration (<a href="model_fitting.html#FITMODE">FITMODE</a> 2 only) </td>
+  </tr>
+  <tr>
+    <td align="left"><b>CALLITE</b></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Maximum number of model calculations for the complete fitting process </td>
+  </tr>
+</table>
+</a>
+</a>
+</a>
+</a>
+<p class="par">
+With <a href="model_fitting.html#LOOPS">LOOPS</a>, the user specifies the number of fitting loops to run, before the fitting stops. In case of <a href="model_fitting.html#FITMODE">FITMODE</a> 1 or <a href="model_fitting.html#FITMODE">FITMODE</a> 2, this is a maximum number, the fitting algorithm might stop before this number of loops is reached, if <a href="model_fitting.html#FITMODE">FITMODE</a> 3, the fitting is re-done <a href="model_fitting.html#LOOPS">LOOPS</a> times. For details, see <a href="#Implemented fitting algorithms">this paragraph above</a>.
+</p>
+<p class="par">
+With <a href="model_fitting.html#SIZE">SIZE</a>, the user specifies the stopping size. For <a href="model_fitting.html#FITMODE">FITMODE</a> 2 and 3, a size is defined at every stage of the fitting procedure, which is a measure of the progress in convergence. If the size drops below <a href="model_fitting.html#SIZE">SIZE</a>, the fitting is either stopped completely (<a href="model_fitting.html#FITMODE">FITMODE</a> 2) or the next fitting loop is started (<a href="model_fitting.html#FITMODE">FITMODE</a> 3). For the definition of the size, <a href="model_fitting.html#golden section">see here</a> for <a href="model_fitting.html#FITMODE">FITMODE</a> 2 (golden section), and <a href="model_fitting.html#golden section">here</a> for <a href="model_fitting.html#FITMODE">FITMODE</a> 3 (downhill simplex). The natural unit of <a href="model_fitting.html#SIZE">SIZE</a> is multiples of the fitting grid provided with the parameter <a href="model_fitting.html#MINDELTA">MINDELTA</a>.
+</p>
+<p class="par">
+With <a href="model_fitting.html#MAXITER">MAXITER</a>, the maximum nuber of model calculations per iteration (the definition of which depends on the chosen fitting algorithm) is set. For details, see <a href="#Implemented fitting algorithms">this paragraph</a>. It is usually safe to choose a very high number (in other words, to ignore the parameter). Only valid for <a href="model_fitting.html#FITMODE">FITMODE</a> 2, 3, but makes sense only for <a href="model_fitting.html#FITMODE">FITMODE</a> 2. (See also <a href="#Implemented fitting algorithms">this paragraph above</a>).
+</p>
+<p class="par">
+With <a href="model_fitting.html#CALLITE">CALLITE</a>, the maximum nuber of models calculated during a fitting process is given. For details, see <a href="#Implemented fitting algorithms">this paragraph</a>. It is usually safe to choose a very high number (in other words, to ignore the parameter). Only valid for <a href="model_fitting.html#FITMODE">FITMODE</a> 2, 3.(See also <a href="#Implemented fitting algorithms">here</a>).
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;LOOPS= 8<br>
+&nbsp;&nbsp;&nbsp;SIZE= 4<br>
+&nbsp;&nbsp;&nbsp;MAXITER= 40<br>
+&nbsp;&nbsp;&nbsp;CALLITE= 4000000<br>
+This example does not require any comment.
+</p>
+
+
+
+<hr>
+<h4><a name="Outliers and noise weighting">Outliers and noise weighting</a></h4>
+<a name="PENALTY">
+<a name="RMS">
+<a name="WEIGHT">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>PENALTY</b></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Penalize outliers from the data cube (continuous parameter, 0: do not penalise) </td>
+  </tr>
+  <tr>
+    <td align="left"><b>RMS</b></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> map units (Jy beam<sup>-1</sup>) </td>
+    <td align="left"> RMS noise in input data cube </td>
+  </tr>
+  <tr>
+    <td align="left"><b>WEIGHT</b></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left">Continuous parameter to take quantisation noise into account in &chi;<sup>2</sup> evaluation.  </td>
+  </tr>
+</table>
+</a>
+</a>
+</a>
+<p class="par">
+With the parameter <a href="model_fitting.html#PEANLTY">PENALTY</a>, the user can control how the construction of outlier point sources, point sources that are generated outside the data cube, are taken into account in the &chi;<sup>2</sup> evaluation. With <a href="model_fitting.html#PEANLTY">PENALTY</a> 1, outliers are penalised moderately, with <a href="model_fitting.html#PEANLTY">PENALTY</a> 0, outliers are not penalised. Use this continuous parameter, if you want to fit a weak source and the  &chi;<sup>2</sup> tends towards lower values if the model lies outside the data cube. For details, <a href="model_fitting.html#outliers">see here</a>.
+</p>
+<p class="par">
+With the parameter <a href="model_fitting.html#RMS">RMS</a>, the user enters the rms noise in the data cube.
+</p>
+<p class="par">
+If <a href="model_fitting.html#WEIGHT">WEIGHT</a> 1.0, the quantisation noise (noise arising from the fact that the model consists of discrete point sources) is taken fully into account in the &chi;<sup>2</sup> evaluation. If <a href="model_fitting.html#WEIGHT">WEIGHT</a> 0.0, quantisation noise is not taken into account. Any value can be chosen for the parameter. The choice <a href="model_fitting.html#WEIGHT">WEIGHT</a> 0.0 leads to a severely reduced usage of resouces (this choice makes the fitting process faster). The details can be found <a href="model_fitting.html#Goodness-of-fit evaluation: basic">here</a>.
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;PENALTY= 1.0<br>
+&nbsp;&nbsp;&nbsp;RMS= 0.0004<br>
+&nbsp;&nbsp;&nbsp;WEIGHT= 0.0<br>
+This example does not require any comment.
+</p>
+
+
+
+<hr>
+<h4><a name="Regularisation">Regularisation</a></h4>
+<a name="REGPARA">
+<a name="REGDENO">
+<a name="REGNUME">
+<a name="REGTHRE">
+<a name="REGWIDT">
+<a name="REGAMPL">
+<a name="REGASTE">
+<a name="REGAMPD">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+   <tr>
+    <td align="left"><b>REGPARA</b></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Give comma-separated list of parameters foreseen for (harmonic) regularisation </td>
+  </tr>
+   <tr>
+    <td align="left"><b>REGDENO</b></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Give comma-separated list of denominator orders for (harmonic) regularisation </td>
+  </tr>
+   <tr>
+    <td align="left"><b>REGNUME</b></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Give comma-separated list of numerator orders for (harmonic) regularisation </td>
+  </tr>
+   <tr>
+    <td align="left"><b>REGTHRE</b></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Threshold value above which a ratio of harmonic amplitides gets penalised </td>
+  </tr>
+   <tr>
+    <td align="left"><b>REGWIDT</b></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> whidth for the harmonic ratio until maximum penalty is reached </td>
+  </tr>
+   <tr>
+    <td align="left"><b>REGAMPL</b></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Constant penalty in harmonic regularisation </td>
+  </tr>
+   <tr>
+    <td align="left"><b>REGASTE</b></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Proportionality constant with loop number for additional penalty in harmonic regularisation </td>
+  </tr>
+   <tr>
+    <td align="left"><b>REGAMPD</b></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Optionally absolute value of denominator in harmonic regularisation </td>
+  </tr>
+</table>
+</a>
+</a>
+</a>
+</a>
+<p class="par">
+The regularisation scheme implemented with the parameter complex listed above is described in detail in the section <a href="model_fitting.html#regularisation">"Regularisation via harmonic components"</a>. Here, we concentrate on the syntactical details. With the <a href="model_fitting.html#REGPARA">REGPARA</a>, the user enters a comma-separated list of <a href="model_geometry.html">geometrical parameters</a> at selected radial nodes, Like with the <a href="model_fitting.html#VARY">VARY</a> list. However, the user can only enter one parameter name per group. Again, parameter names are identical to the keywords describing <a href="model_geometry.html">geometrical parameters</a>, but leaving out the "="-symbol, and the user can make use of the <a href=="model_fitting.html#Abbrevations for ring numbers">abbrevations for ring numbers</a> as with the <a href="model_fitting.html#VARY">VARY</a> list. Per regulrisation group, the user hence supplies a list of active nodes (rings) for one parameter. To calculate the corresponding Fourier coefficients, the values get completed via interpolation (only to calculate the Fourier coefficients, not to calculate the model), such that the parameter is defined at each node. Then, the list gets Fourier-transformed, and the Fourier amplitudes are calculated. Now, for each group, a ratio of sums of selected harmonic amplitudes is calculated. For that purpose, the user supplies the mode numbers the amplitudes of which are summed up in the numerators with the parameter <a href="model_fitting.html#REGNUME">REGNUME</a>. This is a comma-separated list of the modes intended to be summed up in the denominators. The modes can have the numbers 0 to <i>floor</i>(<a href="model_geometry.html#NUR">NUR</a>/2), where <a href="model_geometry.html#NUR">NUR</a> denotes the number of nodes (rings). The single expressions are lists of integers. The user can make use of the <a href=="model_fitting.html#Abbrevations for ring numbers">abbrevations for ring numbers</a>. The user also supplies a (not-comma-separated) list of denominators with the parameter <a href="model_fitting.html#REGAMPD">REGAMPD</a>, one for each regularisation group. If the user chooses to enter 0.0 or less for one of the regularisation groups, then the denominator is calculated from the list <a href="model_fitting.html#REGDENO">REGDENO</a>. As with <a href="model_fitting.html#REGNUME">REGNUME</a>, the user enters the modes that should enter the denominators. Once all ratios of the selected modes are calculated, the increase of the &chi;<sup>2</sup> is calculated with <a href="model_fitting.html#(10)">formula (10)</a>. For each regularisation group one number is entered for <a href="model_fitting.html#REGTHRE">REGTHRE</a>, <a href="model_fitting.html#REGAMPL">REGAMPL</a>, <a href="model_fitting.html#REGWIDT">REGWIDT</a> <a href="model_fitting.html#REAGSTE">REGASTE</a>.
+</p>
+<p class="par">
+</p>
+Again, we emphasise that up to now we have not been very successful with regularising parameters using harmonic decomposition. And again, no reason not to try it and to tell us how it went.
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;REGPARA= VROT 3:10,  SBR<br>
+&nbsp;&nbsp;&nbsp;REGNUME=         5,  4 5<br>
+&nbsp;&nbsp;&nbsp;REGAMPD=        20     0<br>
+&nbsp;&nbsp;&nbsp;REGDENO=         0,  0:5<br>
+&nbsp;&nbsp;&nbsp;REGTHRE=       0.2   0.1<br>
+&nbsp;&nbsp;&nbsp;REGWIDT=       0.2   0.2<br>
+&nbsp;&nbsp;&nbsp;REGAMPL=     50000 40000<br>
+&nbsp;&nbsp;&nbsp;REGASTE=     10000  5000
+</p>
+<p class="par">
+Let's assume <a href="model_geometry.html#NUR">NUR</a> 10. In the example, we specify that we want to penalise too strong irregrularites for the parameters VROT (rotation velocity) and SBR (surface brightness). For SBR, all parameters at all nodes are taken into account, while for VROT, the rotation velocity that is used to calculate the Fourier coefficients is identical to the current model, except for the first two nodes. These will, for the calculation of the Fourier coefficients, be extrapolated and be identical to the values of ring 3. For the first regularisation group (VROT), a ratio is built of the amplitude of the 5th order term in the Fourier decomposition and 20 km&nbsp;s<sup>-1</sup> as a fixed denominator. For the second regulatisation gruop (SBR), the ratio is built with the sum of the amplitudes of the 4th and 5th- order modes as a numerator and the sum of the amplitudes of all modes as the denominator. If for the first regularisation group (VROT) the ratio reaches a value of 0.2, the additional &chi;<sup>2</sup> is linearly increased to a value of 50000+loopnumber&cdot;10000 over a range between 0.2 and 0.4. If for the second regularisation group (SBR) the ratio reaches a value of 0.1, the additional &chi;<sup>2</sup> is linearly increased to a value of 40000+loopnumber&cdot;5000 over a range between 0.1 and 0.3. 
+</p>
+<h3><a name="Restarting TiRiFiC">Restarting TiRifiC</a></h3>
+<p class="par">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+   <tr>
+    <td align="left"><a name="RESTARTNAME"><b>RESTARTNAME</b></a></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Give file name for restarting TiRiFiC </td>
+  </tr>
+</table>
+<p class="par">
+For some purposes, like manual fitting or automated repeated calling of TiRiFiC, it is convenient not to terminate TiRiFiC, but to re-start model construction and the fitting process with changed parameters, without initialising TiRiFiC again (therefore saving time). With the parameter RESTARTNAME, the user specifies a file name. If that file exists, TiRiFiC runs through the fitting process as specified in the input once (or, in the case of <a href="model_fitting.html#LOOPS">LOOPS</a> = 0, it only produces a model), to then wait until the file gets deleted or changes its modification time stamp (like editing the file and saving it or touching the file). Once the time stamp of the file changes or the file is deleted, TiRiFiC starts the model creation and the fitting process again, re-reading all parameters, with a (large) number exceptions: most notably the input and output file names are not read again, and the modes concerning model construction are not read in again, the number of disks and rings is not allowed to change, the RADII and RADSEP are not allowed to change. This avoids the most time intensive initialisation processes when TiRiFiC gets started.
+</p>
+
+<hr>
+<h3><a name="Summary fitting parameters">Summary fitting parameters</a></h3>
+
+<center>
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr border="3" frame="above">
+    <td align="center" style="border-top-width:medium">Name</td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#FITMODE"><b>FITMODE</b></a></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Fitting mode, 1: Golden Section, old fashion, 2: Golden Section, 3: Simplex </td>
+  </tr>
+  <tr border="3" frame="above">
+    <td align="center" style="border-top-width:medium">Name</td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#VARY"><b>VARY</b></a></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center">&nbsp</td>
+    <td align="left">Specification of fitting parameters</td>
+  </tr>
+  <tr border="3" frame="above">
+    <td align="center" style="border-top-width:medium">Name</td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#VARINDX"><b>VARINDX</b></a></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center">&nbsp</td>
+    <td align="left">List of radial nodes to be ignored for a given parameter name</td>
+  </tr>  <tr border="3" frame="above">
+    <td align="center" style="border-top-width:medium">Name</td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#PARMAX"><b>PARMAX</b></a></td>
+    <td align="center">Fitting</td>
+    <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
+    <td align="left">Fitting constraint: maxima</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#PARMIN"><b>PARMIN</b></a></td>
+    <td align="center">Fitting</td>
+    <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
+    <td align="left">Fitting constraint: maxima</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#"MODERATE=><b>MODERATE</b></a></td>
+    <td align="center">Fitting</td>
+    <td align="center">&nbsp;</a></td>
+    <td align="left">Loops to interpolate between fit parameters</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#DELSTART"><b>DELSTART</b></a></td>
+    <td align="center">Fitting</td>
+    <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
+    <td align="left">Start stepwidth for first fitting loop</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#DELEND"><b>DELEND</b></a></td>
+    <td align="center">Fitting</td>
+    <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
+    <td align="left">Stepwidth for <a href="model_fitting.html#MODERATE">MODERATE</a>th and later fitting loop</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#ITESTART"><b>ITESTART</b></a></td>
+    <td align="center">Fitting</td>
+    <td align="center">&nbsp;</td>
+    <td align="left">Maximum number of model generations for first fitting loop (only FITMODE= 1)</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#ITEEND"><b>ITEEND</b></a></td>
+    <td align="center">Fitting</td>
+    <td align="center">&nbsp;</td>
+    <td align="left">Maximum number of model generations for <a href="model_fitting.html#MODERATE">MODERATE</a>th and later fitting loop (only FITMODE= 1)</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#SATDELT"><b>SATDELT</b></a></td>
+    <td align="center">Fitting</td>
+    <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</td>
+    <td align="left">Define stopping condition after a loop (only FITMODE= 1)</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#MINDELTA"><b>MINDELTA</b></a></td>
+    <td align="center">Fitting</td>
+    <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</td>
+    <td align="left">Fitting grid normalisation (minimal stepwidth)</td>
+  </tr>
+  </tr>  <tr border="3" frame="above">
+    <td align="center" style="border-top-width:medium">Name</td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#LOOPS"><b>LOOPS</b></a></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> (Maximum) number of repeated major fitting loops </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#SIZE"><b>SIZE</b></a></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left">Stopping size of the minimisation process (one number, in units of <a href="model_fitting.html#MINDELTA">MINDELTA</a>)  </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#MAXITER"><b>MAXITER</b></a></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Maximum number of model calculations per iteration (<a href="model_fitting.html#FITMODE">FITMODE</a> 2 only) </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#CALLITE"><b>CALLITE</b></a></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Maximum number of model calculations for the complete fitting process </td>
+  </tr>
+  </tr>  <tr border="3" frame="above">
+    <td align="center" style="border-top-width:medium">Name</td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#PENALTY"><b>PENALTY</b></a></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Penalize outliers from the data cube (continuous parameter, 0: do not penalise) </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#RMS"><b>RMS</b></a></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> map units (Jy beam<sup>-1</sup>) </td>
+    <td align="left"> RMS noise in input data cube </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="model_fitting.html#WEIGHT"><b>WEIGHT</b></a></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left">Continuous parameter to take quantisation noise into account in &chi;<sup>2</sup> evaluation.  </td>
+  </tr>
+  </tr>  <tr border="3" frame="above">
+    <td align="center" style="border-top-width:medium">Name</td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+   <tr>
+    <td align="left"><a href="model_fitting.html#REGPARA"><b>REGPARA</b></a></td>
+    <td align="center">Fitting (required)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Give comma-separated list of parameters foreseen for (harmonic) regularisation </td>
+  </tr>
+   <tr>
+    <td align="left"><a href="model_fitting.html#REGDENO"><b>REGDENO</b></a></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Give comma-separated list of denominator orders for (harmonic) regularisation </td>
+  </tr>
+   <tr>
+    <td align="left"><a href="model_fitting.html#REGNUME"><b>REGNUME</b></a></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Give comma-separated list of numerator orders for (harmonic) regularisation </td>
+  </tr>
+   <tr>
+    <td align="left"><a href="model_fitting.html#REGTHRE"><b>REGTHRE</b></a></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Threshold value above which a ratio of harmonic amplitides gets penalised </td>
+  </tr>
+   <tr>
+    <td align="left"><a href="model_fitting.html#REGWIDT"><b>REGWIDT</b></a></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> whidth for the harmonic ratio until maximum penalty is reached </td>
+  </tr>
+   <tr>
+    <td align="left"><a href="model_fitting.html#REGAMPL"><b>REGAMPL</b></a></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Constant penalty in harmonic regularisation </td>
+  </tr>
+   <tr>
+    <td align="left"><a href="model_fitting.html#REGASTE"><b>REGASTE</b></a></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Proportionality constant with loop number for additional penalty in harmonic regularisation </td>
+  </tr>
+   <tr>
+    <td align="left"><a href="model_fitting.html#REGAMPD"><b>REGAMPD</b></a></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Optionally absolute value of denominator in harmonic regularisation </td>
+  </tr>
+   <tr>
+    <td align="left"><a href="model_fitting.html#RESTARTNAME"><b>RESTARTNAME</b></a></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left"> Give file name for restarting TiRiFiC </td>
+  </tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  FOOTER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="footer">
+
+<!-- Created: Fri Apr 13 2007 -->
+<!-- hhmts start -->
+Last modified: Wed Feb 25 15:31:08 SAST 2015
+<!-- hhmts end -->
+<br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
+</div>
+  </body>
+</html>

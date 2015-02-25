@@ -1,0 +1,695 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>TiRiFiC - Modelling Strategy</title>
+<!-- define european ISO charset -->
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<!-- favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<!-- include style -->
+<link rel="stylesheet" type="text/css" href="layout.css">
+<!--[if IE]>
+<link rel="stylesheet" type="text/css" href="layout_ie.css">
+<![endif]-->
+</head>
+  <body>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  HEADER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="hdr">
+<div class="t">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="tr">
+<div id="lh-col-white">
+<!-- <h1 class="hdrle"> -->
+<img class="tir" src="tirlogo.gif" alt="TiRiFiC logo"/> 
+<!-- </h1> -->
+</div>
+<div id="rh-col-white">
+<h1 class="hdr"> Modelling Strategy </h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  LINKS   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="lh-col">
+<div class="tli">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trli">
+<a class="button" href="index.html">HOME</a>
+<a class="button" href="input_and_syntax.html">Input and Syntax</a>
+<a class="button" href="modelling_strategy.html">Modelling Strategy</a>
+<a class="button" href="model_geometry.html">Model Geometry</a>
+<!-- <a class="button" href="model_parameters.html">Model Parameters</a> -->
+<a class="button" href="model_fitting.html">Model Fitting</a>
+<!-- <a class="button" href="fitting_parameters.html">Fitting Parameters</a> -->
+<a class="button" href="output.html">Output</a>
+<!-- <a class="button" href="output_parameters.html">Output Parameters</a> -->
+<a class="button" href="parameter_index.html">Parameter Index</a>
+<a class="button" href="examples.html">Examples</a>
+<a class="button" href="gui.html">GUI</a>
+<a class="button" href="bugs_and_development.html">Bugs and Development</a>
+<a class="button" href="download_and_installation.html">Download and Installation</a>
+<a class="button" href="contact_and_feedback.html">Contact and Feedback</a>
+<a class="button" href="credits.html">Credits</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********   BODY   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="rh-col">
+<div class="tbody">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trbo">
+<p class="paremph">
+<table align="right" width="350" border="0" cellpadding="0">
+  <tr>
+    <td>&nbsp;&nbsp;</td>
+    <td width="30" align="right"><img src="flow_diagram_1.gif" width="350"></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td width="350" height="10" align="right"><i>Fig. 1: TiRiFiC model construction</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;&nbsp;</td>
+  </tr>
+</table>
+The basic strategy to produce a model is introduced in this section.
+</p>
+<p class="par">
+The flow diagram (Fig. 1) to the right shows the basic strategy followed by TiRiFiC to construct a simulated
+observation.  The model generation is very similar to the one of the
+<a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> routine <a
+href="http://www.astro.rug.nl/~gipsy/tsk/galmod.dc1">galmod</a>, we
+refer to the description of this task for additional information. We
+will point out the differences to this task.
+</p>
+<p>
+<center>
+<TABLE style="align:center" BORDER="1" rules="all" cellpadding="5" summary="TiRiFiC web page">
+   <TR>
+     <TD ALIGN="left">
+Contents:
+<ul class="par" style="list-style-type:none;padding-left:0em;margin-top:0px;margin-bottom:0px;">
+<li><a href="#Basic model concepts">Basic model concepts</a></li>
+  <ul class="par" style="list-style-type:none;padding-left:2em;margin-top:0px;margin-bottom:0px;">
+  <li><a href="#Rings">Rings</a></li>
+  <li><a href="#Sub-rings and clouds">Sub-rings and clouds</a></li>
+  <li><a href="#Gridding">Gridding</a></li>
+  <li><a href="#Instrumental function">Instrumental function</a></li>
+  <li><a href="#Controlling computing times">Controlling computing times</a></li>
+  </ul>
+<li><a href="#Basic parameters">Basic parameters</a></li>
+<ul class="par" style="list-style-type:none;padding-left:2em;margin-top:0px;margin-bottom:0px;">
+<li><a href="#Summary of parameters described here">Summary of parameters described here</a></li>
+
+</ul>
+</ul>
+</td>
+</tr>
+</table>
+</center>
+</p>
+
+<table align="left" width="350" border="0" cellpadding="0">
+  <tr>
+    <td width="30" align="left"><img src="subrings.gif" width="350"></td>
+    <td>&nbsp;&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="350" height="10" align="right"><i>Fig. 2: TiRiFiC parametrisation. The user specifies parameters at (user-specified) radii (dots), thus providing parameter nodes. The actual model consists of sub-rings (vertical lines) with a user-specified width with parameter values resulting from a linear interpolation between the nodes ("rings").</i></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>&nbsp;&nbsp;</td>
+  </tr>
+</table>
+<h3><a name="Basic model concepts">Basic model concepts</a></h3>
+<h4><a name="Rings">Rings</a></h4>
+<p class="par">
+A TiRiFiC tilted-ring-model is specified by a set of parameters at
+user-specified radii (Fig. 2) plus a set of global parameters. Hence, the number of
+parameters belonging to the model is the number of specified radii
+times the number of parameters that change with radius plus the
+parameters that are independent of radius. We call the set of
+parametes belonging to a given radius a "ring" to stick to traditional
+terminology, while it is more accurately called a set of nodes at a
+specific radius. 
+</p>
+<h4><a name="Sub-rings and clouds">Sub-rings and clouds</a></h4>
+<p class="par">
+To calculate a model, a number of "sub-rings" with a width specified
+by the user is created by linearly interpolating the ring-specific
+parameters (Fig. 2). Within a subring all parameters stay
+constant. TiRiFiC hence produces a tilted-ring models with the actual
+rings being the generated sub-rings, not the nodes. With the choice of
+the sub-ring width the user specifies the accuracy with which a real
+interpolation of the parameters between the rings (nodes) is
+reached. The reason for this approach is the higher computational
+efficiency that can be reached (the computation speed in increased).
+Each subring will then be modelled via Monte-Carlo integration:
+depending on the parameters given for the specific sub-ring
+(calculated via linear interpolation between the user-specified rings
+or nodes) a list of point sources is generated. The pointsources
+("clouds" in <a
+href="http://www.astro.rug.nl/~gipsy/tsk/galmod.dc1">galmod</a>
+terminology) have equal total flux (for each disk, see "<a
+href=model_parameters.html">Model Parameters</a>") and are distributed
+in Cartesian phase-space (with three orthogonal spatial and three
+orthogonal velocity coordinates) to reflect the given model determined
+by the model parameters. The result is a cloud of point sources of
+equal flux with a well determined position in Cartesian
+phase-space. Differing from <a
+href="http://www.astro.rug.nl/~gipsy/tsk/galmod.dc1">galmod</a>,
+TiRiFiC does not offer a choice for varying "cloud" fluxes.
+</p>
+<h4><a name="Gridding">Gridding</a></h4>
+<p class="par">
+In a next step the point-source cloud is gridded onto a data cube that
+is identical to the input data cube. Doing so, a linear approximation
+is used. It is assumed that the model coordinates scale proportionally
+to the pixel coordinates. Doing so, the projection simply consists of
+neglecting the third axis ("depth") in the spatial coordinates and the
+first two in velocity. This approach is valid only for more distant
+objects (see <a
+href="http://esoads.eso.org/abs/2010A%26A...511A..89C">Corbelli et
+al. 2010</a> for a discussion) of small angular diameter.  Again, the
+reason for this approach is to optimise the computing speed. Future
+implementations might offer a precise treatment of projection
+effects. Note that gridding represents a convolution (with a box
+function of the size of a pixel). However, the approach taken in the <a
+href="http://www.astro.rug.nl/~gipsy/tsk/galmod.dc1">galmod</a>
+description to take this (likely very small) effect into account is only an approximation and therefore deprecated. 
+</p>
+<p class="par">
+Another effect that the user should take into account before using TiRiFiC is that with the given approach radiation transport is treated poorly and under the asssumption that the material is optically thin. Only then, the luminosity along the line-of-sight is the simple sum of the single sources of emission. There are two situations where this applies: i) optical thinness and ii) a structure where the material is distributed in small (optically thick) clouds (like molecular clouds in a first approximation).
+</p>
+<h4><a name="Instrumental function">Instrumental function</a></h4>
+<p class="par">
+Finally, the gridded pointsource cloud is "observed" by convolving the
+resulting data cube with an instrumental function. The user specifies
+a global 2d Gaussian beam and a global (Gaussian) velocity dispersion,
+which should incorporate (also) the instrumental line broadening. The
+final model data cube is hence the result of a 3d convolution of the
+gridded point source model with the combination of the instrumental
+function in space and velocity. Note that this method (again, speed is
+the issue) does not exactly reflect the observational process, since
+the gridding is done before the simulated observation is
+performed. Correctly, one would incorporate the convolution in the
+gridding process, which is but far too expensive. In the velocity
+direction, <a
+href="http://www.astro.rug.nl/~gipsy/tsk/galmod.dc1">galmod</a> as
+well as TiRiFiC offer a Monte-Carlo approach to mitigate the
+pixelisation effect (sub-cloud concept, see "<a
+href=model_parameters.html">Model Parameters</a>"). TiRiFiC makes use of the <a href="http://www.fftw.org/">FFTW library</a> to perform a 3D convolution.
+</p>
+<h4><a name="Controlling computing times">Controlling computing times</a></h4>
+<p class="par">
+The computing time of TiRiFiC can be influenced by two parameters, the first (<a href="modelling_strategy.html#NCORES">NCORES</a>) determines the number of computing cores that TiRiFiC should use. This parameter is limited by the number of computing cores that are given as a maximum at compile time, a higher number specified results simply in the usage of that maximum number. TiRiFiC applies simple <a href="http://openmp.org/wp/">OpenMP</a> directives, which lead to a considerable, but not optimal speed-up, not optimal meaning that the speed-up comes not close to a computing time that would result from dividing the computing time using one core by the number of cores.
+</p>
+<p class="par">
+The second parameter to control the computing speed is the intialisation method <a href="modelling_strategy.html#INIMODE">INIMODE</a> for the convolution routines. They make use of the <a href="http://www.fftw.org/">FFTW library</a>, which in turn offers four different initialisation methods for their FFT routine. Here,  <a href="modelling_strategy.html#INIMODE">INIMODE</a> 0 means to use an ad-hoc best guess method, which requires no initialisation time, while with <a href="modelling_strategy.html#INIMODE">INIMODE</a> 3, several FFTs are excessively tested, compared, and the fastest one is chosen. Values in-between indicate transition modes between the two extremes. Obviously, if one wants to fit data and if one expects a high number of models to be calculated, one chooses <a href="modelling_strategy.html#INIMODE">INIMODE</a> 3, while if one wants to quickly generate one or a few models, the best choice is <a href="modelling_strategy.html#INIMODE">INIMODE</a> 0.
+</a>
+
+
+
+<h3><a name="Basic parameters">Basic parameters</a></h3>
+<p class="par">
+Here, the basic input parameters shall be described, as mentioned in the text above.
+</p>
+<hr>
+<p>
+<center>
+<a name="INSET">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>INSET</b></td>
+    <td align="center">I/O (required)</td>
+    <td align="center">&nbsp</td>
+    <td align="left">The name of the input data set</td>
+  </tr>
+</table>
+</a>
+</center>
+</p>
+<p class="par">
+Defines the input data cube, in the standalone version in <a href="http://en.wikipedia.org/wiki/FITS">FLEXIBLE IMAGE TRANSPORT SYSTEM (FITS)</a> format,
+in the <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> versions in
+<a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a>
+format. <b>WARNING:</b> he extent of a pixel along axis 1 and axis 2
+(Right Ascension and Declination) are assumed by TiRiFiC to be
+identical. If this is not (approximately) provided, TiRiFiC will
+deliver the wrong result.
+TiRiFiC requires a data cube whose first axis is Right Ascension,
+second axis is Declination, third axis either velocity or
+frequency. Further axes (like a stokes axis) are allowed only if their
+dimension is 1.
+</p>
+<p class="par">
+Example 1 (standalone): if you have the data set AURORA.fits, you would specify:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;INSET= AURORA.fits
+</p>
+<p class="par">
+Example 2 (GIPSY): if you have the data set AURORA with the third axis being FELO (velocity, optical definition), and the fourth axis being STOKES, you would specify:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;INSET= AURORA FELO STOKES
+</p>
+<p class="par">
+or
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;INSET= AURORA F S
+</p>
+<p class="par">
+Example 3 (GIPSY): if you have the data set ARORUA with the third axis being VELO (velocity, radio definition), and no fourth axis, you would specify:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;INSET= ARORUA VELO
+</p>
+<p class="par">
+or
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;INSET= ARORUA V
+</p>
+<p class="par">
+Remarks (<a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a>):
+it may happen that <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a>
+remarks upon a conflict with the format of the former input data set,
+if it has the same name, but a different format, and refuses to
+work. The solution to that is to rename the data set. There is a
+hidden history file somewhere, but I haven't found out about its name
+and location yet. Please switch to the standalone version.
+</p>
+<hr>
+<p>
+<center>
+<a name="BOX">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>BOX</b></td>
+    <td align="center">I/O (required)</td>
+    <td align="center">&nbsp</td>
+    <td align="left">Parameter must be set in <a
+      href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> version, but
+      leave always empty. Ignore in standalone version</td>
+  </tr>
+</table>
+</a>
+</center>
+</p>
+<p class="par">
+This is a relic parameter from <a
+href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> that must be
+specified together with <a href="#INSET">INSET</a> if you are running
+the <a
+href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> version. Please
+switch to the standalone version. <br><br>
+Running <a
+href="http://www.astro.rug.nl/~gipsy/">GIPSY</a>, always specify:<br>
+BOX
+</p>
+<hr>
+<p>
+<center>
+<a name="BMAJ">
+<a name="BMIN">
+<a name="BPA">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>BMAJ</b></td>
+    <td align="center">Geometrical</td>
+    <td align="center">arcsec</td>
+    <td align="left">HPBW (Half Power Beam Width), major axis</td>
+  </tr>
+  <tr>
+    <td align="left"><b>BMIN</b></td>
+    <td align="center">Geometrical</td>
+    <td align="center">arcsec</td>
+    <td align="left">HPBW (Half Power Beam Width), minor axis</td>
+  </tr>
+  <tr>
+    <td align="left"><b>BPA</b></td>
+    <td align="center">Geometrical</td>
+    <td align="center">degrees</td>
+    <td align="left">Position angle of spatial part of instrumental fuction</td>
+  </tr>
+</table>
+</a>
+</a>
+</a>
+</center>
+</p>
+<p class="par">
+The parameter set specifies the spatial part of the observational function. The (syntesised) beam (or point spread function) is assumed to be a 2d Gaussian with the major axis Half-Power-Beam-Width (HPBW) BMAJ (in arcsec), the minor axis Half-Power-Beam-Width (HPBW) BMIN (in arcsec) and the position angle (measered anticlockwise from N over E) BPA (in degrees). The instrumentational function is represented by a convolution with a 3d Gaussian. The missing component along the third (velocity) axis is specified with the parameter <a href="#CONDISP">CONDISP</a>, the global velocity dispersion.
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;BMAJ=14<br>
+&nbsp;&nbsp;&nbsp;BMIN=8<br>
+&nbsp;&nbsp;&nbsp;BPA=30
+</p>
+<p class="par">
+specifies that after gridding, the data cube is convolved with 3d
+Gaussian, the spatial component consisting of a Gaussian with a FWHM
+(Full Width at Half Maximum) or HPBW (Half-Power-Beam-Width) of 14
+arcsec in a direction tilted by 30 degrees (anticlockwise) from North
+and in addition a perpendicular Gaussian with a FWHM (Full Width at
+Half Maximum) or HPBW (Half-Power-Beam-Width) of 8 arcsec. <bf> In the
+standalone version, BMAJ, BMIN, and BPA are read from the input file
+header, if possible).
+</p>
+<hr>
+<p>
+<center>
+<a name="NCORES">
+<a name="INIMODE">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>NCORES</b></td>
+    <td align="center">Generic (required)</td>
+    <td align="center">&nbsp;</td>
+    <td align="left">Number of computing cores</td>
+  </tr>
+  <tr>
+    <td align="left"><b>INIMODE</b></td>
+    <td align="center">Generic (required)</td>
+    <td align="center">&nbsp;</td>
+    <td align="left">FFT initialisation mode, integer from 0-3, 3: slowest initialisation, 0: fastest initialisation</td>
+  </tr>
+</table>
+</a>
+</a>
+</center>
+</p>
+<p class="par">
+<a href="modelling_strategy.html#NCORES">NCORES</a> defines the number of desired computing cores to use for the model generation (maximum is always determined by the limitations given by the computer architecture or the constraints defined at compile time). Using more computing cores leads to a speed-up, which is, however, not optimal (the computing time does not decrease inversely proportional to the number of cores). <a href="modelling_strategy.html#INIMODE">INIMODE</a> is a number ranging from 0 to 3, defining the initialisation time for the FFT and convolution routines of TiRiFiC. 0 corresponds to the fastest initialisation, but might result in a non-optimal FFT strategy and slower model generation, while 3 corresponds to the slowest initialisation with the optimally chosen FFT strategy. For generating few models only, <a href="modelling_strategy.html#INIMODE">INIMODE</a> 0 is the optimal choice, for generating many models <a href="modelling_strategy.html#INIMODE">INIMODE</a> 3 might be better.
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;NCORES=14<br>
+&nbsp;&nbsp;&nbsp;INIMODE=3
+</p>
+<p class="par">
+Here, 14 cores are used and the longest and most meticulous initialisation for the convolution routines is used.
+</p>
+<hr>
+<p>
+<center>
+<a name="CONDISP">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>CONDISP</b></td>
+    <td align="center">Geometrical (required)</td>
+    <td align="center">km/s</td>
+    <td align="left">Global velocity dispersion</td>
+  </tr>
+</table>
+</a>
+</center>
+</p>
+<p class="par">
+The parameter CONDISP specifies the observational function along the third (velocity) axis. After gridding, the data cube is convolved with a spatial function specified with the parameters <a href="#BMAJ">BMAJ</a>, <a href="#BMIN">BMIN</a>, <a href="#BPA">BPA</a> and a (normalised) Gaussian const. <i>e</i><sup><i>V</i><sup>2</sup>/(2&#963;<sub><i>V</i></sub><sup>2</sup>)</sup> with the dispersion CONDISP (&#963;<sub><i>V</i></sub>) along the velocity axis. This dispersion does not necessarily need to represent only the instrumental line broadening &#963;<sub>instr.</sub>, but it can also incorporate the intrinsic line broadening  &#963;<sub>gal.</sub> with &#963;<sup>2</sup><sub><i>V</i></sub> = &#963;<sup>2</sup><sub>instr.</sub>+&#963;<sup>2</sup><sub>gal.</sub>.
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;CONDISP= 5
+</p>
+<p class="par">
+determines that after gridding, the data cube is convolved with a Gaussian with a dispersion of 5 km/s in direction of the third axis (velocity). The spatial instrumental function is defined by the parameters <a href="#BMAJ">BMAJ</a>, <a href="#BMIN">BMIN</a>, <a href="#BPA">BPA</a>.
+</p>
+<hr>
+<p>
+<center>
+<a name="RADSEP">
+<a name="RADSEP_i">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>RADSEP</b></td>
+    <td align="center">Geometrical (required)</td>
+    <td align="center">pixel in spatial direction</td>
+    <td align="left">Separation of sub-rings</td>
+  </tr>
+  <tr>
+    <td align="left"><b>RADSEP_i</b></td>
+    <td align="center">Geometrical (required)</td>
+    <td align="center">pixel in spatial direction</td>
+    <td align="left">Separation of sub-rings</td>
+  </tr>
+</table>
+</a>
+</a>
+</center>
+</p>
+<p class="par">
+The TiRiFiC tilted-ring model consists of a number of sub-rings of width RADSEP, for which the tilted-ring parameters are kept constant (see <a href="#Sub-rings and clouds">Sub-rings and clouds</a>). The unit of RADSEP is pixel in spatial direction. This relic from <a
+href="http://www.astro.rug.nl/~gipsy/tsk/galmod.dc1">galmod</a> might be corrected soon. The parameter is specified per disk. If more than one disk is modelled (see chapter <a href="model_geometry.html#Multiple disks">Multiple disks</a>), the sub-ring separation of each disk has to be specified with the parameter RADSEP_i, where i is the number of the disk. RADSEP has no default for the first disk. The default for following disks is RADSEP_i = RADSEP_i-1, RADSEP_2 = RADSEP .
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;RADSEP= 0.05<br>
+&nbsp;&nbsp;&nbsp;RADSEP_2= 0.05<br>
+&nbsp;&nbsp;&nbsp;RADSEP_3=
+</p>
+<p class="par">
+determines that the sub-rings of the first disk have a width and a separation of 0.05 pixels (in spatial direction), 0.05 pixels for disk 2, and 0.05 pixels for disk 3 (defaults to value for disk 2)</a>.
+</p>
+<hr>
+<center>
+<a name="CFLUX">
+<a name="CFLUX_i">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>CFLUX</b></td>
+    <td align="center">Geometrical (required)</td>
+    <td align="center">km s<sup>-1</sup></td>
+    <td align="left">Point source (total) flux</td>
+  </tr>
+  <tr>
+    <td align="left"><b>CFLUX_i</b></td>
+    <td align="center">Geometrical (required)</td>
+    <td align="center">km s<sup>-1</sup></td>
+    <td align="left">Point source (total) flux</td>
+  </tr>
+</table>
+</a>
+</center>
+<p class="par">
+The TiRiFiC tilted-ring model consists of a number of sub-rings for which the tilted-ring parameters are kept constant. These are constructed via Monte-Carlo distrubution of point sources, the TiRiFiC tilted-ring model finally being a cloud of point sources (which is then projected onto the input data cube and convolved by an instrumental function). With CFLUX, the user specifies the total flux of one point source of that cloud in Jy km  s<sup>-1</sup>. The lower this number, the higher the number of point sources, the finer the model. If more than one disk is modelled (see chapter <a href="model_geometry.html#Multiple disks">Multiple disks</a>), the cloud total flux of each disk has to be specified with the parameter CFLUX_i (units: Jy km  s<sup>-1</sup>), where i is the number of the disk. CFLUX has no default (for the first disk). The default for following ith disk is CFLUX_i = CFLUX_i-1, CFLUX_2 = CFLUX .
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;CFLUX= 1E-5<br>
+&nbsp;&nbsp;&nbsp;CFLUX_2= 1E-4<br>
+&nbsp;&nbsp;&nbsp;CFLUX_3=
+</p>
+<p class="par">
+determines that every cloud of the first disk has a total flux of 1E-5 Jy km  s<sup>-1</sup>, all clouds of the second and third disk have a total flux of 1E-4  Jy km  s<sup>-1</sup></a>. 
+</p>
+<hr>
+<p>
+<a name="Summary of parameters described here">
+<center>
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+<tr> <td colspan="4" align="center">Parameters described here </td> </tr>
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="modelling_strategy.html#BMAJ"><b>BMAJ</b></a></td>
+    <td align="center">Geometrical)</td>
+    <td align="center">arcsec </td>
+    <td align="left">HPBW (Half Power Beam Width), major axis</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="modelling_strategy.html#BMIN"><b>BMIN</b></a></td>
+    <td align="center">Geometrical</td>
+    <td align="center">arcsec </td>
+    <td align="left">HPBW (Half Power Beam Width), minor axis</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="#BOX"><b>BOX</b></a></td>
+    <td align="center">I/O (required)</td>
+    <td align="center">&nbsp;</td>
+    <td align="left">Parameter must be set in <a
+      href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> versions, but
+      leave always empty. Ignore for standalone version.</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="modelling_strategy.html#BPA"><b>BPA</b></a></td>
+    <td align="center">Geometrical</td>
+    <td align="center">degrees </td>
+    <td align="left">Position angle of spatial part of instrumental fuction</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="modelling_strategy.html#NCORES"><b>NCORES</b></a></td>
+    <td align="center">Generic (required)</td>
+    <td align="center">&nbsp;</td>
+    <td align="left">Number of computing cores</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="modelling_strategy.html#INIMODE"><b>INIMODE</b></a></td>
+    <td align="center">Generic (required)</td>
+    <td align="center">&nbsp;</td>
+    <td align="left">FFT initialisation mode, integer from 0-3, 3: slowest initialisation, 0: fastest initialisation</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="modelling_strategy.html#CFLUX"><b>CFLUX</b></a></td>
+    <td align="center">Geometrical (required)</td>
+    <td align="center">Jy km  s<sup>-1</sup></td>
+    <td align="left">Point source (total) flux of first disk</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="modelling_strategy.html#CFLUX_i"><b>CFLUX_i</b></a></td>
+    <td align="center">Geometrical (required)</td>
+    <td align="center">Jy km  s<sup>-1</sup></td>
+    <td align="left">Point source (total) flux of ith disk</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="modelling_strategy.html#CONDISP"><b>CONDISP</b></a></td>
+    <td align="center">Geometrical (required)</td>
+    <td align="center">km/s </td>
+    <td align="left">Global velocity dispersion</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="#INSET"><b>INSET</b></a></td>
+    <td align="center">I/O</td>
+     <td align="center">&nbsp;</td>
+   <td align="left">The name of the input data set</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="modelling_strategy.html#RADSEP"><b>RADSEP</b></a></td>
+    <td align="center">Geometrical (required)</td>
+    <td align="center">pixel in spatial direction</td>
+    <td align="left">Separation of sub-rings of first disk</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="modelling_strategy.html#RADSEP_i"><b>RADSEP_i</b></a></td>
+    <td align="center">Geometrical (required)</td>
+    <td align="center">pixel in spatial direction</td>
+    <td align="left">Separation of sub-rings of ith disk</td>
+  </tr>
+</table>
+</a>
+</center>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  FOOTER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="footer">
+
+<!-- Created: Fri Apr 13 2007 -->
+<!-- hhmts start -->
+Last modified: Wed Feb 25 15:31:08 SAST 2015
+<!-- hhmts end -->
+<br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
+</div>
+  </body>
+</html>

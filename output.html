@@ -1,0 +1,1479 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>TiRiFiC - Output</title>
+<!-- define european ISO charset -->
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<!-- favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<!-- include style -->
+<link rel="stylesheet" type="text/css" href="layout.css">
+<!--[if IE]>
+<link rel="stylesheet" type="text/css" href="layout_ie.css">
+<![endif]-->
+</head>
+  <body>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  HEADER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="hdr">
+<div class="t">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="tr">
+<div id="lh-col-white">
+<!-- <h1 class="hdrle"> -->
+<img class="tir" src="tirlogo.gif" alt="TiRiFiC logo"/> 
+<!-- </h1> -->
+</div>
+<div id="rh-col-white">
+<h1 class="hdr"> Output </h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  LINKS   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="lh-col">
+<div class="tli">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trli">
+<a class="button" href="index.html">HOME</a>
+<a class="button" href="input_and_syntax.html">Input and Syntax</a>
+<a class="button" href="modelling_strategy.html">Modelling Strategy</a>
+<a class="button" href="model_geometry.html">Model Geometry</a>
+<!-- <a class="button" href="model_parameters.html">Model Parameters</a> -->
+<a class="button" href="model_fitting.html">Model Fitting</a>
+<!-- <a class="button" href="fitting_parameters.html">Fitting Parameters</a> -->
+<a class="button" href="output.html">Output</a>
+<!-- <a class="button" href="output_parameters.html">Output Parameters</a> -->
+<a class="button" href="parameter_index.html">Parameter Index</a>
+<a class="button" href="examples.html">Examples</a>
+<a class="button" href="gui.html">GUI</a>
+<a class="button" href="bugs_and_development.html">Bugs and Development</a>
+<a class="button" href="download_and_installation.html">Download and Installation</a>
+<a class="button" href="contact_and_feedback.html">Contact and Feedback</a>
+<a class="button" href="credits.html">Credits</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********   BODY   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="rh-col">
+<div class="tbody">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trbo">
+<p class="paremph">
+The output possibilities implemented in TiRiFiC are discussed in this
+section. TiRiFiC offers the output of output tables, simple parameter
+plots, and analytic data sets. For the output of viewgraphs, TiRiFiC
+makes use of the <a
+href="http://www.astro.caltech.edu/~tjp/pgplot/">pgplot
+library</a>. From version 2.2.0 on, for all images and cubes, the <a
+href="http://en.wikipedia.org/wiki/FITS">FLEXIBLE IMAGE TRANSPORT
+SYSTEM (FITS)</a> format is used as an output format. Until version
+2.1.5, the format of the output model data cube is <a
+      href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> format.
+</p>
+<p class="paremph">
+Please notice that some of the output possibilities have not been tested for some while and might be unreliable. We expressively tag these and describe the restrictions in their description. Please <a href="mailto:jozsa@astron.nl">contact us</a> if you encounter an unexpected behaviour not described here.
+</p>
+
+<center>
+<TABLE style="align:center" BORDER="1" rules="all" cellpadding="5" summary="TiRiFiC web page">
+   <TR>
+     <TD ALIGN="left">
+Contents:
+<ul class="par" style="list-style-type:none;padding-left:0em;margin-top:0px;margin-bottom:0px;">
+<li><a href="output.html#Output">Output</a></li>
+  <ul class="par" style="list-style-type:none;padding-left:2em;margin-top:0px;margin-bottom:0px;">
+  <li><a href="output.html#Logfile">Logfile</a></li>
+  <li><a href="output.html#TiRiFiC monitoring">TiRiFiC monitoring</a></li>
+  <li><a href="output.html#Model data cube">Model data cube</a></li>
+  <li><a href="output.html#Data tables">Data tables</a></li>
+  <li><a href="output.html#Default (input) files">Default (input) files</a></li>
+  <li><a href="output.html#Spatial model">Spatial model</a></li>
+  <li><a href="output.html#Tiltogram">Tiltogram</a></li>
+  <li><a href="output.html#Inclinogram">Inclinogram</a></li>
+  <li><a href="output.html#Parameter plots">Parameter plots</a></li>
+<!--  <li><a href="output.html#Briggs plots">Briggs plots</a></li> -->
+  </ul>
+<li><a href="output.html#Summary output parameters">Summary output parameters</a></li>
+</ul>
+</ul>
+</td>
+</tr>
+</table>
+</center>
+</p>
+
+<h3><a name="Output">Output</a></h3>
+<h4><a name="Logfile">Logfile</a></h4>
+<center>
+<a name="LOGNAME">
+<a name="ACTION">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>LOGNAME</b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of logfile.</td>
+  </tr>
+  <tr>
+    <td align="left"><b>ACTION</b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Specify reaction on present logfile.</td>
+  </tr>
+</table>
+</a>
+</a>
+</center>
+<p class="par">
+With the parameter <a href=output.html#LOGNAME">LOGNAME</a>, the user specifies the name of a fits table, which basically contains a list of &chi;<sup>2</sup> values, which are calculated during the fitting process. If the fitting process is interrupted, TiRiFiC will recognise the existence of the logfile when the fitting process gets restarted. In that case the parameter <a href=output.html#ACTION">ACTION</a>) will be checked whether the fitting process should be continued (<a href=output.html#ACTION">ACTION</a> 0), stopped (<a href=output.html#ACTION">ACTION</a> 2), or started from scratch (<a href=output.html#ACTION">ACTION</a> 1). If the fitting process is meant to be continued (<a href=output.html#ACTION">ACTION</a> 0), TiRiFiC will repeat the minimisation process, but instead of generating models to evaluate the &chi;<sup>2</sup>, the &chi;<sup>2</sup> will be read from the logfile (this is much faster), until the last saved &chi;<sup>2</sup> has been read, and then continue with the normal fitting process. If <a href=output.html#ACTION">ACTION</a> 1 is chosen, the logfile will be overwritten from scratch.
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;LOGFILE= HRGH_log<br>
+&nbsp;&nbsp;&nbsp;ACTION= 0
+</p>
+<p class="par">
+While fitting, the logfile HRGH_log will be produced. If e.g. the machine TiRiFiC has been running on has been rebooted (by someone who will get a well-deserved hiding later on), the logfile will be used to repeat the fitting process much faster up to the point where the machine has been rebooted (e.g. by the system administrator).
+</p>
+
+
+
+<h4><a name="TiRiFiC monitoring"></a>TiRiFiC monitoring</h4>
+<p>
+  <table align="center" width="927" border="0" cellpadding="0">
+    <tr>
+      <td width="30" align="left"><table border="1" rules="all"><tr><td><img src="tirmonitor.gif" width="927"></td></tr></table></td>
+      <td>&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="600" height="10" align="left" colspan=2><i>Fig. 1:
+       TiRiFiC runtime output in the GIPSY environment. This output is produced using FITMODE= 2.</i></td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;</td>
+    </tr>
+  </table>
+</p>
+<p class="par">
+When producing a model data cube or while fitting, TiRiFiC dumps some
+  information about the status of the fitting process and the model
+  onto the screen. The information is refreshed for every model
+  generation. If <model_fitting.html#FITMODE">FITMODE</a> = 1 (see section <model_fitting.html">Model fitting</a>), the output during a running fitting process is as follows:
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="13"> <a href="model_fitting.html#FITMODE">FITMODE</a> 1 </td> 
+        <td valign="top"> FM/SM <sup>&nbsp;</sup></td>
+        <td valign="top"> found minimum/searching minimum <sup>&nbsp;</sup></td>
+      </tr>
+<tr>
+        <td valign="top"> BL: <sup>&nbsp;</sup></td>
+        <td valign="top"> Current loop number <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top"> KL: <sup>&nbsp;</sup></td>
+        <td valign="top"> Total number of nested-intervals iterations <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  TM:<sup>&nbsp;</sup></td>
+        <td valign="top">  Total number of calculated models <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  KW:<sup>&nbsp;</sup></td>
+        <td valign="top">  Current first parameter in <a href="model_fitting.html#Fitting expressions, groups, and parameters">fitting group</a> <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  FR:<sup>&nbsp;</sup></td>
+        <td valign="top">  Current first <a href="model_fitting.html#VARY">node number</a> (ring) in <a href="model_fitting.html#Fitting expressions, groups, and parameters">fitting group</a> <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  KM:<sup>&nbsp;</sup></td>
+        <td valign="top">  Calculated model in current iteration/maximum number of modeld in this iteration<sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  NP:<sup>&nbsp;</sup></td>
+        <td valign="top">  Number of point sources disk 1/disk 2/ ...<sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  TF:<sup>&nbsp;</sup></td>
+        <td valign="top">  Total flux (Jy&nbsp;km&nbsp;s<sup>-1</sup>) disk 1/ disk 2/ ...<sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  CC:<sup>&nbsp;</sup></td>
+        <td valign="top">  current &chi;<sup>2</sup><sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  DC:<sup>&nbsp;</sup></td>
+        <td valign="top">  change in &chi;<sup>2</sup>; current &chi;<sup>2</sup> - previous &chi;<sup>2</sup><sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  SW:<sup>&nbsp;</sup></td>
+        <td valign="top">  Current stepwidth for current <a href="model_fitting.html#Fitting expressions, groups, and parameters">fitting group</a>/start stepwidth <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  AC:<sup>&nbsp;</sup></td>
+        <td valign="top">  1: stopping condition fulfilled. 0: not fulfilled <sup>&nbsp;</sup></td>
+      </tr>
+    </table>
+  </center>
+</p>
+<p class="par">
+For <a href="model_fitting.html#FITMODE">FITMODE</a> > 1, the following information is displayed:
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="11"> <a href="model_fitting.html#FITMODE">FITMODE</a> > 1 </td> 
+        <td valign="top"> L: <sup>&nbsp;</sup></td>
+        <td valign="top"> Current loop number <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top"> I: <sup>&nbsp;</sup></td>
+        <td valign="top"> Total number of iterations/maximum number of iterations <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  M:<sup>&nbsp;</sup></td>
+        <td valign="top">  Models in current iteration/maximum number in current iteration/total number of models <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  P:<sup>&nbsp;</sup></td>
+        <td valign="top">  Current first parameter in <a href="model_fitting.html#Fitting expressions, groups, and parameters">fitting group</a> (for <a href="model_fitting.html#FITMODE">FITMODE</a> 2) <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  R:<sup>&nbsp;</sup></td>
+        <td valign="top">  Current first <a href="model_fitting.html#VARY">node number</a> (ring) (for <a href="model_fitting.html#FITMODE">FITMODE</a> 2)<sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  A:<sup>&nbsp;</sup></td>
+        <td valign="top">  Current size in iteration/minimum size in iteration (informative only for <a href="model_fitting.html#FITMODE">FITMODE</a> 2)<sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  N:<sup>&nbsp;</sup></td>
+        <td valign="top">  Number of point sources disk 1/disk 2/ ...<sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  F:<sup>&nbsp;</sup></td>
+        <td valign="top">  Total flux (Jy&nbsp;km&nbsp;s<sup>-1</sup>) disk 1/ disk 2/ ...<sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  C:<sup>&nbsp;</sup></td>
+        <td valign="top">  current &chi;<sup>2</sup><sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  S:<sup>&nbsp;</sup></td>
+        <td valign="top">  Current size (see <a href="model_fitting.html#generic minimum-finder">here</a>)<sup>&nbsp;</sup></td>
+      </tr>
+    </table>
+  </center>
+</p>
+<p class="par">
+After the fitting process has finished, or if only a model has been produced without fitting (<a href="model_fitting.html#LOOPS">LOOPS</a> 0) a concluding summary is displayed for <a href="model_fitting.html#FITMODE">FITMODE</a> > 1:
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="5"> <a href="model_fitting.html#FITMODE">FITMODE</a> > 1, concluding log</td> 
+        <td valign="top">  Finished<sup>&nbsp;</sup></td>
+        <td valign="top">  Indicating that the fitting process is finished <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  N:<sup>&nbsp;</sup></td>
+        <td valign="top">  Number of point sources disk 1/disk 2/ ...<sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  F:<sup>&nbsp;</sup></td>
+        <td valign="top">  Total flux (Jy&nbsp;km&nbsp;s<sup>-1</sup>) disk 1/ disk 2/ ...<sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  C:<sup>&nbsp;</sup></td>
+        <td valign="top">  current &chi;<sup>2</sup><sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top">  S:<sup>&nbsp;</sup></td>
+        <td valign="top">  Current size (see <a href="model_fitting.html#generic minimum-finder">here</a>); undefined for <a href="model_fitting.html#LOOPS">LOOPS</a> 0<sup>&nbsp;</sup></td>
+      </tr>
+    </table>
+  </center>
+</p>
+<p class="par">
+Example 1:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;FM BL:1 KL:2 TM:13 KW:PA FR:1 KM:6/70 NP:112690/0 TF:2.25E+01/0.00E+00 CC:6.483763E+06 DC:-2.9E+02 SW:+4.72E-01/2.00E+00 AC:1
+
+</p>
+<p class="par">
+The output indicates that <a
+    href=model_fitting.html#FITMODE">FITMODE</a> = 1. The minimising process is running through its first loop, the second fitting group is optimised. The 13th model has been generated, the currently first parameter of the fitting group is the position angle of ring 1. The current model consists of 112690 point sources, corresponting to a total flux of 22.5 Jy&nbsp;km&nbsp;s<sup>-1</sup>. No second disk has been generated. The current &chi;<sup>2</sup> is 6.5&middot;10<sup>6</sup>. The current model decreases the &chi;<sup>2</sup> by a value of 290 and is hence regarded a better model. The step width in the current nested intervals minimisation process is 0.47&deg;, and the starting step width has been 2&deg;. Currently, the minimiser would stop after the loop (still satisfied).
+</p>
+<p class="par">
+Example 2:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;L:1/1 I:06/5.0E+06 M:11/5.0E+06/063 P:CONDISP R:01 A:+2.9E-01/+1.0E-01 N:1.1E+05/0.0E+00 F:+1.2E+02/+0.0E+00 C:3.221E+06 S:+1.8E+308
+</p>
+<p class="par">
+The output indicates that <a href=model_fitting.html#FITMODE">FITMODE</a> > 1.The minimising process is running through its first loop. The iteration is the sixth of maximally 5000000. 11 models have been calculated in the current iteration, while 5000000 per iteration are the maximum. 63 models have been calculated so far. The first parameter of the current fitting group is the global dispersion (indicating that <a href=model_fitting.html#FITMODE">FITMODE</a> 2, otherwise P: would be set to "GEN", since for the downhill simplex algorithm all parameters are optimised synchonously). The current first ring has the number 1 (this is the default for the global parameter CONDISP). The current step width is 0.29 km&nbsp;s<sup>-1</sup>, while the grid normalisation is 0.1 km&nbsp;s<sup>-1</sup>. The current model consists of 1.1&middot;10<sup>5</sup> point sources with a total flux of 120 Jy&nbsp;km&nbsp;s<sup>-1</sup>. No second disk appears to be modelled. The current &chi;<sup>2</sup> is 3.2&middot;10<sup>6</sup>, and the current size of the fitting process is an impossibly high number, indicating that the fitting process has started (and again an indication that <a href=model_fitting.html#FITMODE">FITMODE</a> 2. For other fitting modes, the size is always well defined, while for <a href=model_fitting.html#FITMODE">FITMODE</a> 2, the size is undefined in the first loop.
+</p>
+<p class="par">
+</p>
+<p class="par">
+Example 3:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;Finished N:114743/0 F:1.22E+02/0.00E+00 C:3.220933E+06  S:8.875388E+01
+</p>
+<p class="par">
+The output indicates that <a href=model_fitting.html#FITMODE">FITMODE</a> > 1. The fitting process has stopped, or <a href="model_fitting.html#LOOPS">LOOPS</a> 0 (this is not the case, see end of discussion). The current model consists of 1.1&middot;10<sup>5</sup> point sources with a total flux of 120 Jy&nbsp;km&nbsp;s<sup>-1</sup>. No second disk appears to have been modelled. The  &chi;<sup>2</sup> is 3.2&middot;10<sup>6</sup>, and the current size of the fitting process is 89.
+</p>
+<!-- hidden parameters: TEXTLOG and PROGRESSLOG -->
+<h4><a name="Model data cube">Model data cube</a></h4>
+<p>
+  <center>
+  <table align="center" width="900" border="0" cellpadding="0">
+    <tr>
+      <td width="30" align="left"><img src="chmapspir.th.gif" height="300"></td>
+      <td width="30" align="left"><img src=" mom0spir.th.gif" height="300"></td>
+      <td width="30" align="left"><img src="pvspir.th.gif" height="300"></td>
+      <td>&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="3" height="10" align="left" colspan=2><i>Fig. 2:
+      Channel map (left), total-intensity map (middle), and position-velocity diagram from a TiRiFiC output data cube. The coplanar model disk contains two Gaussian distortions ("spiral arms").</i></td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;</td>
+    </tr>
+  </table>
+  </center>
+</p>
+<center>
+<a name="OUTSET">
+<a name="OUTCUBUP">
+  <center>
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>OUTSET</b></td>
+    <td align="center">I/O (required)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output data cube</td>
+  </tr>
+  <tr>
+    <td align="left"><b>OUTCUBUP</b></td>
+    <td align="center">I/O (required)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Frequency of updating <a href="output.html#OUTSET">OUTSET</a></td>
+  </tr>
+</table>
+  </center>
+</a>
+</a>
+</center>
+<p class="par">
+With <a href="output.html#OUTSET">OUTSET</a>, the user specifies the name of an output data cube. The output data set is the <a href="model_geometry.html">geometrical model</a> and has the same dimensions as the input data set, specified with the keyword <a href="modelling_strategy.html#INSET">INSET</a>. The parameter <a href="output.html#OUTCUBUP">OUTCUBUP</a> is an integer number and specifies the numbers of model calculations after which the output data set gets renewed with a model reflecting the current geometrical parameters during the <a href="model_fitting.html">fitting process</a>. At the end of a <a href="model_fitting.html">fitting process</a>, a best-fit model is always written to disk (if <a href="model_fitting.html#LOOPS">LOOPS</a> 0 is chosen, this is simply the model reflecting the input parameters).
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;OUTSET= HRGH <br>
+&nbsp;&nbsp;&nbsp;OUTCUBUP= 124
+</p>
+<p class="par">
+The name of the output data cube is "HRGH". Every 124th model during the fitting process is written to disk, as well as the best-fit model at the end of the fitting process.
+</p>
+<h4><a name="Data tables">Data tables</a></h4>
+<p>
+<center>
+<a name="TABLE">
+<a name="BIGTABLE">
+<a name="DISTANCE">
+<a name="REFRING">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>TABLE</b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output table listing geometrical parameters per node</td>
+  </tr>
+  <tr>
+    <td align="left"><b>BIGTABLE</b></td>
+    <td align="center">I/O (no default)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output table listing geometrical parameters per <a href="model_geometry.html#Radial nodes and parameter discretisationq">sub-ring</a></td>
+  </tr>
+  <tr>
+    <td align="left"><b>DISTANCE</b></td>
+    <td align="center">I/O (default 10)</td>
+    <td align="center">Mpc </td>
+    <td align="left">Distance of object, only needed for output (default: 10 Mpc)</td>
+  </tr>
+  <tr>
+    <td align="left"><b>REFRING</b></td>
+    <td align="center">I/O (default 5)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Number of the reference node to calculate several intrinsic parameters (e.g. warp angle). Default: 5 or <a href="model_geometry.html#NUR">NUR</a> if <a href="model_geometry.html#NUR">NUR</a> < 5</td>
+  </tr>
+</table>
+</a>
+</a>
+</a>
+</a>
+</p>
+</center>
+<p class="par">
+<span style="color:red">Please notice that this output possibility is currently being revised. Until further notice, we advise against the usage of the parameters <a href=output.html#TABLE">TABLE</a> and <a href=output.html#BIGTABLE">BIGTABLE</a>.</span>
+</p>
+<p class="par">
+With <a href=output.html#TABLE">TABLE</a>, the user provides the name of an ASCII output table, showing for each row a list of parameters at different radii (nodes). The table contains also a list of derived parameters (such as radius converted to kpc), which require additional information. With the parameter <a href=output.html#DISTANCE">DISTANCE</a>, the user defines the distance of the object in units of Mpc. With the parameter <a href=output.html#REFRING">REFRING</a> (default: 5 or <a href="model_geometry.html#NUR">NUR</a> if <a href="model_geometry.html#NUR">NUR</a> < 5), the user defines a reference node, with respect to which certain derived quantities are calculated (e.g. the warp angle, the inclination of each ring with respect to the reference ring). The parameters <a href=output.html#REFRING">REFRING</a> and <a href=output.html#DISTANCE">DISTANCE</a> are also evaluated for the output of a larger table, listing the same parameters as the <a href=output.html#TABLE">TABLE</a> output, but not per user-defined node, but per <a href="model_geometry.html#Radial nodes and parameter discretisationq">sub-ring</a>. The name of the table is is specified by the parameter <a href="output.html#BIGTABLE">BIGTABLE</a>.
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;TABLE= HRGHTAB.txt<br>
+&nbsp;&nbsp;&nbsp;BIGTABLE= HRGHBTAB.txt<br>
+&nbsp;&nbsp;&nbsp;DISTANCE= 300<br>
+&nbsp;&nbsp;&nbsp;REFRING= 8<br>
+</p>
+<p class="par">
+The name of the output data table is "HRGHTAB.txt", which is an ASCII file listing <a href="model_geometry.html">geometrical parameters</a> and derived quantities. All values are listed at the user-defined nodes (rings). Another output table, identical to HRGHTAB.txt apart from the fact that the output is sampled at the <a href="model_geometry.html#Radial nodes and parameter discretisationq">sub-rings</a> is called "HRGHBTAB.txt". Derived quantities are calculated assuming a distance of 300 Mpc of the object, and relative to the reference ring 8.
+</p>
+
+<h4><a name="Default files">Default files</a></h4>
+<p>
+  <center>
+<a name="TIRDEF">
+<a name="TIRACC">
+<a name="TIRNR">
+<a name="TIRRAD">
+<a name="TIRSMO">
+<a name="TIRLEN">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>TIRDEF</b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output TiRiFiC .def file for repeated fitting runs</td>
+  </tr>
+  <tr>
+    <td align="left"><b>TIRACC</b></td>
+    <td align="center">I/O (default 5)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Numerical accuracy for the output .def files <a href="output.html#TIRDEF">TIRDEF</a> and <a href="output.html#TIRSMO">TIRSMO</a> (default: 5)</td>
+  </tr>
+  <tr>
+    <td align="left"><b>TIRNR</b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Number of rings in the output .def files <a href="output.html#TIRDEF">TIRDEF</a> and <a href="output.html#TIRSMO">TIRSMO</a></td>
+  </tr>
+  <tr>
+    <td align="left"><b>TIRRAD</b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">arcsec </td>
+    <td align="left">Radii of nodes in the output .def files <a href="output.html#TIRDEF">TIRDEF</a> and <a href="output.html#TIRSMO">TIRSMO</a></tr>
+  <tr>
+    <td align="left"><b>TIRSMO</b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Median-filtered version of <a href="output.html#TIRDEF">TIRDEF</a></td>
+  </tr>
+  <tr>
+    <td align="left"><b>TIRLEN</b></td>
+    <td align="center">I/O (default 3)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Length of median filter used for <a href="output.html#TIRSMO">TIRSMO</a> (default: 3)</td>
+  </tr>
+</table>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+  </center>
+</p>
+<p class="par">
+Most users use the output .def file as the numerical output of TiRiFiC. The user specifies its name with the keyword <a href="output.html#TIRDEF">TIRDEF</a>. TiRiFiC will then produce an output ASCII file that can be used as an input for TiRiFiC. The output .def file is identical to the input file, but the <a href="model_geometry.html">geometrical parameters</a> are updated to be the result of the <a href="model_fitting.html">fitting process</a>. All output <a href="model_geometry.html">geometrical parameters</a> in the .def file have the numerical accurary defined with the parameter <a href="output.html#TIRACC">TIRACC</a>, while the numerical accuracy of the parameters <a href="model_geometry.html#XPOS">XPOS</a> and <a href="model_geometry.html#YPOS">YPOS</a> is always increased by 2. The user has the possibility to regrid the <a href="model_geometry.html">geometrical parameters</a> by explicitly redefining the number of rings with the parameter <a href="output.html#TIRNR">TIRNR</a>, and the ring raddi with the parameter <a href="output.html#TIRRAD">TIRRAD</a>. The .def files will then contain the best-fit parameters, but regridded onto the node radii specified with the keyword <a href="output.html#TIRRAD">TIRRAD</a> (via linear interpolation). With <a href="output.html#TIRSMO">TIRSMO</a>, the user defines the name of an output .def file, which is identical to <a href="output.html#TIRDEF">TIRDEF</a>, while the parameter values are the result of a median filtering of the <a href="model_geometry.html">geometrical parameters</a> as found in the <a href="output.html#TIRDEF">TIRDEF</a> file. The length of the median filter can be specified with the parameter <a href="output.html#TIRLEN">TIRLEN</a> (default: 3). Notice that with changing the number of rings the parameters <a href="model_fitting.html#VARY">VARY</a> and <a href="model_fitting.html#VARINDX">VARINDX</a> might specify an illegal range in radii, which has to be adjusted manually.
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;TIRDEF= HRGH_out.def<br>
+&nbsp;&nbsp;&nbsp;TIRACC= 3<br>
+&nbsp;&nbsp;&nbsp;TIRNR= 10<br>
+&nbsp;&nbsp;&nbsp;TIRRAD= 0 10 20 30 40 50 60 70 80 90<br>
+&nbsp;&nbsp;&nbsp;TIRSMO= HRGH_smo_out.def<br>
+&nbsp;&nbsp;&nbsp;TIRLEN= 5<br>
+</p>
+<p class="par">
+After fitting has finished, TiRiFiC will produce an output file HRGH_out.def, identical to the input file, for which the geometrical parameters reflect the final best-fit solution. The numerical accuracy is 3. The output parameters are regridded to 10 rings with the radii 0 arcsec, 10 arcsec, 20 arcsec, 30 arcsec, 40 arcsec, 50 arcsec, 60 arcsec, 70 arcsec, 80 arcsec, and 90 arcsec. Additionally, an output .def file HRGH_smo_out.def will be produced, which is identical to HRGH_out.def, but the geometrical parameters are median-filtered, with the length of the filter being 5.
+</p>
+
+<h4><a name="Spatial model">Spatial model</a></h4>
+<p>
+<center>
+  <table align="center" width="900" border="0" cellpadding="0">
+    <tr>
+      <td width="500" align="center"><img src="3dmodel_rot.gif" width="500" align="centerx"></td>
+      <td>&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="900" height="10" align="left"><i>Fig. 3:
+       TiRiFiC spatial 3D model, rendered with the rendering software Karma.</i></td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;</td>
+    </tr>
+  </table>
+</center>
+</p>
+<p>
+<center>
+<a name="COOLGAL">
+<a name="COOLBEAM">
+<a name="COOLBIN">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>COOLGAL</b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output fits file, containing a spatial 3D realisation of the output model.</td>
+  </tr>
+  <tr>
+    <td align="left"><b>COOLBEAM</b></td>
+    <td align="center">I/O (default 10)</td>
+    <td align="center">arcsec </td>
+    <td align="left">FWHM of a convolving function to smooth the spatial 3D model as specified with <a href="output.html#COOLGAL">COOLGAL</a> (default: 10 arcsec)</td>
+  </tr>
+  <tr>
+    <td align="left"><b>COOLBIN</b></td>
+    <td align="center">I/O (default 1)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Number of voxels along each axis per input voxel for spatial 3D model as specified with <a href="output.html#COOLGAL">COOLGAL</a> (default: 1)</td>
+  </tr>
+</table>
+</a>
+</a>
+</a>
+</center>
+</p>
+<p class="par">
+Specifying a name for the keyword <a href=output.html#COOLGAL">COOLGAL</a>, TiRiFiC produces a fits file containing a spatial 3D-model with the specified name. The 3D model, based on the best-fit <a href="model_geometry.html">geometrical parameters</a>, is constructed as described in the section <a href="model_geometry.html">geometrical parameters</a>. However, instead of projecting the 6D phase-space model onto a data cube with velocity being the third axis, it gets projected onto a data cube with a third spatial axis. The size of the third axis is identical to the maximum size of the axes in right-ascension and declination of the input data cube. The grid spacing of the third axis is identical to the grid spacing in the spatial domain (which should be identical for the right ascension and the declination axis). The output cube can be made having smaller voxels using the keyword <a href=output.html#COOLBIN">COOLBIN</a>. Along each axis, the number of pixels is increased by that number, but not the size. After gridding, the model gets convolved with a 3D Gaussian with FWHM specified with the keyword <a href=output.html#COOLBEAM">COOLBEAM</a>. 
+</p>
+<p class="par">
+Tips:
+</p>
+<p class="par">
+The user should be aware that with a third axis that is usually much larger (in terms of pixels) than for a spectral data cube, the memory consumption can become very demanding and exceed the capacity of the computer, on which the model is generated. In that case, use another machine, or use an input data cube with larger, but fewer pixels in the spatial domain.
+</p>
+<p class="par">
+Since TiRiFiC is meant to provide a minimal geometrical model, leaving most of the interpretation to the user, a few parameters, which can be interpreted in terms of 3D structure are implemented as a projection. As a consequence, a 3D spatial model might look not as expected. Example: a bowl-shaped warp can be parametrised using the parameter <a href="model_geometry.html#LS0">LS0</a>, which however describes a planar shift along the minor axis of the projected orbit. Any 3D model will not reproduce exactly a bowl-shaped warp (which is a likely interpretation of a non-vanishing <a href="model_geometry.html#LS0">LS0</a>, but not compulsory)  unless the inclination is 90&deg;. If the user decides to model this shift making use of the parameter <a href="model_geometry.html#WM0A">WM0A</a>, which induces a real bowl-shape into the model (in other words, with this choice the user already interpretes the observation inducing a pre-defined geometric), the result of the 3D spatial model will be a bowl-shaped warp.
+</p>
+<p class="par">
+The spatial 3D fits cube can be visualised using any suited rendering software. Highly recommendable is the <a href="http://www.atnf.csiro.au/computing/software/karma/user-manual/node6.html#SECTION00600000000000000000">xray</a> task of the <a href="http://www.atnf.csiro.au/computing/software/karma/">Karma software package</a> by Richard Gooch. Use e.g. "hot_gas_mono" as a "Shader".
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;COOLGAL= HRGH_cool.fits<br>
+&nbsp;&nbsp;&nbsp;COOLBEAM= 12<br>
+</p>
+<p class="par">
+Produces a 3D spatial model conforming to the best-fit parameters. After gridding, the model is convolved with a 3D Gaussian with a FWHM of 12 arcsec.
+</p>
+
+<h4><a name="Tiltogram">Tiltogram</a></h4>
+<p>
+<center>
+  <table align="center" width="900" border="0" cellpadding="0">
+    <tr>
+      <td width="30" align="center" colspan=2><img src="tiltogram.gif" width="350"></td>
+      <td>&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="900" height="10" align="left" colspan=2><i>Fig. 4:
+       TiRiFiC tiltogram output. The diagram shows the inclination of the disk at one radius with respect to the disk at another radius (hence, the diagram is symmetric and 0 on its diagonal). Only available for the first disk. The output shown here has been produced making use of the BIGTILT= keyword.</i></td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;</td>
+    </tr>
+  </table>
+</center>
+</p>
+<p>
+<center>
+<a name="TILT">
+<a name="BIGTILT">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>TILT</b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output fits file, containing a tiltogram per ring.</td>
+  </tr>
+  <tr>
+    <td align="left"><b>BIGTILT</b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output fits file, containing a tiltogram per <a href="model_geometry.html#Radial nodes and parameter discretisationq">sub-ring</a>.</td>
+  </tr>
+</table>
+</a>
+</a>
+</center>
+<p class="par">
+<span style="color:red">Please notice that this output possibility is currently being revised. Until further notice, we advise against the usage of the parameters <a href=output.html#TILT">TILT</a> and <a href=output.html#BIGTILT">BIGTILT</a>.</span>
+</p>
+<p class="par">
+Specifying a name for the keyword <a href=output.html#TILT">TILT</a>, TiRiFiC produces a fits file containing a tiltogram. This is a diagram showing at a set of radii the inclination of the disk with itself at a different radius. Such a diagram has been used to investigate the warp structure of galaxies (see e.g. <a href="http://esoads.eso.org/abs/2007A%26A...468..903J">J&oacute;zsa 2007, A&A, 468, 903</a>). With  <a href=output.html#TILT">TILT</a>, the tiltogram is calculated per user-defined node, with <a href=output.html#BIGTILT">BIGTILT</a>, the tiltogram is calculated per <a href="model_geometry.html#Radial nodes and parameter discretisationq">sub-ring</a>.
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;TILT= HRGH_tilt.fits<br>
+&nbsp;&nbsp;&nbsp;BIGTILT= HRGH_bigtilt.fits<br>
+</p>
+<p class="par">
+Produces a tiltogram calculating the mutual inclination of the disk with itself per ring, with the name HRGH_tilt.fits, and a tiltogram with the mutual inclination of the disk with itself calculated per <a href="model_geometry.html#Radial nodes and parameter discretisationq">sub-ring</a>, with the name HRGH_bigtilt.fits.
+</p>
+
+<h4><a name="Inclinogram">Inclinogram</a></h4>
+<p>
+<center>
+  <table align="center" width="900" border="0" cellpadding="0">
+    <tr>
+      <td width="30" align="center" colspan=2><img src="inc.th.gif" width="350"></td>
+      <td>&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="900" height="10" align="left" colspan=2><i>Fig. 5:
+       TiRiFiC inclinogram output, overlaid as Renzogram on model total-intensity map. To produce this image, the Karma task kvis was used.</i></td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;</td>
+    </tr>
+  </table>
+</center>
+</p>
+<p>
+<center>
+<a name="TILT">
+<a name="BIGTILT">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b>INCLINO</b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output fits file, containing an inclinogram data cube. Only for first disk.</td>
+  </tr>
+  <tr>
+    <td align="left"><b>IN_REFINE</b></td>
+    <td align="center">I/O (default 1)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Increase of <a href=output.html#TILT">TILT</a> in spatial resolution compared to input data cube (default: 1)</td>
+  </tr>
+</table>
+</a>
+</a>
+</center>
+<p class="par">
+<span style="color:red">Please notice that this output possibility is currently being revised. Until further notice, we advise against the usage of the parameters <a href=output.html#INCLINO">INCLINO</a> and <a href=output.html#IN_REFINE">IN_REFINE</a>.</span>
+</p>
+<p class="par">
+With the keyword <a href=output.html#INCLINO">INCLINO</a>, the user specifies the name of an output fits data cube containing an "inclinogram". The data cube has the same spatial dimensions as the input data cube and its number of planes is identical to the number of nodes (rings) <a href="model_geometry.html#NUR">NUR</a> of the model. Each plane contains a filled ellipse (value= 1), representing the projected orbit a corresponding to each ring of the model. With that, producing a Renzogram using a suitable software package (e.g. the <a href="http://www.atnf.csiro.au/computing/software/karma/">Karma software package</a>), an overlay can be produced that reflects the geometrical properties of the model (see viewgraph). With the integer parameter <a href=output.html#IN_REFINE">IN_REFINE</a>, the user specifies a factor by which the output inclinogram is refined in each spatial direction (to avoid pixelisation of the contours).
+</p>
+<p class="par">
+Example:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;INCLINO= HRGH_inclino.fits<br>
+&nbsp;&nbsp;&nbsp;IN_REFINE= 7
+</p>
+<p class="par">
+Produces an inclinogram (data cube) representing the projected orbits of the model at the ring radii. The size of the single pixels in the inclinogram is reduced by a factor of 7 in each spatial direction compared to the input data cube.
+</p>
+
+
+
+<h4><a name="Parameter plots">Parameter plots</a></h4>
+<p>
+<center>
+  <table align="center" width="900" border="0" cellpadding="0">
+    <tr>
+      <td width="400" align="center" colspan=2><img src="tirific_viewgraph.th.gif" width="400"></td>
+      <td width="400" align="center" colspan=2><img src="pretty.th.gif" width="400"></td>
+      <td>&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="900" height="10" align="left" colspan="3"><i>Fig. 6:
+       Left: simple TiRiFiC viewgraph output. Right: more complex TiRiFiC viewgraph output.</i></td>
+    </tr>
+    <tr>
+      <td>&nbsp;&nbsp;</td>
+    </tr>
+  </table>
+</center>
+</p>
+<p>
+<center>
+  <table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+    <tr>
+      <td align="center" style="border-top-width:medium"><a name="GR_DEVICE">     
+<a name="GR_PARMS"> 
+Name
+</a>
+</a>
+</td>
+      <td align="center" style="border-top-width:medium">Category</td>
+      <td align="center" style="border-top-width:medium">Unit</td>
+      <td align="center" style="border-top-width:medium">Description</td>
+    </tr>
+    <tr>      <td align="left"><b>GR_DEVICE</b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/">pgplot</a> device for parameter plot </td>    </tr>
+    <tr>      <td align="left"><b>GR_PARMS</b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Parameters to plot, first parameter on abscissa </td>    </tr>
+    <tr>
+      <td align="center" style="border-top-width:medium"><a name="GR_SBRP"> 
+<a name="GR_LGND"> 
+<a name="GR_TXHT"> 
+<a name="GR_SBHT"> 
+<a name="GR_MR">       
+<a name="GR_ML">       
+Name
+</a>
+</a>
+</a>
+</a>
+</a>
+</td>
+      <td align="center" style="border-top-width:medium">Category</td>
+      <td align="center" style="border-top-width:medium">Unit</td>
+      <td align="center" style="border-top-width:medium">Description</td>
+    </tr>
+    <tr>      <td align="left"><b>GR_SBRP</b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot subrings? (1: yes 0: no) </td>    </tr>
+    <tr>      <td align="left"><b>GR_LGND</b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot legend with axis descriptors? (1: yes 0: no) </td>    </tr>
+    <tr>      <td align="left"><b>GR_TXHT</b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Text height in <a href="http://www.astro.caltech.edu/~tjp/pgplot/">pgplot</a> units (1/40th of the plot height) </td>    </tr>
+    <tr>      <td align="left"><b>GR_SBHT</b></td>      <td align="center">I/O (optional)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a> </td>      <td align="left"> Symbol height (in units of <a href="output.html#TXHT">TXHT</a>) </td>    </tr>
+    <tr>      <td align="left"><b>GR_MR</b></td>      <td align="center">I/O (optional)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a></td>      <td align="left"> Margin between plot and right hand axis descriptors (in units of <a href="output.html#TXHT">TXHT</a>) </td>    </tr>
+    <tr>      <td align="left"><b>GR_ML</b></td>      <td align="center">I/O (optional)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a> </td>      <td align="left"> Margin between plot and left hand axis descriptors (in units of <a href="output.html#TXHT">TXHT</a>) </td>    </tr>
+    <tr>
+      <td align="center" style="border-top-width:medium"><a name="GR_XMIN"> 
+<a name="GR_XMAX"> 
+<a name="GR_XLOG"> 
+Name
+</a>
+</a>
+</a>
+</td>
+      <td align="center" style="border-top-width:medium">Category</td>
+      <td align="center" style="border-top-width:medium">Unit</td>
+      <td align="center" style="border-top-width:medium">Description</td>
+    </tr>
+    <tr>      <td align="left"><b>GR_XMIN= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">abscissa units </td>      <td align="left"> Axis range: minimum of abscissa </td>    </tr>
+    <tr>      <td align="left"><b>GR_XMAX= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">abscissa units </td>      <td align="left"> Axis range: maximum of abscissa </td>    </tr>
+    <tr>      <td align="left"><b>GR_XLOG= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Format abscissa logarithmically? (1: yes 0: no) </td>    </tr>
+    <tr>
+      <td align="center" style="border-top-width:medium"><a name="GR_YMIN_i"> 
+<a name="GR_YMAX_i"> 
+<a name="GR_YLOG_i"> 
+<a name="GR_SYMB_i"> 
+<a name="GR_EMTY_i"> 
+<a name="GR_SIZE_i"> 
+<a name="GR_COL_i"> 
+<a name="GR_LINES_i"> 
+<a name="GR_ERRB_i"> 
+<a name="GR_ERRV_i"> 
+Name
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</td>
+      <td align="center" style="border-top-width:medium">Category</td>
+      <td align="center" style="border-top-width:medium">Unit</td>
+      <td align="center" style="border-top-width:medium">Description</td>
+    </tr>
+    <tr>      <td align="left"><b>GR_YMIN_i= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">ordinate units </td>      <td align="left"> Axis range: minimum of ordinate, ith plot </td>    </tr>
+    <tr>      <td align="left"><b>GR_YMAX_i= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">ordinate units </td>      <td align="left"> Axis range: maximum of ordinate, ith plot </td>    </tr>
+    <tr>      <td align="left"><b>GR_YLOG_i= </b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Format abscissa of ith plot logarithmically? (1: yes 0: no) </td>    </tr>
+    <tr>      <td align="left"><b>GR_SYMB_i= </b></td>      <td align="center">I/O (default -1)</td>      <td align="center">&nbsp; </td>      <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/hershey.html">Pgplot symbol</a> used for main data series ith plot</td>    </tr>
+    <tr>      <td align="left"><b>GR_SIZE_i= </b></td>      <td align="center">I/O (default 1)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a></td>      <td align="left"> Size of symbols for main data series </td>    </tr>
+    <tr>      <td align="left"><b>GR_COL_i= </b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">Pgplot color</a> of main data series (1-15) </td>    </tr>
+    <tr>      <td align="left"><b>GR_LINES_i= </b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot lines for main data series? (1: yes, 0: no) </td>    </tr>
+    <tr>      <td align="left"><b>GR_ERRB_i= </b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot error bars for main data series? </td>    </tr>
+    <tr>      <td align="left"><b>GR_ERRV_i= </b></td>      <td align="center">I/O (default 1)</td>      <td align="center">ordinate units </td>      <td align="left"> List error bars for main data series </td>    </tr>
+    <tr>
+      <td align="center" style="border-top-width:medium"><a name="GR_VERL_i"> 
+<a name="GR_VLVA_i"> 
+<a name="GR_VLCA_i"> 
+<a name="GR_HORL_i"> 
+<a name="GR_HLVA_i"> 
+<a name="GR_HLCA_i"> 
+Name
+</a>
+</a>
+</a>
+</a>
+</a>
+</td>
+      <td align="center" style="border-top-width:medium">Category</td>
+      <td align="center" style="border-top-width:medium">Unit</td>
+      <td align="center" style="border-top-width:medium">Description</td>
+    </tr>
+    <tr>      <td align="left"><b>GR_VERL_i= </b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Number of vertical lines to plot for ith plot </td>    </tr>
+    <tr>      <td align="left"><b>GR_VLVA_i= </b></td>      <td align="center">I/O (optional)</td>      <td align="center"> abscissa units </td>      <td align="left"> Positions of vertical lines for ith plot</td>    </tr>
+    <tr>      <td align="left"><b>GR_VLCA_i= </b></td>      <td align="center">I/O (optional)</td>      <td align="center"> &nbsp; </td>      <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">Pgplot colors</a> of vertical lines ith plot (1-15)</td>    </tr>
+    <tr>      <td align="left"><b>GR_HORL_i= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Number of horizontal lines to plot for ith plot </td>    </tr>
+    <tr>      <td align="left"><b>GR_HLVA_i= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">ordinate units </td>      <td align="left"> Positions of horizontal lines for ith plot </td>    </tr>
+    <tr>      <td align="left"><b>GR_HLCA_i= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>        <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">Pgplot colors</a> of horizontal lines ith plot </td>   </tr>
+    <tr>
+      <td align="center" style="border-top-width:medium"><a name="GR_NRAD_i"> 
+<a name="GR_NPAD_i_j"> 
+<a name="GR_XPAD_i_j"> 
+<a name="GR_YPAD_i_j"> 
+<a name="GR_ERAD_i_j"> 
+<a name="GR_EBAD_i_j"> 
+<a name="GR_SYAD_i_j"> 
+<a name="GR_EMAD_i_j"> 
+<a name="GR_SIAD_i_j"> 
+<a name="GR_COAD_i_j"> 
+<a name="GR_LIAD_i_j"> 
+Name
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</td>
+      <td align="center" style="border-top-width:medium">Category</td>
+      <td align="center" style="border-top-width:medium">Unit</td>
+      <td align="center" style="border-top-width:medium">Description</td>
+    </tr>
+    <tr>      <td align="left"><b>GR_NRAD_i= </b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Number of series to add for ith plot </td>    </tr>
+    <tr>      <td align="left"><b>GR_NPAD_i_j= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Number of data points of jth additional series of ith plot </td>    </tr>
+    <tr>      <td align="left"><b>GR_XPAD_i_j= </b></td>      <td align="center">I/O (optional)</td>      <td align="center"> abscissa units </td>      <td align="left"> Values of data points, jth additional data series, ith plot, abscissa </td>    </tr>
+    <tr>      <td align="left"><b>GR_YPAD_i_j= </b></td>      <td align="center">I/O (optional)</td>      <td align="center"> ordinate units </td>      <td align="left"> Values of data points, jth additional data series, ith plot, ordinate </td>    </tr>
+    <tr>      <td align="left"><b>GR_ERAD_i_j= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot error bars for data points, jth additional data series, ith plot? (1: yes, 0: no) </td>    </tr>
+    <tr>      <td align="left"><b>GR_EBAD_i_j= </b></td>      <td align="center">I/O (optional)</td>      <td align="center"> ordinate units </td>      <td align="left"> Errors for data points, jth additional series, ith plot </td>    </tr>
+    <tr>      <td align="left"><b>GR_SYAD_i_j= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td> <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/hershey.html">Pgplot symbol</a> of data points, jth additional series, ith plot </td>    </tr>
+    <tr>      <td align="left"><b>GR_SIAD_i_j= </b></td>      <td align="center">I/O (optional)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a> </td>      <td align="left"> Size of <a href="http://www.astro.caltech.edu/~tjp/pgplot/">pgplot</a> symbols,  jth additional data series, ith plot </td>    </tr>
+    <tr>      <td align="left"><b>GR_COAD_i_j= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td> <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">Pgplot color</a> of jth additonal data series, ith plot</td>    </tr>
+    <tr>      <td align="left"><b>GR_LIAD_i_j= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Lines between  jth additional series ith plot? (1: yes, 0: no)</td>    </tr>
+<!-- BRIGGS PARAMETERS HAVE BEEN LEFT OUT FOR NOW
+    <tr>
+      <td align="center" style="border-top-width:medium"><a name="BR_PA"> 
+<a name="BR_INCL"> 
+<a name="GR_TLR"> 
+<a name="GR_TLL"> 
+Name
+</a>
+</a>
+</a>
+</a>
+</td>
+      <td align="center" style="border-top-width:medium">Category</td>
+      <td align="center" style="border-top-width:medium">Unit</td>
+      <td align="center" style="border-top-width:medium">Description</td>
+    </tr>
+    <tr>      <td align="left"><b>BR_PA</b></td>      <td align="center">I/O (default ?)</td>      <td align="center">deg </td>      <td align="left"> Reference position angle for Briggs paramter plot </td>    </tr>
+    <tr>      <td align="left"><b>BR_INCL</b></td>      <td align="center">I/O (optional)</td>      <td align="center">deg </td>      <td align="left"> Reference inclination for Briggs parameter plot </td>    </tr>
+    <tr>      <td align="left"><b>GR_TLR</b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left">  Angle range for tip-lon diagram (1: 0-360, 0: -180-180) </td>    </tr>
+    <tr>      <td align="left"><b>GR_TLL</b></td>      <td align="center">I/O (optional)</td>      <td align="center">deg </td>      <td align="left"> Angle instead of indefinite LON </td>    </tr>
+-->
+    <tr>
+      <td align="center" style="border-top-width:medium"><a name="GR_PRFR"> 
+<a name="GR_PRFX"> 
+<a name="GR_PRFY"> 
+Name
+</a>
+</a>
+</a>
+</td>
+      <td align="center" style="border-top-width:medium">Category</td>
+      <td align="center" style="border-top-width:medium">Unit</td>
+      <td align="center" style="border-top-width:medium">Description</td>
+    </tr>
+    <tr>      <td align="left"><b>GR_PRFR</b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Reference ring for central position </td>    </tr>
+    <tr>      <td align="left"><b>GR_PRFX</b></td>      <td align="center">I/O (optional)</td>      <td align="center">deg </td>      <td align="left"> Right ascension of reference position </td>    </tr>
+    <tr>      <td align="left"><b>GR_PRFY</b></td>      <td align="center">I/O (optional)</td>      <td align="center">deg </td>      <td align="left"> Declination of reference position </td>    </tr>
+
+    <tr>
+      <td align="center" style="border-top-width:medium"><a name="ITOU">
+Name
+</a>
+</td>
+      <td align="center" style="border-top-width:medium">Category</td>
+      <td align="center" style="border-top-width:medium">Unit</td>
+      <td align="center" style="border-top-width:medium">Description</td>
+    </tr>
+    <tr>      <td align="left"><b>ITOU</b></td>      <td align="center">I/O (default 1.248683&middot;10<sup>24</sup>)</td>      <td align="center"> atoms&nbsp;cm<sup>-2</sup>&nbsp;(Jy&nbsp;km&nbsp;s<sup>-1</sup>&nbsp;arcsec<sup>-2</sup>)<sup>-1</sup></td>      <td align="left"> Conversion from Jy&nbsp;km&nbsp;s<sup>-1</sup>&nbsp;arcsec<sup>-2</sup> to (HI-) atoms&nbsp;cm<sup>-2</sup> </td>    </tr>
+
+
+    <tr>
+      <td align="center" style="border-top-width:medium"><a name="GR_CONT">
+<a name="GR_CONT">
+Name
+</a>
+</td>
+      <td align="center" style="border-top-width:medium">Category</td>
+      <td align="center" style="border-top-width:medium">Unit</td>
+      <td align="center" style="border-top-width:medium">Description</td>
+    </tr>
+    <tr>      <td align="left"><b>GR_CONT</b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Continue after plot (any value)? </td>    </tr>
+<!-- Only in context of WA and WOLD as plottable thing. This possibility has been left out for now
+    <tr>
+      <td align="center" style="border-top-width:medium"><a name="REFRING">
+<a name="REFRING">
+Name
+</a>
+</td>
+      <td align="center" style="border-top-width:medium">Category</td>
+      <td align="center" style="border-top-width:medium">Unit</td>
+      <td align="center" style="border-top-width:medium">Description</td>
+    </tr>
+    <tr>      <td align="left"><b>REFRING</b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Reference ring for plot keywords WA and WOLD </td>    </tr>
+-->
+
+</table>
+</center>
+<p class="par">
+<b><a name="Initialisation of the graphics output">Initialisation of the graphics output:</a></b> with the parameter <a href="output.html#GR_DEVICE">GR_DEVICE</a>, the user specifies the "graphics device" for parameter plots, using <a href="http://www.astro.caltech.edu/~tjp/pgplot/">pgplot</a> syntax. The most common specifications are
+</p>
+<p>
+  <center>
+    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
+      <tr>
+        <td align="left" rowspan="5"> <a href="output.html#GR_DEVICE">GR_DEVICE</a> </td>
+        <td valign="top"> /xwin <sup>&nbsp;</sup></td>
+        <td valign="top"> : <sup>&nbsp;</sup></td>
+        <td valign="top"> X-window on screen <sup>&nbsp;</sup></td>
+        <td align="left" rowspan="5" nowrap>&nbsp;&nbsp;&nbsp;, where</td> 
+      </tr>
+      <tr>
+        <td valign="top"> filename/ps <sup>&nbsp;</sup></td>
+        <td valign="top"> : <sup>&nbsp;</sup></td>
+        <td valign="top"> B/W postscript file, portrait format, with name filename <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top"> filename/lps <sup>&nbsp;</sup></td>
+        <td valign="top"> : <sup>&nbsp;</sup></td>
+        <td valign="top"> B/W postscript file, landscape format, with name filename <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top"> filename/cps <sup>&nbsp;</sup></td>
+        <td valign="top"> : <sup>&nbsp;</sup></td>
+        <td valign="top"> Color postscript file, portrait format, with name filename <sup>&nbsp;</sup></td>
+      </tr>
+      <tr>
+        <td valign="top"> filename/lcps <sup>&nbsp;</sup></td>
+        <td valign="top"> : <sup>&nbsp;</sup></td>
+        <td valign="top"> Color postscript file, landscape format, with name filename <sup>&nbsp;</sup></td>
+      </tr>
+    </table>
+  </center>
+</p>
+<p class="par">
+the possible specifications are determined when compiling the <a href="http://www.astro.caltech.edu/~tjp/pgplot/">pgplot</a> library (in the drivers.list file, see <a href="http://www.astro.caltech.edu/~tjp/pgplot/install-unix.html">here</a>, section "Select the device drivers").
+</p>
+<p class="par">
+With the keyword <a href="output.html#GR_PARMS">GR_PARMS</a>, the user provides a (whitespace-separated) list of at least two <a href="model_geometry.html">geometrical parameters</a> parameters to plot at the end of the fitting process (which, in the case of <a href="model_fitting.html#LOOPS">LOOPS</a> 0, ends immediately). The names of the parameters are identical to the ones for the corresponding <a href="model_geometry.html">geometrical parameters</a>, leaving out the trailing "=". For n parameters, n-1 plots are produced, ordered vertically. The abscissa (x-axis) of all plots is defined by the first parameter specified with the keyword <a href="output.html#GR_PARMS">GR_PARMS</a>, the consecutive parameters define the ordinates starting from the top plot (second parameter name) to the bottom plot. In addition to the <a href="model_geometry.html">geometrical parameters</a>, the parameter DENS can be added to the list (surface density in atoms cm<sup>-2</sup> or alternatively solar masses pc<sup>-2</sup>). For each parameter, the input unit is given on the left side of each plot, an alternative unit is shown on the right side.
+</p>
+<p class="par">
+Example 1:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;GR_DEVICE= hyperplot.ps/cps<br>
+&nbsp;&nbsp;&nbsp;GR_PARMS= RADI SBR VROT
+</p>
+<p class="par">
+A (portrait-) colour plot hyperplot.ps is written to disk, containing two viewgraphs, one showing surface brightness against radius, the other showing rotation velocity against radius.
+</p>
+<p class="par">
+<b><a name="Global formatting">Global formatting:</a></b> several parameters are used to format all parameter plots. The data nodes at which the model is defined is plotted after a fit. Nodes which have been de-selected with the parameter <a href=model_fitting.html#VARINDX=>VARINDX</a> are not plotted as data points. With
+<a href="output.html#GR_SBRP">GR_SBRP</a>, the user specifies whether the parameters should be plotted such that the <a href="model_geometry.html#Radial nodes and parameter discretisationq">sub-rings</a> are visible (1: yes, 0: no). <a href="output.html#GR_LGND">GR_LGND</a> specifies whether the viewgraphs should come with a legend (<a href="output.html#GR_LGND">GR_LGND</a> 1) attached at the bottom or not (<a href="output.html#GR_LGND">GR_LGND</a> 0). <a href="output.html#GR_TXHT">GR_TXHT</a> specifies the basic height of symbols in pgplot units (1 pgplot unit is 1/40 of the plot height). Other sizes are specified relative to <a href="output.html#GR_TXHT">GR_TXHT</a>. With <a href="output.html#GR_MR">GR_MR</a>, the user specifies the margin between the plot and the right hand axis descriptors, in units of <a href="output.html#GR_TXHT">GR_TXHT</a>. With <a href="output.html#GR_ML">GR_ML</a>, the user specifies the margin between the plot and the left hand axis descriptors, in units of <a href="output.html#GR_TXHT">GR_TXHT</a>. <a href="output.html#GR_SBHT">GR_SBHT</a> is the basic size of symbols (graph markers) in units of <a href="output.html#GR_TXHT">GR_TXHT</a>.
+<a href="output.html#GR_XMIN">GR_XMIN</a> defines the minimum of the abscissa for all plots, and <a href="output.html#GR_XMAX">GR_XMAX</a> its maximum. With <a href="output.html#GR_XLOG">GR_XLOG</a>, the user can initiates a logarithmic scaling of the abscissa (<a href="output.html#GR_XLOG">GR_XLOG</a> 1) or suppress it (default: <a href="output.html#GR_XLOG">GR_XLOG</a> 0).
+</p>
+<p class="par">
+<b><a name="Formatting main parameter series:">Formatting main parameter series:</a></b> For the ith plot on the output graphics, the user specifies the ordinate maximum with the parameter <a href="output.html#GR_YMAX_i">GR_YMAX_i</a> (defaults to best guess by TiRiFiC) and its minimum with <a href="output.html#GR_YMIN_i">GR_YMIN_i</a>, the parameter <a href="output.html#GR_YLOG_i">GR_YLOG_i</a> allowing (<a href="output.html#GR_YLOG_i">GR_YLOG_i</a> 1) or suppressing (<a href="output.html#GR_YLOG_i">GR_YLOG_i</a> 0, default) logarithmic scaling of the single ordinates in the ith viewgraph. With <a href="output.html#GR_SYMB_i">GR_SYMB_i</a>, the user specifies the <a href="http://www.astro.caltech.edu/~tjp/pgplot/hershey.html">pgplot symbol</a> used for the main data series in the ith viewgraph. Negative numbers correspond to polygons with the absolute value of the given number denoting the number of corners, -1 to a circle. The size of the symbols of the main data series in multiples of <a href="output.html#GR_SBHT">GR_SBHT</a> can be given with the parameter <a href="output.html#GR_SIZE_i">GR_SIZE_i</a> (default: 1), its color with the parameter <a href="output.html#GR_COL_i">GR_COL_i</a>. <a href="output.html#GR_COL_i">GR_COL_i</a> describes the colour using the <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">pgplot color</a> definition. If <a href="output.html#GR_LINES_i">GR_LINES_i</a> is set to 1, lines are drawn between the single data points, if it is set to 0 (the default), no lines are drawn between the data points of the main data series of the ith plot. <a href="output.html#GR_ERRB_i">GR_ERRB_i</a> 1 specifies that error bars should be plotted for the ith main data series (parameter ith plot), with the errors (as many as data points, i.e. <a href="model_geometry.html#NUR">NUR</a> values) specified in a whitespace-separated list <a href="output.html#GR_ERRV_i">GR_ERRV_i</a>. It is foreseen to provide automatic error bars as soon as a minimisation algorithm has been implemented which provides these.
+</p>
+<p class="par">
+<b><a name="Vertical and horizontal lines:">Vertical and horizontal lines:</a></b>for each plot on the viewgraph, any number of horizontal and vertical lines can be overplotted. For the ith plot, the user specifies with 
+<a href="output.html#GR_VERL_i">GR_VERL_i</a>
+the number of vertical lines to draw for the ith plot, with
+<a href="output.html#GR_VLVA_i">GR_VLVA_i</a> the (whitespace-separated) positions of the vertical lines on the abscissa (x-axis), and with 
+<a href="output.html#GR_VLCA_i">GR_VLCA_i</a> the <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">pgplot colours</a> of the vertical lines.
+For the ith plot, the user specifies with 
+<a href="output.html#GR_HORL_i">GR_HORL_i</a> the number of horizontal lines to draw for the ith plot, with
+<a href="output.html#GR_HLVA_i">GR_HLVA_i</a> the (whitespace-separated) positions of the vertical lines on the ordinate (y-axis), and with
+<a href="output.html#GR_HLCA_i">GR_HLCA_i</a> the <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">pgplot colours</a> of the horizontal lines.
+</p>
+<p class="par">
+<b><a name="Additional data series:">Additional data series:</a></b> for each plot on the viewgraph, any number of additional data series can be overplotted. For the ith plot, the user specifies with 
+<a href="output.html#GR_NRAD_i">GR_NRAD_i</a> the number of additional data series to overplot for the ith plot (default 0). The user specifies with 
+<a href="output.html#GR_NPAD_i_j">GR_NPAD_i_j</a> the number of additional data points of the jth additional data series for the ith plot, with
+<a href="output.html#GR_XPAD_i_j">GR_XPAD_i_j</a> the values on the abscissa of the jth additional data series for the ith plot,
+<a href="output.html#GR_YPAD_i_j">GR_YPAD_i_j</a> the values on the ordinate of the jth additional data series for the ith plot. With
+<a href="output.html#GR_ERAD_i_j">GR_ERAD_i_j</a> the user specifies whether the jth additional data series of the ith plot should carry error bars (<a href="output.html#GR_ERAD_i_j">GR_ERAD_i_j</a> 1) or not (<a href="output.html#GR_ERAD_i_j">GR_ERAD_i_j</a> 0, the default), the values of which (1 per data point) should be specified with
+<a href="output.html#GR_EBAD_i_j">GR_EBAD_i_j</a>.
+<a href="output.html#GR_SYAD_i_j">GR_SYAD_i_j</a> denotes the <a href="http://www.astro.caltech.edu/~tjp/pgplot/hershey.html">pgplot symbol</a> used for the jth additional data series of the ith plot. Negative numbers correspond to a polygon with the number of corners given by absolute value of the given number, -1 corresponds to a circle. 
+<a href="output.html#GR_SIAD_i_j">GR_SIAD_i_j</a> is the size of the symbols used for the jth additional data series in the ith plot in multiples of <a href="output.html#GR_SBHT">GR_SBHT</a>.
+<a href="output.html#GR_COAD_i_j">GR_COAD_i_j</a> is the <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">pgplot color</a> used for the jth additional data series in the ith plot.
+<a href="output.html#GR_LIAD_i_j">GR_LIAD_i_j</a> 1 determines that the data points of the jth additional data series for the ith plot should be connected with lines, <a href="output.html#GR_LIAD_i_j">GR_LIAD_i_j</a> 0 determines that they should not be connected (default: 0).
+</p>
+<p class="par">
+<b><a name="Reference positions:">Reference positions:</a></b>
+If the user specifies XPOS or YPOS as a parameter to plot, the alternative axis description (on the right) is the relative position with respect to the central position of the reference ring with the number
+<a href="output.html#GR_PRFR">GR_PRFR</a> (default 5 or <a href="model_geometry.html#NUR">NUR</a>, if <a href="model_geometry.html#NUR">NUR</a> < 5). Alternatively, a reference right ascension in degrees can be given with the parameter 
+<a href="output.html#GR_PRFX">GR_PRFX</a> and a reference declination in degrees can be given with the parameter
+<a href="output.html#GR_PRFY">GR_PRFY</a>.
+</p>
+<p class="par">
+<b><a name="Ending the plotting routine:">Ending the plotting routine:</a></b>
+If a plot output is asked for by specifying the <a href="output.html#GR_DEVICE">GR_DEVICE</a> parameter, TiRiFiC will stop to wait until the 
+<a href="output.html#GR_CONT">GR_CONT</a> parameter has been entered (any value), upon which for some graphics devices the graphics output will vanish.
+</p>
+<p class="par">
+Example 2:
+</p>
+<p class="par">
+It is assumed that a simple tilte-ring fit has been made, with 10 nodes.
+
+&nbsp;&nbsp;&nbsp;GR_DEVICE= pretty.ps/vcps <br>
+&nbsp;&nbsp;&nbsp;GR_PARMS= RADI SBR VROT<br>
+&nbsp;&nbsp;&nbsp;GR_SBRP= 1  <br>
+&nbsp;&nbsp;&nbsp;GR_LGND= 1    <br>
+&nbsp;&nbsp;&nbsp;GR_TXHT= 1   <br>
+&nbsp;&nbsp;&nbsp;GR_SBHT= 0.5    <br>
+&nbsp;&nbsp;&nbsp;GR_MR= 5 <br>
+&nbsp;&nbsp;&nbsp;GR_ML= 5<br>
+&nbsp;&nbsp;&nbsp;      <br>
+&nbsp;&nbsp;&nbsp;GR_XMIN= 20   <br>
+&nbsp;&nbsp;&nbsp;GR_XMAX=   <br>
+&nbsp;&nbsp;&nbsp;GR_XLOG= <br>
+&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;GR_YMIN_1=     <br>
+&nbsp;&nbsp;&nbsp;GR_YMAX_1=     <br>
+&nbsp;&nbsp;&nbsp;GR_YLOG_1= 1    <br>
+&nbsp;&nbsp;&nbsp;GR_SYMB_1= 4   <br>
+&nbsp;&nbsp;&nbsp;GR_SIZE_1= 1   <br>
+&nbsp;&nbsp;&nbsp;GR_COL_1= 1  <br>
+&nbsp;&nbsp;&nbsp;GR_LINES_1=  <br>
+&nbsp;&nbsp;&nbsp;GR_ERRB_1= 1  <br>
+&nbsp;&nbsp;&nbsp;GR_ERRV_1= 1.0E-4 1.1E-4 1.2E-4 1.3E-4 1.4E-4 1.5E-5 1.6E-5 1.7E-5 1.8E-5 1.9E-5    <br>
+&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;GR_VERL_1= 1    <br>
+&nbsp;&nbsp;&nbsp;GR_VLVA_1= 50   <br>
+&nbsp;&nbsp;&nbsp;GR_VLCA_1= 2<br>
+&nbsp;&nbsp;&nbsp;GR_HORL_1= 2  <br>
+&nbsp;&nbsp;&nbsp;GR_HLVA_1= 1E-4 1E-5   <br>
+&nbsp;&nbsp;&nbsp;GR_HLCA_1= 1 1<br>
+&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;GR_NRAD_1= 1     <br>
+&nbsp;&nbsp;&nbsp;GR_NPAD_1_1= 5  <br>
+&nbsp;&nbsp;&nbsp;GR_XPAD_1_1= 0 50 100 150 200<br>
+&nbsp;&nbsp;&nbsp;GR_YPAD_1_1= 1E-4 8E-5 7E-5 3E-5 1E-5 <br>
+&nbsp;&nbsp;&nbsp;GR_ERAD_1_1= 1<br>
+&nbsp;&nbsp;&nbsp;GR_EBAD_1_1= 5E-6 5E-6 5E-6 4E-6 4E-6<br>
+&nbsp;&nbsp;&nbsp;GR_SYAD_1_1= -5<br>
+&nbsp;&nbsp;&nbsp;GR_SIAD_1_1= 1.2<br>
+&nbsp;&nbsp;&nbsp;GR_COAD_1_1= 4<br>
+&nbsp;&nbsp;&nbsp;GR_LIAD_1_1= 1<br>
+&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;GR_YMIN_2= 30   <br>
+&nbsp;&nbsp;&nbsp;GR_YMAX_2=     <br>
+&nbsp;&nbsp;&nbsp;GR_YLOG_2= 0<br>
+&nbsp;&nbsp;&nbsp;GR_SYMB_2= -1   <br>
+&nbsp;&nbsp;&nbsp;GR_SIZE_2= 1   <br>
+&nbsp;&nbsp;&nbsp;GR_COL_2= 1  <br>
+&nbsp;&nbsp;&nbsp;GR_LINES_2=  <br>
+&nbsp;&nbsp;&nbsp;GR_ERRB_2= 1  <br>
+&nbsp;&nbsp;&nbsp;GR_ERRV_2= 10 10 10 10 10 10 10 10 10 10<br>
+&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;GR_VERL_2= 1    <br>
+&nbsp;&nbsp;&nbsp;GR_VLVA_2= 65   <br>
+&nbsp;&nbsp;&nbsp;GR_VLCA_2= 1<br>
+&nbsp;&nbsp;&nbsp;GR_HORL_2= 2  <br>
+&nbsp;&nbsp;&nbsp;GR_HLVA_2= 50   <br>
+&nbsp;&nbsp;&nbsp;GR_HLCA_2= 1<br>
+&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;GR_NRAD_2= 2     <br>
+&nbsp;&nbsp;&nbsp;GR_NPAD_2_1= 5  <br>
+&nbsp;&nbsp;&nbsp;GR_XPAD_2_1= 0 50 100 150 200<br>
+&nbsp;&nbsp;&nbsp;GR_YPAD_2_1= 20 40 50 45 41 <br>
+&nbsp;&nbsp;&nbsp;GR_ERAD_2_1= 1<br>
+&nbsp;&nbsp;&nbsp;GR_EBAD_2_1= 15 11 20 14 12<br>
+&nbsp;&nbsp;&nbsp;GR_SYAD_2_1= -3<br>
+&nbsp;&nbsp;&nbsp;GR_SIAD_2_1= 1.2<br>
+&nbsp;&nbsp;&nbsp;GR_COAD_2_1= 4<br>
+&nbsp;&nbsp;&nbsp;GR_LIAD_2_1= 1<br>
+&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;GR_NPAD_2_2= 6  <br>
+&nbsp;&nbsp;&nbsp;GR_XPAD_2_2= 0 40 80 120 160 200<br>
+&nbsp;&nbsp;&nbsp;GR_YPAD_2_2= 10 41 53 41 45 50 <br>
+&nbsp;&nbsp;&nbsp;GR_ERAD_2_2= 1<br>
+&nbsp;&nbsp;&nbsp;GR_EBAD_2_2= 10 9 11 12 10 8 <br>
+&nbsp;&nbsp;&nbsp;GR_SYAD_2_2= -3<br>
+&nbsp;&nbsp;&nbsp;GR_SIAD_2_2= 1.2<br>
+&nbsp;&nbsp;&nbsp;GR_COAD_2_2= 2<br>
+&nbsp;&nbsp;&nbsp;GR_LIAD_2_2= 1
+</p>
+<p class="par">
+This input produces a plot like given in Fig. 6, right side (downloadable <a href="pretty.ps">in ps format here</a>).
+</p>
+
+
+
+<!-- <h4><a name="Briggs plots">Briggs plots</a></h4> 
+     BR_DEVICE= pgplot device
+     BR_PA= position angle of reference ring
+     BR_INCL= inclination of reference ring
+     BR_ANNR= circles to plot
+     BR_ANGL= circle radii in deg
+     BR_SWDTH= dot width
+     BR_CWDTH= circle width
+     BR_LWDTH= line width
+     BR_REFL= Plot reference line?
+     BR_COL= Colour of dots and lines
+-->
+<h3><a name="Summary output parameters">Summary output parameters</a></h3>
+<center>
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center" style="border-top-width:medium"></td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#LOGNAME">LOGNAME=    </a></b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of logfile.</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#ACTION">ACTION=    </a></b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Specify reaction on present logfile.</td>
+  </tr>
+  <tr>
+    <td align="center" style="border-top-width:medium"></td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+   <tr>
+    <td align="left"><b><a href="output.html#OUTSET">OUTSET=    </a></b></td>
+    <td align="center">I/O (required)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output data cube</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#OUTCUBUP">OUTCUBUP=    </a></b></td>
+    <td align="center">I/O (required)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Frequency of updating <a href="output.html#OUTSET">OUTSET</a></td>
+  </tr>
+
+
+  <tr>
+    <td align="center" style="border-top-width:medium"></td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#TABLE">TABLE=    </a></b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output table listing geometrical parameters per node</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#BIGTABLE">BIGTABLE=    </a></b></td>
+    <td align="center">I/O (no default)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output table listing geometrical parameters per <a href="model_geometry.html#Radial nodes and parameter discretisationq">sub-ring</a></td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#DISTANCE">DISTANCE=    </a></b></td>
+    <td align="center">I/O (default 10)</td>
+    <td align="center">Mpc </td>
+    <td align="left">Distance of object, only needed for output (default: 10 Mpc)</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#REFRING">REFRING=    </a></b></td>
+    <td align="center">I/O (default 5)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Number of the reference node to calculate several intrinsic parameters (e.g. warp angle). Default: 5 or <a href="model_geometry.html#NUR">NUR</a> if <a href="model_geometry.html#NUR">NUR</a> < 5</td>
+  <tr>
+    <td align="center" style="border-top-width:medium"></td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#TIRDEF">TIRDEF=    </a></b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output TiRiFiC .def file for repeated fitting runs</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#TIRACC">TIRACC=    </a></b></td>
+    <td align="center">I/O (default 5)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Numerical accuracy for the output .def files <a href="output.html#TIRDEF">TIRDEF</a> and <a href="output.html#TIRSMO">TIRSMO</a> (default: 5)</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#TIRNR">TIRNR=    </a></b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Number of rings in the output .def files <a href="output.html#TIRDEF">TIRDEF</a> and <a href="output.html#TIRSMO">TIRSMO</a></td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#TIRRAD">TIRRAD=    </a></b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">arcsec </td>
+    <td align="left">Radii of nodes in the output .def files <a href="output.html#TIRDEF">TIRDEF</a> and <a href="output.html#TIRSMO">TIRSMO</a></tr>
+  <tr>
+    <td align="left"><b><a href="output.html#TIRSMO">TIRSMO=    </a></b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Median-filtered version of <a href="output.html#TIRDEF">TIRDEF</a></td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#TIRLEN">TIRLEN=    </a></b></td>
+    <td align="center">I/O (default 3)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Length of median filter used for <a href="output.html#TIRSMO">TIRSMO</a> (default: 3)</td>
+  </tr>
+  <tr>
+    <td align="center" style="border-top-width:medium"></td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#COOLGAL">COOLGAL=    </a></b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output fits file, containing a spatial 3D realisation of the output model.</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#COOLBEAM">COOLBEAM=    </a></b></td>
+    <td align="center">I/O (default 10)</td>
+    <td align="center">arcsec </td>
+    <td align="left">FWHM of a convolving function to smooth the spatial 3D model as specified with <a href="output.html#COOLGAL">COOLGAL</a> (default: 10 arcsec)</td>
+  </tr>
+  <tr>
+    <td align="center" style="border-top-width:medium"></td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#TILT">TILT=    </a></b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output fits file, containing a tiltogram per ring.</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#BIGTILT">BIGTILT=    </a></b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output fits file, containing a tiltogram per <a href="model_geometry.html#Radial nodes and parameter discretisationq">sub-ring</a>.</td>
+  </tr>
+  <tr>
+    <td align="center" style="border-top-width:medium"></td>
+    <td align="center" style="border-top-width:medium">Category</td>
+    <td align="center" style="border-top-width:medium">Unit</td>
+    <td align="center" style="border-top-width:medium">Description</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#INCLINO">INCLINO=    </a></b></td>
+    <td align="center">I/O (optional)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Name of output fits file, containing an inclinogram data cube. Only for first disk.</td>
+  </tr>
+  <tr>
+    <td align="left"><b><a href="output.html#IN_REFINE">IN_REFINE=    </a></b></td>
+    <td align="center">I/O (default 1)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Increase of <a href=output.html#TILT">TILT</a> in spatial resolution compared to input data cube (default: 1)</td>
+  </tr>
+
+
+
+
+    <tr>
+      <td align="center" style="border-top-width:medium">Name</td>
+      <td align="center" style="border-top-width:medium">Category</td>
+      <td align="center" style="border-top-width:medium">Unit</td>
+      <td align="center" style="border-top-width:medium">Description</td>
+    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_DEVICE">GR_DEVICE=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/">pgplot</a> device for parameter plot </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_PARMS">GR_PARMS=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Parameters to plot, first parameter on abscissa </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_SBRP">GR_SBRP=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot subrings? (1: yes 0: no) </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_LGND">GR_LGND=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot legend with axis descriptors? (1: yes 0: no) </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_TXHT">GR_TXHT=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Text height in <a href="http://www.astro.caltech.edu/~tjp/pgplot/">pgplot</a> units (1/40th of the plot height) </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_SBHT">GR_SBHT=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a> </td>      <td align="left"> Symbol height (in units of <a href="output.html#TXHT">TXHT</a>) </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_MR">GR_MR=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a></td>      <td align="left"> Margin between plot and right hand axis descriptors (in units of <a href="output.html#TXHT">TXHT</a>) </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_ML">GR_ML=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a> </td>      <td align="left"> Margin between plot and left hand axis descriptors (in units of <a href="output.html#TXHT">TXHT</a>) </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_XMIN">GR_XMIN=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">abscissa units </td>      <td align="left"> Axis range: minimum of abscissa </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_XMAX">GR_XMAX=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">abscissa units </td>      <td align="left"> Axis range: maximum of abscissa </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_XLOG">GR_XLOG=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Format abscissa logarithmically? (1: yes 0: no) </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_YMIN_i">GR_YMIN_i=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">ordinate units </td>      <td align="left"> Axis range: minimum of ordinate, ith plot </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_YMAX_i">GR_YMAX_i=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">ordinate units </td>      <td align="left"> Axis range: maximum of ordinate, ith plot </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_YLOG_i">GR_YLOG_i=    </a></b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Format abscissa of ith plot logarithmically? (1: yes 0: no) </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_SYMB_i">GR_SYMB_i=    </a></b></td>      <td align="center">I/O (default -1)</td>      <td align="center">&nbsp; </td>      <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/hershey.html">Pgplot symbol</a> used for main data series ith plot</td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_SIZE_i">GR_SIZE_i=    </a></b></td>      <td align="center">I/O (default 1)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a></td>      <td align="left"> Size of symbols for main data series </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_COL_i">GR_COL_i=    </a></b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">Pgplot color</a> of main data series (1-15) </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_LINES_i">GR_LINES_i=    </a></b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot lines for main data series? (1: yes, 0: no) </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_ERRB_i">GR_ERRB_i=    </a></b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot error bars for main data series? </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_ERRV_i">GR_ERRV_i=    </a></b></td>      <td align="center">I/O (default 1)</td>      <td align="center">ordinate units </td>      <td align="left"> List error bars for main data series </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_VERL_i">GR_VERL_i=    </a></b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Number of vertical lines to plot for ith plot </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_VLVA_i">GR_VLVA_i=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center"> abscissa units </td>      <td align="left"> Positions of vertical lines for ith plot</td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_VLCA_i">GR_VLCA_i=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center"> &nbsp; </td>      <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">Pgplot colors</a> of vertical lines ith plot (1-15)</td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_HORL_i">GR_HORL_i=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Number of horizontal lines to plot for ith plot </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_HLVA_i">GR_HLVA_i=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">ordinate units </td>      <td align="left"> Positions of horizontal lines for ith plot </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_HLCA_i">GR_HLCA_i=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>        <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">Pgplot colors</a> of horizontal lines ith plot </td>   </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_NRAD_i">GR_NRAD_i=    </a></b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Number of series to add for ith plot </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_NPAD_i_j">GR_NPAD_i_j=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Number of data points of jth additional series of ith plot </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_XPAD_i_j">GR_XPAD_i_j=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center"> abscissa units </td>      <td align="left"> Values of data points, jth additional data series, ith plot, abscissa </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_YPAD_i_j">GR_YPAD_i_j=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center"> ordinate units </td>      <td align="left"> Values of data points, jth additional data series, ith plot, ordinate </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_ERAD_i_j">GR_ERAD_i_j=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot error bars for data points, jth additional data series, ith plot? (1: yes, 0: no) </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_EBAD_i_j">GR_EBAD_i_j=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center"> ordinate units </td>      <td align="left"> Errors for data points, jth additional series, ith plot </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_SYAD_i_j">GR_SYAD_i_j=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td> <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/hershey.html">Pgplot symbol</a> of data points, jth additional series, ith plot </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_SIAD_i_j">GR_SIAD_i_j=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a> </td>      <td align="left"> Size of <a href="http://www.astro.caltech.edu/~tjp/pgplot/">pgplot</a> symbols,  jth additional data series, ith plot </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_COAD_i_j">GR_COAD_i_j=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td> <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">Pgplot color</a> of jth additonal data series, ith plot</td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_LIAD_i_j">GR_LIAD_i_j=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Lines between  jth additional series ith plot? (1: yes, 0: no)</td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_PRFR">GR_PRFR=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Reference ring for central position </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_PRFX">GR_PRFX=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">deg </td>      <td align="left"> Right ascension of reference position </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_PRFY">GR_PRFY=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">deg </td>      <td align="left"> Declination of reference position </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#ITOU">ITOU=    </a></b></td>      <td align="center">I/O (default 1.248683&middot;10<sup>24</sup>)</td>      <td align="center"> atoms&nbsp;cm<sup>-2</sup>&nbsp;(Jy&nbsp;km&nbsp;s<sup>-1</sup>&nbsp;arcsec<sup>-2</sup>)<sup>-1</sup></td>      <td align="left"> Conversion from Jy&nbsp;km&nbsp;s<sup>-1</sup>&nbsp;arcsec<sup>-2</sup> to (HI-) atoms&nbsp;cm<sup>-2</sup> </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_CONT">GR_CONT=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Continue after plot (any value)? </td>    </tr>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  FOOTER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="footer">
+
+<!-- Created: Fri Apr 13 2007 -->
+<!-- hhmts start -->
+Last modified: Wed Feb 25 15:31:08 SAST 2015
+<!-- hhmts end -->
+<br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
+</div>
+  </body>
+</html>

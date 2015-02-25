@@ -1,0 +1,719 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>TiRiFiC - Examples</title>
+<!-- define european ISO charset -->
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<!-- favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<!-- include style -->
+<link rel="stylesheet" type="text/css" href="layout.css">
+<!--[if IE]>
+<link rel="stylesheet" type="text/css" href="layout_ie.css">
+<![endif]-->
+</head>
+  <body>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  HEADER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="hdr">
+<div class="t">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="tr">
+<div id="lh-col-white">
+<!-- <h1 class="hdrle"> -->
+<img class="tir" src="tirlogo.gif" alt="TiRiFiC logo"/> 
+<!-- </h1> -->
+</div>
+<div id="rh-col-white">
+<h1 class="hdr"> Examples </h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  LINKS   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="lh-col">
+<div class="tli">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trli">
+<a class="button" href="index.html">HOME</a>
+<a class="button" href="input_and_syntax.html">Input and Syntax</a>
+<a class="button" href="modelling_strategy.html">Modelling Strategy</a>
+<a class="button" href="model_geometry.html">Model Geometry</a>
+<!-- <a class="button" href="model_parameters.html">Model Parameters</a> -->
+<a class="button" href="model_fitting.html">Model Fitting</a>
+<!-- <a class="button" href="fitting_parameters.html">Fitting Parameters</a> -->
+<a class="button" href="output.html">Output</a>
+<!-- <a class="button" href="output_parameters.html">Output Parameters</a> -->
+<a class="button" href="parameter_index.html">Parameter Index</a>
+<a class="button" href="examples.html">Examples</a>
+<a class="button" href="gui.html">GUI</a>
+<a class="button" href="bugs_and_development.html">Bugs and Development</a>
+<a class="button" href="download_and_installation.html">Download and Installation</a>
+<a class="button" href="contact_and_feedback.html">Contact and Feedback</a>
+<a class="button" href="credits.html">Credits</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********   BODY   ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="rh-col">
+<div class="tbody">
+<div class="b">
+<div class="l">
+<div class="r">
+<div class="bl">
+<div class="br">
+<div class="tl">
+<div class="trbo">
+<p class="paremph">
+We provide a simple example to test TiRiFiC and to have a first hands-on on this page.
+</p>
+<p class="par">
+We provide a few default files for TiRiFiC, which represent a series
+of fitting procedures to a real data cube, and with that describe a possible strategy to parametrise a real galaxy with TiRiFiC. We also provide a copy of one of the default files with keyword links on this web page.
+</p>
+
+<p>
+<center>
+  <table style="align:center" BORDER="1" rules="all" cellpadding="5" summary="TiRiFiC web page">
+    <tr>
+      <td ALIGN="left">
+        Contents:
+        <ul class="par" style="list-style-type:none;padding-left:0em;margin-top:0px;margin-bottom:0px;">
+          <li><a href="#Example modelling run">Example modelling run</a></li>
+          <ul class="par" style="list-style-type:none;padding-left:2em;margin-top:0px;margin-bottom:0px;">
+            <li><a href="#Example with downloadable files for standalone version">Example with downloadable files for standalone version</a></li>
+            <li><a href="#Example with downloadable files for GIPSY version">Example with downloadable files for GIPSY version</a></li>
+            <li><a href="#Commented default file">Commented default file</a></li>
+          </ul>
+        </ul>
+      </td>
+    </tr>
+  </table>
+</center>
+</p>
+
+<h3><a name="Example modelling run">Example modelling run</a></h3>
+
+<h4><a name="Example with downloadable files for standalone version">Example with dwonloadable files for standalone version</a></h4>
+<p class="par">
+We provide a toy example of how one might parametrise a galaxy HI observation. The strategy is very simple. We first make a restricted fit, only fitting a few parameters, to then freeze out more and more fitting parameters in consecutive steps, until a moderately good fit is achieved.
+</p>
+<p>
+<center>
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr border="3" frame="above">
+    <td align="center">File</td>
+    <td align="center">Category</td>
+    <td align="center">Remarks</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6.fts"><b>eso121-g6.fts</b></a></td>
+    <td align="center">Input data cube,
+      converted to FITS format</td>
+    <td align="center">The observation to fit (ATCA HI data cube of ESO 121-G6)</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6_in_first_input.def"><b>eso121-g6_in_first_input.def</b></a></td>
+    <td align="center">TiRiFiC default file</td>
+    <td align="center">Test file, first guess </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6_out_first_input.fts"><b>eso121-g6_out_first_input.fts</b></a></td>
+    <td align="center">FITS data cube</td>
+    <td align="center">Output of run first_input, converted to FITS format </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6_in_00.def"><b>eso121-g6_in_00.def</b></a></td>
+    <td align="center">TiRiFiC default file</td>
+    <td align="center">Fit tilted-ring model with radially constant parameters</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6_out_00.fts"><b>eso121-g6_out_00.fts</b></a></td>
+    <td align="center">FITS data cube</td>
+    <td align="center">Output of run 00, converted to FITS format </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6_in_01.def"><b>eso121-g6_in_01.def</b></a></td>
+    <td align="center">TiRiFiC default file</td>
+    <td align="center">Fit tilted-ring model with radially independent parameters </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6_out_01.fts"><b>eso121-g6_out_01.fts</b></a></td>
+    <td align="center">FITS data cube</td>
+    <td align="center">Output of run 01, converted to FITS format </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6_in_02.def"><b>eso121-g6_in_02.def</b></a></td>
+    <td align="center">TiRiFiC default file</td>
+    <td align="center">Fit tilted-ring model, surface brightness independent for two half disks </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6_out_02.fts"><b>eso121-g6_out_02.fts</b></a></td>
+    <td align="center">FITS data cube</td>
+    <td align="center">Output of run 02, converted to FITS format </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6_in_03.def"><b>eso121-g6_in_03.def</b></a></td>
+    <td align="center">TiRiFiC default file</td>
+    <td align="center">Fit tilted-ring model for a larger disk than before </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6_out_03.fts"><b>eso121-g6_out_03.fts</b></a></td>
+    <td align="center">FITS data cube</td>
+    <td align="center">Output of run 03, converted to FITS format </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6_in_04.def"><b>eso121-g6_in_04.def</b></a></td>
+    <td align="center">TiRiFiC default file</td>
+    <td align="center">Last fit, adjusting inclination at large radii </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6_out_04.fts"><b>eso121-g6_out_04.fts</b></a></td>
+    <td align="center">FITS data cube</td>
+    <td align="center">Output of run 04, converted to FITS format </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/tirific_example.tar.gz"><b>tirific_example.tar.gz</b></a></td>
+    <td align="center">Archive containing all files above</td>
+    <td align="center">Extracts into directory tirific_example, containing all files above </td>
+  </tr>
+</table>
+</p>
+<p class="par">
+As a first step, install TiRiFiC, then download either the single files listed in the table above or the archive <a href="tirific_example/tirific_example.tar.gz">tirific_example.tar.gz</a>, which extracts into the directory tirific_example, containing all files listed above.
+</p>
+<p class="par">
+If you only want to test whether TiRiFiC is working properly, enter
+the directory and type (assuming the binary tirific to be somewhere in your binary search path).
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+> <path-to-TiRiFiC>tirific deffile = eso121-g6_in_first_input.def
+</pre>
+<p class="par">
+You should be prompted to enter GR_CONT. Press the Return button. TiRiFiC should stop without an error message. You should find the output file eso121-g6_out_first_input.fts (TiRiFiC output data cube) and the Postscript file eso121-g6_out_first_input.ps. You have started TiRiFiC not to perform any fitting, but only to produce an output model cube according to the parameters in the default file.
+</p>
+<p class="par">
+To proceed with the example, look at the data cube, e.g. with the <a href="http://www.atnf.csiro.au/computing/software/karma/">Karma</a> task kvis, and compare it with the input data cube. Look at the viewgraph eso121-g6_out_first_input.ps. While the model is far from representing the galaxy, it is matching some part of the observation, which is enough for a start. By reading the file eso121-g6_in_first_input.def with a suitable text editor, you will find a nearly identical file as the first input file eso121-g6_in_00.def. The only differences are the output parameters <a href="output.html#OUTSET">, <a href="output.html#TIRDEF">TIRDEF</a>, <a href="output.html#GR_DEVICE">GR_DEVICE</a>, and the number of fitting loops <a href="model_fitting.html#LOOPS">LOOPS</a>. A copy of the default file eso121-g6_in_00.def with links to the keyword descriptions <a href="examples.html#Commented default file">can be found below</a>.
+</p>
+<p class="par">
+The strategy followed to reach a final fit to the eso121-g6 observation was to make a TiRiFiC fit, producing an output default file (always called eso121-g6_out_ii.def, where ii is the fit number, starting with 00. Each output default file (containing the results of the fit as geometrical input parameters) was edited to upgrade the modelling strategy and to adjust a few geometrical parameters. All changes were commented (look for the '#'-symbol in the default files), then saved as the next input default file (eso121-g6_in_jj.def, where jj = ii + 1). These input default files are provided in the table above. To reconstruct this procedure, type
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+> <path-to-TiRiFiC>tirific deffile=eso121-g6_in_00.def
+</pre>
+<p class="par">
+TiRiFiC stops (type the return key when prompted for the parameter
+GR_CONT) eventually. In the first fitting process (eso121-g6_in_00.def), all parameters are fitted not varying with radius. Comparing the output data cube (eso121-g6_out_00.fts) to the input, one can see that the rotation velocity is well adjusted, and the galaxy centre has been found. In the second step, some parameters are made variable with radius. Have a look at the file eso121-g6_in_01.def, which is a copy of the file eso121-g6_out_00.def, which you should find on your disk. Some keywords have been changed, you can search them with a text editor, looking for the '#' symbol.
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+> <path-to-TiRiFiC>tirific deffile=eso121-g6_in_01.def
+</pre>
+<p class="par">
+Let TiRiFiC fit. Have a look at the plot with the fitting results (eso121-g6_01.ps), then compare the output data cube (eso121-g6_out_01.fts) to the input data cube (eso121-g6.fts). Not perfect, but better. In a next step, we "correct" the surface brightness of the first two rings for the input, and fit the surface brightness independently for each side independently. Also, we now allow the rotation velocity to vary independently for each ring. As we can already see that our model is too restricted in radius, the next output default file will have some additional rings (compare eso121-g6_01_out_01.def with its edited copy eso121-g6_01_in_02.def).
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+> <path-to-TiRiFiC>tirific deffile=eso121-g6_in_02.def
+</pre>
+<p class="par">
+After fitting, look at the plot with the fitting results (eso121-g6_02.ps) and compare the output data cube (eso121-g6_out_02.fts) to the input data cube (eso121-g6.fts). The velocity is a bit high at a radius of 0 arcsec, and a bit wobbly beyond the 9th ring. So we adjust the rotation velocity in the file eso121-g6_out_02.def to create a new input default file eso121-g6_in_03.def (on your disk now). We adjust the <a href="model_fitting.html#VARY">VARY</a> and the <a href="model_fitting.html#VARINDX">VARINDX</a> parameter, to account for the fact that the number of rings has increased. Also, in the next fit, for rings beyond ring 9, we sample rotation velocity and surface brightness coarser than for the inner disk. This ensures a more stable fit.
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+> <path-to-TiRiFiC>tirific deffile=eso121-g6_in_03.def
+</pre>
+<p class="par">
+After fitting, look at the plot with the fitting results (eso121-g6_03.ps) and compare the output data cube (eso121-g6_out_03.fts) to the input data cube (eso121-g6.fts). The only thing to maybe object is an instable inclination at larger radii. We adjust the <a href="model_fitting.html#VARINDX">VARINDX</a> parameter in the file eso121-g6_out_03.def  (on your disk now) to create a new input default file eso121-g6_in_04.def, to take out the inclination of ring 13 as a variable parameter.
+</p>
+
+<pre style="text-align: left; white-space: pre-wrap">
+> <path-to-TiRiFiC>tirific deffile=eso121-g6_in_04.def
+</pre>
+<p class="par">
+After fitting, enjoy the result. With some care, one might achieve better results. Clearly, ESO 121-G6 is a spiral galaxy, so maybe an improvement can be made by not changing the surface brightness of two independent (arbitrary) halves, but by using spiral arms (<a href="model_geometry.html#GAkA">see local distortions</a>) which shift the maximum of the spectra. Since, however, the galaxy is also viewn edge-on, it is doubful that their characteristics are well constrained. So we leave it at that as an example.
+</p>
+
+<h4><a name="Example with downloadable files for GIPSY version">Example with dwonloadable files for GIPSY version</a></h4>
+<p>
+<center>
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr border="3" frame="above">
+    <td align="center">File</td>
+    <td align="center">Category</td>
+    <td align="center">Remarks</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/eso121-g6.descr"><b>eso121-g6.descr</a></b></a></td>
+    <td align="center"><a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> input data cube, header</td>
+    <td align="center">The observation to fit (ATCA HI data cube of ESO 121-G6) </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/eso121-g6.image"><b>eso121-g6.image</b></a></td>
+    <td align="center"><a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> input data cube, body</td>
+    <td align="center">The observation to fit (ATCA HI data cube of ESO 121-G6)</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/eso121-g6_in_first_input.def"><b>eso121-g6_in_first_input.def</b></a></td>
+    <td align="center">TiRiFiC default file</td>
+    <td align="center">Test file, first guess </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/eso121-g6_out_first_input.fts"><b>eso121-g6_out_first_input.fts</b></a></td>
+    <td align="center">FITS data cube</td>
+    <td align="center">Output of run first_input, converted to FITS format </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/eso121-g6_in_00.def"><b>eso121-g6_in_00.def</b></a></td>
+    <td align="center">TiRiFiC default file</td>
+    <td align="center">Fit tilted-ring model with radially constant parameters</td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/eso121-g6_out_00.fts"><b>eso121-g6_out_00.fts</b></a></td>
+    <td align="center">FITS data cube</td>
+    <td align="center">Output of run 00, converted to FITS format </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/eso121-g6_in_01.def"><b>eso121-g6_in_01.def</b></a></td>
+    <td align="center">TiRiFiC default file</td>
+    <td align="center">Fit tilted-ring model with radially independent parameters </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/eso121-g6_out_01.fts"><b>eso121-g6_out_01.fts</b></a></td>
+    <td align="center">FITS data cube</td>
+    <td align="center">Output of run 01, converted to FITS format </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/eso121-g6_in_02.def"><b>eso121-g6_in_02.def</b></a></td>
+    <td align="center">TiRiFiC default file</td>
+    <td align="center">Fit tilted-ring model, surface brightness independent for two half disks </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example/eso121-g6_out_02.fts"><b>eso121-g6_out_02.fts</b></a></td>
+    <td align="center">FITS data cube</td>
+    <td align="center">Output of run 02, converted to FITS format </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/eso121-g6_in_03.def"><b>eso121-g6_in_03.def</b></a></td>
+    <td align="center">TiRiFiC default file</td>
+    <td align="center">Fit tilted-ring model for a larger disk than before </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/eso121-g6_out_03.fts"><b>eso121-g6_out_03.fts</b></a></td>
+    <td align="center">FITS data cube</td>
+    <td align="center">Output of run 03, converted to FITS format </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/eso121-g6_in_04.def"><b>eso121-g6_in_04.def</b></a></td>
+    <td align="center">TiRiFiC default file</td>
+    <td align="center">Last fit, adjusting inclination at large radii </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/eso121-g6_out_04.fts"><b>eso121-g6_out_04.fts</b></a></td>
+    <td align="center">FITS data cube</td>
+    <td align="center">Output of run 04, converted to FITS format </td>
+  </tr>
+  <tr>
+    <td align="left"><a href="tirific_example_gipsy/tirific_example_gipsy.tar.gz"><b>tirific_example_gipsy.tar.gz</b></a></td>
+    <td align="center">Archive containing all files above</td>
+    <td align="center">Extracts into directory tirific_example_gipsy, containing all files above </td>
+  </tr>
+</table>
+</p>
+<p class="par">
+As a first step, install TiRiFiC (a version <= 2.1.5), then download either the single files listed in the table above or the archive <a href="tirific_example_gipsy/tirific_example_gipsy.tar.gz">tirific_example_gipsy.tar.gz</a>, which extracts into the directory tirific_example, containing all files listed above.
+</p>
+<p class="par">
+If you only want to test whether TiRiFiC is working properly, enter the directory and type
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+> cp eso121-g6_in_first_input.def tirific.def
+> gipsy
+</pre>
+<p class="par">
+In the <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> shell, type:
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+tirific
+</pre>
+<p class="par">
+You should be prompted with to enter GR_CONT=. Press the Return button. TiRiFiC should stop without an error message. Leave <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> (Ctrl-c). You should find the output files eso121-g6_out_first_input.descr, eso121-g6_out_first_input.image (TiRiFiC output data cube in <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> format) and the Postscript file eso121-g6_out_first_input.ps. In summary, you have started TiRiFiC not to perform any fitting, but only to produce an output model cube according to the parameters in the default file.
+</p>
+<p class="par">
+To proceed with the example, look at the data cube, e.g. with the <a href="http://www.atnf.csiro.au/computing/software/karma/">Karma</a> task kvis, and compare it with the input data cube. Look at the viewgraph eso121-g6_out_first_input.ps. While the model is far from representing the galaxy, it is matching some part of the observation, which is enough for a start. By reading the file eso121-g6_in_first_input.def with a suitable text editor, you will find a nearly identical file as the first input file eso121-g6_in_00.def. The only differences are the output parameters <a href="output.html#OUTSET">, <a href="output.html#TIRDEF">TIRDEF</a>, <a href="output.html#GR_DEVICE">GR_DEVICE</a>, and the number of fitting loops <a href="model_fitting.html#LOOPS">LOOPS</a>. A copy of the default file eso121-g6_in_00.def with links to the keyword descriptions <a href="examples.html#Commented default file">can be found below</a>.
+</p>
+<p class="par">
+The strategy followed to reach a final fit to the eso121-g6 observation was to make a TiRiFiC fit, producing an output default file (always called eso121-g6_out_ii.def, where ii is the fit number, starting with 00. Each output default file (containing the results of the fit as geometrical input parameters) was edited to upgrade the modelling strategy and to adjust a few geometrical parameters. All changes were commented (look for the keyword "Comment=" in the default files), then saved as the next input default file (eso121-g6_in_jj.def, where jj = ii + 1). These input default files are provided in the table above. To reconstruct this procedure, type
+<p>
+<pre style="text-align: left; white-space: pre-wrap">
+> cp eso121-g6_in_00.def tirific.def
+> rm data.log
+> gipsy
+</pre>
+<p class="par">
+In the <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> shell, type:
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+tirific
+</pre>
+<p class="par">
+When TiRiFiC stops (type the return key when prompted for the parameter GR_CONT=), leave <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> (Ctrl-c). In the first fitting process (eso121-g6_in_00.def), all parameters are fitted not varying with radius. Comparing the output data cube (eso121-g6_out_00 in <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> format) to the input, one can see that the rotation velocity is well adjusted, and the galaxy centre has been found. In the second step, some parameters are made variable with radius. Have a look at the file eso121-g6_in_01.def, which is a copy of the file eso121-g6_out_00.def, which you should find on your disk. Some keywords have been changed, you can search them with a text editor, looking for the "Comment=" keyword.
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+> cp eso121-g6_in_01.def tirific.def
+> rm data.log
+> gipsy
+</pre>
+<p class="par">
+In the <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> shell, type:
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+tirific
+</pre>
+<p class="par">
+Let TiRiFiC fit, then leave GIPSY (or open a second terminal in the same directory). Have a look at the plot with the fitting results (eso121-g6_01.ps), then compare the output data cube (eso121-g6_out_01 in <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> format) to the input data cube (eso121-g6 in <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> format). Not perfect, but better. In a next step, we "correct" the surface brightness of the first two rings for the input, and fit the surface brightness independently for each side independently. Also, we now allow the rotation velocity to vary independently for each ring. As we can already see that our model is too restricted in radius, the next output default file will have some additional rings (compare eso121-g6_01_out_01.def with its edited copy eso121-g6_01_in_02.def).
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+> cp eso121-g6_in_02.def tirific.def
+> rm data.log
+> gipsy
+</pre>
+<p class="par">
+In the <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> shell, type:
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+tirific
+</pre>
+<p class="par">
+After fitting, look at the plot with the fitting results (eso121-g6_02.ps) and compare the output data cube (eso121-g6_out_02 in <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> format) to the input data cube (eso121-g6 in <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> format). The velocity is a bit high at a radius of 0 arcsec, and a bit wobbly beyond the 9th ring. So we adjust the rotation velocity in the file eso121-g6_out_02.def to create a new input default file eso121-g6_in_03.def (on your disk now). We adjust the <a href="model_fitting.html#VARY">VARY</a> and the <a href="model_fitting.html#VARINDX">VARINDX</a> parameter, to account for the fact that the number of rings has increased. Also, in the next fit, for rings beyond ring 9, we sample rotation velocity and surface brightness coarser than for the inner disk. This ensures a more stable fit.
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+> cp eso121-g6_in_03.def tirific.def
+> rm data.log
+> gipsy
+</pre>
+<p class="par">
+In the <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> shell, type:
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+tirific
+</pre>
+<p class="par">
+After fitting, look at the plot with the fitting results (eso121-g6_03.ps) and compare the output data cube (eso121-g6_out_03 in <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> format) to the input data cube (eso121-g6 in <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> format). The only thing to maybe object is an instable inclination at larger radii. We adjust the <a href="model_fitting.html#VARINDX">VARINDX</a> parameter in the file eso121-g6_out_03.def  (on your disk now) to create a new input default file eso121-g6_in_04.def, to take out the inclination of ring 13 as a variable parameter.
+</p>
+
+<pre style="text-align: left; white-space: pre-wrap">
+> cp eso121-g6_in_03.def tirific.def
+> rm data.log
+> gipsy
+</pre>
+<p class="par">
+In the <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> shell, type:
+</p>
+<pre style="text-align: left; white-space: pre-wrap">
+tirific
+</pre>
+<p class="par">
+After fitting, enjoy the result. With some care, one might achieve
+better results. Clearly, ESO 121-G6 is a spiral galaxy, so maybe an
+improvement can be made by not changing the surface brightness of two
+independent (arbitrary) halves, but by using spiral arms (<a
+href="model_geometry.html#GAkA">see local distortions</a>) which shift
+the maximum of the spectra. Since, however, the galaxy is also viewn
+edge-on, it is doubful that their characteristics are well
+constrained. So we leave it at that as an example. This time we add a
+<a href="output.html#COOLGAL">COOLGAL</a> output that can e.g. be enjoyed
+with the xray rendering software of the <a
+href="http://www.atnf.csiro.au/computing/software/karma/">Karma
+software package</a>.
+
+</p>
+
+<h4><a name="Commented default file">Commented default file</a></h4>
+<p class="par">
+Here, a commented TiRiFiC default file is given. It is identical to eso121-g6_in_00.def as provided above. Clicking on the keywords, however, will lead you to the keyword description.
+</p>
+<p class="par">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+<tr>
+<td>
+<pre style="text-align: left; white-space: pre-wrap">
+<font color="008800">Comment= The logfile name</font>
+<a href="output.html#LOGNAME">LOGNAME</a>= data.log
+
+<font color="008800"># Delete logfile if it exists</font>
+<a href="output.html#ACTION">ACTION</a>= 1
+
+<font color="008800"># Delete logfile if it exists</font>
+<a href="modelling_strategy.html#PROMPT">PROMPT</a>= 1
+
+<font color="008800">Comment= Use 8 cores</font>
+<a href="modelling_strategy.html#NCORES">NCORES</a>= 8
+
+<font color="008800">Comment= Name of the input data set, use full velocity axis and full stokes axis, the stokes axis is 1 pixel wide</font>
+<a href="modelling_strategy.html#INSET">INSET</a>= eso121-g6 VELO S
+<font color="008800">Comment= Always leave this empty</font>
+<a href="modelling_strategy.html#BOX">BOX</a>=
+<font color="008800">Comment= Name of the output data set, which has the same dimensions as the input data set</font>
+<a href="output.html#OUTSET">OUTSET</a>=  eso121-g6_out_00
+<font color="008800">Comment= Update the output data set every 10000000th model calculation, i.e. never</font>
+<a href="output.html#OUTCUBUP">OUTCUBUP</a>=  10000000.0
+
+<font color="008800">Comment= Minor FWHM of the synthesised beam</font>
+<a href="model_geometry.html#BMIN">BMIN</a>= 21.94
+<font color="008800">Comment= Major FWHM of the synthesised beam</font>
+<a href="model_geometry.html#BMAJ">BMAJ</a>= 28.61
+<font color="008800">Comment= Position angle of the synthesised beam</font>
+<a href="model_geometry.html#BPA">BPA</a>= 14.3
+<font color="008800">Comment= Rms noise in the data cube</font>
+<a href="model_fitting.html#RMS">RMS</a>= 0.002
+
+<font color="008800">Comment= Number of disks</font>
+<a href="model_geometry.html#NDISKS">NDISKS</a>= 2
+<font color="008800">Comment= Number of rings</font>
+<a href="model_geometry.html#NUR">NUR</a>= 11
+<font color="008800">Comment= Ring radii in arcsec, always start with 0</font>
+    <a href="model_geometry.html#RADI">RADI</a>= 0 20 40 60 80 100 120 140 160 180 200
+<font color="008800">Comment= Rotation velocity for all rings (first guess), km/s, disk 1</font>
+    <a href="model_geometry.html#VROT">VROT</a>= 150
+<font color="008800">Comment= Scale height for all rings (first guess), arcsec, disk 1</font>
+      <a href="model_geometry.html#Z0">Z0</a>= 2
+<font color="008800">Comment= Surface brightness for all rings (first guess), Jy km/s/sqarcs, disk 1</font>
+     <a href="model_geometry.html#SBR">SBR</a>= 1E-4
+<font color="008800">Comment= Inclination for all rings (first guess), degrees, disk 1</font>
+    <a href="model_geometry.html#INCL">INCL</a>= 85
+<font color="008800">Comment= Position angle for all rings (first guess), degrees, disk 1</font>
+      <a href="model_geometry.html#PA">PA</a>= 40
+<font color="008800">Comment= Central position, right ascension, for all rings (first guess), degrees, disk 1</font>
+    <a href="model_geometry.html#XPOS">XPOS</a>= 91.875
+<font color="008800">Comment= Central position, declination, for all rings (first guess), degrees, disk 1</font>
+    <a href="model_geometry.html#YPOS">YPOS</a>= -61.80722
+<font color="008800">Comment= Systemic velocity for all rings (first guess), km/s, disk 1</font>
+    <a href="model_geometry.html#VSYS">VSYS</a>= 1185
+<font color="008800">Comment= Central azimuthal angle of azimuthal wedge, for all rings (first guess), degrees, disk 1 (means around the approaching side)</font>
+    <a href="model_geometry.html#AZ1P">AZ1P</a>= 0
+<font color="008800">Comment= Width of azimuthal wedge, for all rings (first guess), degrees, disk 1 (means half a disk)</font>
+    <a href="model_geometry.html#AZ1W">AZ1W</a>= 180
+
+<font color="008800">Comment= Rotation velocity for all rings (first guess), km/s, disk 2, same as disk 1</font>
+    <a href="model_geometry.html#VROT_i">VROT_2</a>= 150
+<font color="008800">Comment= Scale height for all rings (first guess), arcsec, disk 2, same as disk 1</font>
+      <a href="model_geometry.html#Z0_i">Z0_2</a>= 2
+<font color="008800">Comment= Surface brightness for all rings (first guess), Jy km/s/sqarcs, disk 2, same as disk 1</font>
+     <a href="model_geometry.html#SBR_i">SBR_2</a>= 1E-4
+<font color="008800">Comment= Inclination for all rings (first guess), degrees, disk 2, same as disk 1</font>
+    <a href="model_geometry.html#INCL_i">INCL_2</a>= 85
+<font color="008800">Comment= Position angle for all rings (first guess), degrees, disk 2, same as disk 1</font>
+      <a href="model_geometry.html#PA_i">PA_2</a>= 40
+<font color="008800">Comment= Central position, right ascension, for all rings (first guess), degrees, disk 2, same as disk 1</font>
+    <a href="model_geometry.html#XPOS_i">XPOS_2</a>= 91.875
+<font color="008800">Comment= Central position, declination, for all rings (first guess), degrees, disk 2, same as disk 1</font>
+    <a href="model_geometry.html#YPOS_i">YPOS_2</a>= -61.80722
+<font color="008800">Comment= Systemic velocity for all rings (first guess), km/s, disk 2, same as disk 1</font>
+    <a href="model_geometry.html#VSYS_i">VSYS_2</a>= 1185
+<font color="008800">Comment= Central azimuthal angle of azimuthal wedge, for all rings (first guess), degrees, disk 2 (means around the receding side), NOT the same as disk 1</font>
+    <a href="model_geometry.html#AZ1P_i">AZ1P_2</a>= 180
+<font color="008800">Comment= Width of azimuthal wedge, for all rings (first guess), degrees, disk 2 (means half a disk)</font>
+    <a href="model_geometry.html#AZ1W_i">AZ1W_2</a>= 180
+
+<font color="008800">Comment= With the settings above, two half disks with the same qualities are build. This is equivalent to 1 full disk. But it is convenient to do this from the beginning, if, at a later stage, one wants to fit two independent halves.</font>
+
+<font color="008800">Comment= Global velocity dispersion, km/s</font>
+ <a href="model_geometry.html#CONDISP">CONDISP</a>= 8
+
+<font color="008800">Comment= Layer type (sech2), disk 1</font>
+<a href="model_geometry.html#LTYPE">LTYPE</a>= 2.0
+<font color="008800">Comment= Layer type (sech2), disk 2, defaults to disk 1 layer type</font>
+<a href="model_geometry.html#LTYPE_i">LTYPE_2</a>= 
+
+<font color="008800">Comment= Cloud flux, Jy km/s, disk 1</font>
+<a href="modelling_strategy.html#CFLUX">CFLUX</a>= 2e-06
+<font color="008800">Comment= Cloud flux, Jy km/s, disk 2, defaults to disk 1 cloud flux</font>
+<a href="modelling_strategy.html#CFLUX">CFLUX_2</a>= 
+
+<font color="008800">Comment= Penalise outliers</font>
+<a href="model_fitting.html#PENALTY">PENALTY</a>= 1.0
+<font color="008800">Comment= Do not give quantisation noise any weight in the chisquare evaluation</font>
+<a href="model_fitting.html#WEIGHT">WEIGHT</a>= 0
+<font color="008800">Comment= separation of sub-rings is 0.5 pixels</font>
+<a href="model_geometry.html#RADSEP">RADSEP</a>= 0.05
+<font color="008800">Comment= some seed for the random-number generator</font>
+<a href="model_geometry.html#ISEED">ISEED</a>= 8981
+
+<font color="008800">Comment= use fitmode 2 (golden section)</font>
+<a href="model_fitting.html#FITMODE">FITMODE</a>=FITMODE</a>= 2
+<font color="008800">Comment= four loops</font>
+<a href="model_fitting.html#LOOPS">LOOPS</a>= 4
+<font color="008800">Comment= maximum number of total iterations, leave to default</font>
+<a href="model_fitting.html#MAXITER">MAXITER</a>= 
+<font color="008800">Comment= maximum number of calls per iteration, leave to default</font>
+<a href="model_fitting.html#CALLITE">CALLITE</a>= 
+<font color="008800">Comment= size as stopping condition is 4</font>
+<a href="model_fitting.html#SIZE">SIZE</a>= 4
+
+<font color="008800">Comment= we are currently only fitting parameter groups as a whole, so indexing is not necessary</font>
+<a href="model_fitting.html#VARINDX">VARINDX</a>= 
+<font color="008800">Comment= parameters to vary. All parameters listed are varied as one parameter (i.e. changes apply to all rings at the same time)</font>
+<a href="model_fitting.html#VARY">VARY</a>=       PA 1:11 PA_2 1:11, SBR 1:11 SBR_2 1:11, VROT 1:11 VROT_2 1:11, INCL  1:11 INCL_2  1:11, Z0  1:11 Z0_2  1:11,  XPOS 1:11 XPOS_2 1:11, YPOS 1:11 YPOS_2 1:11, VSYS  1:11  VSYS_2  1:11, CONDISP
+<font color="008800">Comment= parameter maximum</font>
+<a href="model_fitting.html#PARMAX">PARMAX</a>=                   360                    1                    800                      180                  100                     360                    180                     10000       80
+<font color="008800">Comment= parameter minimum</font>
+<a href="model_fitting.html#PARMIN">PARMIN</a>=                     0                   -1                      0                        0                    0                       0                   -180                         1        1
+<font color="008800">Comment= for the consecutive parameters (for FITMODE = 2, these are only DELSTART and DELEND) interpolate for 3 loops</font>
+<a href="model_fitting.html#MODERATE">MODERATE</a>=                   3                    3                      3                        3                    3                       3                      3                         3        3
+<font color="008800">Comment= start stepwidth at the beginning of the iteration process</font>
+<a href="model_fitting.html#DELSTART">DELSTART</a>=                   2                 5E-6                      3                        2                    5                   0.005                  0.005                       0.5        2
+<font color="008800">Comment= start stepwidth after MODERATE= 3 loops</font>
+<a href="model_fitting.html#DELEND">DELEND</a>=                     1                 5E-6                      2                        1                    1                   0.001                  0.001                       0.2        1
+<font color="008800">Comment= relevant only for FITMODE= 1, kept as an example, number of model calulations at the start of the fitting process</font>
+<a href="model_fitting.html#ITESTART">ITESTART</a>=                  70                   70                     70                       70                   70                      70                     70                        70       70
+<font color="008800">Comment= relevant only for FITMODE= 1, kept as an example, number of model calulations after three loops</font>
+<a href="model_fitting.html#ITEEND">ITEEND</a>=                    70                   70                     70                       70                   70                      70                     70                        70       70
+<font color="008800">Comment= relevant only for FITMODE= 1, kept as an example, stopping condition: if the model has not changed after a loop by values larger than these numbers, stop</font>
+<a href="model_fitting.html#SATDELT">SATDELT</a>=                  0.2                 1E-6                    0.2                      0.2                    2                  0.0005                 0.0005                      0.05     0.05
+<font color="008800">Comment= grid normalisation or minimum step width</font>
+<a href="model_fitting.html#MINDELTA">MINDELTA</a>=                0.05                 5E-7                   0.05                     0.05                    1                  0.0002                 0.0002                      0.02     0.02
+
+<font color="008800">Comment= no regularisation</font>
+<a href="model_fitting.html#REGPARA">REGPARA</a>=
+
+<font color="008800">Comment= no output table</font>
+<a href="output.html#TABLE">TABLE</a>=
+<a href="output.html#DISTANCE">DISTANCE</a>= 6
+<a href="output.html#REFRING">REFRING</a>= 5.0
+<a href="output.html#BIGTABLE">BIGTABLE</a>= 
+<a href="output.html#FRACTION">FRACTION</a>= 
+
+<font color="008800">Comment= name of the output default file</font>
+<a href="output.html#TIRDEF">TIRDEF</a>= eso121-g6_out_00.def
+<font color="008800">Comment= no median-filtered .def file</font>
+<a href="output.html#TIRSMO">TIRSMO</a>= 
+<font color="008800">Comment= numeric accuracy for parameters in default file</font>
+<a href="output.html#TIRACC">TIRACC</a>= 5.0
+<font color="008800">Comment= length of median filter, irrelevant, since we do not produce the median-filtered output</font>
+<a href="output.html#TIRLEN">TIRLEN</a>= 
+
+<font color="008800">Comment= no 3D spatial model output</font>
+<a href="output.html#COOLGAL">COOLGAL</a>= 
+<a href="output.html#COOLBEAM">COOLBEAM</a>= 20
+
+<font color="008800">Comment= no tiltogram output</font>
+<a href="output.html#TILT">TILT</a>= 
+<a href="output.html#BIGTILT">BIGTILT</a>= 
+
+<font color="008800">Comment= no inclinogram output</font>
+<a href="output.html#INCLINO">INCLINO</a>= 
+<a href="output.html#IN_REFINE">IN_REFINE</a>= 5.0
+
+<font color="008800">Comment= name of output device, a ps file with name eso121-g6_00.ps, portrait format in the standard pgplot installation, if it doesn't work, try .../ppsfile</font>
+<a href="output.html#GR_DEVICE">GR_DEVICE</a>= eso121-g6_00.ps/vcps 
+<font color="008800">Comment= plot radii on abscissa, surface brightness, rotation velocity, position angle, and inclination on ordinate</font>
+<a href="output.html#GR_PARMS">GR_PARMS</a>= RADI SBR VROT PA INCL
+<font color="008800">Comment= do not plot the sub-rings</font>
+<a href="output.html#GR_SBRP">GR_SBRP</a>= 0  
+<font color="008800">Comment= print a legend</font>
+<a href="output.html#GR_LGND">GR_LGND</a>= 1    
+<font color="008800">Comment= text height is 1</font>
+<a href="output.html#GR_TXHT">GR_TXHT</a>= 1   
+<font color="008800">Comment= basic symbol height is 0.5 times text height</font>
+<a href="output.html#GR_SBHT">GR_SBHT</a>= 0.5   
+<font color="008800">Comment= margin to the right is 5 </font>
+<a href="output.html#GR_MR">GR_MR</a>= 5 
+<font color="008800">Comment= margin to the left is 5</font>
+<a href="output.html#GR_ML">GR_ML</a>= 5
+      
+<font color="008800">Comment= symbol for first graph (SBR vs RADI) is a circle</font>
+<a href="output.html#GR_SYMB_i">GR_SYMB_1</a>= -1
+<font color="008800">Comment= size of symbol is 1 times basic symbol height (0.5 text height)</font>
+<a href="output.html#GR_SIZE_i">GR_SIZE_1</a>= 1   
+<font color="008800">Comment= color is foreground, black</font>
+<a href="output.html#GR_COL_i">GR_COL_1</a>= 1  
+<font color="008800">Comment= plot lines between data points</font>
+<a href="output.html#GR_LINES_i">GR_LINES_1</a>= 1
+
+<font color="008800">Comment= symbol for second graph (VROT vs RADI) is a circle</font>
+<a href="output.html#GR_SYMB_i">GR_SYMB_2</a>= -1
+<font color="008800">Comment= size of symbol is 1 times basic symbol height (0.5 text height)</font>
+<a href="output.html#GR_SIZE_i">GR_SIZE_2</a>= 1   
+<font color="008800">Comment= color is foreground, black</font>
+<a href="output.html#GR_COL_i">GR_COL_2</a>= 1  
+<font color="008800">Comment= plot lines between data points</font>
+<a href="output.html#GR_LINES_i">GR_LINES_2</a>= 1
+
+<font color="008800">Comment= symbol for first graph (PA vs RADI) is a circle</font>
+<a href="output.html#GR_SYMB_i">GR_SYMB_3</a>= -1
+<font color="008800">Comment= size of symbol is 1 times basic symbol height (0.5 text height)</font>
+<a href="output.html#GR_SIZE_i">GR_SIZE_3</a>= 1   
+<font color="008800">Comment= color is foreground, black</font>
+<a href="output.html#GR_COL_i">GR_COL_3</a>= 1  
+<font color="008800">Comment= plot lines between data points</font>
+<a href="output.html#GR_LINES_i">GR_LINES_3</a>= 1
+
+<font color="008800">Comment= symbol for first graph (INCL vs RADI) is a circle</font>
+<a href="output.html#GR_SYMB_i">GR_SYMB_4</a>= -1
+<font color="008800">Comment= size of symbol is 1 times basic symbol height (0.5 text height)</font>
+<a href="output.html#GR_SIZE_i">GR_SIZE_4</a>= 1   
+<font color="008800">Comment= color is foreground, black</font>
+<a href="output.html#GR_COL_i">GR_COL_4</a>= 1  
+<font color="008800">Comment= plot lines between data points</font>
+<a href="output.html#GR_LINES_i">GR_LINES_4</a>= 1
+</pre>
+</td>
+</tr>
+</table>
+</a>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ************************* -->
+<!-- ************************* -->
+<!-- ********  FOOTER  ******* -->
+<!-- ************************* -->
+<!-- ************************* -->
+<div id="footer">
+
+<!-- Created: Fri Apr 13 2007 -->
+<!-- hhmts start -->
+Last modified: Wed Feb 25 15:31:08 SAST 2015
+<!-- hhmts end -->
+<br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
+</div>
+  </body>
+</html>
