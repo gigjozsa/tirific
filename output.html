@@ -546,13 +546,13 @@ The name of the output data table is "HRGHTAB.txt", which is an ASCII file listi
     <td align="left"><b>TIRSMO</b></td>
     <td align="center">I/O (optional)</td>
     <td align="center">&nbsp; </td>
-    <td align="left">Median-filtered version of <a href="output.html#TIRDEF">TIRDEF</a></td>
+    <td align="left">Hanning-filtered version of <a href="output.html#TIRDEF">TIRDEF</a></td>
   </tr>
   <tr>
     <td align="left"><b>TIRLEN</b></td>
-    <td align="center">I/O (default 3)</td>
+    <td align="center">I/O (default 5)</td>
     <td align="center">&nbsp; </td>
-    <td align="left">Length of median filter used for <a href="output.html#TIRSMO">TIRSMO</a> (default: 3)</td>
+    <td align="left">Length of Hanning filter used for <a href="output.html#TIRSMO">TIRSMO</a> (default: 3)</td>
   </tr>
 </table>
 </a>
@@ -564,7 +564,7 @@ The name of the output data table is "HRGHTAB.txt", which is an ASCII file listi
   </center>
 </p>
 <p class="par">
-Most users use the output .def file as the numerical output of TiRiFiC. The user specifies its name with the keyword <a href="output.html#TIRDEF">TIRDEF</a>. TiRiFiC will then produce an output ASCII file that can be used as an input for TiRiFiC. The output .def file is identical to the input file, but the <a href="model_geometry.html">geometrical parameters</a> are updated to be the result of the <a href="model_fitting.html">fitting process</a>. All output <a href="model_geometry.html">geometrical parameters</a> in the .def file have the numerical accurary defined with the parameter <a href="output.html#TIRACC">TIRACC</a>, while the numerical accuracy of the parameters <a href="model_geometry.html#XPOS">XPOS</a> and <a href="model_geometry.html#YPOS">YPOS</a> is always increased by 2. The user has the possibility to regrid the <a href="model_geometry.html">geometrical parameters</a> by explicitly redefining the number of rings with the parameter <a href="output.html#TIRNR">TIRNR</a>, and the ring raddi with the parameter <a href="output.html#TIRRAD">TIRRAD</a>. The .def files will then contain the best-fit parameters, but regridded onto the node radii specified with the keyword <a href="output.html#TIRRAD">TIRRAD</a> (via linear interpolation). With <a href="output.html#TIRSMO">TIRSMO</a>, the user defines the name of an output .def file, which is identical to <a href="output.html#TIRDEF">TIRDEF</a>, while the parameter values are the result of a median filtering of the <a href="model_geometry.html">geometrical parameters</a> as found in the <a href="output.html#TIRDEF">TIRDEF</a> file. The length of the median filter can be specified with the parameter <a href="output.html#TIRLEN">TIRLEN</a> (default: 3). Notice that with changing the number of rings the parameters <a href="model_fitting.html#VARY">VARY</a> and <a href="model_fitting.html#VARINDX">VARINDX</a> might specify an illegal range in radii, which has to be adjusted manually.
+Most users use the output .def file as the numerical output of TiRiFiC. The user specifies its name with the keyword <a href="output.html#TIRDEF">TIRDEF</a>. TiRiFiC will then produce an output ASCII file that can be used as an input for TiRiFiC. The output .def file is identical to the input file, but the <a href="model_geometry.html">geometrical parameters</a> are updated to be the result of the <a href="model_fitting.html">fitting process</a>. All output <a href="model_geometry.html">geometrical parameters</a> in the .def file have the numerical accurary defined with the parameter <a href="output.html#TIRACC">TIRACC</a>, while the numerical accuracy of the parameters <a href="model_geometry.html#XPOS">XPOS</a> and <a href="model_geometry.html#YPOS">YPOS</a> is always increased by 2. The user has the possibility to regrid the <a href="model_geometry.html">geometrical parameters</a> by explicitly redefining the number of rings with the parameter <a href="output.html#TIRNR">TIRNR</a>, and the ring raddi with the parameter <a href="output.html#TIRRAD">TIRRAD</a>. The .def files will then contain the best-fit parameters, but regridded onto the node radii specified with the keyword <a href="output.html#TIRRAD">TIRRAD</a> (via linear interpolation). With <a href="output.html#TIRSMO">TIRSMO</a>, the user defines the name of an output .def file, which is identical to <a href="output.html#TIRDEF">TIRDEF</a>, while the parameter values are the result of a Hanning filtering of the <a href="model_geometry.html">geometrical parameters</a> as found in the <a href="output.html#TIRDEF">TIRDEF</a> file. The length of the Hanning window (number of channels from 0 to 0) can be specified with the parameter <a href="output.html#TIRLEN">TIRLEN</a> (default: 5, which corresponds to usual Hanning). Notice that with changing the number of rings the parameters <a href="model_fitting.html#VARY">VARY</a> and <a href="model_fitting.html#VARINDX">VARINDX</a> might specify an illegal range in radii, which has to be adjusted manually.
 </p>
 <p class="par">
 Example:
@@ -1471,7 +1471,7 @@ This input produces a plot like given in Fig. 6, right side (downloadable <a hre
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Wed Feb 25 15:31:08 SAST 2015
+Last modified: Fri Feb 27 11:49:45 SAST 2015
 <!-- hhmts end -->
 <br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
 </div>

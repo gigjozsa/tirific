@@ -278,10 +278,10 @@ Contents:
  <tr>    <td align="center" style="border-top-width:medium">Name</td>                 <td align="center" style="border-top-width:medium">Category</td>    <td align="center" style="border-top-width:medium">Unit</td>    <td align="center" style="border-top-width:medium">Description</td>  </tr>
 <tr>    <td align="left"><a href="output.html#TIRACC">              <b>TIRACC        </b></a></td>    <td align="center">I/O (default 5)</td>    <td align="center">&nbsp; </td>    <td align="left">Numerical accuracy for the output .def files <a href="output.html#TIRDEF">TIRDEF=</a> and <a href="output.html#TIRSMO">TIRSMO=</a> (default: 5)</td>  </tr>
 <tr>    <td align="left"><a href="output.html#TIRDEF">              <b>TIRDEF        </b></a></td>    <td align="center">I/O (optional)</td>    <td align="center">&nbsp; </td>    <td align="left">Name of output TiRiFiC .def file for repeated fitting runs</td>  </tr>
-<tr>    <td align="left"><a href="output.html#TIRLEN">              <b>TIRLEN        </b></a></td>    <td align="center">I/O (default 3)</td>    <td align="center">&nbsp; </td>    <td align="left">Length of median filter used for <a href="output.html#TIRSMO">TIRSMO=</a> (default: 3)</td>  </tr>
+<tr>    <td align="left"><a href="output.html#TIRLEN">              <b>TIRLEN        </b></a></td>    <td align="center">I/O (default 3)</td>    <td align="center">&nbsp; </td>    <td align="left">Length of Hanning filter used for <a href="output.html#TIRSMO">TIRSMO=</a> (default: 5)</td>  </tr>
 <tr>    <td align="left"><a href="output.html#TIRNR">               <b>TIRNR         </b></a></td>    <td align="center">I/O (optional)</td>    <td align="center">&nbsp; </td>    <td align="left">Number of rings in the output .def files <a href="output.html#TIRDEF">TIRDEF=</a> and <a href="output.html#TIRSMO">TIRSMO=</a></td>  </tr>
 <tr>    <td align="left"><a href="output.html#TIRRAD">              <b>TIRRAD        </b></a></td>    <td align="center">I/O (optional)</td>    <td align="center">arcsec </td>    <td align="left">Radii of nodes in the output .def files <a href="output.html#TIRDEF">TIRDEF=</a> and <a href="output.html#TIRSMO">TIRSMO=</a></tr>
-<tr>    <td align="left"><a href="output.html#TIRSMO">              <b>TIRSMO        </b></a></td>    <td align="center">I/O (optional)</td>    <td align="center">&nbsp; </td>    <td align="left">Median-filtered version of <a href="output.html#TIRDEF">TIRDEF=</a></td>  </tr>
+<tr>    <td align="left"><a href="output.html#TIRSMO">              <b>TIRSMO        </b></a></td>    <td align="center">I/O (optional)</td>    <td align="center">&nbsp; </td>    <td align="left">Hanning-filtered version of <a href="output.html#TIRDEF">TIRDEF=</a></td>  </tr>
 <tr>    <td align="left"><a href="model_fitting.html#VARINDX">      <b>VARINDX       </b></a></td>    <td align="center">Fitting (required)</td>    <td align="center">&nbsp</td>    <td align="left">List of radial nodes to be ignored for a given parameter name</td>   </tr>
 <tr>    <td align="left"><a href="model_fitting.html#VARY">         <b>VARY          </b></a></td>    <td align="center">Fitting (required)</td>    <td align="center">&nbsp</td>    <td align="left">Specification of fitting parameters</td>  </tr>
 <tr>    <td align="left"><a href="model_geometry.html#VM0A">        <b>VM0A          </b></a></td>    <td align="center">Geometrical (default 0)</td>    <td align="center">km s<sup>-1</sup> </td>    <td align="left">Amplitude of harmonics in LOS velocity 0th order: constant shift in velocity</td>  </tr>
@@ -559,7 +559,7 @@ We provide old TiRiFiC versions that still depend on <a href="http://www.astro.r
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Wed Feb 25 15:31:08 SAST 2015
+Last modified: Fri Feb 27 11:49:45 SAST 2015
 <!-- hhmts end -->
 <br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
 </div>
