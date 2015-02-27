@@ -1,3 +1,25 @@
+Sequence to publish next version:
+    > make clean
+    > git add relevant_files
+    > git commit -m "Whatever message"
+    > make
+Edit settings to contain the correct version number
+    > make public [results in an entry in tirific_pubver]
+    > cd www
+Edit construct.tcsh and web pages to contain the new version
+    > construct.tcsh [creates the www pages in a directory ${tirific_www} specified in construct.tcsh]
+    > cd ${tirific_www} (use the directory)
+    > git add --all
+    > git commit -am "Next www page" (-a means add first all changes to known files, so not really necessary, but also not harmful)
+    > git push origin gh-pages
+    > cp $tirific_www/tirific_i.j.k.patch.tar.gz $tirific [where $tirific is where the public tirific is]
+    > cd $tirific [where $tirific is where the public tirific is]
+    > tar zxvf tirific_i.j.k.patch.tar.gz
+    > rm tirific_i.j.k.patch.tar.gz
+    > git add --all
+    > git commit -am "Next tirific" (-a means add first all changes to known files, so not really necessary, but also not harmful)
+    
+
 TiRiFiC Version 2.i.i
 
 TiRiFiC is a program that serves for the fitting

@@ -260,7 +260,6 @@ qfits: $(XMEMORY)qfits_memory.h $(XMEMORY)qfits_memory.c
         make;\
 	make install
 	cd $(DIR)
-	@touch .qfits
 	@echo
 	@echo '########################'
 	@echo '# ENDING QFITS REBUILD #'
