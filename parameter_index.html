@@ -11,6 +11,20 @@
 <!--[if IE]>
 <link rel="stylesheet" type="text/css" href="layout_ie.css">
 <![endif]-->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+<script
+src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'>
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    processEscapes: true
+  }
+});
+</script>
 </head>
   <body>
 <!-- ************************* -->
@@ -238,6 +252,16 @@ Contents:
 <tr>    <td align="left"><a href="model_geometry.html#PA_i">        <b>PA_i          </b></a></td>    <td align="center">Geometrical (default 0)</td>    <td align="center">degrees </td>    <td align="left">Inclination, ith disk, i = 2, 3, ...</td>  </tr>
 <tr>    <td align="left"><a href="model_fitting.html#PENALTY">      <b>PENALTY       </b></a></td>    <td align="center">Fitting (required)</td>    <td align="center"> &nbsp; </td>    <td align="left"> Penalize outliers from the data cube (continuous parameter, 0: do not penalise) </td>  </tr>
 <tr>    <td align="left"><a href="modelling_strategy.html#PROMPT">  <b>PROMPT        </b></a></td>    <td align="center">I/O (not required)</td>    <td align="center"> &nbsp; </td>    <td align="left"> Prompt on error (1: yes, 0: no)? </td>  </tr>
+  <tr> <td align="left"><b><a href="model_fitting.html#PSW_PSSE">  <b>PSW_PSSE</b></a></td>    <td align="center">Fitting (default 42)</td>      <td align="center"> &nbsp; </td>    <td align="left">PSWARM seed                </td> </tr>
+  <tr> <td align="left"><b><a href="model_fitting.html#PSW_PSNP">  <b>PSW_PSNP</b></a></td>    <td align="center">Fitting (default 42)</td>      <td align="center"> &nbsp; </td>    <td align="left">PSWARM number of particles </td> </tr>
+  <tr> <td align="left"><b><a href="model_fitting.html#PSW_PSCO">  <b>PSW_PSCO</b></a></td>    <td align="center">Fitting (default 0.5)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM cognition parameter </td> </tr>
+  <tr> <td align="left"><b><a href="model_fitting.html#PSW_PSSO">  <b>PSW_PSSO</b></a></td>    <td align="center">Fitting (default 0.5)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM social parameter    </td> </tr>
+  <tr> <td align="left"><b><a href="model_fitting.html#PSW_PSMV">  <b>PSW_PSMV</b></a></td>    <td align="center">Fitting (default 0.5)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM maximum velocity    </td> </tr>
+  <tr> <td align="left"><b><a href="model_fitting.html#PSW_PSNF">  <b>PSW_PSNF</b></a></td>    <td align="center">Fitting (default 8000)</td>    <td align="center"> &nbsp; </td>    <td align="left">PSWARM number of function evaluations to go from initial weight to final weight </td> </tr>
+  <tr> <td align="left"><b><a href="model_fitting.html#PSW_PSII">  <b>PSW_PSII</b></a></td>    <td align="center">Fitting (default 0.9)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM initial weight      </td> </tr>
+  <tr> <td align="left"><b><a href="model_fitting.html#PSW_PSFI">  <b>PSW_PSFI</b></a></td>    <td align="center">Fitting (default 0.4)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM final weight        </td> </tr>
+  <tr> <td align="left"><b><a href="model_fitting.html#PSW_PSID">  <b>PSW_PSID</b></a></td>    <td align="center">Fitting (default 2.0)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM increase delta      </td> </tr>
+  <tr> <td align="left"><b><a href="model_fitting.html#PSW_PSDD">  <b>PSW_PSDD</b></a></td>    <td align="center">Fitting (default 0.5)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM decrease delta      </td> </tr>
 <tr>    <td align="left"><a href="model_geometry.html#RADI">        <b>RADI          </b></a></td>    <td align="center">Geometrical (required)</td>    <td align="center">arcsec </td>    <td align="left">List of grid nodes (ring radii)</td>  </tr>
 <tr>    <td align="left"><a href="model_geometry.html#RADSEP">      <b>RADSEP        </b></a></td>    <td align="center">Geometrical (required)</td>    <td align="center">pixel </td>    <td align="left">Separation of sub-grids (sub-rings)</td>  </tr>
 <tr>    <td align="left"><a href="model_geometry.html#RADSEP_i">    <b>RADSEP_i      </b></a></td>    <td align="center">Geometrical (required)</td>    <td align="center">pixel </td>    <td align="left">Separation of sub-grids (sub-rings), ith disk, i = 2, 3, ...</td>  </tr>
@@ -559,7 +583,7 @@ We provide old TiRiFiC versions that still depend on <a href="http://www.astro.r
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Fri Feb 27 12:15:02 SAST 2015
+Last modified: Tue Apr 14 14:32:34 SAST 2015
 <!-- hhmts end -->
 <br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
 </div>

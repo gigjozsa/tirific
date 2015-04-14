@@ -11,6 +11,20 @@
 <!--[if IE]>
 <link rel="stylesheet" type="text/css" href="layout_ie.css">
 <![endif]-->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+<script
+src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'>
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    processEscapes: true
+  }
+});
+</script>
 </head>
   <body>
 <!-- ************************* -->
@@ -115,12 +129,10 @@ The fitting strategies implemented in TiRiFiC are introduced in this section.
 </p>
 <p class="par">
 The flow diagram (Fig. 1) to the right shows how TiRiFiC is expanded to enable the user not only to construct simulated
-observations, but also to automatically adjust model parameters to fit the simulated observation to an input observation. With this, in TiRiFiC we attempt to go qualitatively beyond the possibilities of the
-<a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a> routine <a
-href="http://www.astro.rug.nl/~gipsy/tsk/galmod.dc1">galmod</a>.
+observations, but also to automatically adjust model parameters to fit the simulated observation to an input observation.
 </p>
 <p class="par">
- While the basic functionality is implemented, and automated fitting with TiRiFiC has successfully been applied to paramtrise galaxies, there is certainly much room for improvement. The difficulty is to find a minimising algorithm, which is able to converge quickly, dealing with a complex &chi;<sup>2</sup>-landscape with a generally high number of parameters, a limited available amount of model calculations (since, after all optimisation for speed, the construction of one model still takes significantly longer than a &micro;s), and without analytic (partial) derivatives. So far, two of several tested fitting methods yielded acceptable results.
+The difficulty is to implement a minimising algorithm, which is able to converge quickly, dealing with a complex $\chi^2$-landscape with a generally high number of parameters, a limited available amount of model calculations (since, after all optimisation for speed, the construction of one model still takes significantly longer than a &micro;s), and without analytic (partial) derivatives. So far, three of several tested fitting methods yielded acceptable results.
 </p>
 <p>
 <center>
@@ -163,186 +175,129 @@ Contents:
 
 <h4><a name="General fitting concept">General fitting concept</a></h4>
 <p class="par">
-The aim of the fitting process in TiRiFiC is to adjust a subset of the <a href="model_geometry.html">geometrical parameters</a> with the goal to optimise a simulated observation such that the simulated observation optimally matches a real (input) observation. The measure adopted to numerically determine the model quality is the &chi;<sup>2</sup>, altered by defining boundary conditions (minimum and maximum values for a parameter, regularisation schemes). The TiRiFiC optimisation aims at the minimisation of the &chi;<sup>2</sup>. 
+The aim of the fitting process in TiRiFiC is to adjust a subset of the
+<a href="model_geometry.html">geometrical parameters</a> with the goal
+to optimise a simulated observation such that the simulated
+observation optimally matches a real (input) observation. The measure
+adopted to numerically determine the model quality is the
+$\chi^2$, altered by defining boundary conditions (minimum
+and maximum values for a parameter, regularisation
+schemes). Currently, the TiRiFiC optimisation aims at the minimisation of the $\chi^2$.
 </p>
 <p class="par">
-As far as possible, the fitting routines in TiRiFiC are kept separate from the model generation. This means that the fitting parameters, passed to the fitting routine are normalised (with a normalisation factor provided by the user through the parameter <a href="model_fitting.html#MINDELTA">MINDELTA</a>) to then be varied as dimensionless quantities on a regular grid. The parameters visible to the fitting routine are not necessarily mapped to single <a href="model_geometry.html">geometrical parameters</a> parameters, but the user has the possibility to automatically adjust single geometrical parameters at given radii via linear linear interpolation between fitted quantities, and to group geometrical parameters to be fitted at the same time, in which case only one representative fitting variable is visible to the fitting routine. In other words, such a fitting group appears to the minimising routine as one parameter and automatically adjusted parameters are not visible at all for the fitting routine. Grouping and interpolation is controled by the the parameters <a href="model_fitting.html#VARY">VARY</a> and <a href="model_fitting.html#VARINDX">VARINDX</a>.
+As far as possible, the fitting routines in TiRiFiC are kept separate from the model generation. This means that the fitting parameters, passed to the fitting routine are normalised (with a normalisation factor provided by the user through the parameter <a href="model_fitting.html#MINDELTA">MINDELTA</a>) to then be varied as dimensionless quantities on a regular grid. The parameters visible to the fitting routine are not necessarily mapped to single <a href="model_geometry.html">geometrical parameters</a> parameters, but the user has the possibility to automatically adjust single geometrical parameters at given radii via linear linear interpolation between fitted quantities, and to group geometrical parameters to be fitted at the same time, in which case only one representative fitting variable is visible to the fitting routine. In other words, such a fitting group appears to the minimising routine as one parameter and automatically adjusted parameters are not visible at all to the fitting routine. Grouping and interpolation is controled by the the parameters <a href="model_fitting.html#VARY">VARY</a> and <a href="model_fitting.html#VARINDX">VARINDX</a>.
 </p>
 <p class="par">
-In the following sections, we discuss the &chi;<sup>2</sup> evaluation including the implementation of boundary conditions altering the &chi;<sup>2</sup>, to then describe the implemented fitting algorithms. Finally, the fitting parameters are described in detail.
+In the following sections, we discuss the $\chi^2$ evaluation including the implementation of boundary conditions altering the $\chi^2$, to then describe the implemented fitting algorithms. Finally, the fitting parameters are described in detail.
 </p>
 
 
 
 <h4><a name="Goodness-of-fit evaluation: basic">Goodness-of-fit evaluation: basic</a></h4>
 <p class="par">
-As a measure of the quality of a fit, TiRiFiC calculates the &chi;<sup>2</sup> and with that, in principle, the relative
+As a measure of the quality of a fit, TiRiFiC calculates the $\chi^2$ and with that, in principle, the relative
 probability of two models.
 The chisquare calculation before taking into account boundary conditions is determined by the <a href="model_fitting.html#WEIGHT">WEIGHT</a> and the <a href="model_fitting.html#RMS">RMS</a>
-parameters. The &chi;<sup>2</sup> calculates with
-</p>
-<p>
-  <center>
-    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
-      <tr>
-        <td align="left" rowspan="2"> (1)&nbsp;&nbsp;&nbsp; </td> 
-        <td nowrap valign="top"> &chi;<sup>2</sup>  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top">  &Sigma;<sub>i</sub> (<i>m</i><sub>i</sub>-<i>o</i><sub>i</sub>)<sup>2</sup>&middot;<i>&sigma;</i><sup>-2</sup><sub>i</sub> <sup>&nbsp;</sup></td>
-        <td align="left" rowspan="2" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;, where</td> 
-      </tr>
-      <tr>
-        <td nowrap valign="top">  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top">  &Sigma;<sub>i</sub> (<i>m</i><sub>i</sub>-<i>o</i><sub>i</sub>)<sup>2</sup>&middot;<i>w</i><sup>-1</sup><sub>i</sub> <sup>&nbsp;</sup></td>
-      </tr>
-     </table>
-  </center>
+parameters. The $\chi^2$ calculates with
 </p>
 <p class="par">
-i is an index over all pixels, (<i>m</i><sub>i</sub>) is the model data cube and
-(<i>o</i><sub>i</sub>) the observed data cube, (<i>&sigma;</i><sub>i</sub>) the (pixel-dependent) noise, and (<i>w</i><sub>i</sub>) the corresponding weighting function. If no quantisation noise is assumed, then
-</p>
-<p>
-  <center>
-    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
-      <tr>
-        <td align="left" rowspan="1"> (2)&nbsp;&nbsp;&nbsp; </td> 
-        <td nowrap valign="top"> <i>&sigma;</i><sub>i</sub>  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top">  <i>&sigma;</i><sub>rms</sub> <sup>&nbsp;</sup></td>
-        <td align="left" rowspan="1" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;, where</td> 
-      </tr>
-      <tr>
-        <td nowrap valign="top">  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top">  RMS <sup>&nbsp;</sup></td>
-      </tr>
-     </table>
-  </center>
+\begin{equation}
+\label{eq_2.1}
+\begin{split}
+\chi^2 &= \sum_i \frac{(M_i-O_i)^2}{\sigma_i^2} \\
+       &= \sum_i \frac{(M_i-O_i)^2}{w_i}
+\end{split}
+\qquad,
+\end{equation}
 </p>
 <p class="par">
-<i>&sigma;</i><sub>rms</sub> is the rms noise in the original datacube and asked
-for with the parameter <a href="model_fitting.html#RMS">RMS</a> in the same units as the input data cube (Jy beam<sup>-1</sup>). As the model data cube is the result of a Monte-Carlo integration and before gridding consists of discrete point sources, this assumption is not true and we have to set
-</p>
-<p>
-  <center>
-    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
-      <tr>
-        <td align="left" rowspan="1"> (3)&nbsp;&nbsp;&nbsp; </td> 
-        <td nowrap valign="top"> <i>w</i><sub>i</sub>  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top">  <i>&sigma;</i><sup>2</sup><sub>rms</sub>+<i>&sigma;</i><sub>q</sub><sup>2</sup><sub>i</sub> <sup>&nbsp;</sup></td>
-        <td align="left" rowspan="1" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;,</td> 
-      </tr>
-      <tr>
-        <td nowrap valign="top">   <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top">  RMS<sup>2</sup>+<i>&sigma;</i><sub>q</sub><sup>2</sup><sub>i</sub> <sup>&nbsp;</sup></td>
-        <td align="left" rowspan="1" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;,</td> 
-      </tr>
-     </table>
-  </center>
+where $k$ is an index over all pixels, $(M_i)$ is the model data cube and
+$(O_i)$ the observed data cube, $(\sigma_i)$ the (pixel-dependent) noise, and $(w_i)$ the corresponding weighting function. If no quantisation noise is assumed, then
 </p>
 <p class="par">
-(<i>&sigma;</i><sub>q&nbsp;i</sub>) being the (pixel-dependent) quantisation noise.
-<i>&sigma;</i>&prime;<sub>q&nbsp;i</sub>, the quantisation noise evaluated for a pixel with the index i containing n<sub>i</sub> pointsources of total flux
-<a href="model_geometry.html#CFLUX">CFLUX</a> (specified by the user) in the model cube <i>before convolution</i> (<i>m</i>&prime;<sub>i</sub>), is given by
-</p>
-<p>
-  <center>
-    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
-      <tr>
-        <td align="left" rowspan="3"> (4)&nbsp;&nbsp;&nbsp; </td> 
-        <td nowrap valign="top"> <i>&sigma;</i>&prime;<sub>q&nbsp;i</sub>  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top"> n<sup>1/2</sup><sub>i</sub>&middot;CFLUX <sup>&nbsp;</sup></td>
-        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;. </td> 
-      </tr>
-      <tr>
-        <td nowrap valign="top">  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top">  (<i>m</i>&prime;<sub>i</sub>&middot;CFLUX<sup>-1</sup>)<sup>1/2</sup>&middot;CFLUX <sup>&nbsp;</sup></td>
-      </tr>
-      <tr>
-        <td nowrap valign="top">  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top">  (<i>m</i>&prime;<sub>i</sub>&middot;CFLUX)<sup>1/2</sup> <sup>&nbsp;</sup></td>
-      </tr>
-     </table>
-  </center>
+\begin{equation}
+\label{eq_2.2}
+\begin{split}
+\sigma_i &= \sigma_\mathrm{rms} \\
+&= \mathrm{RMS}
+\end{split}
+\qquad,
+\end{equation}
 </p>
 <p class="par">
-If <i>g</i><sub>i</sub> is the discretised version of the <a href="model_geometry#Instrumental function"> instrumental convolution kernel</a> (a 3D Gaussian), then the quantisation noise <i>&sigma;</i><sub>q&nbsp;i</sub> in the
+$\sigma_\mathrm{rms}$ is the rms noise in the original datacube and asked
+for with the parameter <a href="model_fitting.html#RMS">RMS</a> in the same units as the input data cube ${\rm Jy}\,{\rm beam}^{-1}). As the model data cube is the result of a Monte-Carlo integration and before gridding consists of discrete point sources, this assumption is not true and we have to set
+</p>
+<p class="par">
+\begin{equation}
+\label{eq_2.3}
+\begin{split}
+w_i &= \sigma_\mathrm{rms}^2+(\sigma^\mathrm{q}_i)^2\\
+&= \mathrm{RMS}^2+(\sigma^\mathrm{q}_i)^2
+\end{split}
+\qquad,
+\end{equation}
+</p>
+<p class="par">
+$\sigma^\mathrm{q}_i$ being the (pixel-dependent) quantisation noise.
+$\sigma^{\rm q, u}_{i}$, the quantisation noise evaluated for a pixel with the index $i$ containing $n_i$ pointsources of total flux
+<a href="model_geometry.html#CFLUX">CFLUX</a> (specified by the user) in the model cube ($m^{\rm u}_i$) <i>before convolution</i>, is given by
+</p>
+<p class="par">
+\begin{equation}
+\label{eq_2.4}
+\begin{split}
+\sigma^{\rm q, u}_{i} &= \sqrt{n_i}\cdot \mathrm{CFLUX}\\
+&= \sqrt{\frac{m^{\rm u}_i}{CFLUX}}\cdot \mathrm{CFLUX}\\
+&= \sqrt{m^{\mathrm{u}}_i\cdot \mathrm{CFLUX}}
+\end{split}
+\qquad.
+\end{equation}
+</p>
+<p class="par">
+If $(g_i)$ is the discretised version of the <a href="model_geometry#Instrumental function"> instrumental convolution kernel</a> (a 3D Gaussian), then the quantisation noise $\sigma^\mathrm{q}_i$ in the
 convolved map is given by
 </p>
-<p>
-  <center>
-    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
-      <tr>
-        <td align="left" rowspan="3"> (5)&nbsp;&nbsp;&nbsp; </td> 
-        <td nowrap valign="top"> <i>&sigma;</i><sub>q&nbsp;i</sub>  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top"> (&Sigma;<sub>j</sub> <i>g</i><sup>2</sup><sub>i-j</sub>&middot;<i>&sigma;</i>&prime;<sup>2</sup><sub>q&nbsp;j</sub>)<sup>1/2</sup>    <sup>&nbsp;</sup></td>
-        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;, </td> 
-      </tr>
-      <tr>
-        <td nowrap valign="top">  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top">  (&Sigma;<sub>j</sub> <i>g</i><sup>2</sup><sub>i-j</sub>&middot;<i>m</i><sub>j</sub>&middot;CFLUX)<sup>1/2</sup> <sup>&nbsp;</sup></td>
-      </tr>
-     </table>
-  </center>
+<p class="par">
+\begin{equation}
+\label{eq_2.5}
+\begin{split}
+\sigma^\mathrm{q}_i &= \sqrt{\sum_j g^2_j\cdot({\sigma^\mathrm{q, u}_{i-j})^2}}\\
+&=\sqrt{\sum_j g^2_{j}\cdot({m^\mathrm{u}_{i-j})^2}\cdot\mathrm{CFLUX}}
+\end{split}
+\qquad,
+\end{equation}
 </p>
 <p class="par">
 which is equivalent to a convolution with a convolution with a Gaussian of with an increased dispersion by a factor of 2<sup>1/2</sup> in every direction (not taking into account the 
 normalisation). TiRiFiC can hence calculate the weight map
 </p>
-<p>
-  <center>
-    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
-      <tr>
-        <td align="left" rowspan="3"> (6)&nbsp;&nbsp;&nbsp; </td> 
-        <td nowrap valign="top"> <i>w</i><sub>i</sub>  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top"> <i>&sigma;</i><sup>2</sup><sub>rms</sub> + <i>&sigma;</i><sup>2</sup><sub>q&nbsp;i</sub>    <sup>&nbsp;</sup></td>
-        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp; via FFT </td> 
-      </tr>
-      <tr>
-        <td nowrap valign="top">   <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top"> RMS<sup>2</sup> + <i>&sigma;</i><sup>2</sup><sub>q&nbsp;i</sub>    <sup>&nbsp;</sup></td>
-      </tr>
-     </table>
-  </center>
+<p class="par">
+\begin{equation}
+\label{eq_2.6}
+\begin{split}
+w_i = \sigma^2_\mathrm{rms}+(\sigma^\mathrm{q}_i)^2
+\end{split}
+\qquad,
+\end{equation}
 </p>
 <p class="par">
-to perform a &chi;<sup>2</sup> evaluation taking into account quantisation noise. It is, however, a larger
+to perform a $\chi^2$ evaluation taking into account quantisation noise. It is, however, a larger
 computational effort to do so, and the user might be inclined to
 modify the goodness-of-fit evaluation, which is why in TiRiFiC we introduce the weight parameter
 <a href="model_fitting.html#WEIGHT">WEIGHT</a>, to calculate the weight map following the equation
 </p>
-<p>
-  <center>
-    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
-      <tr>
-        <td align="left" rowspan="3"> (7)&nbsp;&nbsp;&nbsp; </td> 
-        <td nowrap valign="top"> <i>w</i><sub>i</sub>  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top"> (<i>&sigma;</i><sup>2</sup><sub>rms</sub>&middot;WEIGHT<sup>2</sup> + <i>&sigma;</i><sup>2</sup><sub>q&nbsp;i</sub>)&middot;WEIGHT<sup>-2</sup>    <sup>&nbsp;</sup></td>
-        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;. </td> 
-      </tr>
-      <tr>
-        <td nowrap valign="top">   <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top"> (RMS<sup>2</sup>&middot;WEIGHT<sup>2</sup> + <i>&sigma;</i><sup>2</sup><sub>q&nbsp;i</sub>)&middot;WEIGHT<sup>-2</sup>    <sup>&nbsp;</sup></td>
-      </tr>
-     </table>
-  </center>
-</p>
 <p class="par">
-In case of a vanishing weight parameter (<a href="model_fitting.html#WEIGHT">WEIGHT</a> 0.0), the weight map
-has the constant pixel values RMS<sup>2</sup>. In this case it will not be calculated
+\begin{equation}
+\label{eq_2.7}
+\begin{split}
+w_i = \frac{\sigma^2_\mathrm{rms}\cdot \mathrm{WEIGHT}^2+(\sigma^\mathrm{q}_i)^2}{\mathrm{WEIGHT}^2}
+\end{split}
+\qquad,
+\end{equation}
+</p><p class="par">
+An input of a vanishing weight parameter (<a href="model_fitting.html#WEIGHT">WEIGHT</a>  = 0.0) is interpreted as <a href="model_fitting.html#WEIGHT">WEIGHT</a>$=\infty$, meaning that the weight map
+has the constant pixel values $\mathrm{RMS}^2$. In this case it will not be calculated
 resulting in a higher computing speed. If set to 1.0, the correct noise will be
 evaluated, including the quantisation noise. We kept the parameter to be variable between the two discrete cases to
 give the user a weighting scheme at hand. With an increasing
@@ -351,10 +306,10 @@ the high-quantisation-noise (and high emission) regions towards the regions of l
 emission.
 </p>
 <p class="par">
-Again, specifying a nonzero <a href="model_fitting.html#WEIGHT">WEIGHT</a> parameter instructs TiRiFiC to perform two convolutions per model calculation (one for the model itself, one for the weight map), requiring 1.5 times to 1.7 times the amount of reserved memory. The user might therefore be inclined to estimate the quantisation noise before he or she includes the quantisation noise in the &chi;<sup>2</sup> calculation. This is possible by constructing, without fitting, a model that consists of the input model disk(s) and in addition a further disk for which the surface brightness is chosen to be the negative of the surface brightness of the originally intended model. With that, one subtracts a model from exactly the same model, which is however generated using different random-numbers. Hence, the result is a data cube with quantisation noise only, enhanced by a factor of 2<sup>1/2</sup>.
+Again, specifying a nonzero <a href="model_fitting.html#WEIGHT">WEIGHT</a> parameter instructs TiRiFiC to perform two convolutions per model calculation (one for the model itself, one for the weight map), requiring 1.5 times to 1.7 times the amount of reserved memory. The user might therefore be inclined to estimate the quantisation noise before he or she includes the quantisation noise in the $\chi^2$ calculation. This is possible by constructing, without fitting, a model that consists of the input model disk(s) and in addition a further disk for which the surface brightness is chosen to be the negative of the surface brightness of the originally intended model. With that, one subtracts a model from exactly the same model, which is however generated using different random-numbers. Hence, the result is a data cube with quantisation noise only, enhanced by a factor of $\sqrt{2}$.
 </p>
 <p class="par">
-Notice that, to provide a good approximation of the quantisation noise, it is required that the point source flux is approximately the same for all point sources of the model. This condition is violated, if the user specifies different cloud fluxes for different disks. The parameters <a href=model_geometry.html#CFLUX">CFLUX</a> and <a href=model_geometry.html#CFLUX_i">CFLUX_i</a> (i = 2, 3, ...) should therefore have the same value, if with non-vanishing <a href="model_fitting.html#WEIGHT">WEIGHT</a> parameter the quantisation noise is taken into account in the &chi;<sup>2</sup> evaluation.
+Notice that, to provide a good approximation of the quantisation noise, it is required that the point source flux is approximately the same for all point sources of the model. This condition is violated, if the user specifies different cloud fluxes for different disks. The parameters <a href=model_geometry.html#CFLUX">CFLUX</a> and <a href=model_geometry.html#CFLUX_i">CFLUX_i</a> (i = 2, 3, ...) should therefore have the same value, if with non-vanishing <a href="model_fitting.html#WEIGHT">WEIGHT</a> parameter the quantisation noise is taken into account in the $\chi^2$ evaluation.
 </p>
 
 
@@ -362,7 +317,7 @@ Notice that, to provide a good approximation of the quantisation noise, it is re
 <h4><a name="Goodness-of-fit evaluation: boundary conditions">Goodness-of-fit evaluation: boundary conditions</a></h4>
 
 <p class="par">
-Boundary conditions to a TiRiFiC model are user-defined methods to influence the structure of a best-fit model by providing priors. In TiRiFiC, these boundary conditions are implemented by increasing the &chi;<sup>2</sup> before it is passed to the minimising algorithm. The user has the possibility to <a href="model_fitting.html#outliers">i) penalise a model extending (partly) beyond the input data cube</a>, <a href="model_fitting.html#regularisation">ii) regularise the solution by penalising user-defined harmonic amplitudes</a>, <a href="model_fitting.html#minmax">iii) provide minima and maxima to the fitting parameters</a>. We will discuss the implementation of these possibilities here. 
+Boundary conditions to a TiRiFiC model are user-defined methods to influence the structure of a best-fit model by providing priors. In TiRiFiC, these boundary conditions are implemented by increasing the $\chi^2$ before it is passed to the minimising algorithm. The user has the possibility to <a href="model_fitting.html#outliers">i) penalise a model extending (partly) beyond the input data cube</a>, <a href="model_fitting.html#regularisation">ii) regularise the solution by penalising user-defined harmonic amplitudes</a>, <a href="model_fitting.html#minmax">iii) provide minima and maxima to the fitting parameters</a>. We will discuss the implementation of these possibilities here. 
 </p>
 <p class="par">
 <b><a name="outliers">Suppressing outliers:</a></b> TiRiFiC constructs a cloud of point sources, which may (partly) fall
@@ -371,125 +326,95 @@ outside the data cube boundaries shall be called outliers. Without taking any me
 outliers are not included in the chisquare evaluation. In
 principle, especially if the user wants to analyse a marginally
 detected disk, this may lead to the effect that a numerically
-favourable solution (with a lower &chi;<sup>2</sup>) consists of
+favourable solution (with a lower $\chi^2$) consists of
 shifting the model outside the data cube. Any optimisation algorithm will then provide exactly this, probably unwanted, solution.
 
- To optionally prevent this effect, the parameter <a href="model_fitting.html#PENALTY">PENALTY</a>
+To optionally prevent this effect, the parameter <a href="model_fitting.html#PENALTY">PENALTY</a>
 is introduced in TiRiFiC. TiRiFiC counts the number of pointsources that lie
 outside the data cube. Each of those pointsources is then treated roughly
 like a pointsource for which the input datacube has a value of 0, and
 for which no other pointsources occupy the same pixels. By default
 this means that for every outlier a value
 </p>
-<p>
-  <center>
-    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
-      <tr>
-        <td align="left" rowspan="3"> (8)&nbsp;&nbsp;&nbsp; </td> 
-        <td nowrap valign="top"> &Delta;&chi;<sup>2</sup>  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top"> CFLUX&middot;(&pi;/2)<sup>1/2</sup>&middot;&sigma;<sup>2</sup><sub>maj</sub>&middot;&sigma;<sup>2</sup><sub>min</sub>&middot;<i>&sigma;</i><sup>-2</sup><sub>rms</sub>    <sup>&nbsp;</sup></td>
-        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;, </td> 
-      </tr>
-      <tr>
-        <td nowrap valign="top">   <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top"> CFLUX&middot;(&pi;/2)<sup>1/2</sup>&middot;(ln(256))<sup>-1</sup>BMAJ<sup>2</sup>&middot;BMIN<sup>2</sup>&middot;RMS<sup>-2</sup>    <sup>&nbsp;</sup></td>
-      </tr>
-     </table>
-  </center>
+     <p class="par">
+     <p class="par">
+\begin{equation}
+\label{eq_2.8}
+\begin{split}
+\Delta\chi^2 &= \mathrm{CFLUX}\cdot\sqrt{\frac{\pi}{2}}\cdot\frac{\sigma^2_\mathrm{maj}\cdot\sigma^2_\mathrm{min}}{\sigma_\mathrm{rms}}\\
+&=\mathrm{CFLUX}\cdot\sqrt{\frac{\pi}{2}}\cdot(\ln{256})^{-1}\cdot\frac{\mathrm{BMAJ}^2\cdot\mathrm{BMIN}^2}{\mathrm{RMS}^2}
+\end{split}
+\qquad,
+\end{equation}
 </p>
 <p class="par">
-with &sigma;<sub>maj</sub> &sigma;<sub>min</sub> being the dispersions of the spatial part of the instrumental convolving function, is <i>added</i> to the &chi;<sup>2</sup>. As this is in any case an estimate, the
+with $\sigma_\mathrm{maj}$ and $\sigma_\mathrm{min}$ being the dispersions of the spatial part of the instrumental convolving function, is <i>added</i> to the $\chi^2$. As this is in any case an estimate, the
 quantisation noise is not taken into account in this calculation . By setting the
 parameter <a href="model_fitting.html#PENALTY">PENALTY</a>, the user controls this requirement to the model via
 </p>
-<p>
-  <center>
-    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
-      <tr>
-        <td align="left" rowspan="3"> (9)&nbsp;&nbsp;&nbsp; </td> 
-        <td nowrap valign="top"> &Delta;&chi;<sup>2</sup>  <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top"> PENALTY&middot;CFLUX&middot;(&pi;/2)<sup>1/2</sup>&middot;&sigma;<sup>2</sup><sub>maj</sub>&middot;&sigma;<sup>2</sup><sub>min</sub>&middot;<i>&sigma;</i><sup>-2</sup><sub>rms</sub>    <sup>&nbsp;</sup></td>
-        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;. </td> 
-      </tr>
-      <tr>
-        <td nowrap valign="top">   <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top"> PENALTY&middot;CFLUX&middot;(&pi;/2)<sup>1/2</sup>&middot;(ln(256))<sup>-1</sup>BMAJ<sup>2</sup>&middot;BMIN<sup>2</sup>&middot;RMS<sup>-2</sup>    <sup>&nbsp;</sup></td>
-      </tr>
-     </table>
-  </center>
-</p>
-<p class="par">
+     <p class="par">
+\begin{equation}
+\label{eq_2.9}
+\begin{split}
+\Delta\chi^2 &= \mathrm{PENALTY}\cdot\mathrm{CFLUX}\cdot\sqrt{\frac{\pi}{2}}\cdot\frac{\sigma^2_\mathrm{maj}\cdot\sigma^2_\mathrm{min}}{\sigma_\mathrm{rms}}\\
+&=\mathrm{PENALTY}\cdot\mathrm{CFLUX}\cdot\sqrt{\frac{\pi}{2}}\cdot(\ln{256})^{-1}\cdot\frac{\mathrm{BMAJ}^2\cdot\mathrm{BMIN}^2}{\mathrm{RMS}^2}
+\end{split}
+\qquad,
+\end{equation}
+</p><p class="par">
 If for an example the user does not wish to influence the fitting process by penalising outliers, then the user
 sets <a href="model_fitting.html#PENALTY">PENALTY</a> 0. If the user wants to suppress outliers at any cost,
-then the user choses <a href="model_fitting.html#PENALTY">PENALTY</a> 100000 or <a href="model_fitting.html#PENALTY">PENALTY</a>100000000 (maybe even <a href="model_fitting.html#PENALTY">PENALTY</a>100000001). Usually, a model converges quite quickly to resemble an observed disk, also without specifying a non-zero <a href="model_fitting.html#PENALTY">PENALTY</a>, but it is recommended to keep <a href="model_fitting.html#PENALTY">PENALTY</a> 1.
+then the user choses <a href="model_fitting.html#PENALTY">PENALTY</a>
+to be 100000 or 100000000 (maybe even 100000001). Usually, a model
+converges quite quickly to resemble an observed disk, also without
+specifying a non-zero <a
+href="model_fitting.html#PENALTY">PENALTY</a>, but it is recommended
+to keep <a href="model_fitting.html#PENALTY">PENALTY</a> = 1.
 </p>
 <p class="par">
-<b><a name="regularisation">Regularisation via harmonic components:</a></b> the tilted-ring model is a highly idealised model of a disk appearing in nature, e.g. a galactic disk. Therefore, it occasionally happens that, while a tilted-ring model with a well-defined &chi;<sup>2</sup>-minimum in parameter space can be found, it appears as an unphysical solution. An example is a best-fit solution in which the rotation curve shows small-scale periodic variations. Apparently, in this best-fit solution the tilted-ring model is optimised to include surface-brightness- or local velocity variations that are not inherent to the tilted-ring model (e.g. holes or expanding shells in dwarf galaxies are notorious to have such an effect). One way to address this issue is to try to include these variations in the model, another way might be to enforce a smoother, more "physical" solution by penalising such variations. In TiRiFiC, a first attempt to address the issue is made by giving the user the possibility to suppress higher-order harmonics in the parametrisation. So far, this did not prove a very successful method, while it has also not been tested very much. For completeness, and to encourage the interested reader to experiment, we describe the implemented method here, while other possibilities for a regularisation will be implemented in the future.
+<b><a name="regularisation">Regularisation via harmonic components:</a></b> the tilted-ring model is a highly idealised model of a disk appearing in nature, e.g. a galactic disk. Therefore, it occasionally happens that, while a tilted-ring model with a well-defined $\chi^2$-minimum in parameter space can be found, it appears as an unphysical solution. An example is a best-fit solution in which the rotation curve shows small-scale periodic variations. Apparently, in this best-fit solution the tilted-ring model is optimised to include surface-brightness- or local velocity variations that are not inherent to the tilted-ring model (e.g. holes or expanding shells in dwarf galaxies are notorious to have such an effect). One way to address this issue is to try to include these variations in the model, another way might be to enforce a smoother, more "physical" solution by penalising such variations. In TiRiFiC, a first attempt to address the issue is made by giving the user the possibility to suppress higher-order harmonics in the parametrisation. So far, this did not prove a very successful method, while it has also not been tested very much. For completeness, and to encourage the interested reader to experiment, we describe the implemented method here, while other possibilities for a regularisation will be implemented in the future.
 </p>
 <p class="par">
-Any given radially dependent parametrisation {PAR(RADI<sub>j</sub>)}<sub>j =
-  1,...,m</sub> at given nodes (rings) {RADI<sub>j</sub>}<sub>j =
-  1,...,m</sub> provided by the user or changed during the fitting
+Any given radially dependent parametrisation
+$\{\mathrm{PAR}(\mathrm{RADI}_j)\}_{j=1,..., m}$ at given nodes
+(rings) $\{\mathrm{RADI}_j\}_{j=1,..., m}$
+  provided by the user or changed during the fitting
   process (see section <a href="model_geometry.html#Radial nodes and parameter discretisation">Radial nodes and parameter discretisation</a>) can be transformed into a (finite) Fourier series
 </p>
-<p>
-  <center>
-    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
-      <tr>
-        <td align="left" rowspan="3"> (9)&nbsp;&nbsp;&nbsp; </td> 
-        <td nowrap valign="top"> PAR(RADI<sub>j</sub>) <sup>&nbsp;</sup></td> 
-        <td valign="top" > = <sup>&nbsp;</sup></td> 
-        <td valign="top"> a<sub>0</sub> + &Sigma;<sub>k = 1, ... , <i>floor</i>(m/2)</sub> a<sub>k</sub>&middot;cos((2&pi;&middot;k&middot;j-&alpha;<sub>k</sub>)&middot;m<sup>-1</sup>) <sup>&nbsp;</sup></td>
-        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;.</td> 
-      </tr>
-     </table>
-  </center>
+<p class="par">
+\begin{equation}
+\label{eq_2.10}
+\begin{split}
+\mathrm{PAR}(\mathrm{RADI}_j = a_0+\sum_{k=1}^{\lfloor{\frac{m}{2}}\rfloor} a_k\cdot \cos{\frac{2\pi k j-\alpha_k}{m}}
+\end{split}
+\qquad,
+\end{equation}
 </p>
 <p class="par">
-The <i>floor</i> operation has the meaning of rounding down. If m is even, then the highest order phase &alpha;<sub><i>floor</i>(m/2)</sub> is necessarily 0, such that any number of m parameters has always the same number of amplitude-phase combinations in the corresponding Fourier decomposition. A high frequency variation of a parameter series will lead to a higher value of the highest order amplitude a<sub><i>floor</i>(m/2)</sub> in the Fourier decomposition. The idea to regularise the fitting process and hence to suppress such wiggles in the fitting process is to penalise high order (or user-chosen) amplitudes above a certain value in the Fourier decomposition of a radially dependent paramter series. This is the principle behind the currently implemented regularisation scheme offered in TiRiFiC.
+The $\lfloor \rfloor$ operation has the meaning of rounding down. If $m$ is even, then the highest order phase $\alpha_{\lfloor \frac{m}{2}\rfloor}$ is necessarily 0, such that any number of m parameters has always the same number of amplitude-phase combinations in the corresponding Fourier decomposition. A high frequency variation of a parameter series will lead to a higher value of the highest order amplitude $a_{\lfloor \frac{m}{2}\rfloor}$ in the Fourier decomposition. The idea to regularise the fitting process and hence to suppress such wiggles in the fitting process is to penalise high order (or user-chosen) amplitudes above a certain value in the Fourier decomposition of a radially dependent paramter series. This is the principle behind the currently implemented regularisation scheme offered in TiRiFiC.
 </p>
 <p class="par">
 With the parameter <a href="model_fitting.html#REGPARA">REGPARA</a>, the user specifies a (comma-separated) list of radially dependent parameters (<a href="model_fitting.html#REGPARA">syntax</a>) that are foreseen for a regularisation. Any subset of the radially dependent parameteters described in the section <a href="model_geometry.html">Model geometry</a> can be specified. If the model has of a number of <a
-  href="model_geometry.html#NUR">NUR</a> m nodes (rings), then for each radially dependent parameter group {PAR(RADI<sub>j</sub>)}<sub>j = 1, ..., m</sub> a subset {PAR(RADI<sub>l</sub>)}<sub>l 
-  &isin; S</sub>, with S &sube; {1, ..., m} of the complete number of parameters {PAR(RADI<sub>j</sub>)}<sub>j 
-  = 1,...,m</sub> can be chosen. This subset of paramters is then transformed to a set {PAR&prime;(RADI<sub>j</sub>)}<sub>j 
-  = 1,...,m</sub>, with the "missing" parameters calculated via linear interpolation. After that, the series (PAR&prime;<sub>j</sub>) is Fourier-tranformed to calculate the Fourier amplitudes {a<sub>k</sub>}<sub>k = 0, ..., <i>floor</i>(m/2)</sub>. The user has now the possibility to define two sets of orders (indices) of Fourier amplitudes per parameter group specified with <a href="model_fitting.html#REGPARA">REGPARA</a> to define a ratio r of (sums of) Fourier amplitudes. The amplitudes with the orders entered with the keyword <a href="model_fitting.html#REGDENO">REGDENO</a> are summed up to build a denominator, the amplitudes with the orders entered through the keyword <a href="model_fitting.html#REGNUME">REGNUME</a> are summed up to become the numerator of that ratio. Alternatively, a constant denominator can be specified with the keyword <a href="model_fitting.html#REGAMPD">REGAMPD</a>. Assuming that the user specifies the highest-order amplitudes for the numerator (e.g. <i>floor</i>(m/2) only), and all available order amplitudes or a constant number for the denominator, the ratio r is a measure of the strength of the highest-frequency variations of the given parameter with radius, compared to all other Fourier amplitudes or to a fixed number. Following the remarks above, it is possibly desirable to suppress these highest modes by penalising a high ratio r in the fitting process. The user defines per parameter group given in <a href="model_fitting.html#REGPARA">REGPARA</a> a threshold REGTHRE through a list passed with the parameter <a href="model_fitting.html#REGTHRE">REGTHRE</a>, a width REGWIDT through the list <a href="model_fitting.html#REGWIDT">REGWIDT</a>, an amplitude REGAMPL with the list <a href="model_fitting.html#REGAMPL">REGAMPL</a>, and an increment REGASTE for the amplitude per <a href="model_fitting.html#Implemented fitting algorithms">fitting loop</a> (the number of repetitions of a fitting process) with the list  <a href="model_fitting.html#REGASTE">REGASTE</a>. Then, an increment &Delta;&chi;<sup>2</sup>, to be added to the &chi;<sup>2</sup> is calculated via
+  href="model_geometry.html#NUR">NUR</a> ($= m$) nodes (rings), then for each radially dependent parameter group $\{\mathrm{PAR}(\mathrm{RADI}_j)\}_{j=1,..., m}$ a subset $\{\mathrm{PAR}(\mathrm{RADI}_l)\}_{l\in S}$, with $S \subseteq\{1, ..., m\}$ of the complete number of parameters $\{\mathrm{PAR}(\mathrm{RADI}_j)\}_{j=1,..., m}$ can be chosen. This subset of paramters is then transformed to a set $\{\mathrm{PAR^\prime}(\mathrm{RADI}_j)\}_{j=1,..., m}$, with the "missing" parameters calculated via linear interpolation. After that, the series $(\mathrm{PAR}_j)$ is Fourier-tranformed to calculate the Fourier amplitudes $\{a_k\}_{k = 0, ..., \lfloor \frac{m}{2}\rfloor}$. The user has now the possibility to define two sets of orders (indices) of Fourier amplitudes per parameter group specified with <a href="model_fitting.html#REGPARA">REGPARA</a> to define a ratio r of (sums of) Fourier amplitudes. The amplitudes with the orders entered with the keyword <a href="model_fitting.html#REGDENO">REGDENO</a> are summed up to build a denominator, the amplitudes with the orders entered through the keyword <a href="model_fitting.html#REGNUME">REGNUME</a> are summed up to become the numerator of that ratio. Alternatively, a constant denominator can be specified with the keyword <a href="model_fitting.html#REGAMPD">REGAMPD</a>. Assuming that the user specifies the highest-order amplitudes for the numerator (e.g. $\lfloor \frac{m}{2} \rfloor$ only), and all available order amplitudes or a constant number for the denominator, the ratio r is a measure of the strength of the highest-frequency variations of the given parameter with radius, compared to all other Fourier amplitudes or to a fixed number. Following the remarks above, it is possibly desirable to suppress these highest modes by penalising a high ratio r in the fitting process. The user defines per parameter group given in <a href="model_fitting.html#REGPARA">REGPARA</a> a threshold REGTHRE through a list passed with the parameter <a href="model_fitting.html#REGTHRE">REGTHRE</a>, a width REGWIDT through the list <a href="model_fitting.html#REGWIDT">REGWIDT</a>, an amplitude REGAMPL with the list <a href="model_fitting.html#REGAMPL">REGAMPL</a>, and an increment REGASTE for the amplitude per <a href="model_fitting.html#Implemented fitting algorithms">fitting loop</a> (the number of repetitions of a fitting process) with the list  <a href="model_fitting.html#REGASTE">REGASTE</a>. Then, an increment $\Delta \chi^2$, to be added to the $\chi^2$ is calculated via
 </p>
-<p>
-  <center>
-    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
-      <tr>
-        <td align="left" rowspan="3"> <a name="(10)">(10)</a>&nbsp;&nbsp;&nbsp; </td> 
-        <td nowrap rowspan="3">  &Delta;&chi;<sup>2</sup> <sup>&nbsp;</sup></td> 
-        <td nowrap rowspan="3"> = <sup>&nbsp;</sup></td> 
-        <td valign="top"> 0 <sup>&nbsp;</sup></td>
-        <td valign="top"> if <sup>&nbsp;</sup></td>
-        <td valign="top"> r &le; REGTHRE <sup>&nbsp;</sup></td>
-        <td align="left" rowspan="3" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;, with</td> 
-      </tr>
-      <tr>
-        <td valign="top"> (r - REGTHRE)&middot;(REGAMPL + loops&middot;REGASTE)&middot;REGWIDT<sup>-1</sup> <sup>&nbsp;</sup></td>
-        <td valign="top"> if <sup>&nbsp;</sup></td>
-        <td valign="top"> REGTHRE < r < REGTHRE+REGWIDT <sup>&nbsp;</sup></td>
-      </tr>
-       <tr>
-        <td valign="top"> REGAMPL + loops&middot;REGASTE <sup>&nbsp;</sup></td>
-        <td valign="top"> if <sup>&nbsp;</sup></td>
-        <td valign="top"> REGTHRE + REGWIDT &le; r <sup>&nbsp;</sup></td>
-      </tr>
-    </table>
-  </center>
+<p class="par">
+\begin{equation}
+\label{eq_2.11}
+\begin{split}
+\Delta\chi^2=\left\{\begin{array}{llll} 0 &,& r \leq \mathrm{REGTHRE} \\
+                                       \frac{(r - \mathrm{REGTHRE})\cdot(\mathrm{REGAMPL} + loops\cdot\mathrm{REGASTE})}{\mathrm{REGWIDT}}&,&     \mathrm{REGTHRE} < r < \mathrm{REGTHRE}+\mathrm{REGWIDT}
+\\
+                                       \mathrm{REGAMPL}+loops\cdot \mathrm{REGASTE} &,& \mathrm{REGTHRE}+\mathrm{REGWIDT}\leq r\end{array}\right.
+\end{split}
+\qquad\mathrm{, with}
+\end{equation}
 </p>
 <p class="par">
 loops being the number of finished fitting loops. With that, the user has the possibility to increasingly penalise high-frequency variations in a parametrisation. The <a href="model_fitting.html#REGPARA">syntax is discussed below</a>.
 </p>
 
 <p class="par">
-<b><a name="minmax">Minima and maxima for fitting parameters:</a></b> minima and maxima for fitting parameters are defined in the context of parametrising the fitting process (see <a href="model_fitting.html#Fitting parameters">see here</a>). The very simplistic approach is to multiply the &chi;<sup>2</sup> after taking into account <a href="model_fitting.html#outliers">outliers</a> by a factor of OUTRANGEFAC whenever a parameter leaves the specified range between the user-specified values <a href="model_fitting.html#PARMAX">PARMAX</a> and <a href="model_fitting.html#PARMIN">PARMIN</a> during a fitting process. The factor OUTRANGEFAC is currently hardcoded to be 10.0. <a href="mailto:jozsa@ska.ac.za">On request</a> (should be well motivated), we can introduce a corresponding input parameter into TiRiFiC.
+<b><a name="minmax">Minima and maxima for fitting parameters:</a></b> minima and maxima for fitting parameters are defined in the context of parametrising the fitting process (see <a href="model_fitting.html#Fitting parameters">see here</a>). The very simplistic approach is to multiply the $\chi^2$ after taking into account <a href="model_fitting.html#outliers">outliers</a> by a factor of OUTRANGEFAC whenever a parameter leaves the specified range between the user-specified values <a href="model_fitting.html#PARMAX">PARMAX</a> and <a href="model_fitting.html#PARMIN">PARMIN</a> during a fitting process. The factor OUTRANGEFAC is currently hardcoded to be 10.0. <a href="mailto:jozsa@ska.ac.za">On request</a> (should be well motivated), we can introduce a corresponding input parameter into TiRiFiC.
 </p>
 
 
@@ -499,7 +424,7 @@ loops being the number of finished fitting loops. With that, the user has the po
 While a small number of fitting methods have been tested, no ideal
 solution has been found yet. As mentioned above, TiRiFiC would ideally
 use a fast global minimum search algorithm which is able to cope with
-a large number of parameters, a complex &chi;<sup>2</sup> landscape,
+a large number of parameters, a complex $\chi^2$ landscape,
 the absense of analytic derivatives, which would also be able to
 deliver a cross-correlation matrix and statistical errors. <b><i>Any
 suggestions to approach a solution to this issue, the more concrete (even coded
@@ -533,29 +458,20 @@ Any minimising algorithm in TiRiFiC will move through a number of iterations of 
 </p>
 
 <p class="par">
-The currently implemented fitting algorithms are local search algorithms, which require a search direction. This is provided through the keywords <a href="model_fitting.html#MODERATE">MODERATE</a>, <a href="model_fitting.html#DELSTART">DELSTART</a>, and <a href="model_fitting.html#DELEND">DELEND</a>. With <a href="model_fitting.html#DELSTART">DELSTART</a>, the user provides a search direction or a start stepwidth for each fitting parameter at the beginning of the first loop. With <a href="model_fitting.html#MODERATE">MODERATE</a> the user provides for each parameter the number of loops, for which the start stepwidth (start direction) varies linearly between the start stepwidths  <a href="model_fitting.html#DELSTART">DELSTART</a> and <a href="model_fitting.html#DELEND">DELEND</a>. Starting with loop number loop = 1, the start stepwidth sw in each loop for each fitting parameter is given by
-</p>
-<p>
-  <center>
-    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
-      <tr>
-        <td align="left" rowspan="2"> (11)&nbsp;&nbsp;&nbsp; </td> 
-        <td nowrap rowspan="3">  sw <sup>&nbsp;</sup></td> 
-        <td nowrap rowspan="3"> = <sup>&nbsp;</sup></td> 
-        <td valign="top"> DELSTART+(loop-1)&middot;(DELSTART - DELEND)/MODERATE <sup>&nbsp;</sup></td>
-        <td valign="top"> if <sup>&nbsp;</sup></td>
-        <td valign="top"> loop &le; MODERATE <sup>&nbsp;</sup></td>
-        <td align="left" rowspan="2" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;, such that</td> 
-      </tr>
-      <tr>
-        <td valign="top"> DELEND <sup>&nbsp;</sup></td>
-        <td valign="top"> if <sup>&nbsp;</sup></td>
-        <td valign="top"> loop > MODERATE <sup>&nbsp;</sup></td>
-      </tr>
-    </table>
-  </center>
+The currently implemented fitting algorithms are local search algorithms, which require a search direction. This is provided through the keywords <a href="model_fitting.html#MODERATE">MODERATE</a>, <a href="model_fitting.html#DELSTART">DELSTART</a>, and <a href="model_fitting.html#DELEND">DELEND</a>. With <a href="model_fitting.html#DELSTART">DELSTART</a>, the user provides a search direction or a start stepwidth for each fitting parameter at the beginning of the first loop. With <a href="model_fitting.html#MODERATE">MODERATE</a> the user provides for each parameter the number of loops, for which the start stepwidth (start direction) varies linearly between the start stepwidths  <a href="model_fitting.html#DELSTART">DELSTART</a> and <a href="model_fitting.html#DELEND">DELEND</a>. Starting with loop number loop = 1, the start stepwidth $sw$ in each loop for each fitting parameter is given by
 </p>
 <p class="par">
+\begin{equation}
+\label{eq_2.12}
+\begin{split}
+sw=\left\{\begin{array}{llll}                                        \mathrm{DELSTART}+(loop-1)\cdot\frac{\mathrm{DELSTART}-\mathrm{DELEND}}{\mathrm{MODERATE}}&,&     loop < \mathrm{MODERATE}
+\\
+                                       \mathrm{DELEND} &,& loop > \mathrm{MODERATE}\end{array}\right.
+    \end{split}
+\qquad, \mathrm{such\,that}
+\end{equation}
+    </p>
+    <p class="par">
 the final start step width provided in <a href="model_fitting.html#DELEND">DELEND</a> for each loop is reached after MODERATE+1 loops. Internally, the start step widths are normalised using the normalisation as provided by <a href="model_fitting.html#MINDELTA">MINDELTA</a>, but the user provides them in the same units as the <a href="model_geometry.html">geometrical parameters</a>. Again, with <a href="model_fitting.html#MODERATE">MODERATE</a> the user specifies an interpolation interval for the start stepwidth in loops for each fitting parameter.
 </p>
 
@@ -567,18 +483,18 @@ Each TiRiFiC minimiser (with the exception of the golden-section algorithm with 
 simple way to find a local minimum in parameter space, originally thought for a minimum search in one parameter only. In TiRiFiC, we implement what most text books expressively advise against (see e.g. <a href="http://apps.nrbook.com/c/index.html">Press et al. 1992</a>, chap. 10.5, page 412), a sequential fitting of all fitting parameters making use of the golden-section method. In TiRiFiC, this algorithm is selected with choosing <a href="model_fitting.html#FITMODE">FITMODE</a> 1 or <a href="model_fitting.html#FITMODE">FITMODE</a> 2. With <a href="model_fitting.html#FITMODE">FITMODE</a> 2, the algorithm is embedded as a <a href="model_fitting.html#generic minimum-finder">generic minimiser</a>, with <a href="model_fitting.html#FITMODE">FITMODE</a> 1 a former concept is kept, mainly to provide consistency with former versions of TiRiFiC.
 </p>
 <p class="par">
-Sequentially, a nested intervals minimisation of the &chi;<sup>2</sup> is performed for each parameter, to either stop when all parameters have been iterated, or to start the process again with the first fitting parameter. A series of iteration processes for
+Sequentially, a nested intervals minimisation of the $\chi^2$ is performed for each parameter, to either stop when all parameters have been iterated, or to start the process again with the first fitting parameter. A series of iteration processes for
 all specified parameters is being referred to as a loop. In a nested-intervals iteration, the
 stepwidth is varied by changing the search direction and/or
-multiplication with a factor. Defining w = (3-5<sup>1/2</sup>)/2, this factor is given by 
-(1-w)w<sup>-1</sup> &approx; 1.62 when enlargening the stepwidth or by 
-w/(1-w) &approx; 0.62
+multiplication with a factor. Defining $w = \frac{3-\sqrt{5}}{2}$, this factor is given by 
+$\frac{1-w}{w} \approx 1.62$ when enlargening the stepwidth or by 
+$\frac{w}{1-w} \approx 0.62$
 when reducing the stepwidth. The start step width for each loop and each fitting parameter is
 controlled by the keywords <a href="model_fitting.html#MODERATE">MODERATE</a>, <a href="model_fitting.html#DELSTART">DELSTART</a>, and <a href="model_fitting.html#DELEND">DELEND</a> (see sections <a href="model_fitting.html#Fitting parameters">Fitting parameters</a> and <a href="model_fitting.html#generic minimum-finder">Generic approach for minimum-finders</a>). 
 </p>
 <p class="par">
 The
-user has various possibilities to define a stopping condition for the minimum search and controlling its accuracy. On the level of the iteration process for a single fitting parameter, two conditions are provided to switch to the next fitting parameter. First, the user specifies the maximum number of steps (model calculations) for each nested intervals process (minimising the &chi;<sup>2</sup> for one fitting parameter, with the keywords <a href="model_fitting.html#MODERATE">MODERATE</a>, <a href="model_fitting.html#ITESTART">ITESTART</a>,
+user has various possibilities to define a stopping condition for the minimum search and controlling its accuracy. On the level of the iteration process for a single fitting parameter, two conditions are provided to switch to the next fitting parameter. First, the user specifies the maximum number of steps (model calculations) for each nested intervals process (minimising the $\chi^2$ for one fitting parameter, with the keywords <a href="model_fitting.html#MODERATE">MODERATE</a>, <a href="model_fitting.html#ITESTART">ITESTART</a>,
 <a href="model_fitting.html#ITEEND">ITEEND</a> if <a href="model_fitting.html#FITMODE">FITMODE</a> 1, with the keyword <a href="model_fitting.html#CALLITE">CALLITE</a> if <a href="model_fitting.html#FITMODE">FITMODE</a> 2). In the case of <a href="model_fitting.html#FITMODE">FITMODE</a> 1, the maximum number of models generated in an iteration is calculated in the same matter as the start stepwidths (see <a href="model_fitting.html#generic minimum-finder">Generic approach for minimum-finders</a>). Second, the user specifies a minimum stepwidth at
 which the algorithm steps out of the nested-intervals process for the current fitting parameter. This minimum stepwidth is provided by the user with the parameter list <a href="model_fitting.html#MINDELTA">MINDELTA</a>.
 </p>
@@ -607,11 +523,97 @@ Specific to the algorithm is the definition of the size. After normalising with 
 &nbsp;&nbsp;&nbsp;(0, 0, ..., 0), (sw<sub>1</sub> MINDELTA<sup>-1</sup><sub>1</sub>, 0, ..., 0), (0,sw<sub>2</sub> MINDELTA<sup>-1</sup><sub>2</sub>, ..., 0 ), ..., (0, 0, ..., sw<sub>n</sub> MINDELTA<sup>-1</sup><sub>n</sub>),
 </p>
 <p class="par">
- where sw is given in eq. (11), and MINDELTA<sub>i</sub> is the normalisation given in the parameter list <a href="model_fitting.html#MINDELTA">MINDELTA</a>. The parameter <a href="model_fitting.html#CALLITE">CALLITE</a> is ignored for this minimisation mode, since an iteration is ill (not) defined. A loop is a complete minimisation run, and the number of loops given by the parameter <a href="model_fitting.html#LOOPS">LOOPS</a> is the number of repeated iterations, no stopping condition applies to step out of the minimisation process before that number of loops has been performed, apart from the maximum number of model calculations <a href="model_fitting.html#CALLITE">CALLITE</a>. For each loop, the results from the previous loop are adopted as the initial guess.
+\begin{equation}
+\label{eq_2.13}
+\begin{split}
+(0, 0, ..., 0), (\frac{sw}{\mathrm{MINDELTA}_1}, 0, ..., 0), (0, \frac{sw}{\mathrm{MINDELTA}_2}, 0, ..., 0), ..., (0, 0, ..., (\frac{sw}{\mathrm{MINDELTA}_n}), 
+    \end{split}
+\qquad,
+\end{equation}
+</p>
+
+<p class="par">
+ where $sw$ is given in eq. (12), and MINDELTA<sub>i</sub> is the normalisation given in the parameter list <a href="model_fitting.html#MINDELTA">MINDELTA</a>. The parameter <a href="model_fitting.html#CALLITE">CALLITE</a> is ignored for this minimisation mode, since an iteration is ill (not) defined. A loop is a complete minimisation run, and the number of loops given by the parameter <a href="model_fitting.html#LOOPS">LOOPS</a> is the number of repeated iterations, no stopping condition applies to step out of the minimisation process before that number of loops has been performed, apart from the maximum number of model calculations <a href="model_fitting.html#CALLITE">CALLITE</a>. For each loop, the results from the previous loop are adopted as the initial guess.
 </p>
 <p class="par">
-<b><a name="simplex">Future minimisers:</a></b> 
-The inclined reader will remark that the number of implemented minimisers is quite small and not expressively modern. This weak point is being worked on at speed. One other point the reader might want to point out is that e.g. in <a href="http://apps.nrbook.com/c/index.html">Press et al.</a> (1992, chap. 10.5, page 412) a local minimisation method is outlined, which also works without derivatives, and which should be easily implemented as an alternative to the golden-section method. We will do so, but we are not really optimistic that this will enhance the speed of TiRiFiC when fitting. The simple reason is that for a model calculation, TiRiFiC updates only point sources influenced by a parameter change. This means that if e.g. only one geometrical parameter is fitted, also only two rings are updated before the &chi;<sup>2</sup> is calculated. Minimisation methods that are more efficient in terms of iterations, however, mostly use linear combinations of the fitting parameters. This means that in most cases, all fitting parameters are changed in each iteration, which will lead to a completely new model calculation, and is consecutively longer. We might expect a higher stability of the fitting process, though.
+<a name="PSW_PSSE">
+<a name="PSW_PSNP">
+<a name="PSW_PSCO">
+<a name="PSW_PSSO">
+<a name="PSW_PSMV">
+<a name="PSW_PSNF">
+<a name="PSW_PSII">
+<a name="PSW_PSFI">
+<a name="PSW_PSID">
+<a name="PSW_PSDD">
+<b><a name="PSwarm">PSwarm:</a></b> <a
+ href="http://www.norg.uminho.pt/aivaz/pswarm/">PSwarm</a> is a global
+ optimisation solver by <a
+ href="http://www.norg.uminho.pt/aivaz">A.I.F. Vaz</a> and <a
+ href="http://www.mat.uc.pt/~lnv">L.N.Vicente</a>. A description can
+ be found on the <a
+ href="http://www.norg.uminho.pt/aivaz/pswarm/">PSwarm home
+ page</a>. For the use with TiRiFiC, the C implementation of the code
+ has been adopted and adjusted to be linked into the minimising
+ framework of TiRiFiC. We do not make use of linear constraints and
+the initial grid size is calculated automatically, based on a normalisation to <a href="model_fitting.html#MINDELTA">MINDELTA</a> the starting size is calculated automatically, see PSwarm for a description. The following parameters do not have any meaning for PSwarm minimisation within TiRiFiC:
+</p>
+<p class="par">
+&nbsp;&nbsp;&nbsp;ITESTART<br>
+&nbsp;&nbsp;&nbsp;ITEEND<br>
+&nbsp;&nbsp;&nbsp;SATDELT<br>
+&nbsp;&nbsp;&nbsp;DELSTART<br>
+&nbsp;&nbsp;&nbsp;DELEND<br>
+&nbsp;&nbsp;&nbsp;MODERATE<br>
+</p>
+<p class="par">
+The following additional parameters are valid only for the PSwarm minisation (see <a
+ href="http://www.norg.uminho.pt/aivaz/pswarm/">PSwarm home
+ page</a>):
+</p>
+<h4><a name="PSwarm minimisation parameters">PSwarm minimisation parameters</a></h4>
+<a name="PSW_PSSE">
+<a name="PSW_PSNP">
+<a name="PSW_PSCO">
+<a name="PSW_PSSO">
+<a name="PSW_PSMV">
+<a name="PSW_PSNF">
+<a name="PSW_PSII">
+<a name="PSW_PSFI">
+<a name="PSW_PSID">
+<a name="PSW_PSDD">
+<table rules="all" border="1" cellpadding="5" summary="Parameters described here">
+  <tr>
+    <td align="center">Name</td>
+    <td align="center">Category</td>
+    <td align="center">Unit</td>
+    <td align="center">Description</td>
+  </tr>
+  <tr> <td align="left"><b>PSW_PSSE</b></td>    <td align="center">Fitting (default 42)</td>      <td align="center"> &nbsp; </td>    <td align="left">PSWARM seed                </td> </tr>
+  <tr> <td align="left"><b>PSW_PSNP</b></td>    <td align="center">Fitting (default 42)</td>      <td align="center"> &nbsp; </td>    <td align="left">PSWARM number of particles </td> </tr>
+  <tr> <td align="left"><b>PSW_PSCO</b></td>    <td align="center">Fitting (default 0.5)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM cognition parameter </td> </tr>
+  <tr> <td align="left"><b>PSW_PSSO</b></td>    <td align="center">Fitting (default 0.5)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM social parameter    </td> </tr>
+  <tr> <td align="left"><b>PSW_PSMV</b></td>    <td align="center">Fitting (default 0.5)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM maximum velocity    </td> </tr>
+  <tr> <td align="left"><b>PSW_PSNF</b></td>    <td align="center">Fitting (default 8000)</td>    <td align="center"> &nbsp; </td>    <td align="left">PSWARM number of function evaluations to go from initial weight to final weight </td> </tr>
+  <tr> <td align="left"><b>PSW_PSII</b></td>    <td align="center">Fitting (default 0.9)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM initial weight      </td> </tr>
+  <tr> <td align="left"><b>PSW_PSFI</b></td>    <td align="center">Fitting (default 0.4)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM final weight        </td> </tr>
+  <tr> <td align="left"><b>PSW_PSID</b></td>    <td align="center">Fitting (default 2.0)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM increase delta      </td> </tr>
+  <tr> <td align="left"><b>PSW_PSDD</b></td>    <td align="center">Fitting (default 0.5)</td>     <td align="center"> &nbsp; </td>    <td align="left">PSWARM decrease delta      </td> </tr>
+</table>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+</a>
+<hr>
+<p class="par">
+<b><a name="Future minimisers">Future minimisers:</a></b> 
+The next logical step to further TiRiFiC is a move towards MCMC techniques to map out the $\chi^2$-landscape. This is work in progress.
 </p>
 <h4><a name="Goodness-of-fit evaluation: blanked pixels">Goodness-of-fit evaluation: blanked pixels</a></h4>
 <p class="par">
@@ -1076,7 +1078,7 @@ Example:
 &nbsp;&nbsp;&nbsp;MINDELTA=        0.1     0.1      0.15
 </p>
 <p class="par">
-With <a href="model_fitting.html#VARY">VARY</a>, three fitting expressions define 9 fitting groups. For the first expression (fitting groups 1-7), rotational velocities larger than 300 km&nbsp;s<sup>-1</sup> will result in an increased &chi;<sup>2</sup>, and rotational velocities of less than 50 km&nbsp;s<sup>-1</sup> will result in an increased &chi;<sup>2</sup>, for each fitting group at the radial nodes 1-7. The second expression in the <a href="model_fitting.html#VARY">VARY</a> list defines one fitting group. If within this group, any position angle gets above 360&deg; or below 180&deg; during the fitting process, an increased &chi;<sup>2</sup> will be the result. The third expression in the <a href="model_fitting.html#VARY">VARY</a> list defines one fitting group. If within this group, any inclination gets above 90&deg; or below 60&deg; during the fitting process, an increased &chi;<sup>2</sup> will be the result. At the beginning of the fitting process the start stepwidth is 2 km&nbsp;s<sup>-1</sup> for the first seven fitting groups, 2&deg; for the eighth fitting group, and 1&deg; for the ninth fitting group. After two loops have passed, the starting stepwidth for the ninth fitting group (third fitting expression) becomes 0.5&deg;. After three loops are finished, the starting stepwidth for fitting groups 1-7 have reached a value of 1 km&nbsp;s<sup>-1</sup> and the starting stepwidth of the 8th fitting group becomes 1&deg;. If <a href="model_fitting.html#FITMODE">FITMODE</a> 1, in each nested-intervals iteration, maximally 70 model calculations are performed for fitting groups 1-7 and 8. For fitting group 9, 60 model calculations are maximally performed in each iteration at the beginning of the fitting process, and 80 after 2 loops. If <a href="model_fitting.html#FITMODE">FITMODE</a> 1, the fitting procedure stops, if after any loop the model has not changed in the rotation velocities of rings 1-7 by more than 0.2 km&nbsp;s<sup>-1</sup>, in position angle of rings 1-7 by more than 0.2&deg;, and in inclination by more than 0.3&deg;. The grid normalisation or the minimum step width in a nested intervals minimisation process is 0.1 km&nbsp;s<sup>-1</sup> for fitting groups 1-7, 0.1&deg; for fitting group 8, and 0.15&deg; for fitting group 9.
+With <a href="model_fitting.html#VARY">VARY</a>, three fitting expressions define 9 fitting groups. For the first expression (fitting groups 1-7), rotational velocities larger than 300 km&nbsp;s<sup>-1</sup> will result in an increased $\chi^2$, and rotational velocities of less than 50 km&nbsp;s<sup>-1</sup> will result in an increased $\chi^2$, for each fitting group at the radial nodes 1-7. The second expression in the <a href="model_fitting.html#VARY">VARY</a> list defines one fitting group. If within this group, any position angle gets above 360&deg; or below 180&deg; during the fitting process, an increased $\chi^2$ will be the result. The third expression in the <a href="model_fitting.html#VARY">VARY</a> list defines one fitting group. If within this group, any inclination gets above 90&deg; or below 60&deg; during the fitting process, an increased $\chi^2$ will be the result. At the beginning of the fitting process the start stepwidth is 2 km&nbsp;s<sup>-1</sup> for the first seven fitting groups, 2&deg; for the eighth fitting group, and 1&deg; for the ninth fitting group. After two loops have passed, the starting stepwidth for the ninth fitting group (third fitting expression) becomes 0.5&deg;. After three loops are finished, the starting stepwidth for fitting groups 1-7 have reached a value of 1 km&nbsp;s<sup>-1</sup> and the starting stepwidth of the 8th fitting group becomes 1&deg;. If <a href="model_fitting.html#FITMODE">FITMODE</a> 1, in each nested-intervals iteration, maximally 70 model calculations are performed for fitting groups 1-7 and 8. For fitting group 9, 60 model calculations are maximally performed in each iteration at the beginning of the fitting process, and 80 after 2 loops. If <a href="model_fitting.html#FITMODE">FITMODE</a> 1, the fitting procedure stops, if after any loop the model has not changed in the rotation velocities of rings 1-7 by more than 0.2 km&nbsp;s<sup>-1</sup>, in position angle of rings 1-7 by more than 0.2&deg;, and in inclination by more than 0.3&deg;. The grid normalisation or the minimum step width in a nested intervals minimisation process is 0.1 km&nbsp;s<sup>-1</sup> for fitting groups 1-7, 0.1&deg; for fitting group 8, and 0.15&deg; for fitting group 9.
 </p>
 
 
@@ -1176,20 +1178,20 @@ This example does not require any comment.
     <td align="left"><b>WEIGHT</b></td>
     <td align="center">Fitting (required)</td>
     <td align="center"> &nbsp; </td>
-    <td align="left">Continuous parameter to take quantisation noise into account in &chi;<sup>2</sup> evaluation.  </td>
+    <td align="left">Continuous parameter to take quantisation noise into account in $\chi^2$ evaluation.  </td>
   </tr>
 </table>
 </a>
 </a>
 </a>
 <p class="par">
-With the parameter <a href="model_fitting.html#PEANLTY">PENALTY</a>, the user can control how the construction of outlier point sources, point sources that are generated outside the data cube, are taken into account in the &chi;<sup>2</sup> evaluation. With <a href="model_fitting.html#PEANLTY">PENALTY</a> 1, outliers are penalised moderately, with <a href="model_fitting.html#PEANLTY">PENALTY</a> 0, outliers are not penalised. Use this continuous parameter, if you want to fit a weak source and the  &chi;<sup>2</sup> tends towards lower values if the model lies outside the data cube. For details, <a href="model_fitting.html#outliers">see here</a>.
+With the parameter <a href="model_fitting.html#PEANLTY">PENALTY</a>, the user can control how the construction of outlier point sources, point sources that are generated outside the data cube, are taken into account in the $\chi^2$ evaluation. With <a href="model_fitting.html#PEANLTY">PENALTY</a> 1, outliers are penalised moderately, with <a href="model_fitting.html#PEANLTY">PENALTY</a> 0, outliers are not penalised. Use this continuous parameter, if you want to fit a weak source and the  $\chi^2$ tends towards lower values if the model lies outside the data cube. For details, <a href="model_fitting.html#outliers">see here</a>.
 </p>
 <p class="par">
 With the parameter <a href="model_fitting.html#RMS">RMS</a>, the user enters the rms noise in the data cube.
 </p>
 <p class="par">
-If <a href="model_fitting.html#WEIGHT">WEIGHT</a> 1.0, the quantisation noise (noise arising from the fact that the model consists of discrete point sources) is taken fully into account in the &chi;<sup>2</sup> evaluation. If <a href="model_fitting.html#WEIGHT">WEIGHT</a> 0.0, quantisation noise is not taken into account. Any value can be chosen for the parameter. The choice <a href="model_fitting.html#WEIGHT">WEIGHT</a> 0.0 leads to a severely reduced usage of resouces (this choice makes the fitting process faster). The details can be found <a href="model_fitting.html#Goodness-of-fit evaluation: basic">here</a>.
+If <a href="model_fitting.html#WEIGHT">WEIGHT</a> 1.0, the quantisation noise (noise arising from the fact that the model consists of discrete point sources) is taken fully into account in the $\chi^2$ evaluation. If <a href="model_fitting.html#WEIGHT">WEIGHT</a> 0.0, quantisation noise is not taken into account. Any value can be chosen for the parameter. The choice <a href="model_fitting.html#WEIGHT">WEIGHT</a> 0.0 leads to a severely reduced usage of resouces (this choice makes the fitting process faster). The details can be found <a href="model_fitting.html#Goodness-of-fit evaluation: basic">here</a>.
 </p>
 <p class="par">
 Example:
@@ -1274,7 +1276,7 @@ This example does not require any comment.
 </a>
 </a>
 <p class="par">
-The regularisation scheme implemented with the parameter complex listed above is described in detail in the section <a href="model_fitting.html#regularisation">"Regularisation via harmonic components"</a>. Here, we concentrate on the syntactical details. With the <a href="model_fitting.html#REGPARA">REGPARA</a>, the user enters a comma-separated list of <a href="model_geometry.html">geometrical parameters</a> at selected radial nodes, Like with the <a href="model_fitting.html#VARY">VARY</a> list. However, the user can only enter one parameter name per group. Again, parameter names are identical to the keywords describing <a href="model_geometry.html">geometrical parameters</a>, but leaving out the "="-symbol, and the user can make use of the <a href=="model_fitting.html#Abbrevations for ring numbers">abbrevations for ring numbers</a> as with the <a href="model_fitting.html#VARY">VARY</a> list. Per regulrisation group, the user hence supplies a list of active nodes (rings) for one parameter. To calculate the corresponding Fourier coefficients, the values get completed via interpolation (only to calculate the Fourier coefficients, not to calculate the model), such that the parameter is defined at each node. Then, the list gets Fourier-transformed, and the Fourier amplitudes are calculated. Now, for each group, a ratio of sums of selected harmonic amplitudes is calculated. For that purpose, the user supplies the mode numbers the amplitudes of which are summed up in the numerators with the parameter <a href="model_fitting.html#REGNUME">REGNUME</a>. This is a comma-separated list of the modes intended to be summed up in the denominators. The modes can have the numbers 0 to <i>floor</i>(<a href="model_geometry.html#NUR">NUR</a>/2), where <a href="model_geometry.html#NUR">NUR</a> denotes the number of nodes (rings). The single expressions are lists of integers. The user can make use of the <a href=="model_fitting.html#Abbrevations for ring numbers">abbrevations for ring numbers</a>. The user also supplies a (not-comma-separated) list of denominators with the parameter <a href="model_fitting.html#REGAMPD">REGAMPD</a>, one for each regularisation group. If the user chooses to enter 0.0 or less for one of the regularisation groups, then the denominator is calculated from the list <a href="model_fitting.html#REGDENO">REGDENO</a>. As with <a href="model_fitting.html#REGNUME">REGNUME</a>, the user enters the modes that should enter the denominators. Once all ratios of the selected modes are calculated, the increase of the &chi;<sup>2</sup> is calculated with <a href="model_fitting.html#(10)">formula (10)</a>. For each regularisation group one number is entered for <a href="model_fitting.html#REGTHRE">REGTHRE</a>, <a href="model_fitting.html#REGAMPL">REGAMPL</a>, <a href="model_fitting.html#REGWIDT">REGWIDT</a> <a href="model_fitting.html#REAGSTE">REGASTE</a>.
+The regularisation scheme implemented with the parameter complex listed above is described in detail in the section <a href="model_fitting.html#regularisation">"Regularisation via harmonic components"</a>. Here, we concentrate on the syntactical details. With the <a href="model_fitting.html#REGPARA">REGPARA</a>, the user enters a comma-separated list of <a href="model_geometry.html">geometrical parameters</a> at selected radial nodes, Like with the <a href="model_fitting.html#VARY">VARY</a> list. However, the user can only enter one parameter name per group. Again, parameter names are identical to the keywords describing <a href="model_geometry.html">geometrical parameters</a>, but leaving out the "="-symbol, and the user can make use of the <a href=="model_fitting.html#Abbrevations for ring numbers">abbrevations for ring numbers</a> as with the <a href="model_fitting.html#VARY">VARY</a> list. Per regulrisation group, the user hence supplies a list of active nodes (rings) for one parameter. To calculate the corresponding Fourier coefficients, the values get completed via interpolation (only to calculate the Fourier coefficients, not to calculate the model), such that the parameter is defined at each node. Then, the list gets Fourier-transformed, and the Fourier amplitudes are calculated. Now, for each group, a ratio of sums of selected harmonic amplitudes is calculated. For that purpose, the user supplies the mode numbers the amplitudes of which are summed up in the numerators with the parameter <a href="model_fitting.html#REGNUME">REGNUME</a>. This is a comma-separated list of the modes intended to be summed up in the denominators. The modes can have the numbers 0 to <i>floor</i>(<a href="model_geometry.html#NUR">NUR</a>/2), where <a href="model_geometry.html#NUR">NUR</a> denotes the number of nodes (rings). The single expressions are lists of integers. The user can make use of the <a href=="model_fitting.html#Abbrevations for ring numbers">abbrevations for ring numbers</a>. The user also supplies a (not-comma-separated) list of denominators with the parameter <a href="model_fitting.html#REGAMPD">REGAMPD</a>, one for each regularisation group. If the user chooses to enter 0.0 or less for one of the regularisation groups, then the denominator is calculated from the list <a href="model_fitting.html#REGDENO">REGDENO</a>. As with <a href="model_fitting.html#REGNUME">REGNUME</a>, the user enters the modes that should enter the denominators. Once all ratios of the selected modes are calculated, the increase of the $\chi^2$ is calculated with <a href="model_fitting.html#(10)">formula (10)</a>. For each regularisation group one number is entered for <a href="model_fitting.html#REGTHRE">REGTHRE</a>, <a href="model_fitting.html#REGAMPL">REGAMPL</a>, <a href="model_fitting.html#REGWIDT">REGWIDT</a> <a href="model_fitting.html#REAGSTE">REGASTE</a>.
 </p>
 <p class="par">
 </p>
@@ -1293,7 +1295,7 @@ Example:
 &nbsp;&nbsp;&nbsp;REGASTE=     10000  5000
 </p>
 <p class="par">
-Let's assume <a href="model_geometry.html#NUR">NUR</a> 10. In the example, we specify that we want to penalise too strong irregrularites for the parameters VROT (rotation velocity) and SBR (surface brightness). For SBR, all parameters at all nodes are taken into account, while for VROT, the rotation velocity that is used to calculate the Fourier coefficients is identical to the current model, except for the first two nodes. These will, for the calculation of the Fourier coefficients, be extrapolated and be identical to the values of ring 3. For the first regularisation group (VROT), a ratio is built of the amplitude of the 5th order term in the Fourier decomposition and 20 km&nbsp;s<sup>-1</sup> as a fixed denominator. For the second regulatisation gruop (SBR), the ratio is built with the sum of the amplitudes of the 4th and 5th- order modes as a numerator and the sum of the amplitudes of all modes as the denominator. If for the first regularisation group (VROT) the ratio reaches a value of 0.2, the additional &chi;<sup>2</sup> is linearly increased to a value of 50000+loopnumber&cdot;10000 over a range between 0.2 and 0.4. If for the second regularisation group (SBR) the ratio reaches a value of 0.1, the additional &chi;<sup>2</sup> is linearly increased to a value of 40000+loopnumber&cdot;5000 over a range between 0.1 and 0.3. 
+Let's assume <a href="model_geometry.html#NUR">NUR</a> 10. In the example, we specify that we want to penalise too strong irregrularites for the parameters VROT (rotation velocity) and SBR (surface brightness). For SBR, all parameters at all nodes are taken into account, while for VROT, the rotation velocity that is used to calculate the Fourier coefficients is identical to the current model, except for the first two nodes. These will, for the calculation of the Fourier coefficients, be extrapolated and be identical to the values of ring 3. For the first regularisation group (VROT), a ratio is built of the amplitude of the 5th order term in the Fourier decomposition and 20 km&nbsp;s<sup>-1</sup> as a fixed denominator. For the second regulatisation gruop (SBR), the ratio is built with the sum of the amplitudes of the 4th and 5th- order modes as a numerator and the sum of the amplitudes of all modes as the denominator. If for the first regularisation group (VROT) the ratio reaches a value of 0.2, the additional $\chi^2$ is linearly increased to a value of 50000+loopnumber&cdot;10000 over a range between 0.2 and 0.4. If for the second regularisation group (SBR) the ratio reaches a value of 0.1, the additional $\chi^2$ is linearly increased to a value of 40000+loopnumber&cdot;5000 over a range between 0.1 and 0.3. 
 </p>
 <h3><a name="Restarting TiRiFiC">Restarting TiRifiC</a></h3>
 <p class="par">
@@ -1467,7 +1469,7 @@ For some purposes, like manual fitting or automated repeated calling of TiRiFiC,
     <td align="left"><a href="model_fitting.html#WEIGHT"><b>WEIGHT</b></a></td>
     <td align="center">Fitting (required)</td>
     <td align="center"> &nbsp; </td>
-    <td align="left">Continuous parameter to take quantisation noise into account in &chi;<sup>2</sup> evaluation.  </td>
+    <td align="left">Continuous parameter to take quantisation noise into account in $\chi^2$ evaluation.  </td>
   </tr>
   </tr>  <tr border="3" frame="above">
     <td align="center" style="border-top-width:medium">Name</td>
@@ -1548,7 +1550,7 @@ For some purposes, like manual fitting or automated repeated calling of TiRiFiC,
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Fri Feb 27 12:15:02 SAST 2015
+Last modified: Tue Apr 14 14:32:34 SAST 2015
 <!-- hhmts end -->
 <br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
 </div>
