@@ -9749,10 +9749,8 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
     userdble_tir(startinfv -> arel, &fit -> size, &nel, &def, "SIZE=", mes);
   }
 
-
   /* in case of PSWARM, we need these here, again propagating the defaults */
   if (fit -> fitmode == PSWARM) {
-
     fit -> psse = PSW_PSSE_DEF;
     def = 2;
     sprintf(mes, "Give seed for PSWARM rng. [42]");
@@ -9770,7 +9768,7 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
     sprintf(mes, "Give cognition parameter for PSWARM. [0.5]");
     nel = 1;
     userdble_tir(startinfv -> arel, &fit -> psco, &nel, &def, "PSCO=", mes);
-    
+
     fit -> psso = PSW_PSSO_DEF;
     def = 2;
     sprintf(mes, "Give social parameter for PSWARM. [0.5]");
@@ -9783,13 +9781,11 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
     nel = 1;
     userdble_tir(startinfv -> arel, &fit -> psmv, &nel, &def, "PSMV=", mes);
 
-
     fit -> psnf = PSW_PSNF_DEF;
     def = 2;    
-    sprintf(mes, "Give number of funciton evaluations to go from initial inertia to final inertia for PSWARM. [8000]");
+    sprintf(mes, "Number of Evaluations from initial inertia to final inertia for PSWARM. [8000]");
     nel = 1;
     userint_tir(startinfv -> arel, &fit -> psnf, &nel, &def, "PSNF=", mes);
-
     
     fit -> psii = PSW_PSII_DEF;
     def = 2;
@@ -10111,32 +10107,38 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
   userdble_tir(startinfv -> arel, parmin, &nel, &def, "PARMIN=", mes);
   
   /* Get the moderating steps */
-  sprintf(mes, "Give moderating steps (in the same order)");
-  userint_tir(startinfv -> arel, moderate, &nel, &def, "MODERATE=", mes);
-  
-  /* I have no patience programming a warning. If a negative value is
-     given, it will be changed to positive */
-  for (i = 0; i < k; ++i) {
-    if (moderate[i] < 0)
-      moderate[i] = -moderate[i];
-  }
-  
-  /* Get the start delta */
-  sprintf(mes, "Give the start delta (in the same order)");
-  userdble_tir(startinfv -> arel, delstart, &nel, &defaul, "DELSTART", mes);
-  
-  /* Get the end delta */
+  if (fit -> fitmode != PSWARM) {
+    sprintf(mes, "Give moderating steps (in the same order)");
+    userint_tir(startinfv -> arel, moderate, &nel, &def, "MODERATE=", mes);
 
-  /* Defaults to startdela */
-  if (def == 5) {
-    for (i = 0; i < k; ++i)
-      delend[i] = delstart[i];
+    /* I have no patience programming a warning. If a negative value is
+       given, it will be changed to positive */
+    for (i = 0; i < k; ++i) {
+      if (moderate[i] < 0)
+	moderate[i] = -moderate[i];
+    }
+
+    /* Get the start delta */
+    sprintf(mes, "Give the start delta (in the same order)");
+    userdble_tir(startinfv -> arel, delstart, &nel, &defaul, "DELSTART", mes);
+
+    /* Get the end delta */
+
+    /* Defaults to startdela */
+    if (def == 5) {
+      for (i = 0; i < k; ++i)
+	delend[i] = delstart[i];
+    }
+    sprintf(mes, "Give the end delta (in the same order)");
+    userdble_tir(startinfv -> arel, delend, &nel, &def, "DELEND", mes);
   }
-  sprintf(mes, "Give the end delta (in the same order)");
-  userdble_tir(startinfv -> arel, delend, &nel, &def, "DELEND", mes);
-  
-  /* These are not required for fitmode metropolis */
-  
+  else {
+    for (i = 0; i < k; ++i) {
+      moderate[i] = 0;
+    }
+  }
+  /* These are not required for fitmode metropolis (which currently does not exist) */
+
   if (fit -> fitmode >= GOLDEN_SECTION) {
     /* Get the itestart */
     defaul = defaul%4;
@@ -10181,48 +10183,51 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 	    iteend[i] = iteend[i-1];
 	}
       }
+
+      if (defaul != 2)
+	defaul |= 4;
+      if (def != 2)
+	def |= 4;
+    
+      /* Get the satisfaction delta*/
+      sprintf(mes, "Give the satisfaction deltas (in the same order)");
+      userdble_tir(startinfv -> arel, satdelt, &nel, &defaul, "SATDELT=", mes);
+
+      /* dito */
+      for (i = 0; i < k; ++i) {
+	if (satdelt[i] < 0)
+	  satdelt[i] = -satdelt[i];
+      }
     }
     else {
       for (i = 0; i < k; ++i) {
 	itestart[i] = 0;
 	iteend[i] = 0;
+	satdelt[i] = 0.0;
       }
     }
-    
+
     if (defaul != 2)
-      defaul += 4;
+      defaul |= 4;
     if (def != 2)
-      def += 4;
-    
-    /* Get the satisfaction delta*/
-    sprintf(mes, "Give the satisfaction deltas (in the same order)");
-    userdble_tir(startinfv -> arel, satdelt, &nel, &defaul, "SATDELT=", mes);
-    
+      def |= 4;
+
+    /* Get the minimum deltas */
+    sprintf(mes, "Give the minimum deltas (in the same order)");
+    userdble_tir(startinfv -> arel, mindelta, &nel, &defaul, "MINDELTA=", mes);
+
     /* dito */
     for (i = 0; i < k; ++i) {
-      if (satdelt[i] < 0)
-	satdelt[i] = -satdelt[i];
-    }
-    
-    if (fit -> fitmode >= GOLDEN_SECTION) {
-      /* Get the minimum deltas */
-      /* Get the satisfaction delta */
-      sprintf(mes, "Give the minimum deltas (in the same order)");
-      userdble_tir(startinfv -> arel, mindelta, &nel, &defaul, "MINDELTA=", mes);
-      
-      /* dito */
-      for (i = 0; i < k; ++i) {
-	if (mindelta[i] < 0)
-	  mindelta[i] = -mindelta[i];
-      }
-    }
-    else {
-      for (i = 0; i < k; ++i) {
-	mindelta[i] = 0.0;
-      }
+      if (mindelta[i] < 0)
+	mindelta[i] = -mindelta[i];
     }
   }
-  
+  /* else { */
+  /*   for (i = 0; i < k; ++i) { */
+  /*     mindelta[i] = 0.0; */
+  /*   } */
+  /* } */
+
   /* We create a varylist linked list from the input and link it into fit -> varylist */
   /* ndisk construction */
   /* The only possibility for an error is memory problems */

@@ -2199,7 +2199,7 @@ static int mst_put(mst *mstv, void *input, int spec)
   case GFT_INPUT_ADAR:
     mstv -> gen -> adar = input;
     break;
-    
+
     /* These are allowed only when idle */
   default:
     if (mst_gen_ckbu(mstv -> gen)) {
@@ -2208,7 +2208,7 @@ static int mst_put(mst *mstv, void *input, int spec)
     }
 
     switch (spec) {
-      
+
       /* fit method */
     case GFT_INPUT_METHOD:
       
@@ -2301,7 +2301,7 @@ static int mst_put(mst *mstv, void *input, int spec)
 	break;
       mst_put |= copydblvec(input_dbl, &mstv -> gen -> ndpar, mstv -> gen -> npar);
       break;
-      
+     
       /* Total allowed function calls */
     case GFT_INPUT_NCALLS:
       input_size_t = (size_t *) input;
@@ -2919,6 +2919,7 @@ static int mst_initspe(mst *mstv)
 static int mst_refresh(mst *mstv)
 {
   int mst_refresh = GFT_ERROR_NONE;
+
   mstv -> gen -> misinf = GFT_ERROR_NONE;
 
   /* set misinf refreshing the generic part */
@@ -3745,9 +3746,10 @@ static int mst_gen_refresh(mst_gen *mst_genv)
 	}
       }
     }
+
     if ((mst_genv -> ndpar)) {
       if (!mst_genv -> dpar) {
-	if (!(mst_genv -> ndpar = (double *) malloc(mst_genv -> npar*sizeof(double)))) {
+	if (!(mst_genv -> dpar = (double *) malloc(mst_genv -> npar*sizeof(double)))) {
 	  mst_gen_refresh |= GFT_ERROR_MEMORY_ALLOC;
 	}
 	else {
@@ -3756,6 +3758,7 @@ static int mst_gen_refresh(mst_gen *mst_genv)
 	}
       }
     }
+
 
         /* Now check the existence of one of these, they should all be there, or none */
     if (!mst_genv -> dpar) {
