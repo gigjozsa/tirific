@@ -375,6 +375,12 @@ MathJax.Hub.Config({
     <td align="left">Separation of sub-grids (sub-rings), ith disk, i = 2, 3, ...</td>
   </tr>
   <tr>
+    <td align="left"><a name="INTY"><b>INTY</b></a></td>
+    <td align="center">Geometrical (default 0)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Interpolation scheme for sub-grid (sub-ring) parameters; 0: linear, 1: natural cubic spline, 2: natural Akima</td>
+  </tr>
+  <tr>
     <td align="center" colspan="4"><a href="model_geometry.html#Radial nodes and parameter discretisation">More Details</a></td>
   </tr>
 </table>
@@ -402,7 +408,7 @@ MathJax.Hub.Config({
   href="model_geometry.html#RADI">RADI</a>, defaults are
   defined. Furtherly, the values at larger raii default to the last
   given number. Intrinsically, the parameters are calculated on small
-  "sub-rings" via linear interpolation. The width and the separation
+  "sub-rings" via interpolation. The type of interpolation between the radial nodes is controled with the parameter  <a href="model_geometry.html#INTY">INTY</a>. The user has the choice between linear interpolation (<a href="model_geometry.html#INTY">INTY</a>=0, default), natural cubic spline (<a href="model_geometry.html#INTY">INTY</a>=1), and non-rounded Akima interpolation with natural boundary conditions (<a href="model_geometry.html#INTY">INTY</a>=2). Computationally, linear interpolation is the cheapest, followed by Akima, with cubic spline being the most expensive interpolation. The width and the separation
   of the subrings are identical and specified by the user using the
   parameter <a href="model_geometry.html#RADSEP">RADSEP</a>, which
   defined the width of a sub-ring in units of pixels in spatial
@@ -1510,7 +1516,7 @@ Before a data cube is written to disk or compared with an input data cube, the o
   process. Intrinsically, for the calculation of a model phase-space luminosity-density <i>j</i>(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>) and with that, the model intensity <i>I</i>(<i>x</i>, <i>y</i>, <i>V</i><sub>z</sub>), these are converted into a set of n =
   &lceil; RADI<sub>n</sub>&middot;RADSEP<sup>-1</sup> &rceil;
   (&lceil; <i>x</i> &rceil; &hArr; <i>ceil</i>(<i>x</i>) &hArr; "round up" x) parameters defined on
-  equally-spaced "radii" RD<sub>i</sub> of "sub-rings", calculated via linear
+  equally-spaced "radii" RD<sub>i</sub> of "sub-rings", calculated via 
   interpolation. This means that the (quasi-) continuous parameter
   RADI is discretised into a set {RD<sub>i</sub>}<sub>i =
   1,...,n</sub>, with
@@ -1579,24 +1585,12 @@ Before a data cube is written to disk or compared with an input data cube, the o
 -->
 
 <p class="par">
-The user-supplied parameters {PAR(RADI<sub>j</sub>)}<sub>j = 1, ..., m</sub> are interpolated for each sub-ring at the radius RD<sub>i</sub> via
+The user-supplied parameters {PAR(RADI<sub>j</sub>)}<sub>j = 1, ..., m</sub> are interpolated for each sub-ring at the radius RD<sub>i</sub>. The type of interpolation between the radial nodes is controled with the parameter  <a href="model_geometry.html#INTY">INTY</a>. The user has the choice between linear interpolation (<a href="model_geometry.html#INTY">INTY</a>=0, default), natural cubic spline (<a href="model_geometry.html#INTY">INTY</a>=1), and non-rounded Akima interpolation with natural boundary conditions (<a href="model_geometry.html#INTY">INTY</a>=2). Computationally, linear interpolation is the cheapest, followed by Akima, with cubic spline being the most expensive interpolation scheme. We use the interpolation algorithms of the <a href="http://www.gnu.org/s/gsl/">GNU scientific library (GSL)</a> and refer to those www pages for details.
 </p>
 
-<p>
-  <center>
-    <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
-       <tr>
-         <td align="left" rowspan="1"> (4) </td> 
-         <td nowrap valign="top">  RADI<sub>j</sub> &le; RD<sub>i</sub> < RADI<sub>j+1</sub> <sup>&nbsp;</sup></td> 
-         <td valign="top" > &rArr; <sup>&nbsp;</sup></td> 
-         <td valign="top"> PAR(RD<sub>i</sub>) = PAR(RADI<sub>j</sub>)+RD<sub>i</sub>&middot;(PAR(RADI<sub>j+1</sub>)-PAR(RADI<sub>j</sub>))/(RADI<sub>j+1</sub>-RADI<sub>j</sub>)<sup>&nbsp;</sup></td>
-         <td align="left" rowspan="1" nowrap>.</td> 
-       </tr>
-    </table>
-  </center>
-</p>
+
 <p class="par">
-As furtherly discussed below, the resulting model <i>j</i>(<i>x</i>,
+As discussed below, the resulting model <i>j</i>(<i>x</i>,
 <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>,
 <i>V</i><sub>z</sub>), from which the synthetically observed model intensity
 <i>I</i>(<i>x</i>, <i>y</i>, <i>V</i><sub>z</sub>) is derived, is the discrete sum
@@ -1608,7 +1602,7 @@ the interpolated parameters at the discrete sub-ring radii.
           <center>
             <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
                <tr>
-                 <td align="left" rowspan="2"> (5) </td> 
+                 <td align="left" rowspan="2"> (4) </td> 
                  <td nowrap valign="top">  <i>j</i>(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>) <sup>&nbsp;</sup></td> 
                  <td valign="top" > = <sup>&nbsp;</sup></td> 
                  <td valign="top">  &Sigma;<sub>i = 1, ..., n</sub> <i>j</i>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>) <sup>&nbsp;</sup></td>
@@ -1680,7 +1674,7 @@ On demand, TiRiFiC supplies a model consisting of multiple disks. The number of 
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
        <tr>
-         <td align="left" rowspan="2"> (6) </td> 
+         <td align="left" rowspan="2"> (5) </td> 
          <td nowrap valign="top">  RD<sub>i</sub>-RADSEP/2 &le;  <i>R</i> < RD<sub>i</sub>+RADSEP/2 <sup>&nbsp;</sup></td> 
          <td valign="top" > &rArr; <sup>&nbsp;</sup></td> 
          <td nowrap valign="top">  <i>B</i><sub>1</sub>(RD<sub>i</sub>)(<i>R</i>, <i>&#966;</i>) <sup>&nbsp;</sup></td> 
@@ -1729,7 +1723,7 @@ On demand, TiRiFiC supplies a model consisting of multiple disks. The number of 
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
        <tr>
-         <td align="left" rowspan="2"> (7) </td> 
+         <td align="left" rowspan="2"> (6) </td> 
          <td nowrap valign="top">  RD<sub>i</sub>-RADSEP/2 &le;  <i>R</i> < RD<sub>i</sub>+RADSEP/2 <sup>&nbsp;</sup></td> 
          <td valign="top" > &rArr; <sup>&nbsp;</sup></td> 
          <td nowrap valign="top">  <i>B</i><sub>2</sub>(RD<sub>i</sub>)(<i>R</i>, <i>&#966;</i>) <sup>&nbsp;</sup></td> 
@@ -1793,7 +1787,7 @@ On demand, TiRiFiC supplies a model consisting of multiple disks. The number of 
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="3"> (8) </td> 
+        <td align="left" rowspan="3"> (7) </td> 
         <td nowrap valign="top" rowspan="2"> (AZ1P(RD<sub>i</sub>)-AZ1W(RD<sub>i</sub>)/2) mod 360 > (AZ1P(RD<sub>i</sub>)+AZ1W(RD<sub>i</sub>)/2) mod 360  &#8658;<sup>&nbsp;</sup></td> 
         <td valign="top"> I<sub>1,1</sub>(RD<sub>i</sub>) = [0,(AZ1P(RD<sub>i</sub>)+AZ1W(RD<sub>i</sub>)/2) mod 360]<sup>&nbsp;</sup></td>
         <td align="left" rowspan="3" nowrap>, where </td> 
@@ -1818,7 +1812,7 @@ On demand, TiRiFiC supplies a model consisting of multiple disks. The number of 
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
        <tr>
-         <td align="left" rowspan="3"> (9) </td> 
+         <td align="left" rowspan="3"> (8) </td> 
          <td nowrap valign="top" rowspan="2"> (AZ2P(RD<sub>i</sub>)-AZ2W(RD<sub>i</sub>)/2) mod 360 > (AZ2P(RD<sub>i</sub>)+AZ2W(RD<sub>i</sub>)/2) mod 360  &#8658;<sup>&nbsp;</sup></td> 
          <td valign="top"> I<sub>2,1</sub>(RD<sub>i</sub>) = [0,(AZ2P(RD<sub>i</sub>)+AZ2W(RD<sub>i</sub>)/2) mod 360]<sup>&nbsp;</sup></td>
          <td align="left" rowspan="3" nowrap>. </td> 
@@ -1842,7 +1836,7 @@ On demand, TiRiFiC supplies a model consisting of multiple disks. The number of 
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
        <tr>
-         <td align="left" rowspan="2"> (10) </td> 
+         <td align="left" rowspan="2"> (9) </td> 
          <td nowrap rowspan="2"> <i>h</i>(RD<sub>i</sub>)(<i>x</i>) = <sup>&nbsp;</sup></td> 
          <td valign="top"> 1 <sup>&nbsp;</sup></td>
          <td valign="top"> if <sup>&nbsp;</sup></td>
@@ -1871,7 +1865,7 @@ On demand, TiRiFiC supplies a model consisting of multiple disks. The number of 
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
        <tr>
-         <td align="left" rowspan="6"> (11) </td> 
+         <td align="left" rowspan="6"> (10) </td> 
          <td nowrap valign="top"> <i>B</i>(RD<sub>i</sub>)(<i>R</i>, <i>&#966;</i>)  <sup>&nbsp;</sup></td> 
          <td valign="top" > = <sup>&nbsp;</sup></td> 
          <td valign="top"> <i>h</i>(RD<sub>i</sub>)(180&deg;&middot;<i>&phi;</i>/&pi;) &#183; (<i>B</i><sub>1</sub>(RD<sub>i</sub>)(<i>R</i>, <i>&#966;</i>) + <i>B</i><sub>2</sub>(RD<sub>i</sub>)(<i>R</i>, <i>&#966;</i>))<sup>&nbsp;</sup></td>
@@ -1916,7 +1910,7 @@ On demand, TiRiFiC supplies a model consisting of multiple disks. The number of 
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="Scale profile">
        <tr>
-         <td align="left" rowspan="2"> (12) </td> 
+         <td align="left" rowspan="2"> (11) </td> 
          <td nowrap valign="top"> <i>J</i><sub>1</sub>(RD<sub>i</sub>)(<i>R</i>, <i>&#966;</i>, <i>Z</i>)  <sup>&nbsp;</sup></td> 
          <td valign="top" > = <sup>&nbsp;</sup></td> 
          <td valign="top"> <i>B</i>(RD<sub>i</sub>)(<i>R</i>, <i>&#966;</i>) &#183; <i>H</i>(RD<sub>i</sub>)(<i>Z</i>)<sup>&nbsp;</sup></td>
@@ -1936,7 +1930,7 @@ On demand, TiRiFiC supplies a model consisting of multiple disks. The number of 
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
        <tr>
-         <td nowrap valign="middle" rowspan="5">(13) &nbsp;&nbsp;&nbsp; <i>H</i>(Z0(RD<sub>i</sub>))(<i>Z</i>) = </td> 
+         <td nowrap valign="middle" rowspan="5">(12) &nbsp;&nbsp;&nbsp; <i>H</i>(Z0(RD<sub>i</sub>))(<i>Z</i>) = </td> 
          <td valign="top">0) &nbsp;&nbsp;&nbsp; (2&#183;Z0(RD<sub>i</sub>))<sup>-1</sup> for -Z0(RD<sub>i</sub>)&nbsp;<&nbsp;<i>Z</i>&nbsp;<&nbsp;Z0(RD<sub>i</sub>), 0 otherwise <sup>&nbsp;</sup></td>
 <td valign="top"> Constant layer with thickness Z0(RD<sub>i</sub>)<sup>&nbsp;</sup></td>
          <td align="left" rowspan="5" nowrap>. </td> 
@@ -1996,7 +1990,7 @@ On demand, TiRiFiC supplies a model consisting of multiple disks. The number of 
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
        <tr>
-         <td align="left" rowspan="6"> (14)&nbsp;&nbsp;&nbsp; </td> 
+         <td align="left" rowspan="6"> (13)&nbsp;&nbsp;&nbsp; </td> 
          <td nowrap valign="top"> <i>V</i><sup>p</sup><sub>R</sub>(RD<sub>i</sub>)(<i>Z</i>) <sup>&nbsp;</sup></td> 
          <td valign="top" > = <sup>&nbsp;</sup></td> 
          <td valign="top" > VRAD(RD<sub>i</sub>)+&Sigma;<sub>k = 1,...,4</sub> RAkA(RD<sub>i</sub>)&middot;<i>cos</i>(k&middot;(<i>&phi;</i>-&pi;&middot;RAkP(RD<sub>i</sub>)/180&deg;))<sup>&nbsp;</sup></td>
@@ -2045,7 +2039,7 @@ On demand, TiRiFiC supplies a model consisting of multiple disks. The number of 
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
        <tr> 
-         <td align="left" rowspan="3"> (15) &nbsp;&nbsp;&nbsp;</td> 
+         <td align="left" rowspan="3"> (14) &nbsp;&nbsp;&nbsp;</td> 
          <td nowrap valign="top"> <i>V</i><sup>p</sup><sub>x</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>) <sup>&nbsp;</sup></td> 
          <td valign="top" > = <sup>&nbsp;</sup></td> 
          <td valign="top"> <i>V</i><sup>p</sup><sub>R</sub>(RD<sub>i</sub>)(<i>Z</i> = <i>z</i>)&#183;<i>cos</i>(<i>&#966;(<i>x</i>, <i>y</i>)</i>)-<i>V</i><sup>p</sup><sub>&#966;</sub>(RD<sub>i</sub>)(<i>Z</i> = <i>z</i>)&#183;<i>sin</i>(<i>&#966;(<i>x</i>, <i>y</i>)</i>)<sup>&nbsp;</sup></td>
@@ -2096,7 +2090,7 @@ On demand, TiRiFiC supplies a model consisting of multiple disks. The number of 
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
        <tr>
-         <td align="left" rowspan="3"> (16)&nbsp;&nbsp;&nbsp; </td> 
+         <td align="left" rowspan="3"> (15)&nbsp;&nbsp;&nbsp; </td> 
          <td nowrap valign="top"> <i>j</i><sub>1</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>) <sup>&nbsp;</sup></td> 
          <td valign="top" > = <sup>&nbsp;</sup></td> 
          <td valign="top" > <i>J</i><sub>1</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>)&#183;&#948;(<i>V</i><sub>x</sub>-<i>V</i><sup>p</sup><sub>x</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>))&#183;&#948;(<i>V</i><sub>&#966;</sub>-<i>V</i><sup>p</sup><sub>y</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>), <i>z</i>))&#183;&#948;(<i>V</i><sub>z</sub>-<i>V</i><sup>p</sup><sub>z</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>))<sup>&nbsp;</sup></td>
@@ -2171,7 +2165,7 @@ Notice that the simplified model for bar streaming using the 3-parametric prescr
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="2"> (17)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="2"> (16)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  <i>J</i><sub>2</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>) <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> <i>J</i><sub>1</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i> - WM0A(RD<sub>i</sub>)-&#931;<sub>k = 1,...,4</sub> WMkA(RD<sub>i</sub>)&#183;<i>cos</i>(k&#183;(<i>&#966;</i>(<i>x</i>, <i>y</i>)-&pi;&middot;WMkP(RD<sub>i</sub>)/180&#176;))<sup>&nbsp;</sup></td>
@@ -2184,7 +2178,7 @@ Notice that the simplified model for bar streaming using the 3-parametric prescr
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="2"> (18)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="2"> (17)&nbsp;&nbsp;&nbsp; </td> 
 <td nowrap valign="top"> <i>j</i><sub>2</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>) <sup>&nbsp;</sup></td> 
         <td valign="top"> = <sup>&nbsp;</sup></td>
         <td valign="top"> <i>j</i><sub>1</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i> - WM0A(RD<sub>i</sub>)-&#931;<sub>k = 1,...,4</sub> WMkA(RD<sub>i</sub>)&#183;<i>cos</i>(k&#183(<i>&#966;</i>(<i>x</i>, <i>y</i>)-&pi;&middot;WMkP(RD<sub>i</sub>)/180&#176;)), <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>))<sup>&nbsp;</sup></td>
@@ -2203,7 +2197,7 @@ source gets transformed to <i>z</i>' via
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="1"> (19)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="1"> (18)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  <i>z</i>&#8242; <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> <i>z</i> +  WM0A(RD<sub>i</sub>)+&#931;<sub>k = 1,...,4</sub> WMkA(RD<sub>i</sub>)&#183;<i>cos</i>(k&#183;(<i>&#966;</i>(<i>x</i>, <i>y</i>)-&pi;&middot;WMkP(RD<sub>i</sub>)/180&#176;))<sup>&nbsp;</sup></td>
@@ -2227,7 +2221,7 @@ source gets transformed to <i>z</i>' via
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="3"> (20)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="3"> (19)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  A<sup>x</sup><sub>incl</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>) <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> A<sup>x</sup><sub>incl</sub>(INCL(RD<sub>i</sub>))(<i>x</i>, <i>y</i>, <i>z</i>) <sup>&nbsp;</sup></td>
@@ -2267,7 +2261,7 @@ source gets transformed to <i>z</i>' via
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="2"> (21) </td> 
+        <td align="left" rowspan="2"> (20) </td> 
         <td valign="top"> <i>j</i><sub>3</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>))<sup>&nbsp;</sup></td>
         <td valign="top"> = <sup>&nbsp;</sup></td>
         <td valign="top"> <i>j</i><sub>2</sub>(RD<sub>i</sub>)(
@@ -2298,7 +2292,7 @@ source gets transformed to <i>z</i>' via
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="6"> (22)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="6"> (21)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top"> <i>x</i>&#8242;  <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> A<sup>x</sup><sub>incl</sub>(INCL(RD<sub>i</sub>))(<i>x</i>, <i>y</i>, <i>z</i>) <sup>&nbsp;</sup></td>
@@ -2359,7 +2353,7 @@ source gets transformed to <i>z</i>' via
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="1"> (23) </td> 
+        <td align="left" rowspan="1"> (22) </td> 
         <td valign="top"> <i>j</i><sub>4</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>))<sup>&nbsp;</sup></td>
         <td valign="top"> = <sup>&nbsp;</sup></td>
         <td> <i>j</i><sub>3</sub>(RD<sub>i</sub>)(<i>x</i>-LC0(RD<sub>i</sub>), <i>y</i>-LS0(RD<sub>i</sub>), <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>) <sup>&nbsp;</sup></td> 
@@ -2382,7 +2376,7 @@ source gets transformed to <i>z</i>' via
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="6"> (24)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="6"> (23)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top"> <i>x</i>&#8242;  <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> <i>x</i>+LC0(RD<sub>i</sub>) <sup>&nbsp;</sup></td>
@@ -2455,7 +2449,7 @@ source gets transformed to <i>z</i>' via
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="2"> (25) </td> 
+        <td align="left" rowspan="2"> (24) </td> 
         <td valign="top"> <i>j</i><sub>5</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>))<sup>&nbsp;</sup></td>
         <td valign="top"> = <sup>&nbsp;</sup></td>
         <td valign="top"> <i>j</i><sub>4</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>- VM0A(RD<sub>i</sub>)-&#931;<sub>k = 1,...,4</sub> VMkA(RD<sub>i</sub>)&#183;<i>cos</i>(k&middot;(<i>&phi;</i>&prime;(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>)-&pi;&middot;VMkP(RD<sub>i</sub>)/180&#176;)) <sup>&nbsp;</sup></td> 
@@ -2472,7 +2466,7 @@ source gets transformed to <i>z</i>' via
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="2"> (26) </td> 
+        <td align="left" rowspan="2"> (25) </td> 
         <td valign="top"> <i>&phi;</i>&prime;(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>) <sup>&nbsp;</sup></td>
         <td valign="top"> = <sup>&nbsp;</sup></td>
         <td valign="top"> <i>&phi;</i>(A<sup>-1</sup><sub>incl</sub>(INCL(RD<sub>i</sub>))(<i>x</i>-LC0(RD<sub>i</sub>), <i>y</i>-LS0(RD<sub>i</sub>), z)) <sup>&nbsp;</sup></td> 
@@ -2490,7 +2484,7 @@ source gets transformed to <i>z</i>' via
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="1"> (27)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="1"> (26)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  <i>V</i>&#8242;<sub>z</sub> <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> <i>V</i><sub>z</sub> +  VM0A(RD<sub>i</sub>)+&#931;<sub>k = 1,...,4</sub> VMkA(RD<sub>i</sub>)&#183;<i>cos</i>(k&middot;(<i>&phi;</i>&prime;(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>)-&pi;&middot;VMkP(RD<sub>i</sub>)/180&#176;))<sup>&nbsp;</sup></td>
@@ -2547,7 +2541,7 @@ source gets transformed to <i>z</i>' via
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="3"> (28)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="3"> (27)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  A<sup>x</sup><sub>pa</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>) <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> A<sup>x</sup><sub>pa</sub>(PA(RD<sub>i</sub>))(<i>x</i>, <i>y</i>, <i>z</i>) <sup>&nbsp;</sup></td>
@@ -2586,7 +2580,7 @@ source gets transformed to <i>z</i>' via
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="2"> (29) </td> 
+        <td align="left" rowspan="2"> (28) </td> 
         <td valign="top"> <i>j</i><sub>6</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>))<sup>&nbsp;</sup></td>
         <td valign="top"> = <sup>&nbsp;</sup></td>
         <td valign="top">  <i>j</i><sub>5</sub>(RD<sub>i</sub>)(
@@ -2609,14 +2603,14 @@ source gets transformed to <i>z</i>' via
   about the z-axis to the coordinates (<i>x</i>&#8242;,
   <i>y</i>&#8242;, <i>z</i>&#8242;, <i>V</i>&#8242;<sub>x</sub>,
   <i>V</i>&#8242;<sub>y</sub>, <i>V</i>&#8242;<sub>z</sub>), according
-  to equation (28)
+  to equation (27)
 </p>
 
 <p>
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="6"> (30)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="6"> (29)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top"> <i>x</i>&#8242;  <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> A<sup>x</sup><sub>pa</sub>(PA(RD<sub>i</sub>))(<i>x</i>, <i>y</i>, <i>z</i>) <sup>&nbsp;</sup></td>
@@ -2662,7 +2656,7 @@ In the cylindric face-on reference system of a face-on disk (following the cylin
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="3"> (31)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="3"> (30)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top"> <b><i>e</i></b><sub>R</sub>(<i>&#966;</i>) <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> (e<sub>R</sub><sup>x</sup>(<i>&#966;</i>), e<sub>R</sub><sup>y</sup>(<i>&#966;</i>), e<sub>R</sub><sup>z</sup>(<i>&#966;</i>)) <sup>&nbsp;</sup></td>
@@ -2694,7 +2688,7 @@ With respect to the basis (<b><i>e</i></b><sub>R</sub>(<i>&#966;</i>), <b><i>e</
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="3"> (32)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="3"> (31)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  &sigma;<sup>2</sup><sub>1</sub> <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> &sigma;<sup>2</sup><sub>R</sub> <sup>&nbsp;</sup></td>
@@ -2726,7 +2720,7 @@ For a given rotation A, (&sigma;<sup>2</sup>) transforms with
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="1"> (33)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="1"> (32)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  (&sigma;<sup>2</sup>&#8242;)  <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top">  A(&sigma;<sup>2</sup>)A<sup>T</sup> <sup>&nbsp;</sup></td>
@@ -2741,7 +2735,7 @@ or
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="1"> (34)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="1"> (33)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  &sigma;<sup>2</sup>&#8242;<sub>ij</sub> <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> &Sigma;<sub>kl</sub>A<sub>ik</sub>A<sub>jl</sub> &sigma;<sub>kl</sub><sup>&nbsp;</sup></td>
@@ -2757,7 +2751,7 @@ Applying the rotation A<sub>&phi;</sub>
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="3"> (35)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="3"> (34)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  A<sup>x</sup><sub>&phi;</sub>(<i>&psi;</i>)(<i>x</i>, <i>y</i>, <i>z</i>) <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> x&#183;<i>cos</i>(<i>&psi;</i>)-y&#183;<i>sin</i>(<i>&psi;</i>)<sup>&nbsp;</sup>        <td align="left" rowspan="3" nowrap> &nbsp;&nbsp;&nbsp;, with</td> 
@@ -2777,13 +2771,13 @@ Applying the rotation A<sub>&phi;</sub>
   </center>
 </p>
 <p class="par">
-the face-on azimuthal angle &psi; (see below), the rotation A<sub>incl</sub>(INCL(RD<sub>i</sub>)) with respect to inclination, as defined in eq. (20), the rotation A<sub>pa</sub>(PA(RD<sub>i</sub>)) with respect to position angle defined as in (28), and with <b>e</b><sub>z</sub> = (0, 0, 1) being the normal vector along the line-of-sight, we define the line-of-sight velocity spread &sigma;<sup>2</sup><sub>z</sub>(RD<sub>i</sub>)(<i>&phi;</i>) (sticking to the terminology of <a href="http://esoads.eso.org/cgi-bin/nph-data_query?bibcode=2008gady.book.....B&db_key=AST&link_type=ABSTRACT&high=4a952edbbc10597">Binney & Tremaine 2008</a>, p. 281, this is not identical to the line-of-sight velocity dispersion) by
+the face-on azimuthal angle &psi; (see below), the rotation A<sub>incl</sub>(INCL(RD<sub>i</sub>)) with respect to inclination, as defined in eq. (19), the rotation A<sub>pa</sub>(PA(RD<sub>i</sub>)) with respect to position angle defined as in (27), and with <b>e</b><sub>z</sub> = (0, 0, 1) being the normal vector along the line-of-sight, we define the line-of-sight velocity spread &sigma;<sup>2</sup><sub>z</sub>(RD<sub>i</sub>)(<i>&phi;</i>) (sticking to the terminology of <a href="http://esoads.eso.org/cgi-bin/nph-data_query?bibcode=2008gady.book.....B&db_key=AST&link_type=ABSTRACT&high=4a952edbbc10597">Binney & Tremaine 2008</a>, p. 281, this is not identical to the line-of-sight velocity dispersion) by
 </p>
 <p>
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="10"> (36)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="10"> (35)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  &sigma;<sup>2</sup><sub>z</sub>(RD<sub>i</sub>)(<i>&psi;</i>)  <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top">   <b>e</b><sup>T</sup><sub>z</sub> A<sub>pa</sub>(PA(RD<sub>i</sub>))A<sub>incl</sub>(INCL(RD<sub>i</sub>))A<sub>&phi;</sub>(<i>&psi;</i>)(&sigma;<sup>2</sup>)A<sub>&phi;</sub>(<i>&psi;</i>)<sup>T</sup>A<sup>T</sup><sub>incl</sub>(INCL(RD<sub>i</sub>))A<sup>T</sup><sub>pa</sub>(PA(RD<sub>i</sub>))<b>e</b><sub>z</sub> <sup>&nbsp;</sup></td>
@@ -2847,13 +2841,13 @@ the face-on azimuthal angle &psi; (see below), the rotation A<sub>incl</sub>(INC
   </center>
 </p>
 <p class="par">
-The current implementation of TiRiFiC does not allow a variation of a(RD<sub>i</sub>), b(RD<sub>i</sub>), and c(RD<sub>i</sub>) or any linear combination (in fact, as evident from the second last line of equation (36), for a perfect disk, a best fit solution at most two of the four parameters SDIS(RD<sub>i</sub>), a(RD<sub>i</sub>), b(RD<sub>i</sub>), and c(RD<sub>i</sub>)) would be unambiguous), in other words until expressively requested (please do request this if you want to use it!), the velocity ellipsoid is a spheroid with
+The current implementation of TiRiFiC does not allow a variation of a(RD<sub>i</sub>), b(RD<sub>i</sub>), and c(RD<sub>i</sub>) or any linear combination (in fact, as evident from the second last line of equation (35), for a perfect disk, a best fit solution at most two of the four parameters SDIS(RD<sub>i</sub>), a(RD<sub>i</sub>), b(RD<sub>i</sub>), and c(RD<sub>i</sub>)) would be unambiguous), in other words until expressively requested (please do request this if you want to use it!), the velocity ellipsoid is a spheroid with
 </p>
 <p>
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="1"> (37)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="1"> (36)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  a(RD<sub>i</sub>)<sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> b(RD<sub>i</sub>) <sup>&nbsp;</sup></td>
@@ -2870,7 +2864,7 @@ The current implementation of TiRiFiC does not allow a variation of a(RD<sub>i</
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="8"> (38)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="8"> (37)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  &sigma;<sup>2</sup><sub>z</sub>(RD<sub>i</sub>)(<i>&psi;</i>)  <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top">  &sigma;<sup>2</sup><sub>z</sub>(SDIS(RD<sub>i</sub>)) <sup>&nbsp;</sup></td>
@@ -2895,7 +2889,7 @@ Defining the line-of-sight velocity distribution function
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="2"> (39)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="2"> (38)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  <i>D</i><sub>z</sub>(RD<sub>i</sub>)(<i>&psi;</i>)(<i>V</i><sub>z</sub>)  <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top">  <i>D</i><sub>z</sub>(&sigma;<sup>2</sup><sub>z</sub>(SDIS(RD<sub>i</sub>), a(RD<sub>i</sub>), b(RD<sub>i</sub>), c(RD<sub>i</sub>), INCL(RD<sub>i</sub>))(<i>&psi;</i>)(<i>V</i><sub>z</sub>) <sup>&nbsp;</sup></td>
@@ -2917,7 +2911,7 @@ with its current simplified form
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="1"> (40)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="1"> (39)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  <i>D</i><sub>z</sub>(RD<sub>i</sub>)(<i>&psi;</i>)(<i>V</i><sub>z</sub>)  <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top">  <i>D</i><sub>z</sub>(&sigma;<sup>2</sup><sub>z</sub>(SDIS(RD<sub>i</sub>)))(<i>V</i><sub>z</sub>) <sup>&nbsp;</sup></td>
@@ -2934,7 +2928,7 @@ the phase-space luminosity density <i>j</i><sub>6</sub>(RD<sub>i</sub>) transfor
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="3"> (41) </td> 
+        <td align="left" rowspan="3"> (40) </td> 
         <td valign="top"> <i>j</i><sub>7</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>)<sup>&nbsp;</sup></td>
         <td valign="top"> = <sup>&nbsp;</sup></td>
         <td valign="top"> (<i>j</i><sub>6</sub>&nbsp;<b>*</b><sub>V<sub>z</sub></sub>&nbsp;<i>D</i><sub>z</sub>(RD<sub>i</sub>)(<i>&psi;(RD<sub>i</sub>)</i>(<i>x</i>, <i>y</i>, <i>z</i>)))(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>)  <sup>&nbsp;</sup>
@@ -2957,7 +2951,7 @@ the phase-space luminosity density <i>j</i><sub>6</sub>(RD<sub>i</sub>) transfor
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="2"> (42) </td> 
+        <td align="left" rowspan="2"> (41) </td> 
         <td valign="top"> <i>&psi;</i>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>) <sup>&nbsp;</sup></td>
         <td valign="top"> = <sup>&nbsp;</sup></td>
         <td valign="top"> <i>&phi;</i>(A<sup>-1</sup><sub>incl</sub>(INCL(RD<sub>i</sub>))(A<sup>-1</sup><sub>pa</sub><sup>x </sup>(PA(RD<sub>i</sub>))(<i>x</i>, <i>y</i>, <i>z</i>)-LC0(RD<sub>i</sub>), A<sup>-1</sup><sub>pa</sub><sup>y </sup>(PA(RD<sub>i</sub>))(<i>x</i>, <i>y</i>, <i>z</i>)-LS0(RD<sub>i</sub>), A<sup>-1</sup><sub>pa</sub><sup>z </sup>(PA(RD<sub>i</sub>))(<i>x</i>, <i>y</i>, <i>z</i>))) <sup>&nbsp;</sup></td> 
@@ -2986,7 +2980,7 @@ The user supplies the world coordinates of the centre XPOS(RD<sub>i</sub>) (righ
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="3"> (43) </td> 
+        <td align="left" rowspan="3"> (42) </td> 
         <td valign="top"> <i>x</i><sup>c</sup>(RD<sub>i</sub>) &nbsp;</sup></td>
         <td valign="top"> = <sup>&nbsp;</sup></td>
         <td> <i>x</i><sup>c</sup>(XPOS(RD<sub>i</sub>), YPOS(RD<sub>i</sub>), VSYS(RD<sub>i</sub>)) <sup>&nbsp;</sup></td> 
@@ -3016,7 +3010,7 @@ The phase-space luminosity density <i>j</i><sub>7</sub>(RD<sub>i</sub>) transfor
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="2"> (44) </td> 
+        <td align="left" rowspan="2"> (43) </td> 
         <td valign="top"> <sup>&nbsp;</sup></td>
         <td valign="top"> <sup>&nbsp;</sup></td>
         <td valign="top"> <i>j</i><sub>8</sub>(RD<sub>i</sub>)(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>))<sup>&nbsp;</sup>
@@ -3046,7 +3040,7 @@ The phase-space luminosity density <i>j</i><sub>7</sub>(RD<sub>i</sub>) transfor
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="6"> (45)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="6"> (44)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top"> <i>x</i>&#8242;  <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> <i>x</i>+<i>x</i><sub>c</sub>(XPOS(RD<sub>i</sub>), YPOS(RD<sub>i</sub>), VSYS(RD<sub>i</sub>)) <sup>&nbsp;</sup></td>
@@ -3091,7 +3085,7 @@ In a next step, the phase-space luminosity densities <i>j</i><sub>8</sub>(RD<sub
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="1"> (46) </td> 
+        <td align="left" rowspan="1"> (45) </td> 
         <td valign="top"> <i>I</i><sub>1</sub>(<i>x</i>, <i>y</i>, <i>V</i><sub>Z</sub>)<sup>&nbsp;</sup></td>
         <td valign="top"> = <sup>&nbsp;</sup></td>
         <td valign="top"> &Sigma;<sub>i = 1, ..., n</sub> &int; &int; &int;&nbsp;<i>j</i><sub>6</sub>(<i>x</i>, <i>y</i>, <i>z</i>, <i>V</i><sub>x</sub>, <i>V</i><sub>y</sub>, <i>V</i><sub>z</sub>) d<i>z</i> d<i>V</i><sub>x</sub> d<i>V</i><sub>y</sub> <sup>&nbsp;</sup></td> 
@@ -3115,7 +3109,7 @@ For computational reasons, gridding in TiRiFiC consists of a search of the neare
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="1"> (47) </td> 
+        <td align="left" rowspan="1"> (46) </td> 
         <td valign="top"> <i>I</i><sub>2</sub>(<i>x</i>, <i>y</i>, <i>V</i><sub>z</sub>)<sup>&nbsp;</sup></td>
         <td valign="top"> = <sup>&nbsp;</sup></td>
         <td valign="top"> &Sigma;<sub>i,j,k</sub> &#948(<i>x</i>-i&middot;&Delta;<sub>x</sub>) &#948(<i>y</i>-j&middot;&Delta;<sub>y</sub>) &#948(<i>V</i><sub>z</sub>-k&middot;&Delta;<sub>V<sub>z</sub></sub>)  (&int; &int; &int;&nbsp; <i>I</i><sub>1</sub>(<i>x</i>-<i>x</i>&prime;, <i>y</i>-<i>y</i>&prime;, <i>V</i><sub>z</sub>-<i>V</i>&prime;<sub>z</sub>) &middot; &Delta;<sup>-1</sup><sub>x</sub>&middot;&Pi;(&Delta;<sup>-1</sup><sub>x</sub>&middot;<i>x</i>&prime;)  &Delta;<sup>-1</sup><sub>y</sub>&middot;&Pi;(&Delta;<sup>-1</sup><sub>y</sub>&middot;<i>y</i>&prime;) &Delta;<sup>-1</sup><sub>x</sub>&middot;&Pi;(&Delta;<sup>-1</sup><sub>V<sub>z</sub></sub>&middot;<i>V</i>&prime;<sub>z</sub>)   d<i>x</i>&prime; d<i>y</i>&prime; d<i>V</i>&prime;<sub>z</sub>) <sup>&nbsp;</sup></td> 
@@ -3128,7 +3122,7 @@ For computational reasons, gridding in TiRiFiC consists of a search of the neare
           <center>
             <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
                <tr>
-                 <td align="left" rowspan="2"> (48) </td> 
+                 <td align="left" rowspan="2"> (47) </td> 
                  <td nowrap valign="top">  -1/2 &le; x < 1/2 <sup>&nbsp;</sup></td> 
                  <td valign="top" > &rArr; <sup>&nbsp;</sup></td> 
                  <td valign="top"> &Pi;  = 1<sup>&nbsp;</sup></td>
@@ -3162,7 +3156,7 @@ In the spatial domain, the instrumental function is a 2D Gaussian with a major a
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="2"> (49)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="2"> (48)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  <i>S</i><sub>xy</sub>(BMAJ, BMIN, BPA)(<i>x</i>, <i>y</i>)  <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
 <td valign="top"><i>exp</i>(-(A<sup>-1</sup><sub>B</sub><sup>x</sup>(BPA)(<i>x</i>, <i>y</i>))<sup>2</sup>(2&#183;&sigma;<sup>2</sup><sub>maj</sub>)<sup>-1</sup>)&middot;<i>exp</i>(-(A<sup>-1</sup><sub>B</sub><sup>y</sup>(BPA)(<i>x</i>, <i>y</i>))<sup>2</sup>(2&#183;&sigma;<sup>2</sup><sub>min</sub>)<sup>-1</sup>)<sup>&nbsp;</sup>
@@ -3179,7 +3173,7 @@ the rotation A<sub>B</sub>(BPA) given by
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="3"> (50)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="3"> (49)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  A<sup>x</sup><sub>B</sub>(BPA)(<i>x</i>, <i>y</i>) <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> x&#183;<i>cos</i>(&#960;&#183;BPA/180&#176;)-y&#183;<i>sin</i>(&#960;&#183;BPA/180&#176;)<sup>&nbsp;</sup>        </td>
@@ -3200,7 +3194,7 @@ the dispersions being derived from the HPBWs
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="3"> (51)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="3"> (50)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  &sigma;<sub>maj</sub>  <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> (<i>ln</i>(256))<sup>-1/2</sup> BMAJ<sup>&nbsp;</sup> </td>
@@ -3225,7 +3219,7 @@ In the velocity domain, with the global dispersion CONDISP, the user defines the
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="2"> (52)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="2"> (51)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  <i>S</i><sub>V<sub>z</sub></sub>(CONDISP)(<i>V</i><sub>z</sub>)  <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top">(2&#960;&#183;CONDISP<sup>2</sup>)<sup>-1/2</sup><i>exp</i>(-<i>V</i><sup>2</sup><sub>z</sub>(2&#183;CONDISP<sup>2</sup>)<sup>-1</sup>)<sup>&nbsp;</sup>
@@ -3242,7 +3236,7 @@ Then, the final model intensity <i>I</i> is the result of a convolution with the
   <center>
     <table style="align:center" BORDER="0" rules="none" cellpadding="5" summary="TiRiFiC web page">
       <tr>
-        <td align="left" rowspan="2"> (53)&nbsp;&nbsp;&nbsp; </td> 
+        <td align="left" rowspan="2"> (52)&nbsp;&nbsp;&nbsp; </td> 
         <td nowrap valign="top">  <i>I</i>(x, y, <i>V</i><sub>z</sub>)  <sup>&nbsp;</sup></td> 
         <td valign="top" > = <sup>&nbsp;</sup></td> 
         <td valign="top"> &Sigma;<sub>i,j,k</sub> &#948(<i>x</i>-i&middot;&Delta;<sub>x</sub>) &#948(<i>y</i>-j&middot;&Delta;<sub>y</sub>) &#948(<i>V</i><sub>z</sub>-k&middot;&Delta;<sub>V<sub>z</sub></sub>) (&int; &int; &int;&nbsp; <i>I</i><sub>2</sub>(<i>x</i>-<i>x</i>&prime;, <i>y</i>-<i>y</i>&prime;, <i>V</i><sub>z</sub>-<i>V</i>&prime;<sub>z</sub>) &middot;  <i>S</i><sub>V<sub>z</sub></sub>(CONDISP)(<i>V</i>&prime;<sub>z</sub>) &middot; <i>S</i><sub>xy</sub>(BMAJ, BMIN, BPA)(<i>x</i>&prime;, <i>y</i>&prime;) d<i>x</i>&prime; d<i>y</i>&prime; d<i>V</i>&prime;<sub>z</sub>)<sup>&nbsp;</sup>
@@ -3295,7 +3289,11 @@ The consequence of the convolution with the instrumental function <i>after</i> g
     <td align="center">pixel </td>
     <td align="left">Separation of sub-grids (sub-rings), ith disk, i = 2, 3, ...</td>
   </tr>
-
+  <tr>
+    <td align="left"><a href="model_geometry.html#INTY"><b>INTY</b></a></td>
+    <td align="center">Geometrical (default 0)</td>
+    <td align="center">&nbsp; </td>
+    <td align="left">Interpolation scheme for sub-grid (sub-ring) parameters; 0: linear, 1: natural cubic spline, 2: natural Akima</td>
   <tr>
     <td align="center" style="border-top-width:medium" style="border-top-width:medium">Name</td>
     <td align="center" style="border-top-width:medium">Category</td>
@@ -3905,7 +3903,7 @@ The consequence of the convolution with the instrumental function <i>after</i> g
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Tue Apr 14 14:32:34 SAST 2015
+Last modified: Wed Jul 1 07:45:02 SAST 2015
 <!-- hhmts end -->
 <br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
 </div>

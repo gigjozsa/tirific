@@ -185,7 +185,7 @@ and maximum values for a parameter, regularisation
 schemes). Currently, the TiRiFiC optimisation aims at the minimisation of the $\chi^2$.
 </p>
 <p class="par">
-As far as possible, the fitting routines in TiRiFiC are kept separate from the model generation. This means that the fitting parameters, passed to the fitting routine are normalised (with a normalisation factor provided by the user through the parameter <a href="model_fitting.html#MINDELTA">MINDELTA</a>) to then be varied as dimensionless quantities on a regular grid. The parameters visible to the fitting routine are not necessarily mapped to single <a href="model_geometry.html">geometrical parameters</a> parameters, but the user has the possibility to automatically adjust single geometrical parameters at given radii via linear linear interpolation between fitted quantities, and to group geometrical parameters to be fitted at the same time, in which case only one representative fitting variable is visible to the fitting routine. In other words, such a fitting group appears to the minimising routine as one parameter and automatically adjusted parameters are not visible at all to the fitting routine. Grouping and interpolation is controled by the the parameters <a href="model_fitting.html#VARY">VARY</a> and <a href="model_fitting.html#VARINDX">VARINDX</a>.
+As far as possible, the fitting routines in TiRiFiC are kept separate from the model generation. This means that the fitting parameters, passed to the fitting routine are normalised (with a normalisation factor provided by the user through the parameter <a href="model_fitting.html#MINDELTA">MINDELTA</a>) to then be varied as dimensionless quantities on a regular grid. The parameters visible to the fitting routine are not necessarily mapped to single <a href="model_geometry.html">geometrical parameters</a> parameters, but the user has the possibility to automatically adjust single geometrical parameters at given radii via linear interpolation between fitted quantities, and to group geometrical parameters to be fitted at the same time, in which case only one representative fitting variable is visible to the fitting routine. In other words, such a fitting group appears to the minimising routine as one parameter and automatically adjusted parameters are not visible at all to the fitting routine. Grouping and interpolation is controled by the the parameters <a href="model_fitting.html#VARY">VARY</a>, <a href="model_fitting.html#VARINDX">VARINDX</a>, and <a href="model_fitting.html#INDINTY">INDINTY</a> .
 </p>
 <p class="par">
 In the following sections, we discuss the $\chi^2$ evaluation including the implementation of boundary conditions altering the $\chi^2$, to then describe the implemented fitting algorithms. Finally, the fitting parameters are described in detail.
@@ -915,6 +915,7 @@ Let us assume that VROT and VROT_2 describe the rotation velocities of a recedin
 <hr>
 <h4><a name="Indexing parameters">Indexing parameters</a></h4>
 <a name="VARINDX">
+<a name="INDINTY">
 <table rules="all" border="1" cellpadding="5" summary="Parameters described here">
   <tr>
     <td align="center">Name</td>
@@ -928,14 +929,21 @@ Let us assume that VROT and VROT_2 describe the rotation velocities of a recedin
     <td align="center">&nbsp</td>
     <td align="left">List of radial nodes to be ignored for a given parameter name</td>
   </tr>
+  <tr>
+    <td align="left"><b>INDINTY</b></td>
+    <td align="center">Fitting (default 1)</td>
+    <td align="center">&nbsp</td>
+    <td align="left">Interpolation scheme between parameters indexed by <a href="model_fitting.html#VARINDX">VARINDX</a></td>
+  </tr>
 </table>
 </a>
+</a>
 <p class="par">
-With <a href="model_fitting.html#VARINDX">VARINDX</a>, the user defines a set of parameters at specific nodes, which are furtherly not provided by the user any more or fitted, but which are the result of a radial linear interpolation (or extrapolation) of the parameters at the next radial nodes that are not listed in <a href="model_fitting.html#VARINDX">VARINDX</a>. If<br>
+With <a href="model_fitting.html#VARINDX">VARINDX</a>, the user defines a set of parameters at specific nodes, which are furtherly not provided by the user any more or fitted, but which are the result of a radial interpolation (or extrapolation) of the parameters at the next radial nodes that are not listed in <a href="model_fitting.html#VARINDX">VARINDX</a>. If<br>
 VARY= ... PAR r ... <br>
 and the list does not contain r-i and r+j as the first neighbouring radii for which the parameter is not "indexed", then<br>
 PAR(RADI<sub>r</sub>) = PAR(RADI<sub>r-i</sub>)+RADI<sub>r</sub>&cdot;(PAR(RADI<sub>r+j</sub>)-PAR(RADI<sub>r-i</sub>)(RADI<sub>r+j</sub>-RADI<sub>r-i</sub>)<sup>-1</sup>   .<br>
-If an interpolation is not possible (because there is no neighbouring radius not indexed), then a parameter takes the value of the next parameter not on the index list. It is an error to put all radial nodes on the index for a given parameter.
+The type of interpolation between the indexed radial nodes is controled with the parameter  <a href="model_fitting.html#INDINTY">INDINTY</a>. The user has the choice between linear interpolation (<a href="model_fitting.html#INDINTY">INDINTY</a>=0, default), natural cubic spline (<a href="model_fitting.html#INDINTY">INDINTY</a>=1), and non-rounded Akima interpolation with natural boundary conditions (<a href="model_fitting.html#INDINTY">INDINTY</a>=2). Computationally, linear interpolation is the cheapest, followed by Akima, with cubic spline being the most expensive interpolation scheme. We use the interpolation algorithms of the <a href="http://www.gnu.org/s/gsl/">GNU scientific library (GSL)</a> and refer to those www pages for details. If an interpolation is not possible (because there is no neighbouring radius not indexed), then a parameter takes the value of the next parameter not on the index list. It is an error to put all radial nodes on the index for a given parameter.
 </p>
 <p class="par">
 Any specification of indexed parameters in the input of geometrical parameters is ignored. The same <a href="model_fitting.html#Abbrevations for ring numbers">abbrevations for ring numbers</a> as for the <a href="model_fitting.html#VARY">VARY</a> keyword are valid. The parameter <a href="model_fitting.html#VARINDX">VARINDX</a> has to be provided to TiRiFiC, but can be left empty (in which case no parameter is indexed).
@@ -948,9 +956,10 @@ Let's assume that <a href="model_geometry.html#NUR">NUR</a> 7. Then
 </p>
 <p class="par">
 &nbsp;&nbsp;&nbsp;VARINDX= PA 1:3 VROT  3 5:6 PA 6 7
+&nbsp;&nbsp;&nbsp;INDINTY= 2
 </p>
 <p class="par">
-defines that for the initial model, and during the fitting process, the position angle of radial nodes 1 to 3 has always the same value as the position angle of radial node (ring) 4, the value of the rotation velocity of ring 3 is always the result of a radial interpolation between the rotation velocity at nodes 2 and 4, the rotation velocities at radial nodes 5 and 6 are the result of a radial linear interpolation between the rotation velocities at radial nodes (rings) 4 and 7. Finally, the position angle at nodes 6 and 7 always have the same value as the position angle at the radial node 5.
+defines that for the initial model, and during the fitting process, the position angle of radial nodes 1 to 3 has always the same value as the position angle of radial node (ring) 4, the value of the rotation velocity of ring 3 is always the result of a radial Akima interpolation between the rotation velocity at nodes 2 and 4, the rotation velocities at radial nodes 5 and 6 are the result of a radial Akima interpolation between the rotation velocities at radial nodes (rings) 4 and 7. Finally, the position angle at nodes 6 and 7 always have the same value as the position angle at the radial node 5.
 </p>
 
 
@@ -1358,6 +1367,12 @@ For some purposes, like manual fitting or automated repeated calling of TiRiFiC,
     <td align="center">&nbsp</td>
     <td align="left">List of radial nodes to be ignored for a given parameter name</td>
   </tr>  <tr border="3" frame="above">
+  <tr>
+    <td align="left"><a href="model_fitting.html#INDINTY"><b>INDINTY</b></a></td>
+    <td align="center">Fitting (default 1)</td>
+    <td align="center">&nbsp</td>
+    <td align="left">Interpolation scheme for parameters listed by <a href="model_fitting.html#VARINDX">VARINDX</a>; 0: linear, 1: natural cubic spline, 2: natural Akima</td>
+  </tr>  <tr border="3" frame="above">
     <td align="center" style="border-top-width:medium">Name</td>
     <td align="center" style="border-top-width:medium">Category</td>
     <td align="center" style="border-top-width:medium">Unit</td>
@@ -1550,7 +1565,7 @@ For some purposes, like manual fitting or automated repeated calling of TiRiFiC,
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Tue Apr 14 14:32:34 SAST 2015
+Last modified: Wed Jul 1 07:45:02 SAST 2015
 <!-- hhmts end -->
 <br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
 </div>

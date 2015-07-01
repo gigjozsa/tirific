@@ -885,9 +885,11 @@ Name
 <a name="GR_SIZE_i"> 
 <a name="GR_COL_i"> 
 <a name="GR_LINES_i"> 
+<a name="GR_INTER_i"> 
 <a name="GR_ERRB_i"> 
 <a name="GR_ERRV_i"> 
 Name
+</a>
 </a>
 </a>
 </a>
@@ -909,6 +911,7 @@ Name
     <tr>      <td align="left"><b>GR_SIZE_i= </b></td>      <td align="center">I/O (default 1)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a></td>      <td align="left"> Size of symbols for main data series </td>    </tr>
     <tr>      <td align="left"><b>GR_COL_i= </b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">Pgplot color</a> of main data series (1-15) </td>    </tr>
     <tr>      <td align="left"><b>GR_LINES_i= </b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot lines for main data series? (1: yes, 0: no) </td>    </tr>
+    <tr>      <td align="left"><b>GR_INTER_i= </b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Interpolation scheme for lines for main data series; 0: linear, 1: natural cubic spline, 2: natural Akima </td>    </tr>
     <tr>      <td align="left"><b>GR_ERRB_i= </b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot error bars for main data series? </td>    </tr>
     <tr>      <td align="left"><b>GR_ERRV_i= </b></td>      <td align="center">I/O (default 1)</td>      <td align="center">ordinate units </td>      <td align="left"> List error bars for main data series </td>    </tr>
     <tr>
@@ -947,7 +950,9 @@ Name
 <a name="GR_SIAD_i_j"> 
 <a name="GR_COAD_i_j"> 
 <a name="GR_LIAD_i_j"> 
+<a name="GR_INTERPAD_i_j"> 
 Name
+</a>
 </a>
 </a>
 </a>
@@ -973,6 +978,7 @@ Name
     <tr>      <td align="left"><b>GR_SIAD_i_j= </b></td>      <td align="center">I/O (optional)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a> </td>      <td align="left"> Size of <a href="http://www.astro.caltech.edu/~tjp/pgplot/">pgplot</a> symbols,  jth additional data series, ith plot </td>    </tr>
     <tr>      <td align="left"><b>GR_COAD_i_j= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td> <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">Pgplot color</a> of jth additonal data series, ith plot</td>    </tr>
     <tr>      <td align="left"><b>GR_LIAD_i_j= </b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Lines between  jth additional series ith plot? (1: yes, 0: no)</td>    </tr>
+    <tr>      <td align="left"><b>GR_INTERPAD_i_j= </b></td>      <td align="center">I/O (defaults to <a href="model_geometry.html#INTY">INTY</a>)</td>      <td align="center">&nbsp; </td>      <td align="left">  Interpolation scheme for lines jth additional series ith plot; 0: linear, 1: natural cubic spline, 2: natural Akima</td>    </tr>
 <!-- BRIGGS PARAMETERS HAVE BEEN LEFT OUT FOR NOW
     <tr>
       <td align="center" style="border-top-width:medium"><a name="BR_PA"> 
@@ -1108,7 +1114,7 @@ A (portrait-) colour plot hyperplot.ps is written to disk, containing two viewgr
 <a href="output.html#GR_XMIN">GR_XMIN</a> defines the minimum of the abscissa for all plots, and <a href="output.html#GR_XMAX">GR_XMAX</a> its maximum. With <a href="output.html#GR_XLOG">GR_XLOG</a>, the user can initiates a logarithmic scaling of the abscissa (<a href="output.html#GR_XLOG">GR_XLOG</a> 1) or suppress it (default: <a href="output.html#GR_XLOG">GR_XLOG</a> 0).
 </p>
 <p class="par">
-<b><a name="Formatting main parameter series:">Formatting main parameter series:</a></b> For the ith plot on the output graphics, the user specifies the ordinate maximum with the parameter <a href="output.html#GR_YMAX_i">GR_YMAX_i</a> (defaults to best guess by TiRiFiC) and its minimum with <a href="output.html#GR_YMIN_i">GR_YMIN_i</a>, the parameter <a href="output.html#GR_YLOG_i">GR_YLOG_i</a> allowing (<a href="output.html#GR_YLOG_i">GR_YLOG_i</a> 1) or suppressing (<a href="output.html#GR_YLOG_i">GR_YLOG_i</a> 0, default) logarithmic scaling of the single ordinates in the ith viewgraph. With <a href="output.html#GR_SYMB_i">GR_SYMB_i</a>, the user specifies the <a href="http://www.astro.caltech.edu/~tjp/pgplot/hershey.html">pgplot symbol</a> used for the main data series in the ith viewgraph. Negative numbers correspond to polygons with the absolute value of the given number denoting the number of corners, -1 to a circle. The size of the symbols of the main data series in multiples of <a href="output.html#GR_SBHT">GR_SBHT</a> can be given with the parameter <a href="output.html#GR_SIZE_i">GR_SIZE_i</a> (default: 1), its color with the parameter <a href="output.html#GR_COL_i">GR_COL_i</a>. <a href="output.html#GR_COL_i">GR_COL_i</a> describes the colour using the <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">pgplot color</a> definition. If <a href="output.html#GR_LINES_i">GR_LINES_i</a> is set to 1, lines are drawn between the single data points, if it is set to 0 (the default), no lines are drawn between the data points of the main data series of the ith plot. <a href="output.html#GR_ERRB_i">GR_ERRB_i</a> 1 specifies that error bars should be plotted for the ith main data series (parameter ith plot), with the errors (as many as data points, i.e. <a href="model_geometry.html#NUR">NUR</a> values) specified in a whitespace-separated list <a href="output.html#GR_ERRV_i">GR_ERRV_i</a>. It is foreseen to provide automatic error bars as soon as a minimisation algorithm has been implemented which provides these.
+<b><a name="Formatting main parameter series:">Formatting main parameter series:</a></b> For the ith plot on the output graphics, the user specifies the ordinate maximum with the parameter <a href="output.html#GR_YMAX_i">GR_YMAX_i</a> (defaults to best guess by TiRiFiC) and its minimum with <a href="output.html#GR_YMIN_i">GR_YMIN_i</a>, the parameter <a href="output.html#GR_YLOG_i">GR_YLOG_i</a> allowing (<a href="output.html#GR_YLOG_i">GR_YLOG_i</a> 1) or suppressing (<a href="output.html#GR_YLOG_i">GR_YLOG_i</a> 0, default) logarithmic scaling of the single ordinates in the ith viewgraph. With <a href="output.html#GR_SYMB_i">GR_SYMB_i</a>, the user specifies the <a href="http://www.astro.caltech.edu/~tjp/pgplot/hershey.html">pgplot symbol</a> used for the main data series in the ith viewgraph. Negative numbers correspond to polygons with the absolute value of the given number denoting the number of corners, -1 to a circle. The size of the symbols of the main data series in multiples of <a href="output.html#GR_SBHT">GR_SBHT</a> can be given with the parameter <a href="output.html#GR_SIZE_i">GR_SIZE_i</a> (default: 1), its color with the parameter <a href="output.html#GR_COL_i">GR_COL_i</a>. <a href="output.html#GR_COL_i">GR_COL_i</a> describes the colour using the <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">pgplot color</a> definition. If <a href="output.html#GR_LINES_i">GR_LINES_i</a> is set to 1, lines are drawn between the single data points, if it is set to 0 (the default), no lines are drawn between the data points of the main data series of the ith plot. The shape of the lines is determined by the parameter <a href="output.html#GR_INTER_i">GR_INTER_i</a>. The user has the choice between linear interpolation (<a href="output.html#GR_INTER_i">GR_INTER_i</a>=0, default), natural cubic spline (<a href="output.html#GR_INTER_i">GR_INTER_i</a>=1), and non-rounded Akima interpolation with natural boundary conditions (<a href="output.html#GR_INTER_i">GR_INTER_i</a>=2). We use the interpolation algorithms of the <a href="http://www.gnu.org/s/gsl/">GNU scientific library (GSL)</a> and refer to those www pages for details. <a href="output.html#GR_ERRB_i">GR_ERRB_i</a> 1 specifies that error bars should be plotted for the ith main data series (parameter ith plot), with the errors (as many as data points, i.e. <a href="model_geometry.html#NUR">NUR</a> values) specified in a whitespace-separated list <a href="output.html#GR_ERRV_i">GR_ERRV_i</a>. It is foreseen to provide automatic error bars as soon as a minimisation algorithm has been implemented which provides these.
 </p>
 <p class="par">
 <b><a name="Vertical and horizontal lines:">Vertical and horizontal lines:</a></b>for each plot on the viewgraph, any number of horizontal and vertical lines can be overplotted. For the ith plot, the user specifies with 
@@ -1133,6 +1139,7 @@ For the ith plot, the user specifies with
 <a href="output.html#GR_SIAD_i_j">GR_SIAD_i_j</a> is the size of the symbols used for the jth additional data series in the ith plot in multiples of <a href="output.html#GR_SBHT">GR_SBHT</a>.
 <a href="output.html#GR_COAD_i_j">GR_COAD_i_j</a> is the <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">pgplot color</a> used for the jth additional data series in the ith plot.
 <a href="output.html#GR_LIAD_i_j">GR_LIAD_i_j</a> 1 determines that the data points of the jth additional data series for the ith plot should be connected with lines, <a href="output.html#GR_LIAD_i_j">GR_LIAD_i_j</a> 0 determines that they should not be connected (default: 0).
+The shape of the lines is determined by the parameter <a href="output.html#GR_INTERPAD_i_j">GR_INTERPAD_i_j</a>. The user has the choice between linear interpolation (<a href="output.html#GR_INTERPAD_i_j">GR_INTERPAD_i_j</a>=0, default), natural cubic spline (<a href="output.html#GR_INTERPAD_i_j">GR_INTERPAD_i_j</a>=1), and non-rounded Akima interpolation with natural boundary conditions (<a href="output.html#GR_INTERPAD_i_j">GR_INTERPAD_i_j</a>=2). We use the interpolation algorithms of the <a href="http://www.gnu.org/s/gsl/">GNU scientific library (GSL)</a> and refer to those www pages for details.
 </p>
 <p class="par">
 <b><a name="Reference positions:">Reference positions:</a></b>
@@ -1171,7 +1178,8 @@ It is assumed that a simple tilte-ring fit has been made, with 10 nodes.
 &nbsp;&nbsp;&nbsp;GR_SYMB_1= 4   <br>
 &nbsp;&nbsp;&nbsp;GR_SIZE_1= 1   <br>
 &nbsp;&nbsp;&nbsp;GR_COL_1= 1  <br>
-&nbsp;&nbsp;&nbsp;GR_LINES_1=  <br>
+&nbsp;&nbsp;&nbsp;GR_LINES_1= 0 <br>
+&nbsp;&nbsp;&nbsp;GR_INTER_1= 0 <br>
 &nbsp;&nbsp;&nbsp;GR_ERRB_1= 1  <br>
 &nbsp;&nbsp;&nbsp;GR_ERRV_1= 1.0E-4 1.1E-4 1.2E-4 1.3E-4 1.4E-4 1.5E-5 1.6E-5 1.7E-5 1.8E-5 1.9E-5    <br>
 &nbsp;&nbsp;&nbsp;<br>
@@ -1192,6 +1200,7 @@ It is assumed that a simple tilte-ring fit has been made, with 10 nodes.
 &nbsp;&nbsp;&nbsp;GR_SIAD_1_1= 1.2<br>
 &nbsp;&nbsp;&nbsp;GR_COAD_1_1= 4<br>
 &nbsp;&nbsp;&nbsp;GR_LIAD_1_1= 1<br>
+&nbsp;&nbsp;&nbsp;GR_INTERPAD_1_1= 0<br>
 &nbsp;&nbsp;&nbsp;<br>
 &nbsp;&nbsp;&nbsp;GR_YMIN_2= 30   <br>
 &nbsp;&nbsp;&nbsp;GR_YMAX_2=     <br>
@@ -1442,6 +1451,7 @@ This input produces a plot like given in Fig. 6, right side (downloadable <a hre
     <tr>      <td align="left"><b><a href="output.html#GR_SIZE_i">GR_SIZE_i=    </a></b></td>      <td align="center">I/O (default 1)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a></td>      <td align="left"> Size of symbols for main data series </td>    </tr>
     <tr>      <td align="left"><b><a href="output.html#GR_COL_i">GR_COL_i=    </a></b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">Pgplot color</a> of main data series (1-15) </td>    </tr>
     <tr>      <td align="left"><b><a href="output.html#GR_LINES_i">GR_LINES_i=    </a></b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot lines for main data series? (1: yes, 0: no) </td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_INTER_i"> GR_INTER_i=   </a></b></td>      <td align="center">I/O (defaults to <a href="model_geometry.html#INTY">INTY</a>)</td>      <td align="center">&nbsp; </td>      <td align="left"> Interpolation scheme for lines for main data series; 0: linear, 1: natural cubic spline, 2: natural Akima </td>    </tr>
     <tr>      <td align="left"><b><a href="output.html#GR_ERRB_i">GR_ERRB_i=    </a></b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Plot error bars for main data series? </td>    </tr>
     <tr>      <td align="left"><b><a href="output.html#GR_ERRV_i">GR_ERRV_i=    </a></b></td>      <td align="center">I/O (default 1)</td>      <td align="center">ordinate units </td>      <td align="left"> List error bars for main data series </td>    </tr>
     <tr>      <td align="left"><b><a href="output.html#GR_VERL_i">GR_VERL_i=    </a></b></td>      <td align="center">I/O (default 0)</td>      <td align="center">&nbsp; </td>      <td align="left"> Number of vertical lines to plot for ith plot </td>    </tr>
@@ -1460,6 +1470,7 @@ This input produces a plot like given in Fig. 6, right side (downloadable <a hre
     <tr>      <td align="left"><b><a href="output.html#GR_SIAD_i_j">GR_SIAD_i_j=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center"><a href="output.html#TXHT">TXHT</a> </td>      <td align="left"> Size of <a href="http://www.astro.caltech.edu/~tjp/pgplot/">pgplot</a> symbols,  jth additional data series, ith plot </td>    </tr>
     <tr>      <td align="left"><b><a href="output.html#GR_COAD_i_j">GR_COAD_i_j=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td> <td align="left"> <a href="http://www.astro.caltech.edu/~tjp/pgplot/fig51.html">Pgplot color</a> of jth additonal data series, ith plot</td>    </tr>
     <tr>      <td align="left"><b><a href="output.html#GR_LIAD_i_j">GR_LIAD_i_j=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Lines between  jth additional series ith plot? (1: yes, 0: no)</td>    </tr>
+    <tr>      <td align="left"><b><a href="output.html#GR_INTERPAD_i_j">GR_INTERPAD_i_j= </a></b></td>      <td align="center">I/O (defaults to <a href="model_geometry.html#INTY">INTY</a>)</td>      <td align="center">&nbsp; </td>      <td align="left">  Interpolation scheme for lines jth additional series ith plot; 0: linear, 1: natural cubic spline, 2: natural Akima</td>    </tr>
     <tr>      <td align="left"><b><a href="output.html#GR_PRFR">GR_PRFR=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">&nbsp; </td>      <td align="left"> Reference ring for central position </td>    </tr>
     <tr>      <td align="left"><b><a href="output.html#GR_PRFX">GR_PRFX=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">deg </td>      <td align="left"> Right ascension of reference position </td>    </tr>
     <tr>      <td align="left"><b><a href="output.html#GR_PRFY">GR_PRFY=    </a></b></td>      <td align="center">I/O (optional)</td>      <td align="center">deg </td>      <td align="left"> Declination of reference position </td>    </tr>
@@ -1485,7 +1496,7 @@ This input produces a plot like given in Fig. 6, right side (downloadable <a hre
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Tue Apr 14 14:32:34 SAST 2015
+Last modified: Wed Jul 1 07:45:02 SAST 2015
 <!-- hhmts end -->
 <br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
 </div>
