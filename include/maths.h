@@ -96,6 +96,24 @@
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/**
+   @def INTERPTYPE_XXX
+   @brief Integer identifyer for interpolation types
+
+   PGP_I_LINEAR: linear interpolation
+   PGP_I_CPLINE: natural cubic spline
+   PGP_I_AKIMA: natural Akima interpolation
+
+   See gsl documentation.
+
+*/
+/* ------------------------------------------------------------ */
+#define MATHS_I_LINEAR 0
+#define MATHS_I_CSPLINE 1
+#define MATHS_I_AKIMA 2
+
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* MACROS */
 /* ------------------------------------------------------------ */
 

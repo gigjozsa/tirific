@@ -558,7 +558,7 @@ int pswarm_outroutine(int status, const char *message, pswarm_options *opt, pswa
 {
   if (!(pop) || !(opt) || !(pop -> statusm) || !(opt -> printfun))
     return PSWARM_STATUS_ERROR;
-  sprintf(pop -> statusm, message);
+  sprintf(pop -> statusm, "%s", message);
   pop -> status = status;
   opt -> printfun(pop);
   if (!(pop -> status & PSWARM_STATUS_ERROR))

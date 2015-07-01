@@ -2328,7 +2328,7 @@ static int dcp_putsep(dcp_control *dcp_controlv, char grse, char dein, char deco
 /* Replaces the indexed list in dcp_controlv with the list given. Makes a local copy */
 static int dcp_index(dcp_control *dcp_controlv, int number, int *list)
 {
-  int *internlist;
+  int *internlist, length;
 
   if (!dcp_controlv || number < 0)
     return 1;
@@ -2347,10 +2347,12 @@ static int dcp_index(dcp_control *dcp_controlv, int number, int *list)
   if (dcp_controlv -> inin)
     free(dcp_controlv -> inin);
 
-  /* length = number; */
+  length = number;
 
-  while(number--)
-    internlist[number] = list[number];
+  /* This is new, I think important */
+
+  while(length--)
+    internlist[length] = list[length];
 
   bubble(number, internlist);
 
@@ -5134,8 +5136,8 @@ int simparse_scn_arel_readval_gen(simparse_scn_arel **simparse_scn_arellist, cha
 
  error:
   /* This is a programming error, so we give some details to the programmer */
-  if ((errorval = SIMPARSE_SCN_ERROR_NULL_PASSED) || (errorval = SIMPARSE_SCN_ERROR_WRONG_ARRAY))
-    fprintf(stderr,errormes);
+    if ((errorval = SIMPARSE_SCN_ERROR_NULL_PASSED) || (errorval = SIMPARSE_SCN_ERROR_WRONG_ARRAY))
+      fprintf(stderr,"%s",errormes);
   
   if ((errormes))
     free(errormes);

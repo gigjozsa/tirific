@@ -284,8 +284,8 @@ Cube *padcubex(Cube *cube)
 Cube *padcubex_norealloc(Cube *cube)
 {
   int i,j,k;
-  size_t counter;
-  float *dummy;
+  /* size_t counter; */
+  /* float *dummy; */
 
   if (cube) {
     /* if the cube contains a padding it should be removed */
@@ -334,8 +334,8 @@ Cube *padcubex_norealloc(Cube *cube)
   }
   return cube;  
   
- error:
-  return NULL;
+ /* error: */
+ /*  return NULL; */
 }
 
 /* ------------------------------------------------------------ */

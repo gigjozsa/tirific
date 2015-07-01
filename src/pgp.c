@@ -79,13 +79,16 @@
 #include <math.h>
 #include <string.h>
 #include <float.h>
+#include <stdlib.h>
+#include <gsl/gsl_interp.h>
+#include <gsl/gsl_spline.h>
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* INTERNAL INCLUDES */
 /* ------------------------------------------------------------ */
 #include <pgp.h>
-#include <stdlib.h>
+#include <maths.h>
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
@@ -186,6 +189,29 @@ float pgp_logf10f(float x);
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/**
+  @fn static int pgp_get_interparray(float *x, float *y, int npoints, int interptype, int nout, float **xout, float **yout)
+  @brief Returns an array of interpolated values.
+
+  Assumes an array of npoints x-y pairs as an input. Checks if x is strictly monotonically increasing. If *xout is not NULL, deallocates *xout. If *yout is not NULL, deallocates *yout. Allocates an array *xout of nout equally-spaced points with xout[0] = x[0] and xout[nout-1] = x[nout-1]. Allocates an array *yout of nout data points where the ith data point is an interpolation between x and y at the position xout[i]. interptype determines the interpolation type, which can be  PGP_I_LINEAR: linear; PGP_I_CSPLINE: cubic natural spline; PGP_I_AKIMA: Akima .
+
+  @param x          (float * ) input data points, abscissae, must be strictly increasing
+  @param y 	    (float * ) input data points, ordinate
+  @param npoints    (  int   ) input number of data points
+  @param interptype (  int   ) input interpolation type: PGP_I_LINEAR: linear; PGP_I_CSPLINE: cubic natural spline; PGP_I_AKIMA: Akima
+  @param nout	    (  int   ) input number of output data points
+  @param xout 	    (float **) output data array x-values (equally spaced)
+  @param yout 	    (float **) output data array y-values
+
+  @return logarithm of the number or, if impossible, LOGFAULT
+
+*/
+/* ------------------------------------------------------------ */
+ static int pgp_get_interparray(float *x, float *y, int npoints, int interptype, int nout, float **xout, float **yout);
+
+
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* FUNCTION CODE */
 /* ------------------------------------------------------------ */
 
@@ -273,7 +299,7 @@ pgp_gdsc *pgp_gdsc_default(int nplots, int legendcols, int legendrows, float cha
     chrhty = 1/(12.3+2*legendrows+7.0*nplots);
 
   chrhtx= chrhty/scalexy;
-  
+
   gdsc -> numberheight = chrhtx/chrhtxref;
   gdsc -> symbolheight = 1.0;
   gdsc -> legendheight = 1.0;
@@ -321,6 +347,8 @@ pgp_gdsc *pgp_gdsc_default(int nplots, int legendcols, int legendrows, float cha
 /*     gdsc -> logarcsy[i] = 0; */
   gdsc -> logarcsx = 0;
   gdsc -> logarcsy = 0;
+  gdsc -> interptype_lines = PGP_I_LINEAR;
+  gdsc -> interp_numlines = 500;
 
   return gdsc;
 }
@@ -504,7 +532,7 @@ int pgp_openbox(pgp_gdsc *gdsc, int nplot, float xmin, float xmax, float ymin, f
   float plotheight;
   float chrhtxref;    /* Horizontal character width in x-map units, 1 is whole page */
   float chrhtyref;    /* Vertical character height in y-map units, 1 is whole page */
-  float scalexy;      /* scale from x size of numbers to y size of numbers (or inverse scale of x to y size of area */
+  /* float scalexy; */    /* scale from x size of numbers to y size of numbers (or inverse scale of x to y size of area */
   float dummy1, dummy2;
 
   int slw; /* Standard linewidth */
@@ -743,7 +771,7 @@ int pgp_openbox(pgp_gdsc *gdsc, int nplot, float xmin, float xmax, float ymin, f
   cpgqcs(0, &chrhtxref, &chrhtyref);
 
   /* The physical size in x is scalexy times the physical size in y */
-  scalexy = chrhtyref/chrhtxref;
+  /* scalexy = chrhtyref/chrhtxref; */
 
   /* plot height */
   plotheight = (1.0 - 2.0*(gdsc -> legendrows+1)*gdsc -> legendheight*chrhtyref - 6*gdsc -> axdescheight*chrhtyref-6*chrhtyref)/gdsc -> nplots;
@@ -1068,11 +1096,11 @@ int pgp_legend(pgp_gdsc *gdsc, int nhor, int nver, char *string)
 {
   float chrhtxref;    /* Horizontal character width in x-map units, 1 is whole page */
   float chrhtyref;    /* Vertical character height in y-map units, 1 is whole page */
-  float charwidth;
+  /* float charwidth; */
   float posix;
   float posiy;
-  float boxwidth, plotheight;
-
+  float plotheight;
+  /* float boxwidth; */
   float xlo; /* Box in window coordinates */
   float xhi;
   float ylo;
@@ -1111,7 +1139,7 @@ int pgp_legend(pgp_gdsc *gdsc, int nhor, int nver, char *string)
   cpgsvp(xlo, xhi, ylo, yhi);
 
   /* This is the length of a box element in units of the x-axis, spacing is one character between rows */
-  boxwidth = (1-(gdsc -> legendcols-1)*charwidth)/gdsc -> legendcols;
+  /* boxwidth = (1-(gdsc -> legendcols-1)*charwidth)/gdsc -> legendcols; */
 
   /* This is the position of the string in x along the axis */
   posix = (nhor-0.5)/gdsc -> legendcols;
@@ -1239,20 +1267,29 @@ int pgp_lines(pgp_gdsc *gdsc, int npoints, float *xpos, float *ypos, int colour)
   float *xposd = NULL;
   float *yposd = NULL;
 
+  if (gdsc -> interptype_lines != PGP_I_LINEAR) {
+    if (pgp_get_interparray(xpos, ypos, npoints, gdsc -> interptype_lines, gdsc -> interp_numlines+1, &xposd, &yposd))
+      goto error;
+    npoints = gdsc -> interp_numlines+1;
+    xpos = xposd;
+    ypos = yposd;
+  }
+
   /* Allocate space if necessary */
   if (gdsc -> logarcsx == 1) {
-    if (!(xposd = (float *) malloc(npoints*sizeof(float))))
-      return 1;
+    if (!xposd) {
+      if (!(xposd = (float *) malloc(npoints*sizeof(float))))
+	goto error;
+    }
     for (i=0; i < npoints; ++i) {
 	xposd[i] = pgp_logf10f(xpos[i]);
     }
     xpos = xposd;
   }
   if (gdsc -> logarcsy == 1) {
-    if (!(yposd = (float *) malloc(npoints*sizeof(float)))) {
-      if ((xposd))
-	free(xposd);
-      return 2;
+    if (!yposd) {
+      if (!(yposd = (float *) malloc(npoints*sizeof(float))))
+	goto error;
     }
     for (i=0; i < npoints; ++i) {
 	yposd[i] = pgp_logf10f(ypos[i]);
@@ -1282,15 +1319,18 @@ int pgp_lines(pgp_gdsc *gdsc, int npoints, float *xpos, float *ypos, int colour)
   cpgslw(gdsc -> boxlw);
 
   /* Deallocate */
-  if (gdsc -> logarcsy == 1) {
-    free(yposd);
-  }
-
-  if (gdsc -> logarcsx == 1) {
+  if ((xposd))
     free(xposd);
-  }
-
+  if ((yposd))
+    free(yposd);
   return 0;
+
+ error:
+  if ((xposd))
+    free(xposd);
+  if ((yposd))
+    free(yposd);
+  return 1;
 }
 
 /* ------------------------------------------------------------ */
@@ -1463,6 +1503,149 @@ float pgp_logf10f(float x)
     return log10f(x);
   else
     return LOGFAULT;
+}
+
+/* ------------------------------------------------------------ */
+
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+/* Returns an array of interpolated values. */
+
+static int pgp_get_interparray(float *x, float *y, int npoints, int interptype, int noutpoints, float **xout, float **yout)
+{
+  int i, pgp_get_interparray = 0;
+  double *xdouble = NULL, *ydouble = NULL; /* input is float, but gsl requires double */
+  gsl_interp *gsl_interpv = NULL; /* gsl structs */
+  gsl_interp_accel *gsl_interp_accelv = NULL; /* gsl structs */
+  const gsl_interp_type * intytype = NULL; /* interpolation type, internal to gsl */
+  float dx;
+
+  /* At least two data points */
+  if (npoints < 2) {
+    pgp_get_interparray |= 1;
+    goto error;
+  }
+
+  /* Wipe the input, gone ... */
+  if (*xout) {
+    free(*xout);
+    *xout = NULL;
+  }  
+  if (*yout) {
+    free(*yout);
+    *yout = NULL;
+  }
+
+  /* Allocate arrays */
+  if (!(xdouble = (double *) malloc(npoints*sizeof(double)))) {
+    pgp_get_interparray |= 2;
+    goto error;
+  }
+  if (!(ydouble = (double *) malloc(npoints*sizeof(double)))) {
+    pgp_get_interparray |= 2;
+    goto error;
+  }
+  for (i = 0; i < npoints; ++i) {
+    xdouble[i] = x[i];
+    ydouble[i] = y[i];
+  }
+  if (!(*xout = (float *) malloc(noutpoints*sizeof(float)))) {
+    pgp_get_interparray |= 2;
+    goto error;
+  }
+  if (!(*yout = (float *) malloc(noutpoints*sizeof(float)))) {
+    pgp_get_interparray |= 2;
+    goto error;
+  }
+
+  switch(interptype) {
+    case PGP_I_LINEAR:
+      intytype = gsl_interp_linear;
+      break;
+
+    case PGP_I_CSPLINE:
+      if (npoints > 2)
+	intytype = gsl_interp_cspline;
+      else {
+	printf("Must have at least 3 radii for spline, using linear\n");
+	intytype = gsl_interp_linear;
+      }
+      break;
+    
+    case PGP_I_AKIMA:
+      if (npoints > 4) {
+	intytype = gsl_interp_akima;
+      }
+      else {
+	printf("Must have at least 5 radii for Akima\n");
+	if (npoints > 2) {
+	  printf("Using natural cubic spline\n");
+	  intytype = gsl_interp_cspline;
+	}
+	else {
+	  printf("Using linear\n");
+	  intytype = gsl_interp_linear;
+	}
+      }
+      break;
+
+    /* No real default, but we set linear */
+    default:
+      intytype = gsl_interp_linear;
+      break;
+    }
+
+  /* Attempt to allocate all gsl structures */
+  if (!(gsl_interpv = gsl_interp_alloc(intytype, npoints))) {
+    pgp_get_interparray |= 2;
+    goto error;
+  }
+  if (!(gsl_interp_accelv = gsl_interp_accel_alloc())) {
+    pgp_get_interparray |= 2;
+    goto error;
+  }
+
+  gsl_interp_init(gsl_interpv, xdouble, ydouble, npoints);
+  
+  (*xout)[0] = x[0];
+  (*yout)[0] = y[0];
+
+  dx = (x[npoints-1]-x[0])/((float)(noutpoints-1));
+  for (i = 1; i < noutpoints; ++i) {
+    (*xout)[i] = (*xout)[i-1]+dx;
+    (*yout)[i] = gsl_interp_eval(gsl_interpv, xdouble, ydouble, (*xout)[i], gsl_interp_accelv);
+  }
+  (*xout)[i-1] = x[npoints-1];
+  (*yout)[i-1] = y[npoints-1];
+  
+  /* last points should be identical regardless of rounding errors */
+    free(xdouble);
+    free(ydouble);
+    gsl_interp_free(gsl_interpv);
+    gsl_interp_accel_free(gsl_interp_accelv);
+
+  return pgp_get_interparray;
+
+ error:
+  if (xdouble)
+    free(xdouble);
+  if (ydouble)
+    free(ydouble);
+  if (*xout) {
+    free(*xout);
+    *xout = NULL;
+  }  
+  if (*yout) {
+    free(*yout);
+    *yout = NULL;
+  }
+  if (gsl_interpv)
+    gsl_interp_free(gsl_interpv);
+  if (gsl_interp_accelv)
+    gsl_interp_accel_free(gsl_interp_accelv);
+
+  return pgp_get_interparray;  
 }
 
 /* ------------------------------------------------------------ */

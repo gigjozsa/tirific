@@ -3452,7 +3452,9 @@ int ftstab_putcard(char n, char *keyl, char *valuel)
 	  sprintf(string2,"%s",string);
 	}
 	else {
-	  sprintf(string2, "!@#$%^%$");
+	  /* Originally, we had the following line, which has been replaced */
+	  /* sprintf(string2, "!@#$%^%$"); */
+	  sprintf(string2, "        ");
 	}
 
 	/* if we encounter a comment the whole card will be appended to the end of old */

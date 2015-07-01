@@ -433,7 +433,7 @@ This was commented hdu stuff
 /*
                tirific.dc1
 
-Program:       TIRIFIC (Version 2.2.4)
+Program:       TIRIFIC (Version 2.2.5)
 
 Purpose:       Fit a tilted-ring model to a datacube
 
@@ -478,6 +478,8 @@ jozsa@astron.nl
 #include <limits.h>
 #include <sys/stat.h>
 #include <gft.h>
+#include <gsl/gsl_interp.h>
+#include <gsl/gsl_spline.h>
 #ifdef OPENMPTIR
 #include <omp.h>
 #endif
@@ -999,6 +1001,8 @@ par = (par-NSSDPARAMS)%NDPARAMS + NSSDPARAMS;
 #define PSFI_PRIMPOS     33 /* PSWARM final weight */
 #define PSID_PRIMPOS     34 /* PSWARM increase delta */
 #define PSDD_PRIMPOS     35 /* PSWARM decrease delta */                                                            
+#define INTY_PRIMPOS     36 /* interpolation type */                                                            
+#define INDINTY_PRIMPOS  37 /* interpolation type */                                                            
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
@@ -1006,7 +1010,7 @@ par = (par-NSSDPARAMS)%NDPARAMS + NSSDPARAMS;
    @brief Last entry in primpos not counted by disk
 */
 /* ------------------------------------------------------------ */
-#define LASTSING_PRIMPOS    35
+#define LASTSING_PRIMPOS    37
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -1152,11 +1156,21 @@ par = (par-NSSDPARAMS)%NDPARAMS + NSSDPARAMS;
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
+   @define GR_INTERP_NUMLINES_DEFAULT
+   @brief Number of interpolating lines in graphics when interpolating in a curved way (really not important)
+*/
+/* ------------------------------------------------------------ */
+#define GR_INTERP_NUMLINES_DEFAULT 500
+
+
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/**
    @define VERSION_NUMBER
    @brief Version number of this module
 */
 /* ------------------------------------------------------------ */
-#define VERSION_NUMBER 2.2.4
+#define VERSION_NUMBER 2.3.0
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -1171,6 +1185,24 @@ par = (par-NSSDPARAMS)%NDPARAMS + NSSDPARAMS;
 #define GOLDEN_SECTION_ALT 2
 #define SIMPLEX 3
 #define PSWARM 4
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/**
+   @define INTERP_NUMBER
+   @brief Number of interpolation methods
+*/
+/* ------------------------------------------------------------ */
+#define INTERP_NUMBER 3
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/**
+   @define INTERP_LINEAR
+   @brief Identifyer for linear interpolation
+*/
+/* ------------------------------------------------------------ */
+#define INTERP_LINEAR MATHS_I_LINEAR
+#define INTERP_CSPLINE MATHS_I_CSPLINE /* cubic natural spline */
+#define INTERP_AKIMA MATHS_I_AKIMA /* Akima */
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
@@ -2350,6 +2382,9 @@ typedef struct ringparms
   /** @brief Array of same size containing the previous parameters */
   double *oldpar;
 
+  /** @brief Array tracking if a parameter has changed, for use in chkchange */
+  int *chapar;
+
   /** @brief Subset separation in grids */
   double radsep; 
 
@@ -2358,6 +2393,36 @@ typedef struct ringparms
   
   /** @brief big version of par, for all subrings */
   float *modpar;
+
+  /** @brief array of interpolation objects, for each parameter class one */
+  gsl_interp **gsl_interparray;
+
+  /** @brief array of interpolation lookup objects */
+  gsl_interp_accel **gsl_interp_accelarray;
+
+  /** @brief array of smoothing schemes for each parameter: 0: linear 1: spline 2: Akima */ 
+  int *smothcar;
+
+  /** @brief array of interpolation objects, for each parameter class one */
+  gsl_interp **gsl_indinterparray;
+
+  /** @brief array of interpolation lookup objects */
+  gsl_interp_accel **gsl_indinterp_accelarray;
+
+  /** @brief array of smoothing schemes for each parameter for indexing: 0: linear 1: spline 2: Akima */ 
+  int *smothindcar;
+
+  /** @brief dummy of size nur used in interpolation: array of binary values 1: active, 0: indexed */
+  int *actarray;
+
+  /** @brief dummy of size nur used in interpolation: array of indices of current parameter array */
+  int *actindar;
+
+  /** @brief dummy of size nur used in interpolation: input to interpolation function, y */
+  double *interar;
+
+  /** @brief dummy of size nur used in interpolation: input to interpolation function, x */
+  double *radar;
 
   /** @brief Flux of one cloud */
   double *cflux;
@@ -3882,22 +3947,24 @@ static int galmod(hdrinf *hdr, ringparms *rpm, int fitmode, varlel *varele, deco
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
-   @fn static int changedependent(ringparms *rpm, double *par, decomp_inlist *index)
+   @fn static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, varlel *varele, int fitmode, int *chapar)
    @brief Takes the parameter list and changes the parameters on the index
 
    Takes the parameter list and identifies parameters on the index in
-   decomp_inlist, then linearly interpolates between the parameters
+   decomp_inlist, then interpolates between the parameters
    that the parameter on the index depends on
 
    @param rpm      (ringparms *)     Ring parameter information struct
    @param par      (double *)        Parameter list
    @param index    (decomp_inlist *) An index- and dependency list as provided by simparse function decomp_get_inlist()
+   @param chapar   (int *)           array of parameters that change
 
    @return (success) int changedependent: number of indexed parameters
+           (error) -1
 
 */
 /* ------------------------------------------------------------ */
-static int changedependent(ringparms *rpm, double *par, decomp_inlist *index);
+static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, int *chapar);
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -3947,31 +4014,7 @@ static void interpinit(ringparms *rpm, double radsep, int disk);
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
-  @fn static int chkchange(varlel *varele, int fitmode, int ringnr, int nur, decomp_inlist *index)
-  @brief Help function to interpover: Check if the modpar array in the range of a ring has to be changed
-  
-  If in the previous parameter change a change of the ring has
-   occured, this function will return 1, 0 otherways.
-  
-  @param varele (varlel *) Actual element of the varlel list, or the
-  first element in case of fitmode = 0
-  
-  @param fitmode (int)     Fitmode 0: Metropolis, 1: Golden section
-  parameter information struct 
-  @param ringnr  (int)     Number of ring to be checked, starting with 0
-  @param nur      (int)     Number of rings
-  @param index   (decomp_inlist *) an index structure as defined in simparse
-  @param disk    (int)     disk number; if the disk is not fitted, 0 is returned.
-
-  @return int chkchange: 1 if change for ring has occured, 0 if not
-*/
-/* ------------------------------------------------------------ */
-static int chkchange(varlel *varele, int fitmode, int ringnr, int nur, decomp_inlist *index, int disk);
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-  @fn static int chkchangep(varlel *varele, int fitmode, int parnr, int nur, decomp_inlist *index)
+  @fn static int chkchangep(varlel *varele, int fitmode, int parnr, int nur)
   @brief Help function to interpover: Check if the modpar array has to be changed for a parameter
   
   If in the previous parameter change a change of the parameter has
@@ -3984,12 +4027,11 @@ static int chkchange(varlel *varele, int fitmode, int ringnr, int nur, decomp_in
   parameter information struct 
   @param ringnr  (int)     Number of ring to be checked
   @param nur      (int)     Number of rings
-  @param index   (decomp_inlist *) an index structure as defined in simparse
 
   @return int chkchange: 1 if change for parameter has occured, 0 if not
 */
 /* ------------------------------------------------------------ */
-static int chkchangep(varlel *varele, int fitmode, int parnr, int nur, decomp_inlist *index);
+static int chkchangep(varlel *varele, int fitmode, int parnr, int nur);
 
 
 
@@ -6594,7 +6636,7 @@ int main(int argc, char *argv[])
 
   printf("\n");
   printf("####################\n");
-  printf("# TIRIFIC v. 2.2.4 #\n");
+  printf("# TIRIFIC v. 2.2.5 #\n");
   printf("####################\n");
   printf("\n");
 
@@ -6611,6 +6653,7 @@ int main(int argc, char *argv[])
     
     if (!(rpm = get_ringparms(startinfv, log, hdr, rpm)))
       goto error;
+
     if (!(fit = get_fitparms(startinfv, log, hdr, rpm, fit))) {
       goto error;
     }
@@ -8444,8 +8487,18 @@ static ringparms *create_ringparms(int ndisks)
   /* Initialise all the pointers */
   create_ringparms -> par = NULL;
   create_ringparms -> oldpar = NULL;
+  create_ringparms -> chapar = NULL;
   create_ringparms -> modpar = NULL;
-
+  create_ringparms -> gsl_interparray = NULL;
+  create_ringparms -> gsl_interp_accelarray = NULL;
+  create_ringparms -> smothcar = NULL;
+  create_ringparms -> gsl_indinterparray = NULL;
+  create_ringparms -> gsl_indinterp_accelarray = NULL;
+  create_ringparms -> smothindcar = NULL;
+  create_ringparms -> actarray = NULL;
+  create_ringparms -> actindar = NULL;
+  create_ringparms -> interar = NULL;
+  create_ringparms -> radar = NULL;
   create_ringparms -> ltype = NULL;
   create_ringparms -> cflux = NULL;
   create_ringparms -> allnpoints = NULL;
@@ -8554,6 +8607,50 @@ void destroy_ringparms(ringparms *prm)
     free(prm -> par);
   if ((prm -> oldpar))
     free(prm -> oldpar);
+  if ((prm -> chapar))
+    free(prm -> chapar);
+
+  if ((prm -> gsl_interparray)) {
+    for (i = 0; i < prm -> ndisks*NDPARAMS; ++i) {
+	if ((prm -> gsl_interparray[i]))
+	  gsl_interp_free(prm -> gsl_interparray[i]);
+    }
+    free(prm -> gsl_interparray);
+  }
+  if ((prm -> gsl_interp_accelarray)) {
+    for (i = 0; i < prm -> ndisks*NDPARAMS; ++i) {
+      if ((prm -> gsl_interp_accelarray[i]))
+	gsl_interp_accel_free(prm -> gsl_interp_accelarray[i]);
+    }
+    free(prm -> gsl_interp_accelarray);
+  }
+    
+  if ((prm -> smothcar))
+    free(prm -> smothcar);
+  if ((prm -> gsl_indinterparray)) {
+    for (i = 0; i < prm -> ndisks*NDPARAMS; ++i) {
+	if ((prm -> gsl_indinterparray[i]))
+	  gsl_interp_free(prm -> gsl_indinterparray[i]);
+    }
+    free(prm -> gsl_indinterparray);
+  }
+  if ((prm -> gsl_indinterp_accelarray)) {
+    for (i = 0; i < prm -> ndisks*NDPARAMS; ++i) {
+      if ((prm -> gsl_indinterp_accelarray[i]))
+	gsl_interp_accel_free(prm -> gsl_indinterp_accelarray[i]);
+    }
+    free(prm -> gsl_indinterp_accelarray);
+  }
+  if ((prm -> smothindcar))
+    free(prm -> smothindcar);
+  if ((prm -> actarray))
+    free(prm -> actarray);
+  if ((prm -> actindar))
+    free(prm -> actindar);
+  if ((prm -> interar  ))
+    free(prm -> interar  );
+  if ((prm -> radar   ))
+    free(prm -> radar   );
 
   if (prm -> ltype)
     free(prm -> ltype);
@@ -8745,13 +8842,15 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
   int dummy;
   char mes[81];  /* Any message */
   char placer[10];
+  int inty, indinty; /* interpolation type */
+  const gsl_interp_type * intytype; /* same, only internal to gsl */
+  const gsl_interp_type * indintytype; /* same, only internal to gsl */
 
   int i,j = 0; /* Simple control variables */
   int disk; /* number of the disk */
   /* Read values that are needed only in this module */
   int mode; /* For memory handling */
   int ndisks;
-
   int pcondisp, condisp;
 
 /* primary beam stuff */
@@ -8814,6 +8913,41 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 	/* Do some allocation that hides some variables in this function */
 	if (!(rpm -> oldpar = (double *) malloc((rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(double))))
 	  goto error;
+	/* Do some allocation that hides some variables in this function, same size as par and oldpar to ease indexing */
+	if (!(rpm -> chapar = (int *) malloc((rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(int))))
+	  goto error;
+	for (j = 0; j < (rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS); ++j)
+	  rpm -> chapar[j] = 0;
+
+	/* Allocate the interpolation structures */
+	if (!(rpm -> gsl_interparray = (gsl_interp **) malloc(rpm -> ndisks*NDPARAMS*sizeof(gsl_interp *))))
+	  goto error;
+	for (j = 0; j < rpm -> ndisks*NDPARAMS; ++j)
+	  rpm -> gsl_interparray[j] = NULL;
+	if (!(rpm -> gsl_interp_accelarray = (gsl_interp_accel **) malloc(rpm -> ndisks*NDPARAMS*sizeof(gsl_interp_accel *))))
+	      goto error;	
+	for (j = 0; j < rpm -> ndisks*NDPARAMS; ++j)
+	  rpm -> gsl_interp_accelarray[j] = NULL;
+	if (!(rpm -> smothcar = (int *) malloc(rpm -> ndisks*NDPARAMS*sizeof(int))))
+	      goto error;
+	if (!(rpm -> gsl_indinterparray = (gsl_interp **) malloc(rpm -> ndisks*NDPARAMS*sizeof(gsl_interp *))))
+	  goto error;
+	for (j = 0; j < rpm -> ndisks*NDPARAMS; ++j)
+	  rpm -> gsl_indinterparray[j] = NULL;
+	if (!(rpm -> gsl_indinterp_accelarray = (gsl_interp_accel **) malloc(rpm -> ndisks*NDPARAMS*sizeof(gsl_interp_accel *))))
+	      goto error;	
+	for (j = 0; j < rpm -> ndisks*NDPARAMS; ++j)
+	  rpm -> gsl_indinterp_accelarray[j] = NULL;
+	if (!(rpm -> smothindcar = (int *) malloc(rpm -> ndisks*NDPARAMS*sizeof(int))))
+	      goto error;
+	if (!(rpm -> actarray = (int *) malloc(rpm -> nur * sizeof(int))))
+	  goto error;
+	if (!(rpm -> actindar = (int *) malloc(rpm -> nur * sizeof(int))))
+	  goto error;
+	if (!(rpm -> interar = (double *) malloc(rpm -> nur * sizeof(double))))
+	  goto error;
+	if (!(rpm -> radar = (double *) malloc(rpm -> nur * sizeof(double))))
+	  goto error;
 	
 	++i;
       }
@@ -8846,6 +8980,149 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
       }
       else 
 	err = 1;
+    }
+
+    /* Get the default interpolation method */
+    /* 0: linear, 1: natural spline, default 0 */
+    inty = INTERP_LINEAR;
+    
+    sprintf(mes, "Give default interpolation type");
+    def = 2;
+    nel = 1;
+    err = 0;
+    while (!(err)) {
+      userint_tir(startinfv -> arel, &inty, &nel, &def, "INTY=", mes);
+      if (inty < 0 || inty >= INTERP_NUMBER) {
+	sprintf(mes, "Must lie between %i and %i!", 0, INTERP_NUMBER-1);
+	cancel_tir(startinfv -> arel, "INTY=", 2);
+	def = 1;
+      }
+      else 
+	err = 1;
+    }
+
+    /* Now allocate all the interpolation structs and "accelerators" */
+    switch (inty) {
+    case INTERP_LINEAR:
+      intytype = gsl_interp_linear;
+      break;
+
+    case INTERP_CSPLINE:
+      if (rpm -> nur > 2){
+	intytype = gsl_interp_cspline;
+      }
+      else {
+	sprintf(mes, "Must have at least 3 radii for spline, using linear");
+	anyout_tir(&err, mes);
+	intytype = gsl_interp_linear;
+      }
+      break;
+    
+    case INTERP_AKIMA:
+      if (rpm -> nur > 4) {
+	intytype = gsl_interp_akima;
+      }
+      else {
+	sprintf(mes, "Must have at least 5 radii for Akima");
+	anyout_tir(&err, mes);
+	if (rpm -> nur > 2) {
+	  sprintf(mes, "Using natural cubic spline");
+	  anyout_tir(&err, mes);
+	  intytype = gsl_interp_cspline;
+	}
+	else {
+	  sprintf(mes, "Using linear");
+	  anyout_tir(&err, mes);
+	  intytype = gsl_interp_linear;
+	}
+      }
+      break;
+
+    /* No real default */
+    default:
+      break;
+    }
+
+    /* Real allocation here */
+    for (i = 0; i < rpm -> ndisks*NDPARAMS; ++i) {
+      if (!(rpm -> gsl_interparray[i] = gsl_interp_alloc(intytype, rpm -> nur)))
+	goto error;
+      /* printf("%s"); */
+
+      if (!(rpm -> gsl_interp_accelarray[i] = gsl_interp_accel_alloc()))
+	goto error;
+      rpm -> smothcar[i] = inty;
+    }
+
+        /* Get the default interpolation method */
+    /* 0: linear, 1: natural spline, default 0 */
+    indinty = inty;
+    
+    sprintf(mes, "Give default interpolation type");
+    def = 2;
+    nel = 1;
+    err = 0;
+    while (!(err)) {
+      userint_tir(startinfv -> arel, &indinty, &nel, &def, "INDINTY=", mes);
+      if (indinty < 0 || indinty >= INTERP_NUMBER) {
+	sprintf(mes, "Must lie between %i and %i!", 0, INTERP_NUMBER-1);
+	cancel_tir(startinfv -> arel, "INDINTY=", 2);
+	def = 1;
+      }
+      else 
+	err = 1;
+    }
+
+    /* Now allocate all the interpolation structs and "accelerators" */
+    switch (indinty) {
+    case INTERP_LINEAR:
+      indintytype = gsl_interp_linear;
+      break;
+
+    case INTERP_CSPLINE:
+      if (rpm -> nur > 2)
+	indintytype = gsl_interp_cspline;
+      else {
+	sprintf(mes, "Must have at least 3 radii for spline, using linear");
+	anyout_tir(&err, mes);
+	indintytype = gsl_interp_linear;
+      }
+      break;
+    
+    case INTERP_AKIMA:
+      if (rpm -> nur > 4) {
+	indintytype = gsl_interp_akima;
+      }
+      else {
+	sprintf(mes, "Must have at least 5 radii for Akima");
+	anyout_tir(&err, mes);
+	if (rpm -> nur > 2) {
+	  sprintf(mes, "Using natural cubic spline");
+	  anyout_tir(&err, mes);
+	  indintytype = gsl_interp_cspline;
+	}
+	else {
+	  sprintf(mes, "Using linear");
+	  anyout_tir(&err, mes);
+	  indintytype = gsl_interp_linear;
+	}
+      }
+      break;
+
+    /* No real default */
+    default:
+      break;
+    }
+
+    /* Real allocation here */
+    for (i = 0; i < rpm -> ndisks*NDPARAMS; ++i) {
+      if (!(rpm -> gsl_indinterparray[i] = gsl_interp_alloc(indintytype, rpm -> nur)))
+	goto error;
+      /* printf("%s"); */
+
+      if (!(rpm -> gsl_indinterp_accelarray[i] = gsl_interp_accel_alloc()))
+	goto error;
+      rpm -> smothindcar[i] = indinty;
     }
 
     /* Now get all sorts of parameters */
@@ -10358,8 +10635,33 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 /*     gft_mst_put(fit -> gft_mstv, array, GFT_INPUT_SPAR); */
   } 
   
+  /* Reset the touched array */
+  for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i) {
+    rpm -> chapar[i] = 1;
+  }
+
+  /* Count the number of parameters and put them in */
+  /* varele = fit -> varylist; */
+  /* i = 0; */
+  /* while (varele) { */
+  /*   printf("varylist entry: %i\n",i); */
+  /*   printf("elements:"); */
+  /*   for (j = 0; j < varele -> nelem; ++j) { */
+  /*     printf(" %i", varele -> elements[j]); */
+  /*   } */
+  /*     printf("\n         "); */
+  /*   for (j = 0; j < varele -> nelem; ++j) { */
+  /*     printf(" %i", varele -> elements[j]%rpm -> nur); */
+  /*   } */
+  /*     printf("\n"); */
+  /*     printf("\n"); */
+  /*   ++i; */
+  /*   varele = varele -> next; */
+  /* } */
+
   /* Interpolate over the index once */
-  changedependent(rpm, rpm -> par, fit -> index);
+  if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+    goto error;
 
   /* Deallocate things */
   if ((array))
@@ -11728,8 +12030,11 @@ static int writemodel(hdrinf *origin, ringparms *rpm, fitparms *fit, double *par
 
   }
 
-  /* correct dependent parameters */
-  changedependent(rpm, rpm -> par, index);
+  for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
+    rpm -> chapar[i] = 1;
+  
+  if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+    goto error;
 
   /* Testing */
   /* for(k = 0; k < origin -> nsubs; ++k) */
@@ -11787,6 +12092,9 @@ static int writemodel(hdrinf *origin, ringparms *rpm, fitparms *fit, double *par
  /* origin -> nprof = origin -> bcsize1*origin -> bsize2; */
 
  return 1;
+
+ error:
+ return 0;
 }
 
 /* ------------------------------------------------------------ */
@@ -11927,7 +12235,7 @@ static int writecoolmodel(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 
   /*     Convert the read parameter list to internal units */
   changetointern(rpm -> par, rpm -> nur, hdr, rpm -> ndisks);
-  
+
   /* provide some info */
   nel=1;
   sprintf(mes, "Cool number of bytes used: %lu", thecube -> size_x*thecube -> size_y*thecube -> size_v*sizeof(float));
@@ -11946,8 +12254,12 @@ static int writecoolmodel(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
     rpm -> par[i] = par[i];
   }
 
+  for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
+    rpm -> chapar[i] = 1;
+  
   /* correct dependent parameters */
-  changedependent(rpm, rpm -> par, index);
+  if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+    goto error;
 
   /* Then we generate the cube and convolve it */
   galmodcool(hdr, rpm, 1, NULL, index, &fluxpoints, &allnpoints);
@@ -12132,8 +12444,14 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
     nextvarlel = nextvarlel -> next;
   }
   
+  /* Now ensure that the indexed parameters are aligned */
+  for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
+    rpm -> chapar[i] = chkchangep(fit -> varylist, fit -> fitmode, i, rpm -> nur);
+
   /* When starting make one run of interpover, but first ensure a proper interpolation of the indexed parameters */
-  changedependent(rpm, rpm -> par, fit -> index);
+  if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+    goto error;
+
   interpover(rpm, rpm -> radsep, 0, NULL, fit -> index);
   
   /* The degrees of freedom are determined by the amount of variable
@@ -12476,7 +12794,11 @@ static double gchsq_gen_start(double *vector, void *rest)
   chimult = pow(OUTRANGEFAC,chprm_gen(vector, adarv -> fit -> varylist, adarv -> rpm -> par));
   
   /* Now ensure that the indexed parameters are aligned */
-  changedependent(adarv -> rpm, adarv -> rpm -> par, adarv -> fit -> index);
+  for (i = adarv -> rpm -> nur*NSSDPARAMS; i < adarv -> rpm ->nur *(NSSDPARAMS+NDPARAMS*adarv -> rpm -> ndisks); ++i)
+    adarv -> rpm -> chapar[i] = 1;
+  
+  if (changedependent(adarv -> rpm, adarv -> rpm -> par, adarv -> fit -> index, adarv -> rpm -> chapar) < 0)
+    goto error;
 
   /* When starting make one run of interpover */
   interpover(adarv -> rpm, adarv -> rpm -> radsep, 1, NULL, adarv -> fit -> index);
@@ -12541,6 +12863,9 @@ static double gchsq_gen_start(double *vector, void *rest)
  i = gft_mst_putf(adarv -> fit -> gft_mstv, &gchsq_gen, GFT_INPUT_GCHSQ_REP);
 
   return adarv -> hdr -> chi2;
+
+ error:
+  return -1.0;
 }
 
 
@@ -12635,8 +12960,12 @@ static double gchsq_gen(double *vector, void *rest)
 /*   else */
 /*     chimult = 1.0; */
  
-  /* Now ensure that the indexed parameters are aligned */
-  changedependent(adarv -> rpm, adarv -> rpm -> par, adarv -> fit -> index);
+    /* Now ensure that the indexed parameters are aligned */
+  for (i = adarv -> rpm -> nur*NSSDPARAMS; i < adarv -> rpm->nur *(NSSDPARAMS+NDPARAMS*adarv -> rpm->ndisks); ++i) {
+    adarv -> rpm -> chapar[i] = chkchangep(adarv -> fit -> varylist, adarv -> fit -> fitmode, i, adarv -> rpm -> nur);
+  }
+  if (changedependent(adarv -> rpm, adarv -> rpm -> par, adarv -> fit -> index, adarv -> rpm -> chapar) < 0)
+    goto error;
 
   /* Do make the model */
 /*   galmod(adarv -> hdr, adarv -> rpm, GENFIT, adarv -> fit -> varylist, adarv -> fit -> index, fluxpoints, adarv -> fit -> npoints); */
@@ -12707,6 +13036,9 @@ static double gchsq_gen(double *vector, void *rest)
   }
 
   return gchsq_genv;
+
+ error:
+  return -1.0;
 }
 
 
@@ -12816,7 +13148,11 @@ static double gchsq_gen2(double *vector, void *rest)
 /*     chimult = 1.0; */
  
   /* Now ensure that the indexed parameters are aligned */
-  changedependent(adarv -> rpm, adarv -> rpm -> par, adarv -> fit -> index);
+  for (i = adarv -> rpm -> nur*NSSDPARAMS; i < adarv -> rpm->nur *(NSSDPARAMS+NDPARAMS*adarv -> rpm->ndisks); ++i)
+    adarv -> rpm -> chapar[i] = chkchangep(adarv -> fit -> varylist, adarv -> fit -> fitmode, i, adarv -> rpm -> nur);
+
+  if (changedependent(adarv -> rpm, adarv -> rpm -> par, adarv -> fit -> index, adarv -> rpm -> chapar) < 0)
+    goto error;
 
   /* Do make the model */
   galmod(adarv -> hdr, adarv -> rpm, GENFIT, adarv -> fit -> varylist, adarv -> fit -> index, adarv -> rpm -> fluxpoints, adarv -> fit -> npoints);
@@ -12905,6 +13241,9 @@ static double gchsq_gen2(double *vector, void *rest)
 
     
     return gchsq_genv;
+
+ error:
+    return -1.0;
 }
 
 
@@ -12915,13 +13254,101 @@ static double gchsq_gen2(double *vector, void *rest)
 
 /* Interpolate over the par list to get the modpar */
 
+static void interpinit(ringparms *rpm, double radsep, int disk)
+{
+  int i,j,jp,k;
+  /* float width; */
+  /* float dpardr[NPARAMS]; */
+  /* float dr; */
+  int n2, n1;
+  
+
+  /* In the modpar array interpolate over all rings */
+  for (i = 1; i < rpm -> nur; ++i) {
+    
+    /* This is the actual width between two radii */
+    /* Obsolete when using GSL */
+    /* width = rpm -> par[PRADI*rpm -> nur+i] - rpm -> par[PRADI*rpm -> nur+i-1]; */
+    
+    /* These are the rings to be calculated */
+    n2 = (int) (rpm -> par[PRADI*rpm -> nur+i]/radsep-0.5); 
+    n1 = ((int) (rpm -> par[PRADI*rpm -> nur+i-1]/radsep+0.5)); 
+    
+    /* in-between two rings, the slope is determined */
+/* 	for (j = NPARAMS+(disk-1)*NDPARAMS; j < NPARAMS+disk*NDPARAMS; ++j) { */
+
+
+    for (jp = NPARAMS-NDPARAMS; jp < NPARAMS; ++jp) {
+      
+      j = jp + disk*NDPARAMS;
+
+      /* If the parameter is in the list */
+      /* Obsolete when using GSL */
+      /* dpardr[jp]= (rpm -> par[j*rpm -> nur+i]-rpm -> par[j*rpm -> nur+i-1])/width; */
+
+      /* Not sure if this is required, but do it anyway */
+      gsl_interp_accel_reset(rpm -> gsl_interp_accelarray[j-NSSDPARAMS]);
+
+      /* Very sure that this is a requirement; a test has shown that this should be ouside an omp pragma, not sure why */
+      gsl_interp_init(rpm -> gsl_interparray[j-NSSDPARAMS],rpm -> par+PRADI*rpm -> nur, rpm -> par + rpm -> nur*j, rpm -> nur);
+    }
+
+    /* D*mn GSL! GSL interpolation is not compatible with OMP anyway */
+/* #ifdef OPENMPTIR */
+/* #pragma  omp parallel for schedule(dynamic) */
+/* #endif */
+    for (jp = NPARAMS-NDPARAMS; jp < NPARAMS; ++jp) {
+      
+      j = jp + disk*NDPARAMS;
+
+      /* If the parameter is in the list */
+      /* Obsolete when using GSL */
+      /* dpardr[jp]= (rpm -> par[j*rpm -> nur+i]-rpm -> par[j*rpm -> nur+i-1])/width; */
+
+      /* Not sure if this is required, but do it anyway */
+      gsl_interp_accel_reset(rpm -> gsl_interp_accelarray[j-NSSDPARAMS]);
+
+      /* Very sure that this is a requirement; a test has shown */
+      gsl_interp_init(rpm -> gsl_interparray[j-NSSDPARAMS],rpm -> par+PRADI*rpm -> nur, rpm -> par + rpm -> nur*j, rpm -> nur);
+
+      for (k = n1; k <= n2; ++k) {
+	/* for each parameter the intepolation is done */
+	rpm -> modpar[PRADI*rpm -> nr+k] = ((float) k)*radsep+radsep/2.0;
+	/* Obsolete when using GSL */
+	/* dr = rpm -> modpar[PRADI*rpm -> nr+k]-rpm -> par[PRADI*rpm -> nur+i-1];  */
+	/* rpm -> modpar[j*rpm -> nr+k] = rpm -> par[j*rpm -> nur+i-1]+dpardr[jp]*dr;  */
+	/* if (k == n1) { */
+	/*   fprintf(stderr,"Alpha j: %i n1: %i n2: %i %i %f %f\n",j,n1,n2,k,rpm -> modpar[PRADI*rpm -> nr+k],rpm -> par[PRADI*rpm -> nur+i-1]); */
+	/* } */
+	/* if (k == n2) { */
+	/*   fprintf(stderr,"Omega %i %f %f\n",k,rpm -> modpar[PRADI*rpm -> nr+k],rpm -> par[PRADI*rpm -> nur+i]); */
+	/* } */
+	rpm -> modpar[j*rpm -> nr+k] = gsl_interp_eval(rpm -> gsl_interparray[j-NSSDPARAMS], rpm -> par+PRADI*rpm -> nur, rpm -> par + rpm -> nur*j, rpm -> modpar[PRADI*rpm -> nr+k], rpm -> gsl_interp_accelarray[j-NSSDPARAMS]);
+      }
+    }
+
+    /* Now change the pre-processed parameters and terminate the pointsource lists */
+    for (k = n1; k <= n2; ++k)
+      srprep(rpm, k, 0, disk);
+  } 
+}
+
+
+/* ------------------------------------------------------------ */
+
+
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+/* Interpolate over the par list to get the modpar */
+
 static void interpover(ringparms *rpm, double radsep, int fitmode, varlel *varele, decomp_inlist *index)
 {
   int i,j,jp,k,disk;
-  float width;
-  float dpardr[NPARAMS];
-  float dr;
-  int n1, n2;
+  /* float width; */
+  /* float dpardr[NPARAMS]; */
+  /* float dr; */
+  int n1, n2, s, e;
   
   
   /* Check if we initialise */
@@ -12931,53 +13358,94 @@ static void interpover(ringparms *rpm, double radsep, int fitmode, varlel *varel
     }
     return;
   }
+
+  /* Switch on all indicators right to a range that should be interpolated over, depending on interpolation method */
+  for (disk = 0; disk < rpm -> ndisks; ++disk) {
+    
+    for (jp = 0; jp < NDPARAMS; ++jp) {
+      
+      for (i = 1; i < rpm -> nur; ++i) {
+	if (rpm -> chapar[(NDPARAMS*disk+jp+NSSDPARAMS)*rpm -> nur+i])
+	  break;
+      }
+      if (i < rpm -> nur) {
+	if (rpm -> smothcar[jp+disk*NDPARAMS] == INTERP_AKIMA) {
+	  s = -2;
+	  e = 4;
+	}
+	else if (rpm -> smothcar[jp+disk*NDPARAMS] == INTERP_CSPLINE) {
+	  s = 1;
+	  e = rpm -> nur;
+	}
+	else {
+	  s = 1;
+	  e = 2;
+	}
+	for (i = 0; i < rpm -> nur; ++i) {
+	  if (rpm -> chapar[(NDPARAMS*disk+jp+NSSDPARAMS)*rpm -> nur+i] == 1) {
+	    for (k = s; k < e; ++k) {
+	      if ((k+i) >= rpm -> nur)
+		break;
+	      if ((k+i) > -1) {
+		rpm -> chapar[(NDPARAMS*disk+jp+NSSDPARAMS)*rpm -> nur+k+i] = 2;
+	      }
+	    }
+	    /* i = i+k; */
+	  }
+	}
+      }
+    }
+  }
   
+  /* printf("paraf:"); */
+  /* for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i) */
+  /*   if (rpm -> chapar[i]) */
+  /*     printf(" %i", i); */
+  /* printf(" "); */
+
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     
     /* In the modpar array interpolate over all rings */
     for (i = 1; i < rpm -> nur; ++i) {
       
-      /* If yes, we need these */
-      if (chkchange(varele, fitmode, i, rpm -> nur, index, disk)) {
-	
-	/* This is the actual width between two radii */
-	width = rpm -> par[PRADI*rpm -> nur+i] - rpm -> par[PRADI*rpm -> nur+i-1];
-	
 	/* These are the subrings to be calculated */
-	n2 = (int) (rpm -> par[PRADI*rpm -> nur+i]/radsep-0.5); 
-	n1 = ((int) (rpm -> par[PRADI*rpm -> nur+i-1]/radsep+0.5)); 
-	
-	
-	/* in-between two rings, the slope is determined, should start with 1 */
-	/* 	for (j = NPARAMS+(disk-1)*NDPARAMS; j < NPARAMS+disk*NDPARAMS; ++j) { */
+      n2 = (int) (rpm -> par[PRADI*rpm -> nur+i]/radsep-0.5); 
+      n1 = ((int) (rpm -> par[PRADI*rpm -> nur+i-1]/radsep+0.5)); 
+      
+      /* D*mn GSL! GSL interpolation is not compatible with OMP anyway */
+      /* #ifdef OPENMPTIR */
+      /* #pragma omp parallel for schedule(dynamic) */
+      /* #endif */
+      for (jp = 0; jp < NDPARAMS; ++jp) {
 
-#ifdef OPENMPTIR
-#pragma omp parallel for schedule(dynamic)
-#endif
-	for (jp = NPARAMS-NDPARAMS; jp < NPARAMS; ++jp) {
-
-	  j = jp + disk*NDPARAMS;
+	j = NSSDPARAMS+jp+disk*NDPARAMS;
+	
+	/* If the parameter is in the list */
+	if (rpm -> chapar[j*rpm -> nur+i]) {
 	  
-	  /* If the parameter is in the list */
-	  if (chkchangep(varele, fitmode, j*rpm -> nur+i, rpm -> nur, index)) {
-	    dpardr[jp]= (rpm -> par[j*rpm -> nur+i]-rpm -> par[j*rpm -> nur+i-1])/width;
-
-	    for (k = n1; k <= n2; ++k) {
-	      dr = rpm -> modpar[PRADI*rpm -> nr+k]-rpm -> par[PRADI*rpm -> nur+i-1];
-	      
-	      /* for each parameter the intepolation is done */
-	      rpm -> modpar[j*rpm -> nr+k] = rpm -> par[j*rpm -> nur+i-1]+dpardr[jp]*dr;
-	    }
+	  /* Obsolete when using GSL */
+	  /* dpardr[jp]= (rpm -> par[j*rpm -> nur+i]-rpm -> par[j*rpm -> nur+i-1])/width; */
+	  
+	  /* GSL Re-initialise interpolation, don't know if required, but well ... */
+	  gsl_interp_accel_reset(rpm -> gsl_interp_accelarray[j-NSSDPARAMS]);
+	  
+	  for (k = n1; k <= n2; ++k) {
+	    /* Obsolete when using GSL */	    
+	    /* dr = rpm -> modpar[PRADI*rpm -> nr+k]-rpm -> par[PRADI*rpm -> nur+i-1]; */
+	    
+	    /* for each parameter the intepolation is done */
+	    /* Obsolete when using GSL */	    
+	    /* rpm -> modpar[j*rpm -> nr+k] = rpm -> par[j*rpm -> nur+i-1]+dpardr[jp]*dr; */
+	    rpm -> modpar[j*rpm -> nr+k] = gsl_interp_eval (rpm -> gsl_interparray[j-NSSDPARAMS], rpm -> par, rpm -> par + rpm -> nur*j, rpm -> modpar[PRADI*rpm -> nr+k], rpm -> gsl_interp_accelarray[j-NSSDPARAMS]);
 	  }
+	  /* Now change the pre-processed parameters and terminate the pointsource lists */
+	  for (k = n1; k <= n2; ++k)
+	    srprep(rpm, k, 0, disk);
 	}
-
-	/* Now change the pre-processed parameters and terminate the pointsource lists */
-	for (k = n1; k <= n2; ++k)
-	  srprep(rpm, k, 0, disk);
       }
     }
   }
-    return;
+  return;
 }
 
 /* ------------------------------------------------------------ */
@@ -14074,148 +14542,83 @@ return;
 /* ------------------------------------------------------------ */
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
-/* Help function to interpover: Check if the modpar array in the range
-   of a ring has to be changed */
-static int chkchange(varlel *varele, int fitmode, int ringnr, int nur, decomp_inlist *index, int disk)
-{
-  int ring, element, i, pardisk;
-  
-  
-  /* If fitmode is Golden Section, we check only one varelement */
-  if (fitmode == GOLDEN_SECTION) {
-    for (element = 0; element < varele -> nelem; ++element) {
-		
-      /* We do this only if the particular disk is changed */
-		
-		/*       if (((varele -> elements[element]-(NDPARAMS*nur))/(NDPARAMS*nur)) == disk) { */
-      if (((pardisk = (varele -> elements[element]/nur-NPARAMS+NDPARAMS))<0?0:(pardisk/NDPARAMS)) == disk) {
-		  
-		  /* If the ring itself or the ting before has been changed, we return */
-		  if (ringnr == (ring = varele -> elements[element]%(nur))) {
-			 return 1;
-		  }
-		  if (ringnr == ring+1) {
-			 return 1;      
-		  }
-		  
-		  /* Now go through the index */
-		  for (i = 0; i < index -> nuel; ++i) {
-			 if (index -> inpal[i] == varele -> elements[element] || index -> inpah[i] == varele -> elements[element]) {
-				if (ringnr == (ring = index -> ipa[i]%(nur))) {
-				  return 1;
-				}
-				if (ringnr == ring+1) {
-				  return 1;
-				}
-			 }	
-		  }
-      }
-    }
-  }
-  
-  /* Fitmode is Metropolis or other, we check the whole list */
-  else {
-	 
-	 
-    while ((varele)) {
-      if (varele -> indicator) {
-		  for (element = 0; element < varele -> nelem; ++element) {
-			 if (((pardisk = (varele -> elements[element]/nur-NPARAMS+NDPARAMS))<0?0:(pardisk/NDPARAMS)) == disk) {
-				
-				/* 	if (((varele -> elements[element]-(NDPARAMS*nur))/(NDPARAMS*nur)) == disk) { */
-				/* If the ring itself or the ting before has been changed, we return */
-				if (ringnr == (ring = varele -> elements[element]%(nur)))
-				  return 1;
-				if (ringnr == ring+1)
-				  return 1;
-				for (i = 0; i < index -> nuel; ++i) {
-				  if (index -> inpal[i] == varele -> elements[element] || index -> inpah[i] == varele -> elements[element]) {
-					 if (ringnr == (ring = index -> ipa[i]%nur)) {
-						return 1;
-					 }
-					 if (ringnr == ring+1) {
-						return 1;
-					 }
-				  }
-				}
-			 }
-		  }
-      }
-      varele = varele -> next;
-    }
-  }
-  
-  /* The ring is not in there */
-  return 0;
-}
-
-/* ------------------------------------------------------------ */
-
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 /* Help function to interpover: Check if the modpar array in the range
    of a ring has to be changed */
-static int chkchangep(varlel *varele, int fitmode, int parnr, int nur, decomp_inlist *index)
+static int chkchangep(varlel *varele, int fitmode, int parnr, int nur)
 {
-  int i, j, k;
-  int param;
+  int i, param;
+  /* int k; */
   
   /* If fitmode is Golden Section, we check only the actual varele element */
   if ((fitmode == GOLDEN_SECTION)) {
     for (i = 0; i < varele -> nelem; ++i) {
-		
+      
       /* If the ring itself or the ting before has been changed, we return */
-      if (parnr == (param = varele -> elements[i]))
-		  return 1;
+      if (parnr == varele -> elements[i])
+	return 1;
       
       /* Don't know whether the second logical is a good idea */
-      if ((parnr == param+1) && ((param+1)%nur))
-		  return 1;
+      /* if ((parnr == param+1) && ((param+1)%nur)) */
+      /* 	return 1; */
       
-      for (j = 0; j < index -> nuel; ++j) {
-		  if (index -> inpal[j] == varele -> elements[i] || index -> inpah[j] == varele -> elements[i]) {
-			 if (parnr == (param = index -> ipa[j])) {
-				return 1;
-			 }
-			 if ((parnr == param+1) && ((param+1)%nur)) {
-				return 1;
-			 }
-		  }
-      }      
+      /* for (j = 0; j < index -> nuel; ++j) { */
+      /* 	if (index -> inpal[j] == varele -> elements[i] || index -> inpah[j] == varele -> elements[i]) { */
+      /* 	  if (parnr == (param = index -> ipa[j])) { */
+      /* 	    return 1; */
+      /* 	  } */
+      /* 	  if ((parnr == param+1) && ((param+1)%nur)) { */
+      /* 	    return 1; */
+      /* 	  } */
+      /* 	} */
+      /* }       */
     }
   }
   
   /* Fitmode is Metropolis, we check the whole list */
   else {
-	 k = 0;
+    /* k = 0; */
     while ((varele)) {
-		++k;
-		/* fprintf(stderr,"This is the number: %i\n", k); */
+      /* fprintf(stderr,"This is the number: %i\n", k); */
+	/* if (k == 2) { */
+	/*   if (parnr == 131) */
+	/*     printf("Should get there... %i   ", k); */
+	/* } */
       if ((varele -> indicator)) {
-		  for (i = 0; i < varele -> nelem; ++i) {
-			 
-			 /* If the ring itself or the ting before has been changed, we return */
-			 if (parnr == (param = varele -> elements[i]))
-				return 1;
-			 if ((parnr == param+1) && ((param+1)%nur))
-				return 1;
-			 for (j = 0; j < index -> nuel; ++j) {
-				if (index -> inpal[j] == varele -> elements[i] || index -> inpah[j] == varele -> elements[i]) {
-				  if (parnr == (param = index -> ipa[j])) {
-					 return 1;
-				  }
-				  if ((parnr == param+1) && ((param+1)%nur)) {
-					 return 1;
-				  }
-				}
-			 }      
-		  }
+	/* if (k == 2) { */
+	/*    if (parnr == 131)  */
+	/*    printf("got here!   ");  */
+	/* } */
+	for (i = 0; i < varele -> nelem; ++i) {
+	  /* If the ring itself or the ting before has been changed, we return */
+	  if (parnr == (param = varele -> elements[i])) {
+	    /* if (parnr == 131) */
+	    /*   printf("ding... "); */
+	    return 1;
+	  }
+	  /* param = varele -> elements[i]; */
+	  /* if ((parnr == param+1) && ((param+1)%nur)) { */
+	  /*   if (parnr == 131) */
+	  /*     printf("dong... "); */
+	  /*   return 1; */
+	  /* }	   */
+	  /* for (j = 0; j < index -> nuel; ++j) { */
+	  /*   if (index -> inpal[j] == varele -> elements[i] || index -> inpah[j] == varele -> elements[i]) { */
+	  /*     if (parnr == (param = index -> ipa[j])) { */
+	  /* 	return 1; */
+	  /*     } */
+	  /*     if ((parnr == param+1) && ((param+1)%nur)) { */
+	  /* 	return 1; */
+	  /*     } */
+	  /*   } */
+	  /* }       */
+	}
       }
       varele = varele -> next;
+      /* ++k; */
     }
   }
   
@@ -14229,84 +14632,171 @@ static int chkchangep(varlel *varele, int fitmode, int parnr, int nur, decomp_in
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Interpolate over the par list to get the modpar */
-
-static void interpinit(ringparms *rpm, double radsep, int disk)
-{
-  int i,j,jp,k;
-  float width;
-  float dpardr[NPARAMS];
-  float dr;
-  int n2, n1;
-  
-
-  /* In the modpar array interpolate over all rings */
-  for (i = 1; i < rpm -> nur; ++i) {
-    
-    /* This is the actual width between two radii */
-    width = rpm -> par[PRADI*rpm -> nur+i] - rpm -> par[PRADI*rpm -> nur+i-1];
-    
-    /* These are the rings to be calculated */
-    n2 = (int) (rpm -> par[PRADI*rpm -> nur+i]/radsep-0.5); 
-    n1 = ((int) (rpm -> par[PRADI*rpm -> nur+i-1]/radsep+0.5)); 
-    
-    /* in-between two rings, the slope is determined */
-/* 	for (j = NPARAMS+(disk-1)*NDPARAMS; j < NPARAMS+disk*NDPARAMS; ++j) { */
-#ifdef OPENMPTIR
-#pragma  omp parallel for schedule(dynamic)
-#endif
-    for (jp = NPARAMS-NDPARAMS; jp < NPARAMS; ++jp) {
-      
-      j = jp + disk*NDPARAMS;
-
-      /* If the parameter is in the list */
-      dpardr[jp]= (rpm -> par[j*rpm -> nur+i]-rpm -> par[j*rpm -> nur+i-1])/width;
-
-      for (k = n1; k <= n2; ++k) {
-	/* for each parameter the intepolation is done */
-	rpm -> modpar[PRADI*rpm -> nr+k] = ((float) k)*radsep+radsep/2.0;
-	dr = rpm -> modpar[PRADI*rpm -> nr+k]-rpm -> par[PRADI*rpm -> nur+i-1]; 
-	rpm -> modpar[j*rpm -> nr+k] = rpm -> par[j*rpm -> nur+i-1]+dpardr[jp]*dr; 
-      }
-    }
-
-    /* Now change the pre-processed parameters and terminate the pointsource lists */
-  
-    for (k = n1; k <= n2; ++k)
-      srprep(rpm, k, 0, disk);
-  } 
-}
-
-
-/* ------------------------------------------------------------ */
-
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
 /* Takes the parameter list and changes the parameters on the index */
-static int changedependent(ringparms *rpm, double *par, decomp_inlist *index)
+static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, int *chapar)
 {
-  int i;
+  int i,j,k,counts;
+  int nactive; /* number of active points (not indexed) */
+  gsl_interp *gsl_interpv = NULL; /* interpolation function */
+  gsl_interp_accel *gsl_interp_accelv = NULL; /* interpolation function accelerator */
+  double dummy;
 
-#ifdef OPENMPTIR
-#pragma omp parallel for schedule(dynamic)
-#endif
-  for (i = 0; i < index -> nuel; ++i) {
-    /* First check if the upper and the lower index are identical */
-    if (index -> inpal[i] == index -> inpah[i]) {
-      if (index -> ipa[i] != index -> inpal[i]) {
-	par[index -> ipa[i]] = par[index -> inpal[i]];
-      }
+  /* fprintf(stderr,"got here\n"); */
+
+  if (!(index -> nuel))
+    return 0;
+  
+  /* index is strictly sorted */
+  counts = 0;
+  
+  /* loop over all parameters except the radii */
+  for (j = NSSDPARAMS; j < NSSDPARAMS+rpm -> ndisks*NDPARAMS; ++j) {
+    nactive = 0;
+    
+    /* Check if any of the parameters in that parameter group has changed */
+    for (i = 0; i < rpm -> nur; ++i) {
+      if (chapar[j*rpm->nur+i])
+	break;
     }
-    else {
+    
+    /* Only if there was a change, we need to interpolate in that group */
+    if (i < rpm -> nur) {    
+      for (i = 0; i < rpm -> nur; ++i) {
+	rpm -> actindar[i] = j*rpm -> nur + i;
+	if (index -> ipa[counts] == rpm -> actindar[i]) {
+	  rpm -> actarray[i] = 0;
+	  ++counts;
+	}
+	else {
+	  rpm -> actarray[i] = 1;
+	  ++nactive;
+	}
+      }
+      /* fprintf(stderr,"got here2\n"); */
+      
+      /* Now evaluate a few situations */
+      
+      /* If there has been no dependent parameter, we do not need to do anything */
+      if (nactive != rpm -> nur) {
+	
+	/* Only one active parameter for all */
+	if (nactive == 1) {
+	  for (i = 0; i < rpm -> nur; ++i) {
+	    par[j*rpm -> nur + i] = par[index -> inpal[counts-1]];
+	    chapar[j*rpm -> nur + i] = 1;
+	  }
+	}
+	
+	/* Otherwise interpolation */
+	else {
+	  
+	  i = 0;
+	  while (!(rpm -> actarray[i]))
+	    ++i;
+	  if (i) {
+	    rpm -> actarray[0] = 1;
+	    par[j*rpm -> nur] = par[rpm -> actindar[i]];
+	    chapar[j*rpm -> nur] = 1;
+	  }
 
-      /* And interpolate the parameter */
-      par[index -> ipa[i]] = par[index -> inpal[i]]+(par[PRADI*rpm -> nur+index -> ripa[i]]-par[PRADI*rpm -> nur+index -> rinpal[i]])*(par[index -> inpah[i]]-par[index -> inpal[i]])/(par[PRADI*rpm -> nur+index -> rinpah[i]] - par[PRADI*rpm -> nur+index -> rinpal[i]]);
+	  i = rpm -> nur-1;
+	  while (!(rpm -> actarray[i]))
+	    --i;
+	  if (i != (rpm -> nur-1)) {
+	    printf("shit!");
+	    rpm -> actarray[rpm -> nur-1] = 1;
+	    par[(j+1)*rpm -> nur-1] = par[rpm -> actindar[i]];
+	    chapar[(j+1)*rpm -> nur-1] = 1;
+	  }
+
+	  /* Now fill the arrays to be passed to the interpolator */
+	  k = 0;
+	  for (i = 0; i < rpm -> nur; ++i) {
+	    if (rpm -> actarray[i]) {
+	      rpm -> radar[k] = par[PRADI*rpm -> nur+i];
+	      rpm -> interar[k] = par[rpm -> actindar[i]];
+	      ++k;
+	    }
+	  }
+	  
+	  /* Interpolate: use the appropriate mode, same as defined in rpm -> smothcar (user input indy) unless number of available points is 2, which entails linear */
+	  
+	  /* This we need in any case */
+	  if (!(gsl_interp_accelv = gsl_interp_accel_alloc()))
+	    goto error;
+	  
+	  /* Linear */
+	  if ((k < 3) || rpm -> smothindcar[j-NPARAMS+NDPARAMS] == INTERP_LINEAR  ) {
+	    if (!(gsl_interpv = gsl_interp_alloc (gsl_interp_linear, k)))
+	      goto error;
+	  }
+	  
+	  /* Spline */
+	  else if (k < 5 || rpm -> smothindcar[j-NPARAMS+NDPARAMS] == INTERP_CSPLINE) {
+	    if (!(gsl_interpv = gsl_interp_alloc (gsl_interp_cspline, k)))
+	      goto error;
+	  }
+	  
+	  /* Akima */
+	  else if (rpm -> smothindcar[j-NPARAMS+NDPARAMS] == INTERP_AKIMA) {
+	    if (!(gsl_interpv = gsl_interp_alloc (gsl_interp_akima, k)))
+	      goto error;
+	  }
+	  
+	  /* Something's wrong */
+	  else
+	    goto error;
+	  
+	  gsl_interp_init (gsl_interpv, rpm -> radar, rpm -> interar, k);
+	  
+	  /* Now interpolate where required */
+	  
+	  for (i = 0; i < rpm -> nur; ++i) {
+	    if (!rpm -> actarray[i]) {
+	      dummy = par[rpm -> actindar[i]];
+	      par[rpm -> actindar[i]] = gsl_interp_eval(gsl_interpv, rpm -> radar, rpm -> interar, par[PRADI*rpm -> nur+i], gsl_interp_accelv);
+	      /* If there was a change, we note it down */
+	      if (par[rpm -> actindar[i]] != dummy) {
+		rpm -> chapar[rpm -> actindar[i]] = 1;
+	      }
+	    }
+	  }
+	}
+	
+	gsl_interp_free(gsl_interpv);
+	gsl_interp_accel_free(gsl_interp_accelv);
+      }
+      if (counts == index -> nuel)
+	break;
     }
   }
-
+  /*
+    #ifdef OPENMPTIR
+    #pragma omp parallel for schedule(dynamic)
+    #endif
+    for (i = 0; i < index -> nuel; ++i) { */
+  /* First check if the upper and the lower index are identical */
+  /*    if (index -> inpal[i] == index -> inpah[i]) {
+	if (index -> ipa[i] != index -> inpal[i]) {
+	par[index -> ipa[i]] = par[index -> inpal[i]];
+	}
+	}
+	else {
+  */
+  /* And interpolate the parameter */
+  /*      par[index -> ipa[i]] = par[index -> inpal[i]]+(par[PRADI*rpm -> nur+index -> ripa[i]]-par[PRADI*rpm -> nur+index -> rinpal[i]])*(par[index -> inpah[i]]-par[index -> inpal[i]])/(par[PRADI*rpm -> nur+index -> rinpah[i]] - par[PRADI*rpm -> nur+index -> rinpal[i]]);
+	  }
+	  } */
+  
+  
   return index -> nuel;
+  
+ error:
+  if (gsl_interpv)
+    gsl_interp_free(gsl_interpv);
+  if (gsl_interp_accelv)
+    gsl_interp_accel_free(gsl_interp_accelv);
+  return -1;
 }
 /* ------------------------------------------------------------ */
 
@@ -14510,26 +15000,25 @@ static int chprm_gen(double *parms, varlel *varylist, double *newpar)
   int i,j = 0;
   int outofrange = 0;
   double oldzero = 0.0;
-
+  
   /* As long as there is any element of varylist we continue */
   while ((varylist)) {
-	 
+    
     varylist -> indicator = 0;
     
     oldzero = newpar[varylist -> elements[0]];
-	 
+    
     if (!(parms[j] == oldzero)) {
-		
+      
       varylist -> indicator = 1;
-		
       /* Every adressant of elements will be changed by the same amount */
       for (i = 0; i < varylist -> nelem; ++i) {
-		  newpar[varylist -> elements[i]] = newpar[varylist -> elements[i]]-oldzero+parms[j];
-		  
-		  /* And it will be checked whether on of them is out of range */
-		  if (maths_checkinbetw(varylist -> parmax, varylist -> parmin, newpar[varylist -> elements[i]])) {	  
-			 ++outofrange;
-		  }
+	newpar[varylist -> elements[i]] = newpar[varylist -> elements[i]]-oldzero+parms[j];
+	
+	/* And it will be checked whether on of them is out of range */
+	if (maths_checkinbetw(varylist -> parmax, varylist -> parmin, newpar[varylist -> elements[i]])) {	  
+	  ++outofrange;
+	}
       }
     }
     ++j;
@@ -14881,7 +15370,9 @@ static float zprof(int option, maths_rstrf *permrandstr, float *y2)
 
   /* Note: y1 is basically uninitialised for case 1 UNLESS it is initialised by calling zprof(6,randstr) before. This is (hopefully done throughout the program) */
 
-  float  x1, x2, w, y1;
+  float  x1, x2, w;
+  static float y1 = 0.0;
+
 /*   static float y2; */
 
   switch (option) {
@@ -15158,7 +15649,9 @@ static int hdl_init(int ndisks)
   if (ftstab_hdladditem("PSFI"    , "NATURAL", " "           , 0.0, 1.0) < 0)    { return 0;}
   if (ftstab_hdladditem("PSID"    , "NATURAL", " "           , 0.0, 1.0) < 0)    { return 0;}
   if (ftstab_hdladditem("PSDD"    , "NATURAL", " "           , 0.0, 1.0) < 0)    { return 0;}
-  if (ftstab_hdladditem("LTYPE"   , "NATURAL", " "           , 0.0, 1.0) < 0)    { return 0;}
+  if (ftstab_hdladditem("NUR"     , "NATURAL", " "           , 0.0, 1.0) < 0)    { return 0;}
+  if (ftstab_hdladditem("INTY"    , "NATURAL", " "           , 0.0, 1.0) < 0)    { return 0;}
+  if (ftstab_hdladditem("INDINTY" , "NATURAL", " "           , 0.0, 1.0) < 0)    { return 0;}
   for (disk = 1; disk < ndisks; ++disk) {
     /* NOTE: this used to be sprintf(placer, "LTYPE_%i" , disk+1); */
     sprintf(placer, "LTYPE_%i" , disk+1);
@@ -15234,7 +15727,6 @@ static int putgenresults(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
   char mes[200];
   int dev = 1;
   double solchisq;
-
  /*********************************/
  /*********************************/
  /*********************************/
@@ -15296,7 +15788,12 @@ static int putgenresults(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
   }
 
   /* Now ensure that the indexed parameters are aligned */
-  changedependent(rpm, rpm -> par, fit -> index);
+  for (i = rpm -> nur*NSSDPARAMS; i < rpm -> nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i) {
+    rpm -> chapar[i] = chkchangep(fit -> varylist, fit -> fitmode, i, rpm -> nur);
+  }
+
+  if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+    goto error;
 
   /* When ending make one run of interpover */
   interpover(rpm, rpm -> radsep, 1, NULL, fit -> index);
@@ -15473,14 +15970,19 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
   for (j = 0; j < i; ++j)
     varele = varele -> next;
   
+  for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
+    rpm -> chapar[i] = 1;
+
   /* The new parameter list will be created */
   if (!(fit -> loopnr)) {
-    changedependent(rpm, rpm -> par, fit -> index);
+    if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+      goto error;
     for (i = 0; i < rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++i)
       rpm -> oldpar[i] = rpm -> par[i];
   }
   else {
-    changedependent(rpm, rpm -> oldpar, fit -> index);
+    if (changedependent(rpm, rpm -> oldpar, fit -> index, rpm -> chapar) < 0)
+      goto error;
     for (i = 0; i < rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++i)
       rpm -> par[i] = rpm -> oldpar[i];
   }
@@ -15604,13 +16106,18 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
        varele2 = varele2 -> next;
      }
 
-        /* check and change the index */
-	changedependent(rpm, rpm -> par, fit -> index);
+     /* Reset the touched array */
+     for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
+       rpm -> chapar[i] = chkchangep(varele, fit -> fitmode, i, rpm -> nur);
 
-	/* Do it */
-	for (i = 0; i < rpm -> ndisks; ++i)
-	  rpm -> fluxpoints[i] = 0;
-	galmod(hdr, rpm, 1, varele, fit -> index, rpm -> fluxpoints, fit -> npoints);
+     /* check and change the index */
+     if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+       goto error;
+
+     /* Do it */
+     for (i = 0; i < rpm -> ndisks; ++i)
+       rpm -> fluxpoints[i] = 0;
+     galmod(hdr, rpm, 1, varele, fit -> index, rpm -> fluxpoints, fit -> npoints);
 
 	++globiter;
  
@@ -15700,7 +16207,8 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 
 	  /* check and change the index */
 
-	  changedependent(rpm, rpm -> oldpar, fit -> index);
+	  if (changedependent(rpm, rpm -> oldpar, fit -> index, rpm -> chapar) < 0)
+	    goto error;
 
 	  /* Now enlarge the delta and accept the chisquare */
 	  hdr -> oldchi2 = hdr -> chi2;
@@ -15748,15 +16256,19 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
        varele2 = varele2 -> next;
      }
 	  /* check out the indexed parameters */
-	  changedependent(rpm, rpm -> par, fit -> index);
+     for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
+       rpm -> chapar[i] = chkchangep(varele, fit -> fitmode, i, rpm -> nur);
 
-	  /* We don't have to check whether we broke out of range */
-   
-	  /* Do it */
-	  galmod(hdr, rpm, 1, varele, fit -> index, rpm -> fluxpoints, fit -> npoints);
-	  ++globiter;
-   
-	  /* Get the chisquare */
+     if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+       goto error;
+
+     /* We don't have to check whether we broke out of range */
+     
+     /* Do it */
+     galmod(hdr, rpm, 1, varele, fit -> index, rpm -> fluxpoints, fit -> npoints);
+     ++globiter;
+     
+     /* Get the chisquare */
 	  hdr -> chi2 = getchisquare_c(rpm -> par[((NPARAMS + (rpm -> ndisks - 1)*NDPARAMS))*rpm -> nur]);
    
 	  /* Regularise */
@@ -15829,8 +16341,12 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 	    for (i = 0; i < varele -> nelem; ++i)
 	      rpm -> oldpar[varele -> elements[i]] = rpm -> oldpar[varele -> elements[i]] + delta;
 
-	    /* check out the indexed parameters */
-	    changedependent(rpm, rpm -> oldpar, fit -> index);
+	    for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
+	      rpm -> chapar[i] = chkchangep(varele, fit -> fitmode, i, rpm -> nur);
+
+		 /* check out the indexed parameters */
+	    if (changedependent(rpm, rpm -> oldpar, fit -> index, rpm -> chapar) < 0)
+	      goto error;
 
 	    hdr -> oldchi2 = hdr -> chi2;
 	  }
@@ -15943,7 +16459,11 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 	rpm -> par[varele -> elements[i]] = rpm -> oldpar[varele -> elements[i]];
       
       /* check out the indexed parameters */
-      changedependent(rpm, rpm -> par, fit -> index);
+      for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
+	rpm -> chapar[i] = 1;
+
+      if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+	goto error;
       
       /* BUGFIX: This seems to be very important in order not to loose pointsources; if not done, a pointsource list might be terminated the wrong way */
       interpover(rpm, rpm -> radsep, 1, varele, fit -> index);
@@ -15976,6 +16496,9 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 
   free(prevresult);
   return 1;
+
+ error:
+  return 0;
 }
 
 /* ------------------------------------------------------------ */
@@ -16174,6 +16697,12 @@ static int writeasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
 
     /* We convert to internal units and interpolate over */
     changetointern(rpm -> par, rpm -> nur, hdr, rpm -> ndisks);
+
+    for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
+      rpm -> chapar[i] = chkchangep(fit -> varylist, fit -> fitmode, i, rpm -> nur);
+    
+    if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+      goto error;
 
     interpover(rpm, rpm -> radsep, 0, NULL, fit -> index);
 
@@ -16383,6 +16912,9 @@ static int writeasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
     
   fclose(stream);
   return 1;
+
+ error:
+  return 0;
 }
 
 /* ------------------------------------------------------------ */
@@ -16567,6 +17099,12 @@ static int writebigasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringp
 
     /* We con't convert to internal units and interpolate over */
 /*     changetointern(rpm -> par, rpm -> nur, hdr, rpm -> ndisks); */
+
+    for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
+      rpm -> chapar[i] = 1;
+    
+    if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+      goto error;
 
     interpover(rpm, dinterntoparam(rpm -> radsep, RADI, hdr, rpm -> ndisks), 0, NULL, fit -> index);
 
@@ -17934,6 +18472,8 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
       tirout_a(startinfv -> arel, stream, "MAXITER=");
       tirout_a(startinfv -> arel, stream, "CALLITE=");
       tirout_a(startinfv -> arel, stream, "SIZE=");
+      tirout_a(startinfv -> arel, stream, "INTY=");
+      tirout_a(startinfv -> arel, stream, "INDINTY=");
       
       /* We want to hide the whole pswarm issue from the user, so we only spit it out if there have been changes to the defaults */
       if (fit -> psse != PSW_PSSE_DEF) tirout_a(startinfv -> arel, stream, "PSSE=");
@@ -18033,6 +18573,8 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
 	tirout_a(startinfv -> arel, stream, inqstr);
 	sprintf(inqstr, "GR_LINES_%i=", j);
 	tirout_a(startinfv -> arel, stream, inqstr);
+	sprintf(inqstr, "GR_INTERP_%i=", j);
+	tirout_a(startinfv -> arel, stream, inqstr);
 	sprintf(inqstr, "GR_ERRB_%i=", j);
 	tirout_a(startinfv -> arel, stream, inqstr);
 	sprintf(inqstr, "GR_YMIN_%i=", j);
@@ -18052,6 +18594,8 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
 	/*  sprintf(inqstr, "GR_COAD_%i=", j); */
 	/*  tirout_a(startinfv -> arel, stream, inqstr); */
 	/*  sprintf(inqstr, "GR_LIAD_%i=", j); */
+	/*  tirout_a(startinfv -> arel, stream, inqstr); */
+	/*  sprintf(inqstr, "GR_INTERPAD_%i_%i=", j); */
 	/*  tirout_a(startinfv -> arel, stream, inqstr); */
       }
       fclose(stream);
@@ -18495,6 +19039,10 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
       rpm -> par[i] = log -> outarray[i];
     }
     changetointern(rpm -> par, rpm -> nur, hdr, rpm -> ndisks);
+    for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
+      rpm -> chapar[i] = 1;
+    if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+      goto error;
     interpover(rpm, rpm -> radsep, 0, NULL, fit -> index);
 
     /* Now fill the array */
@@ -18546,7 +19094,7 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
 static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit)
 {  
   char mes[81];
-  int j, ok, nel, def, dev;
+  int i, j, ok, nel, def, dev;
 
   char *br_device = NULL;
   double br_pa;
@@ -18779,6 +19327,12 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
     rpm -> par[j] = log -> outarray[j];
   
   /* Interpolate over */
+  for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
+    rpm -> chapar[i] = 1;
+  
+  if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+    goto error;
+
   interpover(rpm, dinterntoparam(rpm -> radsep, RADI, hdr, rpm -> ndisks), 0, NULL, fit -> index);
 
   /* Now fill the arrays */
@@ -18954,12 +19508,13 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
   char *strbef = NULL;
   
   int i, j, k, dev, def, nel, inword, nrplts;
-  char mes[81];
+  char mes[200];
   char *pgdevice = NULL;
   
-  char inqstr[13];
+  char inqstr[20];
   int colour;
   int lines;
+  int interp;
   int errbars;
   int symb;
   int fill;
@@ -18996,17 +19551,18 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
   int *adfill = NULL;
   int *adsymb = NULL;
   int *adlines = NULL;
+  int *adinterp = NULL;
   float *adsizer = NULL; 
-
+  
   int verln, horln;
   float *vertarray = NULL, *horarray = NULL;
   int *vertcarray = NULL, *horcarray = NULL;
   float vhlxs[2],vhlys[2];
-
+  
   int keypres, nread, nreturned;
-
-
-
+  
+  
+  
   /* Ask the user for the output device */
   /* for (i = 0; i < 200; ++i) { */
   /*   pgdevice[i] = ' '; */
@@ -19018,9 +19574,9 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
   /* nel = 1; */
   /* userchar_tir(pgdevice, &nel, &def, "GR_DEVICE=", mes); */
   /* termsinglestr(pgdevice); */
-
+  
   /* cancel_tir(startinfv -> arel, "GR_DEVICE"); */
-
+  
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "GR_DEVICE", "Give graphics (pgplot) device.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr)) {
     goto error;
   }
@@ -19035,18 +19591,18 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
       goto error;
     }
   }
-
+  
   freeparsed(varystr);
   varystr = NULL;
-
+  
   /* If there was no input we return */
   if (*pgdevice == '\0') {
     return 0;
   }
   /* Check if there was a logfile and stop if there wasn't */
-/*   if (*log -> logname == '\0') */
-/*     return 0; */
-
+  /*   if (*log -> logname == '\0') */
+  /*     return 0; */
+  
   /* Allocate the complicated varystr */
   if (!(varystr = (char **) malloc(MAXGRAPHS*sizeof(char *))))
     goto error;
@@ -19057,36 +19613,35 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
   /* sprintf(mes, "Give parameters to plot"); */
   /* def = 0; */
   /* nel = usertext_tir(varyhstr, &def, "GR_PARMS=",mes); */
-
+  
   /* Terminate the string */
   /* varyhstr[nel] = '\0'; */
-
+  
   if ((varyhstr))
     free(varyhstr);
   if (simparse_scn_arel_readval_string(startinfv -> arel, "GR_PARMS", "Give parameters to plot.", 0, "", 0, -1, 0, 0, &keypres, &nread, &nreturned, &varyhstr)) {
     goto error;
   }
-
-/* Change the case if it is lower case */
+  
+  /* Change the case if it is lower case */
   i = 0;
   while (varyhstr[i]) {
     if (varyhstr[i] >= 'a' && varyhstr[i] <= 'z')
       varyhstr[i] = varyhstr[i]+'A'-'a';
     ++i;
   }
-
+  
   /* Now hack it into peaces, fill varystr, ignoring wrong parameters */
   inword = 0;
   i = 0;
   nrplts = 0;
   
   while (varyhstr[i] != '\0') {
-
-   if ((inword)) {
+    
+    if ((inword)) {
       if (varyhstr[i] == ' ' || varyhstr[i] == '\t') {
 	varyhstr[i] = '\0';
-
-
+	
 	if ((ident = get_graphident(strbef, NULL, NULL, NULL, NULL, rpm -> ndisks)) > 0) {
 	  varystr[nrplts] = strbef;
 	  ++nrplts;
@@ -19094,7 +19649,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
 	inword = 0;
       }
       else if (varyhstr[i+1] == '\0') {
-
+	
 	if ((ident = get_graphident(strbef, NULL, NULL, NULL, NULL, rpm -> ndisks)) > 0) {
 	  varystr[nrplts] = strbef;
 	  ++nrplts;
@@ -19108,14 +19663,13 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     }
     ++i;
   }
-
+  
   dev = 1;
   if (nrplts < 2) {
     sprintf(mes, "Something wrong with GR_PARMS=, no output");
     anyout_tir(&dev, mes);
   }
   
-
   /* Allocate memory for the output */
   if (!(xarray = (float *) malloc((rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(float))))
     goto error;
@@ -19134,7 +19688,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
   
   if (!(ylarray = (float *) malloc((rpm -> nr*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(float))))
     goto error;
-
+  
   /* We read all values into the outarray */
   tir_get_grid(log, rpm, log -> outarray);
   
@@ -19161,29 +19715,35 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
   nel = 1;
   xrefp = rpm -> par[PXPOS*rpm -> nur+posrefr];
   userdble_tir(startinfv -> arel, &xrefp, &nel, &def, "GR_PRFX=", mes);
-
+  
   /* Export this to log */
   log -> xref = xrefp;
-
+  
   sprintf(mes, "Reference Declination [%.3f]",rpm -> par[PYPOS*rpm -> nur+posrefr]);
   def = 2;
   nel = 1;
   yrefp = rpm -> par[PYPOS*rpm -> nur+posrefr];
   userdble_tir(startinfv -> arel, &yrefp, &nel, &def, "GR_PRFY=", mes);
-
+  
   /* Export this to log */
   log -> yref = yrefp;
   
   /* Interpolate over */
+  for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
+    rpm -> chapar[i] = 1;
+    
+  if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+    goto error;
+
   interpover(rpm, barwidth = dinterntoparam(rpm -> radsep, RADI, hdr, rpm -> ndisks), 0, NULL, fit -> index);
   
   /* Now prepare the arrays for x */
-
+  
   fillgrapharray(startinfv, hdr, rpm, ident = get_graphident(varystr[0], NULL, NULL, NULL, NULL, rpm -> ndisks), xarray, xlarray, rpm -> ndisks);
   
   /* Get the scale and the identity card */
   gr_fillscaling(log, hdr, get_graphident(varystr[0], bottomdeschi, bottomdesclo, topdesclo, legend, rpm -> ndisks), &btscale, &btzero, rpm -> ndisks);
-
+  
   /* Inquire whether to plot subrings */
   sprintf(mes, "Plot values for subrings 1/0? [1]");
   def = 2;
@@ -19216,7 +19776,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
   def = 2;
   nel = 1;
   userreal_tir(startinfv -> arel, &xmax, &nel, &def, "GR_XMAX=", mes);
-
+  
   /* Inquire x-axis style */
   sprintf(mes, "Logarithmic scaling of x-axis? (1/0)");
   xlog = 0;
@@ -19226,7 +19786,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
   
   if ((xlog))
     xlog = 1;
-
+  
   /* In case of SBR, the right hand is SD */
   if (ident == SBR)
     gr_fillaxis((NPARAMS+(rpm -> ndisks-1)*NDPARAMS+DENS_GRAPHNR), topdeschi, rpm -> ndisks);
@@ -19242,7 +19802,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     gr_fillaxis(ident, topdeschi, rpm -> ndisks);
   }
   
-/* Ask whether to plot a legend */
+  /* Ask whether to plot a legend */
   sprintf(mes, "Plot legend (1/0)?");
   def = 2;
   nel = 1;
@@ -19286,7 +19846,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
   for (i = 1; i < nrplts; ++i) {
     def = 2;
     nel = 1;
-
+    
     /* Inquire colour */
     colour = i;
     sprintf(inqstr, "GR_COL_%i=", i);
@@ -19301,9 +19861,9 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     
     /* Inquire fill */
     fill = 0;
-/*     sprintf(inqstr, "GR_EMTY_%i=", i); */
-/*     sprintf(mes, "Fill symbol for plot %i? (0)", i); */
-/*     userint_tir(startinfv -> arel, &fill, &nel, &def, inqstr, mes); */
+    /*     sprintf(inqstr, "GR_EMTY_%i=", i); */
+    /*     sprintf(mes, "Fill symbol for plot %i? (0)", i); */
+    /*     userint_tir(startinfv -> arel, &fill, &nel, &def, inqstr, mes); */
     
     /* Inquire sizer */
     sizer = 1.0;
@@ -19317,18 +19877,50 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     sprintf(mes, "Plot lines 1/0? [0]");
     userint_tir(startinfv -> arel, &lines, &nel, &def, inqstr, mes);
     
+    /* Inquire lines interpolation type */
+    switch (rpm -> smothcar[ident-1+NPARAMS-NDPARAMS]) {
+    case PGP_I_CSPLINE:
+      interp = 1;
+      break;
+    case PGP_I_AKIMA:
+      interp = 2;
+      break;
+    default:
+      interp = 0;
+      break;
+    }
+    sprintf(inqstr, "GR_INTERP_%i=", i);
+    sprintf(mes, "Interpolation 0: linear, 1: cubic spline, 2: Akima [0]");
+    userint_tir(startinfv -> arel, &interp, &nel, &def, inqstr, mes);
+    switch (interp) {
+    case 1:
+      interp = PGP_I_CSPLINE;
+      break;
+    case 2:
+      interp = PGP_I_AKIMA;
+      break;
+    default:
+      interp = PGP_I_LINEAR;
+      break;
+    }
+    
+    /* Inqurie number of small interpolating lines, once for all */
+    gdsc -> interp_numlines = GR_INTERP_NUMLINES_DEFAULT;
+    sprintf(inqstr, "GR_INTERP_NUMLINES=");
+    sprintf(mes, "Number of small straight lines when interpolating [%i]", gdsc -> interp_numlines);
+    userint_tir(startinfv -> arel, &(gdsc -> interp_numlines), &nel, &def, inqstr, mes);
+
     /* Inquire errorbars */
     errbars = 0;
     sprintf(inqstr, "GR_ERRB_%i=", i);
     sprintf(mes, "Plot errorbars 1/0? [0]");
     userint_tir(startinfv -> arel, &errbars, &nel, &def, inqstr, mes);
-
+    
     /* Inquire logarithmic scaling */
     ylog = 0;
     sprintf(inqstr, "GR_YLOG_%i=", i);
     sprintf(mes, "y-axis logarithmic scaling 1/0? [0]");
     userint_tir(startinfv -> arel, &ylog, &nel, &def, inqstr, mes);
-
     
     if ((ylog))
       ylog = 1;
@@ -19340,21 +19932,21 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     sprintf(mes, "How many vertical lines for plot %i?", i);
     userint_tir(startinfv -> arel, &verln, &nel, &def, inqstr, mes);
     verln = verln > 0 ? verln : -verln;
-
+    
     if ((verln)) {
       
       /* allocate */
       if (!(vertarray = (float *) malloc(verln*sizeof(float))))
- goto error;
+	goto error;
       
       if (!(vertcarray = (int *) malloc(verln*sizeof(int))))
- goto error;
+	goto error;
       
       for (j = 0; j < verln; ++j)
- vertarray[j] = 0.0;
+	vertarray[j] = 0.0;
       
       for (j = 0; j < verln; ++j)
- vertcarray[j] = 1;
+	vertcarray[j] = 1;
       
       sprintf(mes, "Give values for vertical lines");
       def = 2;
@@ -19369,7 +19961,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
       userint_tir(startinfv -> arel, vertcarray, &nel, &def, inqstr, mes);
       
       for (j = 0; j < verln; ++j)
- vertcarray[j] = vertcarray[j] > 0 ?  vertcarray[j] : - vertcarray[j];
+	vertcarray[j] = vertcarray[j] > 0 ?  vertcarray[j] : - vertcarray[j];
     }
     
     /* Get number of horizontal lines */
@@ -19384,16 +19976,16 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
       
       /* allocate */
       if (!(horarray = (float *) malloc(horln*sizeof(float))))
- goto error;
+	goto error;
       
       if (!(horcarray = (int *) malloc(horln*sizeof(int))))
- goto error;
+	goto error;
       
       for (j = 0; j < horln; ++j)
- horarray[j] = 0.0;
+	horarray[j] = 0.0;
       
       for (j = 0; j < horln; ++j)
- horcarray[j] = 1;
+	horcarray[j] = 1;
       
       sprintf(mes, "Give values for horizontal lines of plot %i",i);
       sprintf(inqstr, "GR_HLVA_%i=", i);
@@ -19408,7 +20000,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
       userint_tir(startinfv -> arel, horcarray, &nel, &def, inqstr, mes);
       
       for (j = 0; j < verln; ++j)
- horcarray[j] = horcarray[j] > 0 ?  horcarray[j] : - horcarray[j];
+	horcarray[j] = horcarray[j] > 0 ?  horcarray[j] : - horcarray[j];
     }
     
     /* Fill yerrarray */
@@ -19431,7 +20023,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     }
     else {
       for (j = 0; j < rpm -> nur; ++j)
- yerrarray[j] = 0;
+	yerrarray[j] = 0;
     }      
     
     /* Fill yarray */
@@ -19447,7 +20039,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     /*       rpm -> par[PXPOS*rpm -> nur+j] = rpm -> par[PXPOS*rpm -> nur+j]-((int) rpm -> par[(PXPOS+1)*rpm -> nur-1]); */
     /*       rpm -> par[PYPOS*rpm -> nur+j] = rpm -> par[PYPOS*rpm -> nur+j]-((int) rpm -> par[(PYPOS+1)*rpm -> nur-1]); */
     /*     } */
-
+    
     fillgrapharray(startinfv, hdr, rpm, ident = get_graphident(varystr[i], NULL, NULL, NULL, NULL, rpm -> ndisks), yarray, ylarray, rpm -> ndisks);
     
     /* Inquire number of additional arrays */
@@ -19461,33 +20053,33 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     /* Reserve memory */
     if (nradd > 0) {
       if (!(npadd = (int *) malloc(nradd*sizeof(int))))
- goto error;
+	goto error;
       if (!(erad = (int *) malloc(nradd*sizeof(int))))
- goto error;
+	goto error;
       if (!(adcol = (int *) malloc(nradd*sizeof(int))))
- goto error;
+	goto error;
       if (!(adsymb = (int *) malloc(nradd*sizeof(int))))
- goto error;
+	goto error;
       if (!(adfill = (int *) malloc(nradd*sizeof(int))))
- goto error;
+	goto error;
       if (!(adlines = (int *) malloc(nradd*sizeof(int))))
- goto error;
+	goto error;
       if (!(adsizer = (float *) malloc(nradd*sizeof(float))))
- goto error;
+	goto error;
       if (!(xval = (float **) malloc(nradd*sizeof(float *))))
- goto error;
+	goto error;
       for (k = 0; k < nradd; ++k) {
- xval[k] = NULL;
+	xval[k] = NULL;
       }
       if (!(yval = (float **) malloc(nradd*sizeof(float *))))
- goto error;
+	goto error;
       for (k = 0; k < nradd; ++k) {
- yval[k] = NULL;
+	yval[k] = NULL;
       }
       if (!(errb = (float **) malloc(nradd*sizeof(float *))))
- goto error;
+	goto error;
       for (k = 0; k < nradd; ++k) {
- errb[k] = NULL;
+	errb[k] = NULL;
       }
     }
     
@@ -19500,123 +20092,149 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
       
       npadd[k] = -1;
       while(npadd[k] < 0) {
- def = 4;
- nel = 1;
- npadd[k] = 0;
- userint_tir(startinfv -> arel, npadd+k, &nel, &def, inqstr, mes);
- if (npadd[k] < 0) {
-   sprintf(mes, "Must be at least 0");
-   anyout_tir(&nel, mes);
-   cancel_tir(startinfv -> arel, inqstr, 2);
- }
+	def = 4;
+	nel = 1;
+	npadd[k] = 0;
+	userint_tir(startinfv -> arel, npadd+k, &nel, &def, inqstr, mes);
+	if (npadd[k] < 0) {
+	  sprintf(mes, "Must be at least 0");
+	  anyout_tir(&nel, mes);
+	  cancel_tir(startinfv -> arel, inqstr, 2);
+	}
       }
       
       if ((npadd[k])) {
- 
- /* Reserve memory */
- if (!(xval[k] = (float *) malloc(npadd[k]*sizeof(float))))
-   goto error;
- if (!(yval[k] = (float *) malloc(npadd[k]*sizeof(float))))
-   goto error;
- if (!(errb[k] = (float *) malloc(npadd[k]*sizeof(float))))
-   goto error;
- 
- /* Inquire points */
- sprintf(mes, "Give additional points, x axis for plot %i (%i):", i, k+1);
- sprintf(inqstr, "GR_XPAD_%i_%i=", i, k+1);
- def = 4;
- nel = npadd[k];
- userreal_tir(startinfv -> arel, xval[k], &nel, &def, inqstr, mes);
- 
- sprintf(mes, "Give additional points, y axis for plot %i (%i):", i, k+1);
- sprintf(inqstr, "GR_YPAD_%i_%i=", i, k+1);
- userreal_tir(startinfv -> arel, yval[k], &nel, &def, inqstr, mes);
- 
- /* Inquire errorbars */
- sprintf(mes, "Errorbars to additional points of plot %i (%i) (1/0)?", i, k+1);
- sprintf(inqstr, "GR_ERAD_%i_%i=", i, k+1);
- def = 2;
- nel = 1;
- erad[k] = 0;
- userint_tir(startinfv -> arel, &erad[k], &nel, &def, inqstr, mes);
- 
- if ((erad[k])) {
-   
-   /* Get the errorbars */
-   sprintf(mes, "Give errorbars for additional points of plot %i (%i):", i, k+1);
-   sprintf(inqstr, "GR_EBAD_%i_%i=", i, k+1);
-   def = 4;
-   nel = npadd[k];
-   userreal_tir(startinfv -> arel, errb[k], &nel, &def, inqstr, mes);
- }
- else {
-   for (j = 0; j < npadd[k]; ++j)
-     (errb[k])[j] = 0;
- }
- 
- /* Inquire colour */
- sprintf(mes, "Give colour of additional points of plot %i (%i):", i, k+1);
- sprintf(inqstr, "GR_COAD_%i_%i", i, k+1);
- def = 2;
- nel = 1;
- adcol[k] = i;
- userint_tir(startinfv -> arel, adcol+k, &nel, &def, inqstr, mes);
- 
- /* Inquire symbol */
- sprintf(mes, "Give symbol of additional points of plot %i (-1):", i);
- sprintf(inqstr, "GR_SYAD_%i_%i", i, k+1);
- def = 2;
- nel = 1;
- adsymb[k] = -1;
- userint_tir(startinfv -> arel, adsymb+k, &nel, &def, inqstr, mes);
- 
- /* Inquire emptyness */
- sprintf(mes, "Symbols of additional points of plot %i empty: (1)", i);
- sprintf(inqstr, "GR_EMAD_%i_%i", i, k+1);
- def = 2;
- nel = 1;
- adfill[k] = 0;
-/*  userint_tir(startinfv -> arel, adfill+k, &nel, &def, inqstr, mes); */
- 
- /* Inquire sizer */
- sprintf(mes, "Size of additional points relative to standard size");
- sprintf(inqstr, "GR_SIAD_%i_%i", i, k+1);
- def = 2;
- nel = 1;
- adsizer[k] = 1.0;
- userreal_tir(startinfv -> arel, adsizer+k, &nel, &def, inqstr, mes);
- 
- /* Inquire lines */
- sprintf(mes, "Draw lines between additional points of plot %i (%i) (1/0)?", i, k+1);
- sprintf(inqstr, "GR_LIAD_%i_%i", i, k+1);
- def = 2;
- nel = 1;
- adlines[k] = 0;
- userint_tir(startinfv -> arel, adlines+k, &nel, &def, inqstr, mes);
+	
+	/* Reserve memory */
+	if (!(xval[k] = (float *) malloc(npadd[k]*sizeof(float))))
+	  goto error;
+	if (!(yval[k] = (float *) malloc(npadd[k]*sizeof(float))))
+	  goto error;
+	if (!(errb[k] = (float *) malloc(npadd[k]*sizeof(float))))
+	  goto error;
+	
+	/* Inquire points */
+	sprintf(mes, "Give additional points, x axis for plot %i (%i):", i, k+1);
+	sprintf(inqstr, "GR_XPAD_%i_%i=", i, k+1);
+	def = 4;
+	nel = npadd[k];
+	userreal_tir(startinfv -> arel, xval[k], &nel, &def, inqstr, mes);
+	
+	sprintf(mes, "Give additional points, y axis for plot %i (%i):", i, k+1);
+	sprintf(inqstr, "GR_YPAD_%i_%i=", i, k+1);
+	userreal_tir(startinfv -> arel, yval[k], &nel, &def, inqstr, mes);
+	
+	/* Inquire errorbars */
+	sprintf(mes, "Errorbars to additional points of plot %i (%i) (1/0)?", i, k+1);
+	sprintf(inqstr, "GR_ERAD_%i_%i=", i, k+1);
+	def = 2;
+	nel = 1;
+	erad[k] = 0;
+	userint_tir(startinfv -> arel, &erad[k], &nel, &def, inqstr, mes);
+	
+	if ((erad[k])) {
+	  
+	  /* Get the errorbars */
+	  sprintf(mes, "Give errorbars for additional points of plot %i (%i):", i, k+1);
+	  sprintf(inqstr, "GR_EBAD_%i_%i=", i, k+1);
+	  def = 4;
+	  nel = npadd[k];
+	  userreal_tir(startinfv -> arel, errb[k], &nel, &def, inqstr, mes);
+	}
+	else {
+	  for (j = 0; j < npadd[k]; ++j)
+	    (errb[k])[j] = 0;
+	}
+	
+	/* Inquire colour */
+	sprintf(mes, "Give colour of additional points of plot %i (%i):", i, k+1);
+	sprintf(inqstr, "GR_COAD_%i_%i", i, k+1);
+	def = 2;
+	nel = 1;
+	adcol[k] = i;
+	userint_tir(startinfv -> arel, adcol+k, &nel, &def, inqstr, mes);
+	
+	/* Inquire symbol */
+	sprintf(mes, "Give symbol of additional points of plot %i (-1):", i);
+	sprintf(inqstr, "GR_SYAD_%i_%i", i, k+1);
+	def = 2;
+	nel = 1;
+	adsymb[k] = -1;
+	userint_tir(startinfv -> arel, adsymb+k, &nel, &def, inqstr, mes);
+	
+	/* Inquire emptyness */
+	sprintf(mes, "Symbols of additional points of plot %i empty: (1)", i);
+	sprintf(inqstr, "GR_EMAD_%i_%i", i, k+1);
+	def = 2;
+	nel = 1;
+	adfill[k] = 0;
+	/*  userint_tir(startinfv -> arel, adfill+k, &nel, &def, inqstr, mes); */
+	
+	/* Inquire sizer */
+	sprintf(mes, "Size of additional points relative to standard size");
+	sprintf(inqstr, "GR_SIAD_%i_%i", i, k+1);
+	def = 2;
+	nel = 1;
+	adsizer[k] = 1.0;
+	userreal_tir(startinfv -> arel, adsizer+k, &nel, &def, inqstr, mes);
+	
+	/* Inquire lines */
+	sprintf(mes, "Draw lines between additional points of plot %i (%i) (1/0)?", i, k+1);
+	sprintf(inqstr, "GR_LIAD_%i_%i", i, k+1);
+	def = 2;
+	nel = 1;
+	adlines[k] = 0;
+	userint_tir(startinfv -> arel, adlines+k, &nel, &def, inqstr, mes);
+	
+	switch (interp) {
+	case PGP_I_CSPLINE:
+	  adinterp[k] = 1;
+	  break;
+	case PGP_I_AKIMA:
+	  adinterp[k] = 2;
+	  break;
+	default:
+	  adinterp[k] = 0;
+	  break;
+	}
+	sprintf(inqstr, "GR_INTERPAD_%i_%i=", i, k+1);
+	sprintf(mes, "Interpolation between additional points plot %i (%i), 0: linear, 1: cubic spline, 2: Akima [0]", i, k+1);
+	userint_tir(startinfv -> arel, adinterp+k, &nel, &def, inqstr, mes);
+	switch (adinterp[k]) {
+	case 1:
+	  adinterp[k] = PGP_I_CSPLINE;
+	  break;
+	case 2:
+	  adinterp[k] = PGP_I_AKIMA;
+	  break;
+	default:
+	  adinterp[k] = PGP_I_LINEAR;
+	  break;
+	}
       }
     }
-    
+      
     /* Inquire min and max */
     ymin = yarray[0]-fabs(yerrarray[0]);
     for (j = 1; j < rpm -> nur; ++j)
       ymin = (ymin > (yarray[j]-fabs(yerrarray[j])))?(yarray[j]-fabs(yerrarray[j])):ymin;
     if ((bars))
       for (j = 0; j < rpm -> nr; ++j)
- ymin = (ymin > ylarray[j])?ylarray[j]:ymin;
+	ymin = (ymin > ylarray[j])?ylarray[j]:ymin;
     for (k = 0; k < nradd; ++k) {
       for (j = 0; j < npadd[k]; ++j)
- ymin = (ymin > ((yval[k])[j]-fabs((errb[k])[j])))?((yval[k])[j]-fabs((errb[k])[j])):ymin;
+	ymin = (ymin > ((yval[k])[j]-fabs((errb[k])[j])))?((yval[k])[j]-fabs((errb[k])[j])):ymin;
     }
-    
+      
     ymax = yarray[0]+fabs(yerrarray[0]);
     for (j = 1; j < rpm -> nur; ++j)
       ymax = (ymax < (yarray[j]+fabs(yerrarray[j])))?(yarray[j]+fabs(yerrarray[j])):ymax;
     if ((bars))
       for (j = 0; j < rpm -> nr; ++j)
- ymax = (ymax < ylarray[j])?ylarray[j]:ymax;
+	ymax = (ymax < ylarray[j])?ylarray[j]:ymax;
     for (k = 0; k < nradd; ++k) {
       for (j = 0; j < npadd[k]; ++j)
- ymax = (ymax < ((yval[k])[j]+fabs((errb[k])[j])))?((yval[k])[j]+fabs((errb[k])[j])):ymax;
+	ymax = (ymax < ((yval[k])[j]+fabs((errb[k])[j])))?((yval[k])[j]+fabs((errb[k])[j])):ymax;
     }
     /* Ask */
     sprintf(inqstr, "GR_YMIN_%i=", i);
@@ -19629,11 +20247,11 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     def = 2;
     nel = 1;
     userreal_tir(startinfv -> arel, &ymax, &nel, &def, inqstr, mes);
-    
+      
     /* Fill the y axis descriptors and scalings */
     /* Get the scale and the identity card */
     gr_fillscaling(log, hdr, get_graphident(varystr[i], leftdeschi, leftdesclo, rightdesclo, legend, rpm -> ndisks), &lrscale, &lrzero, rpm -> ndisks);
-    
+      
     /* In case of SBR, the right hand is SD */
     if (ident == SBR)
       gr_fillaxis((NPARAMS+(rpm -> ndisks-1)*NDPARAMS+DENS_GRAPHNR), rightdeschi, rpm -> ndisks);
@@ -19647,35 +20265,37 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     }
     else
       gr_fillaxis(ident, rightdeschi, rpm -> ndisks);
-    
+      
     /* Plot the box */
     pgp_openbox(gdsc, i, xmin, xmax, ymin, ymax, leftdeschi, leftdesclo, rightdeschi, rightdesclo, bottomdeschi, bottomdesclo, topdeschi, topdesclo, lrzero, lrscale, btzero, btscale, xlog, ylog);
-
+      
     /* Plot additional points */
     if (nradd > 0) {
       for (k = 0; k < nradd; ++k) {
- if ((npadd[k])) {
-   
-   pgp_marker(gdsc, npadd[k], xval[k], yval[k], adcol[k], adfill[k], adsymb[k], adsizer[k]);
-   
-   /* Plot errorbars */
-   if ((erad[k]))
-     pgp_errby(gdsc, npadd[k], xval[k], yval[k], errb[k], adcol[k]);
-   
-   /* Plot lines */
-   if ((adlines[k]))
-     pgp_lines(gdsc, npadd[k], xval[k], yval[k], adcol[k]);
-   
-   /* Free memory */
-   free(xval[k]);
-   xval[k] = NULL;
-   free(yval[k]);
-   yval[k] = NULL;
-   free(errb[k]);
-   errb[k] = NULL;
- }
+	if ((npadd[k])) {
+	    
+	  pgp_marker(gdsc, npadd[k], xval[k], yval[k], adcol[k], adfill[k], adsymb[k], adsizer[k]);
+	    
+	  /* Plot errorbars */
+	  if ((erad[k]))
+	    pgp_errby(gdsc, npadd[k], xval[k], yval[k], errb[k], adcol[k]);
+	    
+	  /* Plot lines */
+	  if ((adlines[k])) {
+	    gdsc -> interptype_lines = adinterp[k];
+	    pgp_lines(gdsc, npadd[k], xval[k], yval[k], adcol[k]);
+	  }
+
+	  /* Free memory */
+	  free(xval[k]);
+	  xval[k] = NULL;
+	  free(yval[k]);
+	  yval[k] = NULL;
+	  free(errb[k]);
+	  errb[k] = NULL;
+	}
       }
-      
+	
       /* free stuff */
       free(npadd);
       free(erad);
@@ -19685,72 +20305,74 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
       free(yval);
       free(errb);
     }
-    
+      
     /* Plot bars */
     if ((bars)) 
       pgp_bars(gdsc, rpm -> nr, xlarray, ylarray, barwidth, colour);
-    
+      
     /* Plot lines */
-    if ((lines))
+    if ((lines)) {
+      gdsc -> interptype_lines = interp;
       pgp_lines(gdsc, rpm -> nur, xarray, yarray, colour);
+    }
 
     /* Copy the x array and remove points */
     for (j = 0; j < rpm -> nur; ++j)
       xarray2[j] = xarray[j];
     numplpts = gr_deleteindexed(rpm -> nur, ident, xarray2, yarray, yerrarray, fit -> index, rpm -> ndisks);
-
-    if (numplpts) {
-
-    /* Plot errorbars */
-      if ((errbars))
- pgp_errby(gdsc, numplpts, xarray2, yarray, yerrarray, colour);
       
+    if (numplpts) {
+	
+      /* Plot errorbars */
+      if ((errbars))
+	pgp_errby(gdsc, numplpts, xarray2, yarray, yerrarray, colour);
+	
       /* Plot the points */
       pgp_marker(gdsc, numplpts, xarray2, yarray, colour, fill, symb, sizer);
     }
-    
+      
     /* plot horizontal lines */
     if ((horln)) {
       for (j = 0; j < horln; ++j) {
- vhlys[0] = vhlys[1] = horarray[j];
- 
- if (xmin == xmax) { 
-   vhlxs[0] = 1000000.0*xarray[0]+0.1;
-   vhlxs[1] = -1000000.0*xarray[0]-0.1;
- }
- else {
-   vhlxs[0] = (xmin+xmax)/2.0-1000000.0*(xmax-xmin);
-   vhlxs[1] = (xmin+xmax)/2.0+1000000.0*(xmax-xmin);
- }
- pgp_lines(gdsc, 2, vhlxs, vhlys, horcarray[j]);
+	vhlys[0] = vhlys[1] = horarray[j];
+	  
+	if (xmin == xmax) { 
+	  vhlxs[0] = 1000000.0*xarray[0]+0.1;
+	  vhlxs[1] = -1000000.0*xarray[0]-0.1;
+	}
+	else {
+	  vhlxs[0] = (xmin+xmax)/2.0-1000000.0*(xmax-xmin);
+	  vhlxs[1] = (xmin+xmax)/2.0+1000000.0*(xmax-xmin);
+	}
+	pgp_lines(gdsc, 2, vhlxs, vhlys, horcarray[j]);
       }
       free(horarray);
       free(horcarray);
     }
-    
+      
     /* plot vertical lines */
     if ((verln)) {
       for (j = 0; j < verln; ++j) {
- vhlxs[0] = vhlxs[1] = vertarray[j];
- if (ymin == ymax) { 
-   vhlys[0] = 1000000.0*yarray[0]+0.1;
-   vhlys[1] = -1000000.0*yarray[0]-0.1;
- }
- else {
-   vhlys[0] = (ymin+ymax)/2.0-1000000.0*(ymax-ymin);
-   vhlys[1] = (ymin+ymax)/2.0+1000000.0*(ymax-ymin);
- }
- pgp_lines(gdsc, 2, vhlxs, vhlys, vertcarray[j]);
+	vhlxs[0] = vhlxs[1] = vertarray[j];
+	if (ymin == ymax) { 
+	  vhlys[0] = 1000000.0*yarray[0]+0.1;
+	  vhlys[1] = -1000000.0*yarray[0]-0.1;
+	}
+	else {
+	  vhlys[0] = (ymin+ymax)/2.0-1000000.0*(ymax-ymin);
+	  vhlys[1] = (ymin+ymax)/2.0+1000000.0*(ymax-ymin);
+	}
+	pgp_lines(gdsc, 2, vhlxs, vhlys, vertcarray[j]);
       }
       free(vertarray);
       free(vertcarray);
     }
-    
+      
     /* Put the legend line */
     if ((pltlegend))
       pgp_legend(gdsc, i%2+1, i/2+1, legend);
   }
-  
+    
   /* Free memory */
   free(varystr);
   free(varyhstr);
@@ -19761,19 +20383,19 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
   free(xlarray);
   free(ylarray);
   free(pgdevice);
-  
+    
   /* Once we got here, we ask the user if to continue */
   sprintf(mes, "Continue (Press return)?");
   def = 1;
   nel = 1;
   userint_tir(startinfv -> arel, &pltlegend, &nel, &def, "GR_CONT=", mes);
-  
-  
+    
+    
   /* Then we stop it */
   pgp_end();
-  
+    
   return nrplts-1;
-  
+    
  error:
   if ((varystr))
     free(varystr);
@@ -19791,7 +20413,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     free(xlarray);
   if ((ylarray))
     free(ylarray);
-
+    
   if ((npadd))
     free(npadd);
   if ((erad))
@@ -19814,37 +20436,37 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     free(vertcarray);
   if ((horcarray))
     free(horcarray);
-
+    
   if ((xval)) {
     for (i = 0; i < nradd; ++i) {
       if ((xval[i]))
- free(xval[i]);
+	free(xval[i]);
     }
     free(xval);
   }
-
+    
   if ((yval)) {
     for (i = 0; i < nradd; ++i) {
       if ((yval[i]))
- free(yval[i]);
+	free(yval[i]);
     }
     free(yval);
   }
-
+    
   if ((errb)) {
     for (i = 0; i < nradd; ++i) {
       if ((errb[i]))
- free(errb[i]);
+	free(errb[i]);
     }
     free(errb);
   }
-
+    
   if ((pgdevice))
     free(pgdevice);
-
+    
   return 0;
 }
-
+  
 /* ------------------------------------------------------------ */
 
 

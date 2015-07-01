@@ -62,10 +62,29 @@
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* INTERNAL INCLUDES */
 /* ------------------------------------------------------------ */
+#include <maths.h>
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* SYMBOLIC CONSTANTS */
 /* ------------------------------------------------------------ */
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/**
+   @def INTERPTYPE_XXX
+   @brief Integer identifyer for interpolation types
+
+   PGP_I_LINEAR: linear interpolation
+   PGP_I_CPLINE: natural cubic spline
+   PGP_I_AKIMA: natural Akima interpolation
+
+   See gsl documentation.
+
+*/
+/* ------------------------------------------------------------ */
+#define PGP_I_LINEAR MATHS_I_LINEAR
+#define PGP_I_CSPLINE MATHS_I_CSPLINE
+#define PGP_I_AKIMA MATHS_I_AKIMA
+
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* TYPEDEFS */
@@ -156,6 +175,12 @@ typedef struct pgp_gdsc
 
   /** @brief Current viewport scaling y axis 0: normal 1: logarithmic 2: hms 3: dms */
   int logarcsy;
+
+  /** @brief Current viewport interpolation for lines, PGP_I_LINEAR: linear; PGP_I_CSPLINE: cubic natural spline; PGP_I_AKIMA: Akima */
+  int interptype_lines;
+
+  /** @brief Any line is a set of linear lines; this is the number of such lines in case of cubic natural spline and Akima interpolation */
+  int interp_numlines;
 
 } pgp_gdsc;
 
