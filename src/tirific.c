@@ -433,7 +433,7 @@ This was commented hdu stuff
 /*
                tirific.dc1
 
-Program:       TIRIFIC (Version 2.2.5)
+Program:       TIRIFIC (Version 2.3.0)
 
 Purpose:       Fit a tilted-ring model to a datacube
 
@@ -6636,7 +6636,7 @@ int main(int argc, char *argv[])
 
   printf("\n");
   printf("####################\n");
-  printf("# TIRIFIC v. 2.2.5 #\n");
+  printf("# TIRIFIC v. 2.3.0 #\n");
   printf("####################\n");
   printf("\n");
 
