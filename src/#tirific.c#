@@ -6636,7 +6636,7 @@ int main(int argc, char *argv[])
 
   printf("\n");
   printf("####################\n");
-  printf("# TIRIFIC v. 2.3.1 #\n");
+  printf("# TIRIFIC v. 2.3.0 #\n");
   printf("####################\n");
   printf("\n");
 
@@ -6698,10 +6698,10 @@ int main(int argc, char *argv[])
     
     /* Put the results for each subring in an ascii table */
     writebigasctable(startinfv, log, hdr, rpm, fit);
-
+    
     /* Graphics */
     nrplts = graphout(startinfv, log, hdr, rpm, fit);
-   
+    
     nrplts = ((nrplts))?nrplts:1;
    
     briggsout(startinfv, log, hdr, rpm, fit);
@@ -18368,16 +18368,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
 	}
 	reparray = log -> outarray;
       }
-
-      /* put out the radii */
-      ftstab_putcoltitl(key, RADI);
-      fprintf(stream, "%8s= ", key);
-      for (m = 0; m < nrings; ++m) {
-	fprintf(stream, format, radii[m]);
-      }
-      fprintf(stream, "\n");
-
-      for (j = NSSDPARAMS; j < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS); ++j) {
+      for (j = 0; j < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS); ++j) {
 	
 	/************/
 	/************/
@@ -18391,43 +18382,58 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
 	  
 	  /************/
 	  
+	  
 	  /* Put the title */
 	  ftstab_putcoltitl(key, j+1);
 	  fprintf(stream, "%8s= ", key);
-	  	  
+	  
+	  if (!(j == PRADI) && ((n = ((j-NSSDPARAMS)%NDPARAMS + NSSDPARAMS)) == PXPOS || n == PYPOS)) {
 	    for (m = 0; m < nrings; ++m) {
 	      
-	      /* Not sure if this is required, but do it anyway */
-	      gsl_interp_accel_reset(rpm -> gsl_interp_accelarray[j-NSSDPARAMS]);
-	      
-	      /* Very sure that this is a requirement; a test has shown */
-	      /* gsl_interp_init(rpm -> gsl_interparray[j-NSSDPARAMS],rpm -> par+PRADI*rpm -> nur, rpm -> par + rpm -> nur*j, rpm -> nur); */
-	      gsl_interp_init(rpm -> gsl_interparray[j-NSSDPARAMS],reparray+PRADI*rpm -> nur, reparray + rpm -> nur*j, rpm -> nur);
-	      
 	      /* Search the first radius that is greater than the current, don't care about efficiency */
-	      /* for (k = 1; k < rpm -> nur; ++k) { */
-	      /* 	if (radii[m] < reparray[PRADI*rpm -> nur+k]) */
-	      /* 	  break; */
-	      /* } */
+	      for (k = 1; k < rpm -> nur; ++k) {
+		if (radii[m] < reparray[PRADI*rpm -> nur+k])
+		  break;
+	      }
 	      
 	      /* Now we can interpolate or extrapolate */
 	      /* Check for radius here */
-	      if ( radii[m] < reparray[PRADI*rpm -> nur+rpm -> nur-1]) {
-		/* dpdr = (reparray[j*rpm -> nur+k]-reparray[j*rpm -> nur+k-1])/(reparray[PRADI*rpm -> nur+k]-reparray[PRADI*rpm -> nur+k-1]); */
-		/* dpdr = reparray[j*rpm -> nur+k-1]+dpdr*(radii[m]-reparray[PRADI*rpm -> nur+k-1]); */
-		dpdr = gsl_interp_eval(rpm -> gsl_interparray[j-NSSDPARAMS], rpm -> par+PRADI*rpm -> nur, rpm -> par + rpm -> nur*j, radii[m], rpm -> gsl_interp_accelarray[j-NSSDPARAMS]);
+	      if (k < rpm -> nur) {
+		dpdr = (reparray[j*rpm -> nur+k]-reparray[j*rpm -> nur+k-1])/(reparray[PRADI*rpm -> nur+k]-reparray[PRADI*rpm -> nur+k-1]);
 	      }
 	      else {
-		dpdr = reparray[(j+1)*rpm -> nur-1];
+		dpdr = 0.;
 	      }
-
-	      if (!(j == PRADI) && ((n = ((j-NSSDPARAMS)%NDPARAMS + NSSDPARAMS)) == PXPOS || n == PYPOS)) {
-		fprintf(stream, format2, dpdr);
+	      
+	      fprintf(stream, format2, reparray[j*rpm -> nur+k-1]+dpdr*(radii[m]-reparray[PRADI*rpm -> nur+k-1]));
+	    }
+	  }
+	  else {
+	    for (m = 0; m < nrings; ++m) {
+	      
+	      /* Search the first radius that is greater than the current, don't care about efficiency */
+	      for (k = 1; k < rpm -> nur; ++k) {
+		if (radii[m] < reparray[PRADI*rpm -> nur+k])
+		  break;
+	      }
+	      
+	      /* Now we can interpolate or extrapolate */
+	      /* Check for radius here */
+	      if (k < rpm -> nur) {
+		  dpdr = (reparray[j*rpm -> nur+k]-reparray[j*rpm -> nur+k-1])/(reparray[PRADI*rpm -> nur+k]-reparray[PRADI*rpm -> nur+k-1]);
 	      }
 	      else {
-	      	fprintf(stream, format, dpdr);
+		if (j == PRADI)
+		  dpdr = 1;
+		else
+		  dpdr = 0;
 	      }
-	    } 
+	      fprintf(stream, format, reparray[j*rpm -> nur+k-1]+dpdr*(radii[m]-reparray[PRADI*rpm -> nur+k-1]));
+	    }
+	    /************/
+	    /************/
+	    /************/
+	  }
 	    fprintf(stream, "\n");
 	}   
       }
@@ -20303,7 +20309,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     /* Plot bars */
     if ((bars)) 
       pgp_bars(gdsc, rpm -> nr, xlarray, ylarray, barwidth, colour);
-
+      
     /* Plot lines */
     if ((lines)) {
       gdsc -> interptype_lines = interp;

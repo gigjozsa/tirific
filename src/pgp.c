@@ -1612,12 +1612,16 @@ static int pgp_get_interparray(float *x, float *y, int npoints, int interptype, 
   (*yout)[0] = y[0];
 
   dx = (x[npoints-1]-x[0])/((float)(noutpoints-1));
+
+  /* Bugfix: rounding error could lead to failure of interpolation */
+  --noutpoints;
+
   for (i = 1; i < noutpoints; ++i) {
     (*xout)[i] = (*xout)[i-1]+dx;
     (*yout)[i] = gsl_interp_eval(gsl_interpv, xdouble, ydouble, (*xout)[i], gsl_interp_accelv);
   }
-  (*xout)[i-1] = x[npoints-1];
-  (*yout)[i-1] = y[npoints-1];
+  (*xout)[i] = x[npoints-1];
+  (*yout)[i] = y[npoints-1];
   
   /* last points should be identical regardless of rounding errors */
     free(xdouble);
