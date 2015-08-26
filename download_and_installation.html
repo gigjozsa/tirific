@@ -123,6 +123,10 @@ TiRiFiC is an open source project. We provide the source code on this web page. 
         Contents:
         <ul class="par" style="list-style-type:none;padding-left:0em;margin-top:0px;margin-bottom:0px;">
           <li><a href="#Download">Download</a></li>
+        <ul class="par" style="list-style-type:none;padding-left:2em;margin-top:0px;margin-bottom:0px;">
+          <li><a href="#Download from github">Download from github</a></li>
+          <li><a href="#Download from web page">Download from web page</a></li>
+        </ul>
           <li><a href="#Installation">Installation</a></li>
         <ul class="par" style="list-style-type:none;padding-left:2em;margin-top:0px;margin-bottom:0px;">
           <li><a href="#Fresh Installation">Fresh Installation</a></li>
@@ -141,6 +145,22 @@ TiRiFiC is an open source project. We provide the source code on this web page. 
 <b>BEFORE DOWNLOADING SOFTWARE FROM THIS WEB PAGE, READ <a href="disclaimer.html">THIS DISCLAIMER</a>!</b>
 </center>
 </p>
+<p class="par">
+TiRiFiC can be obtained from the www pages or, alternatively, from its <a href="https://github.com/gigjozsa/tirific">github repository https://github.com/gigjozsa/tirific</a>. Downloading from github has the advantage that the latest binary, compiled under Ubuntu 14.04, is also included in the repository and can be tried as a working solution before going through the installation steps.
+</p>
+<h4><a name="Download from github">Download from github</a></h4>
+<ol class="par">
+    <li>With a browser open the <a href="https://github.com/gigjozsa/tirific">github repository https://github.com/gigjozsa/tirific</a></li>
+    <tt>> firefox  https://github.com/gigjozsa/tirific</tt><br>
+<br>
+    <li>(Install git)</li>
+<br>
+    <li>Get the files using git or by clicking on the .zip archive button. Please take into account that the template settings file (which in case of a local installation you will have edited) will be downloaded as well.</li>
+    <tt>> git clone git@github.com:gigjozsa/tirific.git</tt><br>
+<br>
+<li>If you have Ubuntu 14.04, check if the binary tirific-master/bin/tirific works (see <a href="#Test tirific">"Test TiRiFiC"</a>). If not, proceed with <a href="#Fresh Installation">Fresh Installation</a> omitting download step.</li>
+</ol>
+<h4><a name="Download from web page">Download from web page</a></h4>
 <p>
 <center>
 <table rules="all" border="1" cellpadding="5" summary="Parameters described here">
@@ -330,7 +350,7 @@ should finish successfully. If this is not the case, try to solve the issue by e
 removes unnessessary files.
 <br>
 <br>
-    <li>Test TiRiFiC</li>
+    <li><a name="Test tirific">Test TiRiFiC</a></li>
 A test file is included in the installation. To test TiRiFiC do:<br>
 <tt>> cd bin</tt><br>
 <tt>> tirific deffile=tirific.def</tt><br>
@@ -427,7 +447,7 @@ Alternatively, copy the <tt>tirific</tt> to the directory in which you want to u
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Wed Aug 26 10:06:51 SAST 2015
+Last modified: Wed Aug 26 15:43:37 SAST 2015
 <!-- hhmts end -->
 <br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
 </div>
