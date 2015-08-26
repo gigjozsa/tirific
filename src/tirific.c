@@ -433,7 +433,7 @@ This was commented hdu stuff
 /*
                tirific.dc1
 
-Program:       TIRIFIC (Version 2.3.0)
+Program:       TIRIFIC (Version 2.3.2)
 
 Purpose:       Fit a tilted-ring model to a datacube
 
@@ -1170,7 +1170,7 @@ par = (par-NSSDPARAMS)%NDPARAMS + NSSDPARAMS;
    @brief Version number of this module
 */
 /* ------------------------------------------------------------ */
-#define VERSION_NUMBER 2.3.0
+#define VERSION_NUMBER 2.3.2
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -6636,7 +6636,7 @@ int main(int argc, char *argv[])
 
   printf("\n");
   printf("####################\n");
-  printf("# TIRIFIC v. 2.3.1 #\n");
+  printf("# TIRIFIC v. 2.3.2 #\n");
   printf("####################\n");
   printf("\n");
 
@@ -12555,6 +12555,15 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
 	++j;
 	nextvarlel = nextvarlel -> next;
       }
+
+      /* BUGFIX: change this according to the current solution */
+      for (i = rpm -> nur*NSSDPARAMS; i < rpm ->nur *(NSSDPARAMS+NDPARAMS*rpm -> ndisks); ++i)
+	rpm -> chapar[i] = chkchangep(fit -> varylist, fit -> fitmode, i, rpm -> nur);
+      /*    rpm -> chapar[i] = 1; */
+      
+      if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
+	goto error;
+      
       ++fit -> loopnr;
     }
     
@@ -12785,7 +12794,6 @@ static double gchsq_gen_start(double *vector, void *rest)
   adar *adarv;
   /************************/
 
-
 /* We get all the info from the additional arguments */
   adarv = (adar *) rest;
 
@@ -12891,8 +12899,6 @@ static double gchsq_gen(double *vector, void *rest)
   /************************/
   adar *adarv;
   /************************/
-
-
 
 /* We get all the info from the additional arguments */
   adarv = (adar *) rest;
@@ -14552,7 +14558,7 @@ static int chkchangep(varlel *varele, int fitmode, int parnr, int nur)
 {
   int i, param;
   /* int k; */
-  
+
   /* If fitmode is Golden Section, we check only the actual varele element */
   if ((fitmode == GOLDEN_SECTION)) {
     for (i = 0; i < varele -> nelem; ++i) {
@@ -14649,29 +14655,32 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
   /* index is strictly sorted */
   counts = 0;
   
+  /* BUGFIX: this outer loop is required to catch a situation where a parameter is interpolated over but does not belong to a group which is fitted */
+  while (counts < index -> nuel) {
   /* loop over all parameters except the radii */
   for (j = NSSDPARAMS; j < NSSDPARAMS+rpm -> ndisks*NDPARAMS; ++j) {
     nactive = 0;
-    
+
     /* Check if any of the parameters in that parameter group has changed */
     for (i = 0; i < rpm -> nur; ++i) {
-      if (chapar[j*rpm->nur+i])
+      if (chapar[j*rpm->nur+i]) {
 	break;
+      }
     }
     
     /* Only if there was a change, we need to interpolate in that group */
-    if (i < rpm -> nur) {    
-      for (i = 0; i < rpm -> nur; ++i) {
-	rpm -> actindar[i] = j*rpm -> nur + i;
-	if (index -> ipa[counts] == rpm -> actindar[i]) {
-	  rpm -> actarray[i] = 0;
-	  ++counts;
-	}
-	else {
-	  rpm -> actarray[i] = 1;
-	  ++nactive;
-	}
-      }
+    if (i < rpm -> nur) {
+	for (i = 0; i < rpm -> nur; ++i) {
+	  rpm -> actindar[i] = j*rpm -> nur + i;
+	  if (index -> ipa[counts] == rpm -> actindar[i]) {
+	    rpm -> actarray[i] = 0;
+	    ++counts;
+	  }
+	  else {
+	    rpm -> actarray[i] = 1;
+	    ++nactive;
+	  }
+     }
       /* fprintf(stderr,"got here2\n"); */
       
       /* Now evaluate a few situations */
@@ -14689,7 +14698,6 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
 	
 	/* Otherwise interpolation */
 	else {
-	  
 	  i = 0;
 	  while (!(rpm -> actarray[i]))
 	    ++i;
@@ -14703,7 +14711,6 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
 	  while (!(rpm -> actarray[i]))
 	    --i;
 	  if (i != (rpm -> nur-1)) {
-	    printf("shit!");
 	    rpm -> actarray[rpm -> nur-1] = 1;
 	    par[(j+1)*rpm -> nur-1] = par[rpm -> actindar[i]];
 	    chapar[(j+1)*rpm -> nur-1] = 1;
@@ -14752,11 +14759,13 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
 	  /* Now interpolate where required */
 	  
 	  for (i = 0; i < rpm -> nur; ++i) {
-	    if (!rpm -> actarray[i]) {
+	    /* fprintf(stderr,"got here number: %i %i\n", i, rpm -> actarray[i]); */
+	    if (!(rpm -> actarray[i])) {
 	      dummy = par[rpm -> actindar[i]];
 	      par[rpm -> actindar[i]] = gsl_interp_eval(gsl_interpv, rpm -> radar, rpm -> interar, par[PRADI*rpm -> nur+i], gsl_interp_accelv);
 	      /* If there was a change, we note it down */
 	      if (par[rpm -> actindar[i]] != dummy) {
+		/* fprintf(stderr,"Found this to have changed: %i\n", i); */
 		rpm -> chapar[rpm -> actindar[i]] = 1;
 	      }
 	    }
@@ -14769,6 +14778,8 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
       if (counts == index -> nuel)
 	break;
     }
+  }
+  ++counts;
   }
   /*
     #ifdef OPENMPTIR
@@ -15727,9 +15738,6 @@ static int putgenresults(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
   char mes[200];
   int dev = 1;
   double solchisq;
- /*********************************/
- /*********************************/
- /*********************************/
 
     /* Get the best-fit chisquare and check if we had a solution*/
   if (gft_mst_get(fit -> gft_mstv, &solchisq, GFT_OUTPUT_SOLCHSQ)) {
