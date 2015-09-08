@@ -132,6 +132,11 @@ TiRiFiC is an open source project. We provide the source code on this web page. 
           <li><a href="#Fresh Installation">Fresh Installation</a></li>
           <li><a href="#Update TiRiFiC">Update TiRiFiC</a></li>
         </ul>
+          <li><a href="#Troubleshooting">Troubleshooting</a></li>
+        <ul class="par" style="list-style-type:none;padding-left:2em;margin-top:0px;margin-bottom:0px;">
+          <li><a href="#DIY">DIY</a></li>
+          <li><a href="#If nothing helps">If nothing helps</a></li>
+        </ul>
         </ul>
       </td>
     </tr>
@@ -429,6 +434,42 @@ Either copy <tt>pdir/tirific_i.j.k/gipsy/tirific</tt> to your <a href="http://ww
 or, if you have created a symbolic link before, you do not need to do anything.<br>
 Alternatively, copy the <tt>tirific</tt> to the directory in which you want to use it.
 </ol>
+<h3><a name="Troubleshooting">Troubleshooting</a></h3>
+<p class="par">
+
+<h4><a name="DIY">DIY</a></h4>
+<ol class="par">
+    <li>Check settings</li>
+Most issues can be solved by installing the auxillary libraries (see check dependencies) and pointing to them in the settings file. Especially if the error message indicates that a .h file cannot be found, this often means that its parent directory is not correctly given in the settings file.
+    <li>Check dependencies</li>
+Error messages from the compiler like "could not find blabla" mostly indicate a missing library, or, since many Unix distributions have the include files separated from the actual (runtime) libraries, the corresponding "development" files. Example: is next to libreadline also libreadline-dev installed from your package manager? If not, you should install it.<br>
+    <li>Add the current directory to your path</li>
+E.g.:<br>
+<tt>> tcsh </tt><br>
+<tt>> set path = (. $path)</tt><br>
+
+    <li>Known issues:</li>
+<ol class="par">
+    <li>Yosemite and gcc 5.1 from homebrew</li>
+In some cases, qfits won't compile. Try to change in xxx/tirific_2.3.2/qfits-6.2.0/src/qfits_byteswap.c on line 67,<br>
+<tt>"=q" (w) :</tt><br>
+ to <br>
+<tt>"=Q" (w) :</tt><br><br>
+Then,<br>
+<tt>> tcsh </tt><br>
+<tt>> cd xxx/tirific_2.3.2/qfits-6.2.0/</tt><br>
+<tt>> set CURDIR = `pwd`</tt><br>
+<tt>> configure --prefix=$(CURDIR)/qloc --enable-shared=no;</tt><br>
+<tt>> make </tt><br>
+<tt>> cd .. </tt><br>
+<tt>> make </tt>
+</ol>    
+</ol>
+</p>
+<h4><a name="If nothing helps">If nothing helps</a></h4>
+<p class="par">
+Contact <a href="mailto:jozsa@ska.ac.za">Gyula J&oacute;zsa</a>.
+</p>
 </div>
 </div>
 </div>
@@ -447,9 +488,9 @@ Alternatively, copy the <tt>tirific</tt> to the directory in which you want to u
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Mon Sep 7 10:56:51 SAST 2015
+Last modified: Tue Sep 8 16:15:34 SAST 2015
 <!-- hhmts end -->
-<br><a href="mailto:jozsa@astron.nl">Gyula J&oacute;zsa</a>
+<br><a href="mailto:jozsa@ska.ac.za">Gyula J&oacute;zsa</a>
 </div>
   </body>
 </html>
