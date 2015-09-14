@@ -1474,7 +1474,7 @@ int cubarithm_readcube(const char *filename, Cube **cubename, char *errorstr)
   if ((cubarithm_qf_copycard(qheader, qhead_intern, "BTYPE")))  {sprintf(dummykey, "BTYPE"); sprintf(dummyval, "%s", cubenamehook -> type); sprintf(dummycomment, " "); cubarithm_qf_addrcard(qhead_intern, "BTYPE", dummyval, dummycomment); ++numheads;}
   if (!(cubarithm_qf_copycard(qheader, qhead_intern, "CELLSCAL"))) {++numheads;}
   if (!(cubarithm_qf_copycard(qheader, qhead_intern, "RESTFREQ"))) {++numheads;}
-  if (!(cubarithm_qf_copycard(qheader, qhead_intern, "FREQ0"))) {++numheads;}
+  if (!(cubarithm_qf_copycard(qheader, qhead_intern, "FREQ0"))) {++numheads;if ((cubarithm_qf_copycard(qheader, qhead_intern, "RESTFREQ"))) {sprintf(dummyval, "%+20.13E",cubenamehook -> restfreq); sprintf(dummycomment, "REST FREQUENCY: item added by TiRiFiC"); cubarithm_qf_addrcard(qhead_intern, "RESTFREQ", dummyval, dummycomment); ++numheads;}} 
   if (!(cubarithm_qf_copycard(qheader, qhead_intern, "BMAJ"))) {++numheads;}
   if (!(cubarithm_qf_copycard(qheader, qhead_intern, "BMIN"))) {++numheads;}
   if (!(cubarithm_qf_copycard(qheader, qhead_intern, "BPA"))) {++numheads;}

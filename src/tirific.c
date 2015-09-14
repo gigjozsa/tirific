@@ -433,7 +433,7 @@ This was commented hdu stuff
 /*
                tirific.dc1
 
-Program:       TIRIFIC (Version 2.3.2)
+Program:       TIRIFIC (Version 2.3.3)
 
 Purpose:       Fit a tilted-ring model to a datacube
 
@@ -1170,7 +1170,7 @@ par = (par-NSSDPARAMS)%NDPARAMS + NSSDPARAMS;
    @brief Version number of this module
 */
 /* ------------------------------------------------------------ */
-#define VERSION_NUMBER 2.3.2
+#define VERSION_NUMBER 2.3.3
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -6636,7 +6636,7 @@ int main(int argc, char *argv[])
 
   printf("\n");
   printf("####################\n");
-  printf("# TIRIFIC v. 2.3.2 #\n");
+  printf("# TIRIFIC v. 2.3.3 #\n");
   printf("####################\n");
   printf("\n");
 
@@ -8133,20 +8133,20 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
       /* The conversion factors for the user */
   hdr -> deltgridtouser[0] = fabs(hdr -> oric -> delt_x*DEGTOARCSEC);
   hdr -> deltgridtouser[1] = fabs(hdr -> oric -> delt_y*DEGTOARCSEC);
-  hdr -> deltgridtouser[2] = fabs(hdr -> oric -> delt_v*0.001);
+  hdr -> deltgridtouser[2] = fabs(hdr -> oric -> delt_v*hdr -> globsettouser[2]);
 
   hdr -> globgridtouser[0] = fabs(hdr -> oric -> delt_x);
   hdr -> globgridtouser[1] = fabs(hdr -> oric -> delt_y);
-  hdr -> globgridtouser[2] = fabs(hdr -> oric -> delt_v*0.001);
+  hdr -> globgridtouser[2] = fabs(hdr -> oric -> delt_v*hdr -> globsettouser[2]);
 
       /* hdr -> globgridtouser[i] = fabs(hdr -> userglobcdelt[i]); */
       
       /* The reference values of the axis in user units */
   hdr -> userglobcrval[0] = hdr -> oric -> refval_x*1.;     
   hdr -> userglobcrval[1] = hdr -> oric -> refval_y*1.;     
-  hdr -> userglobcrval[2] = hdr -> oric -> refval_v*0.001;     
+  hdr -> userglobcrval[2] = hdr -> oric -> refval_v*hdr -> globsettouser[2];     
     
-  hdr -> signv = -hdr -> oric -> delt_y/fabs(hdr -> oric -> delt_y);
+  hdr -> signv = -hdr -> oric -> delt_v/fabs(hdr -> oric -> delt_v);
     
   /* Calculate the size of the cube in grids along axis 1 and 2 */
   /* hdr -> bsize1=bhi[0]-blo[0]+1; */

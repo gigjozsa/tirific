@@ -268,7 +268,7 @@ qfits: $(XMEMORY)qfits_memory.h $(XMEMORY)qfits_memory.c
 
 clean:
 	touch $(SRC)bla.o; rm -f $(SRC)*.o
-	cd $(GFTDIR); touch $(SRC)bla.o; rm -f $(SRC)*.o
+	touch $(GFTDIR)bla.o; rm -f $(GFTDIR)*.o
 
 virginal: clean
 	touch $(DIR)qfits-6.2.0; rm -rf $(DIR)qfits-6.2.0

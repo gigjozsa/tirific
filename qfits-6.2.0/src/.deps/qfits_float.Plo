@@ -1,0 +1,8 @@
+qfits_float.lo: qfits_float.c /usr/include/stdc-predef.h ../config.h \
+ qfits_float.h
+
+/usr/include/stdc-predef.h:
+
+../config.h:
+
+qfits_float.h:
