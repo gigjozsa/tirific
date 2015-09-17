@@ -984,55 +984,55 @@ defines that for the initial model, and during the fitting process, the position
   </tr>
   <tr>
     <td align="left"><b>PARMAX</b></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
     <td align="left">Fitting constraint: maxima</td>
   </tr>
   <tr>
     <td align="left"><b>PARMIN</b></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
     <td align="left">Fitting constraint: maxima</td>
   </tr>
   <tr>
     <td align="left"><b>MODERATE</b></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">&nbsp;</a></td>
     <td align="left">Loops to interpolate between fit parameters</td>
   </tr>
   <tr>
     <td align="left"><b>DELSTART</b></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
     <td align="left">Start stepwidth for first fitting loop</td>
   </tr>
   <tr>
     <td align="left"><b>DELEND</b></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
     <td align="left">Stepwidth for <a href="model_fitting.html#MODERATE">MODERATE</a>th and later fitting loop</td>
   </tr>
   <tr>
     <td align="left"><b>ITESTART</b></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">&nbsp;</td>
     <td align="left">Maximum number of model generations for first fitting loop (only FITMODE= 1)</td>
   </tr>
   <tr>
     <td align="left"><b>ITEEND</b></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">&nbsp;</td>
     <td align="left">Maximum number of model generations for <a href="model_fitting.html#MODERATE">MODERATE</a>th and later fitting loop (only FITMODE= 1)</td>
   </tr>
   <tr>
     <td align="left"><b>SATDELT</b></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</td>
     <td align="left">Define stopping condition after a loop (only FITMODE= 1)</td>
   </tr>
   <tr>
     <td align="left"><b>MINDELTA</b></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</td>
     <td align="left">Fitting grid normalisation (minimal stepwidth)</td>
   </tr>
@@ -1056,7 +1056,7 @@ With any of the keywords
 <a href="model_fitting.html#ITESTART">ITESTART</a>,
 <a href="model_fitting.html#ITEEND">ITEEND</a>,
 <a href="model_fitting.html#SATDELT">SATDELT</a>, and
-<a href="model_fitting.html#MINDELTA">MINDELTA</a>, the user provides a list of values with as many elements as (comma-separated) fitting expressions are given for the <a href="model_fitting.html#VARY">VARY</a> keyword. Whitespaces are used as separator.
+<a href="model_fitting.html#MINDELTA">MINDELTA</a>, the user provides a list of values with as many elements as (comma-separated) fitting expressions are given for the <a href="model_fitting.html#VARY">VARY</a> keyword. Whitespaces are used as separator. Any of these have a default, depending on the parameter group (first element) and the fitting method. The defaults are defined in the file <tt>src/tirific_defaults.h</tt>.
 </p>
 <p class="par">
 With <a href="model_fitting.html#PARMAX">PARMAX</a> and
@@ -1380,55 +1380,55 @@ For some purposes, like manual fitting or automated repeated calling of TiRiFiC,
   </tr>
   <tr>
     <td align="left"><a href="model_fitting.html#PARMAX"><b>PARMAX</b></a></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
     <td align="left">Fitting constraint: maxima</td>
   </tr>
   <tr>
     <td align="left"><a href="model_fitting.html#PARMIN"><b>PARMIN</b></a></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
     <td align="left">Fitting constraint: maxima</td>
   </tr>
   <tr>
     <td align="left"><a href="model_fitting.html#"MODERATE=><b>MODERATE</b></a></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">&nbsp;</a></td>
     <td align="left">Loops to interpolate between fit parameters</td>
   </tr>
   <tr>
     <td align="left"><a href="model_fitting.html#DELSTART"><b>DELSTART</b></a></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
     <td align="left">Start stepwidth for first fitting loop</td>
   </tr>
   <tr>
     <td align="left"><a href="model_fitting.html#DELEND"><b>DELEND</b></a></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</a></td>
     <td align="left">Stepwidth for <a href="model_fitting.html#MODERATE">MODERATE</a>th and later fitting loop</td>
   </tr>
   <tr>
     <td align="left"><a href="model_fitting.html#ITESTART"><b>ITESTART</b></a></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">&nbsp;</td>
     <td align="left">Maximum number of model generations for first fitting loop (only FITMODE= 1)</td>
   </tr>
   <tr>
     <td align="left"><a href="model_fitting.html#ITEEND"><b>ITEEND</b></a></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">&nbsp;</td>
     <td align="left">Maximum number of model generations for <a href="model_fitting.html#MODERATE">MODERATE</a>th and later fitting loop (only FITMODE= 1)</td>
   </tr>
   <tr>
     <td align="left"><a href="model_fitting.html#SATDELT"><b>SATDELT</b></a></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</td>
     <td align="left">Define stopping condition after a loop (only FITMODE= 1)</td>
   </tr>
   <tr>
     <td align="left"><a href="model_fitting.html#MINDELTA"><b>MINDELTA</b></a></td>
-    <td align="center">Fitting</td>
+    <td align="center">Fitting (default variable)</td>
     <td align="center">Defined with <a href="model_fitting.html#VARY">VARY</td>
     <td align="left">Fitting grid normalisation (minimal stepwidth)</td>
   </tr>
@@ -1565,7 +1565,7 @@ For some purposes, like manual fitting or automated repeated calling of TiRiFiC,
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Mon Sep 14 16:10:09 SAST 2015
+Last modified: Thu Sep 17 14:28:33 SAST 2015
 <!-- hhmts end -->
 <br><a href="mailto:jozsa@ska.ac.za">Gyula J&oacute;zsa</a>
 </div>
