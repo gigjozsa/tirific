@@ -433,7 +433,7 @@ This was commented hdu stuff
 /*
                tirific.dc1
 
-Program:       TIRIFIC (Version 2.3.3)
+Program:       TIRIFIC (Version 2.3.4)
 
 Purpose:       Fit a tilted-ring model to a datacube
 
@@ -504,6 +504,8 @@ jozsa@astron.nl
 #include <simparse.h>
 #include <fourat.h>
 #include "opsystems.h"
+#include <tirific_identifyers.h>
+#include <tirific_defaults.h>
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
@@ -635,298 +637,6 @@ jozsa@astron.nl
 /* #define ndisks 2 */
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-   @define NPARAMS
-   @brief The number of parameters for every ring in the first disk
-*/
-/* ------------------------------------------------------------ */
-#define NPARAMS 79
-
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-   @define NDPARAMS
-   @brief The number of parameters for each ring for all disks
-*/
-/* ------------------------------------------------------------ */
-/* ndisk construction */
-#define NDPARAMS 78
-
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-   @define NSPARAMS
-   @brief The number of global parameters for all rings
-
-*/
-/* ------------------------------------------------------------ */
-#define NSPARAMS 1
-
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-   @define NPMNDPARAMS
-   @brief NPARAMS - NDPARAMS
-*/
-/* ------------------------------------------------------------ */
-#define NSSDPARAMS (NPARAMS-NDPARAMS)
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-   @define PRPARAMS
-   @brief NPARAMS - NDPARAMS
-*/
-/* ------------------------------------------------------------ */
-#define PRPARAMS (NPARAMS-NDPARAMS-1)
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/*
-
-ndisks      : (constant) number of disks
-
-NPARAMS     : (constant) number of radially dependent parameters of first
-disk (including global, radially dependent parameters, at the moment
-only the radii)
-
-NDPARAMS    : (constant) number of parameters shared by all disks
-
-NSSDPARAMS : (constant) NPARAMS - NDPARAMS
-
-PRPARAMS    : (constant) NPARAMS - NDPARAMS - 1
-
-XXX         : (constant) identifyer of parameter XXX, starting with 1
-
-PXXX        : (constant) identifyer of parameter XXX, starting with 0
-
-disk        : (variable) disk number (ranging from 0 to ndisks)
-
-nur         : (variable) number of rings
-
-ring        : (variable) ring number (starting with 0)
-
-A parameter starting from 0 is addressed by (disk = 0 for RADI):
-(NPARAMS - NDPARAMS + disk*NDPARAMS - 1 + PXXX)
-(    NSSDPARAMS     + disk*NDPARAMS - 1 + PXXX)
-(     PRPARAMS      + disk*NDPARAMS     + PXXX)
-
-A parameter starting from 1 is addressed by (disk = 0 for RADI):
-(NPARAMS - NDPARAMS + disk*NDPARAMS - 1 + XXX)
-(    NSSDPARAMS     + disk*NDPARAMS - 1 + XXX)
-(     PRPARAMS      + disk*NDPARAMS     + XXX)
-
-PCONDISP (starting from 0) has the number:
-NPARAMS + (ndisks - 1)*NDPARAMS
-
-CONDISP (starting from 1) has the number:
-NPARAMS + (ndisks - 1)*NDPARAMS + 1
-
-A certain parameter with ring number ring (starting with 0) is addressed by (disk = 0 for RADI):
-
-(NPARAMS - NDPARAMS + disk*NDPARAMS - 1 + PXXX)*nur + ring    =
-(    NSSDPARAMS     + disk*NDPARAMS - 1 + PXXX)*nur + ring    =
-(     PRPARAMS      + disk*NDPARAMS     + PXXX)*nur + ring
-
-The total number of parameters  (assuming that the only singular parameter is CONDISP) 
-excluding the singular parameter condisp that are in the rpm list is:
-NPARAMS + (ndisks - 1)*NDPARAMS + NSPARAMS =
-CONDISP
-
-The total number of parameters (assuming that the only singular parameter is CONDISP) that are in the rpm list is:
-nur*(NPARAMS + (ndisks - 1)*NDPARAMS) + NSPARAMS
-
-To reduce a parameter identifyer to the appropriate (same) parameter of the first disk (starting with 1):
-par = (par-NSSDPARAMS-1)%NDPARAMS + NSSDPARAMS + 1;
-
-To reduce a parameter identifyer to the appropriate (same) parameter of the first disk (starting with 0):
-par = (par-NSSDPARAMS)%NDPARAMS + NSSDPARAMS;
-
- */
-/* ------------------------------------------------------------ */
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-   @define PRADI @brief A parameter for each ring, but not CONDISP is
-   adressed by (ndisk*NDPARAMS+PXXXX)*rpm -> nur+ringnr, CONDISP is
-   addressed by ((ndisks-1)*NDPARAMS+PCONDISP)*rpm -> nur
-*/
-/* ------------------------------------------------------------ */
-#define PRADI    0
-#define PVROT    1
-#define PVRAD    2
-#define PVVER	 3
-#define PDVRO    4
-#define PDVRA	 5
-#define PDVVE	 6
-#define PZDRO    7 
-#define PZDRA	 8 
-#define PZDVE	 9 
-#define PZ0      10
-#define PSBR     11
-#define PSM1A    12
-#define PSM1P    13
-#define PSM2A    14
-#define PSM2P    15
-#define PSM3A    16
-#define PSM3P    17
-#define PSM4A    18
-#define PSM4P    19
-#define PGA1A    20 
-#define PGA1P    21
-#define PGA1D    22
-#define PGA2A    23 
-#define PGA2P    24
-#define PGA2D    25
-#define PGA3A    26 
-#define PGA3P    27
-#define PGA3D    28
-#define PGA4A    29 
-#define PGA4P    30
-#define PGA4D	 31
-#define PAZ1P	 32
-#define PAZ1W	 33
-#define PAZ2P	 34
-#define PAZ2W    35
-#define PINCL    36
-#define PPA      37
-#define PXPOS    38
-#define PYPOS    39
-#define PVSYS    40
-#define PSDIS    41
-#define PCLNR    42
-#define PVM0A    43
-#define PVM1A    44
-#define PVM1P    45
-#define PVM2A    46
-#define PVM2P    47
-#define PVM3A    48
-#define PVM3P    49
-#define PVM4A    50
-#define PVM4P    51
-#define PWM0A    52
-#define PWM1A    53
-#define PWM1P    54
-#define PWM2A    55
-#define PWM2P    56
-#define PWM3A    57
-#define PWM3P    58
-#define PWM4A    59
-#define PWM4P    60
-#define PLS0     61
-#define PLC0     62
-#define PRO1A    63
-#define PRO1P    64
-#define PRO2A    65
-#define PRO2P    66
-#define PRO3A    67
-#define PRO3P    68
-#define PRO4A    69
-#define PRO4P    70
-#define PRA1A    71
-#define PRA1P    72
-#define PRA2A    73
-#define PRA2P    74
-#define PRA3A    75
-#define PRA3P    76
-#define PRA4A    77
-#define PRA4P    78
-
-/* #define PCONDISP (NPARAMS + (ndisks - 1)*NDPARAMS) */
-
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-   @define RADI
-   @brief Identification
-*/
-/* ------------------------------------------------------------ */
-#define RADI    1 
-#define VROT    2 
-#define VRAD    3 
-#define VVER    4 
-#define DVRO    5 
-#define DVRA    6 
-#define DVVE    7 
-#define ZDRO    8 
-#define ZDRA    9 
-#define ZDVE    10
-#define Z0      11
-#define SBR     12
-#define SM1A    13
-#define SM1P    14
-#define SM2A    15
-#define SM2P    16
-#define SM3A    17
-#define SM3P    18
-#define SM4A    19
-#define SM4P    20
-#define GA1A    21
-#define GA1P    22
-#define GA1D    23
-#define GA2A    24
-#define GA2P    25
-#define GA2D    26
-#define GA3A    27
-#define GA3P    28
-#define GA3D    29
-#define GA4A    30
-#define GA4P    31
-#define GA4D    32
-#define AZ1P    33
-#define AZ1W    34
-#define AZ2P    35
-#define AZ2W    36
-#define INCL    37
-#define PA      38
-#define XPOS    39
-#define YPOS    40
-#define VSYS    41
-#define SDIS    42
-#define CLNR    43
-#define VM0A    44
-#define VM1A    45
-#define VM1P    46
-#define VM2A    47
-#define VM2P    48
-#define VM3A    49   
-#define VM3P    50   
-#define VM4A    51   
-#define VM4P    52   
-#define WM0A    53   
-#define WM1A    54   
-#define WM1P    55   
-#define WM2A    56   
-#define WM2P    57 
-#define WM3A    58 
-#define WM3P    59 
-#define WM4A    60 
-#define WM4P    61
-#define LS0     62
-#define LC0     63
-#define RO1A    64
-#define RO1P    65
-#define RO2A    66
-#define RO2P    67
-#define RO3A    68
-#define RO3P    69
-#define RO4A    70
-#define RO4P    71
-#define RA1A    72
-#define RA1P    73
-#define RA2A    74
-#define RA2P    75
-#define RA3A    76
-#define RA3P    77
-#define RA4A    78
-#define RA4P    79
-/* #define CONDISP (NPARAMS + (ndisks - 1)*NDPARAMS + 1) */
   
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -1164,45 +874,6 @@ par = (par-NSSDPARAMS)%NDPARAMS + NSSDPARAMS;
 
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-   @define VERSION_NUMBER
-   @brief Version number of this module
-*/
-/* ------------------------------------------------------------ */
-#define VERSION_NUMBER 2.3.3
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-   @define GOLDEN_SECTION
-   @brief Identifyer for the GOLDEN_SECTION method
-*/
-/* ------------------------------------------------------------ */
-#define GOLDEN_SECTION 1
-#define METROPOLIS 0
-#define GENFIT 2
-#define GOLDEN_SECTION_ALT 2
-#define SIMPLEX 3
-#define PSWARM 4
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-   @define INTERP_NUMBER
-   @brief Number of interpolation methods
-*/
-/* ------------------------------------------------------------ */
-#define INTERP_NUMBER 3
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-   @define INTERP_LINEAR
-   @brief Identifyer for linear interpolation
-*/
-/* ------------------------------------------------------------ */
-#define INTERP_LINEAR MATHS_I_LINEAR
-#define INTERP_CSPLINE MATHS_I_CSPLINE /* cubic natural spline */
-#define INTERP_AKIMA MATHS_I_AKIMA /* Akima */
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
@@ -2821,6 +2492,37 @@ int errno;
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* PRIVATE FUNCTION DECLARATIONS */
 /* ------------------------------------------------------------ */
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/**
+   @fn static int create_defaults_from_dcp(hdrinf * hdr, decomp_listel *decomp_listelv, double *parmax, double *parmin, int *moderate, double *delstart, double *delend, int *itestart, int *iteend, double *satdelt, double *mindelta, int nur, int ndisks, int fitmode)
+   @brief Creates defaults from a decomp list
+
+   The arrays need to be allocated and will be filled with the appropriate defaults depending on the contents of decomp_listelv.
+
+   @param hdr (hdrinf *)    A header descriptor struct, properly filled.
+   @param decomp_listelv (decomp_listel *) decomp array as returned by decomp_get() from the simparse module
+   @param parmax         (double *)        Parameter maxima
+   @param parmin         (double *)        Parameter minima
+   @param moderate       (int *)           Moderate array
+   @param delstart       (double *)        Delstart array
+   @param delend         (double *)        Delend array
+   @param itestart       (int *)           Itestart array
+   @param iteend         (int *)           Iteend array
+   @param satdelt        (double *)        Satdelt array
+   @param mindelta       (double *)        Mindelta array
+   @param nur            (int)             Number of rings
+   @param ndisks         (int)             Number of disks
+   @param fitmode        (int)             Fitmode
+
+   @return (success) int create_varylist_from_dcp: 0
+           (error)   1;
+*/
+/* ------------------------------------------------------------ */
+static int create_defaults_from_dcp(hdrinf * hdr, decomp_listel *decomp_listelv, double *parmax, double *parmin, int *moderate, double *delstart, double *delend, int *itestart, int *iteend, double *satdelt, double *mindelta, int nur, int ndisks, int fitmode);
+
+
+
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
@@ -6636,7 +6338,7 @@ int main(int argc, char *argv[])
 
   printf("\n");
   printf("####################\n");
-  printf("# TIRIFIC v. 2.3.3 #\n");
+  printf("# TIRIFIC v. 2.3.4 #\n");
   printf("####################\n");
   printf("\n");
 
@@ -9860,7 +9562,6 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 
   /* Private control and changing variables */
   int def;      /* Any default mode */
-  int defaul;
   int nel;      /* Number of elements */
   int nread;    /* Number of read elements */
   char mes[81];  /* Any message */
@@ -10354,7 +10055,11 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
   
   /* Read in all the stuff from the logfile */
   nel = k;
-  
+
+  /* Create defaults for the case that the user is too lazy */
+  if (create_defaults_from_dcp(hdr, decomp_listelv, parmax, parmin, moderate, delstart, delend, itestart, iteend, satdelt, mindelta, rpm -> nur, rpm -> ndisks, fit -> fitmode))
+    goto error;
+
   /* Now read in everything from the input */
   
   /* Get the steps */  
@@ -10365,15 +10070,15 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
   /* Now read in everything from the user input */
   
   /* The default is +inf */
-  for (i = 0; i < k; ++i) {
-    parmax[i] = DBL_MAX;
-    parmin[i] = -DBL_MAX;
-    moderate[i] = 0;
+  /* for (i = 0; i < k; ++i) { */
+  /*   parmax[i] = DBL_MAX; */
+  /*   parmin[i] = -DBL_MAX; */
+  /*   moderate[i] = 0; */
     
-  }
-  def = 5;
-  defaul = 4;
-  
+  /* } */
+
+  /* We have created defaults, and the user is allowed to make use of them, hence no longer def = 4, but def = 2 */
+  def = 2;
   
   /* Get the parmax */
   sprintf(mes, "Give parameter maximum (in the same order)");
@@ -10397,15 +10102,15 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 
     /* Get the start delta */
     sprintf(mes, "Give the start delta (in the same order)");
-    userdble_tir(startinfv -> arel, delstart, &nel, &defaul, "DELSTART", mes);
+    userdble_tir(startinfv -> arel, delstart, &nel, &def, "DELSTART", mes);
 
     /* Get the end delta */
 
-    /* Defaults to startdela */
-    if (def == 5) {
-      for (i = 0; i < k; ++i)
-	delend[i] = delstart[i];
-    }
+    /* No longer defaults to startdelta, but to defaults */
+    /* if (def == 5) { */
+    /*   for (i = 0; i < k; ++i) */
+    /* 	delend[i] = delstart[i]; */
+    /* } */
     sprintf(mes, "Give the end delta (in the same order)");
     userdble_tir(startinfv -> arel, delend, &nel, &def, "DELEND", mes);
   }
@@ -10418,11 +10123,11 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 
   if (fit -> fitmode >= GOLDEN_SECTION) {
     /* Get the itestart */
-    defaul = defaul%4;
+    /* defaul = defaul%4; */
     
     if (fit -> fitmode == GOLDEN_SECTION) {
       sprintf(mes, "Give starting number of iterations");
-      nread = userint_tir(startinfv -> arel, itestart, &nel, &defaul, "ITESTART", mes);
+      nread = userint_tir(startinfv -> arel, itestart, &nel, &def, "ITESTART", mes);
       
       /* I have no patience programming a warning. If a negative value is
 	 given, it will be changed to positive and 0 will be changed to 1 */
@@ -10439,12 +10144,12 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
       
       /* Get the iteend */
       /* Defaults to itestart */
-      if (def%4 == 1) { 
-	for (i = 0; i < k; ++i)
-	  iteend[i] = itestart[i];
-      }
+      /* if (def%4 == 1) {  */
+      /* 	for (i = 0; i < k; ++i) */
+      /* 	  iteend[i] = itestart[i]; */
+      /* } */
       
-      def = def%4;
+      /* def = def%4; */
       sprintf(mes, "Give final number of iterations (in the same order)");
       nread = userint_tir(startinfv -> arel, iteend, &nel, &def, "ITEEND", mes);
       
@@ -10461,14 +10166,14 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 	}
       }
 
-      if (defaul != 2)
-	defaul |= 4;
-      if (def != 2)
-	def |= 4;
+      /* if (defaul != 2) */
+      /* 	defaul |= 4; */
+      /* if (def != 2) */
+      /* 	def |= 4; */
     
       /* Get the satisfaction delta*/
       sprintf(mes, "Give the satisfaction deltas (in the same order)");
-      userdble_tir(startinfv -> arel, satdelt, &nel, &defaul, "SATDELT=", mes);
+      userdble_tir(startinfv -> arel, satdelt, &nel, &def, "SATDELT=", mes);
 
       /* dito */
       for (i = 0; i < k; ++i) {
@@ -10484,14 +10189,14 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
       }
     }
 
-    if (defaul != 2)
-      defaul |= 4;
-    if (def != 2)
-      def |= 4;
+    /* if (defaul != 2) */
+    /*   defaul |= 4; */
+    /* if (def != 2) */
+    /*   def |= 4; */
 
     /* Get the minimum deltas */
     sprintf(mes, "Give the minimum deltas (in the same order)");
-    userdble_tir(startinfv -> arel, mindelta, &nel, &defaul, "MINDELTA=", mes);
+    userdble_tir(startinfv -> arel, mindelta, &nel, &def, "MINDELTA=", mes);
 
     /* dito */
     for (i = 0; i < k; ++i) {
@@ -10812,19 +10517,20 @@ static  varlel *create_varylist_from_dcp(hdrinf *hdr, decomp_listel *decomp_list
     
       for (j = 0; j < varylist -> nelem; ++j) 
 		  varylist -> elements[j] = (decomp_listelv+i) -> poli[j];
+
+      /* poli[j] is the list of elements PXPOS etc., meaning that poli[0] points to the appropriate parameter */
       
-      if (varylist -> nelem > -1) {
-		  varylist -> parmax   = simpleglobtointern(parmax[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);
-		  varylist -> parmin   = simpleglobtointern(parmin[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);   
-		  varylist -> moderate = moderate[(decomp_listelv + i) -> grnr]; 
-		  varylist -> delstart = ddparamtointern(delstart[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks); 
-		  varylist -> delend   = ddparamtointern(delend[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);   
-		  varylist -> itestart = itestart[(decomp_listelv + i) -> grnr]; 
-		  varylist -> iteend   = iteend[(decomp_listelv + i) -> grnr];   
-		  varylist -> satdelt  = ddparamtointern(satdelt[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);  
-		  varylist -> mindelta = ddparamtointern(mindelta[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);
-		  varylist -> indicator = 0;
-      }
+      varylist -> parmax   = simpleglobtointern(parmax[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);
+      varylist -> parmin   = simpleglobtointern(parmin[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);   
+      varylist -> moderate = moderate[(decomp_listelv + i) -> grnr]; 
+      varylist -> delstart = ddparamtointern(delstart[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks); 
+      varylist -> delend   = ddparamtointern(delend[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);   
+      varylist -> itestart = itestart[(decomp_listelv + i) -> grnr]; 
+      varylist -> iteend   = iteend[(decomp_listelv + i) -> grnr];   
+      varylist -> satdelt  = ddparamtointern(satdelt[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);  
+      varylist -> mindelta = ddparamtointern(mindelta[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);
+      varylist -> indicator = 0;
+
       varylist = appendvarlel(varylist);
     }
     ++i;
@@ -10855,6 +10561,52 @@ static  varlel *create_varylist_from_dcp(hdrinf *hdr, decomp_listel *decomp_list
  error:
   destroyvarlel(varyfirst);
   return NULL;
+}
+
+/* ------------------------------------------------------------ */
+
+
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+static int create_defaults_from_dcp(hdrinf *hdr, decomp_listel *decomp_listelv, double *parmax, double *parmin, int *moderate, double *delstart, double *delend, int *itestart, int *iteend, double *satdelt, double *mindelta, int nur, int ndisks, int fitmode)
+{
+  int i = 0, parnum;
+  double value;
+  /******/
+  /******/
+/*   int obsint = 0; */
+/*   char obsmes[200]; */
+  /******/   
+
+  if (!(decomp_listelv))
+    goto error;
+
+  while (((decomp_listelv+i) -> nuel) != -1) {
+    
+    if ((decomp_listelv + i) -> nuel > 0) {
+
+      parnum = (decomp_listelv+i) -> poli[0];
+
+      /* poli[j] is the list of elements PXPOS etc., meaning that poli[0] points to the appropriate parameter */
+      
+      if (tirific_defaults_fitdefromident(parnum, nur, ndisks, fitmode, TIRIDENT_PARMAX  , &value)) return 1; parmax  [(decomp_listelv + i) -> grnr] = value;
+      if (tirific_defaults_fitdefromident(parnum, nur, ndisks, fitmode, TIRIDENT_PARMIN  , &value)) return 1; parmin  [(decomp_listelv + i) -> grnr] = value;
+      if (tirific_defaults_fitdefromident(parnum, nur, ndisks, fitmode, TIRIDENT_MODERATE, &value)) return 1; moderate[(decomp_listelv + i) -> grnr] = value;
+      if (tirific_defaults_fitdefromident(parnum, nur, ndisks, fitmode, TIRIDENT_DELSTART, &value)) return 1; delstart[(decomp_listelv + i) -> grnr] = value;
+      if (tirific_defaults_fitdefromident(parnum, nur, ndisks, fitmode, TIRIDENT_DELEND  , &value)) return 1; delend  [(decomp_listelv + i) -> grnr] = value;
+      if (tirific_defaults_fitdefromident(parnum, nur, ndisks, fitmode, TIRIDENT_ITESTART, &value)) return 1; itestart[(decomp_listelv + i) -> grnr] = value;
+      if (tirific_defaults_fitdefromident(parnum, nur, ndisks, fitmode, TIRIDENT_ITEEND  , &value)) return 1; iteend  [(decomp_listelv + i) -> grnr] = value;
+      if (tirific_defaults_fitdefromident(parnum, nur, ndisks, fitmode, TIRIDENT_SATDELT , &value)) return 1; satdelt [(decomp_listelv + i) -> grnr] = value;
+      if (tirific_defaults_fitdefromident(parnum, nur, ndisks, fitmode, TIRIDENT_MINDELTA, &value)) return 1; mindelta[(decomp_listelv + i) -> grnr] = value;
+    }
+    ++i;
+  }
+  
+  return 0;
+  
+ error:
+  return 1;
 }
 
 /* ------------------------------------------------------------ */

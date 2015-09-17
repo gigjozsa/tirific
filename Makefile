@@ -169,6 +169,15 @@ $(SRC)fourat.o: $(SRC)fourat.c $(LOCINCDIR)fourat.h $(FFTWDIR)fftw3.h
 	@echo '# fourat.o finished #'
 	@echo '#####################'
 
+$(SRC)tirific_defaults.o: $(SRC)tirific_defaults.c $(LOCINCDIR)tirific_defaults.h
+	@echo '###############################'
+	@echo '# starting tirific_defaults.o #'
+	@echo '###############################'
+	$(CC) $(CFLAGS) -c -o $@ $< $(LOCINC)
+	@echo '###############################'
+	@echo '# tirific_defaults.o finished #'
+	@echo '###############################'
+
 $(GFTDIR)gft.o: $(GFTDIR)/gft.c $(GFTDIR)/gft.h $(GFTDIR)/golden.h $(GFTDIR)/pswarm.h
 	@echo '#########################'
 	@echo '# starting gft.o #'
@@ -206,6 +215,7 @@ OBJTIRIFIC = $(SRC)maths.o\
              $(SRC)simparse.o\
              $(SRC)pgp.o\
              $(SRC)fourat.o\
+             $(SRC)tirific_defaults.o\
 	     $(GFTDIR)gft.o\
              $(GFTDIR)golden.o\
              $(GFTDIR)pswarm.o
