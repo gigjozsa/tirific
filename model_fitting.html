@@ -454,7 +454,7 @@ A TiRiFiC minimum finder is provided with a set of fitting parameters as specifi
 </p>
 
 <p class="par">
-Any minimising algorithm in TiRiFiC will move through a number of iterations of models to finish a loop of iterations, after which it will then start the next loop, until a stopping condition is meat. The definition of an iteration and a loop is different from minimising algorithm to minimising algorithm, and will be specified in detail in the description of the single minimisers. In TiRiFiC, the user specifies the maximum number of loops with the keyword <a href="model_fitting.html#LOOPS">LOOPS</a>, the maximum total number of iterations with the keyword <a href="model_fitting.html#MAXITER">MAXITER</a>, and the maximum number of model calculations per iteration with the keyword <a href="model_fitting.html#CALLITE">CALLITE</a>, thus defining boundary stopping conditions for the minimisers.
+Any minimising algorithm in TiRiFiC will move through a number of iterations of models to finish a loop of iterations, after which it will then start the next loop, until a stopping condition is meat. The definition of an iteration and a loop is different from minimising algorithm to minimising algorithm, and will be specified in detail in the description of the single minimisers. In TiRiFiC, the user specifies the maximum number of loops with the keyword <a href="model_fitting.html#LOOPS">LOOPS</a>, the maximum total number of iterations with the keyword <a href="model_fitting.html#MAXITER">MAXITER</a>, and the maximum number of model calculations per iteration with the keyword <a href="model_fitting.html#CALLITE">CALLITE</a> (only relevant for <a href="model_fitting.html#FITMODE">FITMODE</a> = 2), thus defining boundary stopping conditions for the minimisers.
 </p>
 
 <p class="par">
@@ -533,7 +533,7 @@ Specific to the algorithm is the definition of the size. After normalising with 
 </p>
 
 <p class="par">
- where $sw$ is given in eq. (12), and MINDELTA<sub>i</sub> is the normalisation given in the parameter list <a href="model_fitting.html#MINDELTA">MINDELTA</a>. The parameter <a href="model_fitting.html#CALLITE">CALLITE</a> is ignored for this minimisation mode, since an iteration is ill (not) defined. A loop is a complete minimisation run, and the number of loops given by the parameter <a href="model_fitting.html#LOOPS">LOOPS</a> is the number of repeated iterations, no stopping condition applies to step out of the minimisation process before that number of loops has been performed, apart from the maximum number of model calculations <a href="model_fitting.html#CALLITE">CALLITE</a>. For each loop, the results from the previous loop are adopted as the initial guess.
+ where $sw$ is given in eq. (12), and MINDELTA<sub>i</sub> is the normalisation given in the parameter list <a href="model_fitting.html#MINDELTA">MINDELTA</a>. The parameter <a href="model_fitting.html#CALLITE">CALLITE</a> is ignored for this minimisation mode, since an iteration is ill (not) defined. A loop is a complete minimisation run, and the number of loops given by the parameter <a href="model_fitting.html#LOOPS">LOOPS</a> is the number of repeated iterations, no stopping condition applies to step out of the minimisation process before that number of loops has been performed. For each loop, the results from the previous loop are adopted as the initial guess.
 </p>
 <p class="par">
 <a name="PSW_PSSE">
@@ -1121,13 +1121,13 @@ With <a href="model_fitting.html#VARY">VARY</a>, three fitting expressions defin
     <td align="left"><b>MAXITER</b></td>
     <td align="center">Fitting (required)</td>
     <td align="center"> &nbsp; </td>
-    <td align="left"> Maximum number of model calculations per iteration (<a href="model_fitting.html#FITMODE">FITMODE</a> 2 only) </td>
+    <td align="left">  Maximum number of iterations for the complete fitting process </td>
   </tr>
   <tr>
     <td align="left"><b>CALLITE</b></td>
     <td align="center">Fitting (required)</td>
     <td align="center"> &nbsp; </td>
-    <td align="left"> Maximum number of model calculations for the complete fitting process </td>
+    <td align="left"> Maximum number of model calculations per iteration (<a href="model_fitting.html#FITMODE">FITMODE</a> 2 only)</td>
   </tr>
 </table>
 </a>
@@ -1141,10 +1141,10 @@ With <a href="model_fitting.html#LOOPS">LOOPS</a>, the user specifies the number
 With <a href="model_fitting.html#SIZE">SIZE</a>, the user specifies the stopping size. For <a href="model_fitting.html#FITMODE">FITMODE</a> 2 and 3, a size is defined at every stage of the fitting procedure, which is a measure of the progress in convergence. If the size drops below <a href="model_fitting.html#SIZE">SIZE</a>, the fitting is either stopped completely (<a href="model_fitting.html#FITMODE">FITMODE</a> 2) or the next fitting loop is started (<a href="model_fitting.html#FITMODE">FITMODE</a> 3). For the definition of the size, <a href="model_fitting.html#golden section">see here</a> for <a href="model_fitting.html#FITMODE">FITMODE</a> 2 (golden section), and <a href="model_fitting.html#golden section">here</a> for <a href="model_fitting.html#FITMODE">FITMODE</a> 3 (downhill simplex). The natural unit of <a href="model_fitting.html#SIZE">SIZE</a> is multiples of the fitting grid provided with the parameter <a href="model_fitting.html#MINDELTA">MINDELTA</a>.
 </p>
 <p class="par">
-With <a href="model_fitting.html#MAXITER">MAXITER</a>, the maximum nuber of model calculations per iteration (the definition of which depends on the chosen fitting algorithm) is set. For details, see <a href="#Implemented fitting algorithms">this paragraph</a>. It is usually safe to choose a very high number (in other words, to ignore the parameter). Only valid for <a href="model_fitting.html#FITMODE">FITMODE</a> 2, 3, but makes sense only for <a href="model_fitting.html#FITMODE">FITMODE</a> 2. (See also <a href="#Implemented fitting algorithms">this paragraph above</a>).
+With <a href="model_fitting.html#MAXITER">MAXITER</a>, the maximum nuber of iterations (the definition of which depends on the chosen fitting algorithm) is set. For details, see <a href="#Implemented fitting algorithms">this paragraph</a>. It is usually safe to choose a very high number (in other words, to ignore the parameter). Only valid for <a href="model_fitting.html#FITMODE">FITMODE</a> 2, 3, 4.
 </p>
 <p class="par">
-With <a href="model_fitting.html#CALLITE">CALLITE</a>, the maximum nuber of models calculated during a fitting process is given. For details, see <a href="#Implemented fitting algorithms">this paragraph</a>. It is usually safe to choose a very high number (in other words, to ignore the parameter). Only valid for <a href="model_fitting.html#FITMODE">FITMODE</a> 2, 3.(See also <a href="#Implemented fitting algorithms">here</a>).
+With <a href="model_fitting.html#CALLITE">CALLITE</a>, the maximum nuber of models calculated per iteration is given. For details, see <a href="#Implemented fitting algorithms">this paragraph</a>. It is usually safe to choose a very high number (in other words, to ignore the parameter). Only valid for <a href="model_fitting.html#FITMODE">FITMODE</a> 2.(See also <a href="#Implemented fitting algorithms">here</a>).
 </p>
 <p class="par">
 Example:
@@ -1454,13 +1454,13 @@ For some purposes, like manual fitting or automated repeated calling of TiRiFiC,
     <td align="left"><a href="model_fitting.html#MAXITER"><b>MAXITER</b></a></td>
     <td align="center">Fitting (required)</td>
     <td align="center"> &nbsp; </td>
-    <td align="left"> Maximum number of model calculations per iteration (<a href="model_fitting.html#FITMODE">FITMODE</a> 2 only) </td>
+    <td align="left">  Maximum number of iterations for the complete fitting process </td>
   </tr>
   <tr>
     <td align="left"><a href="model_fitting.html#CALLITE"><b>CALLITE</b></a></td>
     <td align="center">Fitting (required)</td>
     <td align="center"> &nbsp; </td>
-    <td align="left"> Maximum number of model calculations for the complete fitting process </td>
+    <td align="left"> Maximum number of model calculations per iteration (<a href="model_fitting.html#FITMODE">FITMODE</a> 2 only) </td>
   </tr>
   </tr>  <tr border="3" frame="above">
     <td align="center" style="border-top-width:medium">Name</td>
@@ -1565,7 +1565,7 @@ For some purposes, like manual fitting or automated repeated calling of TiRiFiC,
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Thu Sep 17 14:59:18 SAST 2015
+Last modified: Thu Feb 16 11:50:05 SAST 2017
 <!-- hhmts end -->
 <br><a href="mailto:jozsa@ska.ac.za">Gyula J&oacute;zsa</a>
 </div>

@@ -145,7 +145,7 @@ Contents:
 <tr>    <td align="left"><a href="modelling_strategy.html#BOX">     <b>BOX           </b></a></td>    <td align="center">I/O (obsolete)</td>    <td align="center">&nbsp;</td>    <td align="left">Parameter must be set in GIPSY versions, because of <a href="http://www.astro.rug.nl/~gipsy/">GIPSY</a>, but leave always empty</td>  </tr>
  <tr>    <td align="center" style="border-top-width:medium">Name</td>                 <td align="center" style="border-top-width:medium">Category</td>    <td align="center" style="border-top-width:medium">Unit</td>    <td align="center" style="border-top-width:medium">Description</td>  </tr>
 <tr>    <td align="left"><a href="model_geometry.html#BPA">         <b>BPA           </b></a></td>    <td align="center">Geometrical (from FITS header)</td>    <td align="center">degrees </td>    <td align="left">Position angle of observational beam major axis, measured anticlockwise from N</td>  </tr>
-<tr>    <td align="left"><a href="model_fitting.html#CALLITE">      <b>CALLITE       </b></a></td>    <td align="center">Fitting (required)</td>    <td align="center"> &nbsp; </td>    <td align="left"> Maximum number of model calculations for the complete fitting process </td>  </tr>  
+<tr>    <td align="left"><a href="model_fitting.html#CALLITE">      <b>CALLITE       </b></a></td>    <td align="center">Fitting (required)</td>    <td align="center"> &nbsp; </td>    <td align="left"> Maximum number of model calculations per iteration (<a href="model_fitting.html#FITMODE">FITMODE</a> 2 only) </td>  </tr>  
 <tr>    <td align="left"><a href="modelling_strategy.html#CFLUX">   <b>CFLUX         </b></a></td>    <td align="center">Geometrical (required)</td>    <td align="center">Jy km  s<sup>-1</sup></td>    <td align="left">Point source (total) flux of first disk</td>  </tr>
 <tr>    <td align="left"><a href="modelling_strategy.html#CFLUX_i"> <b>CFLUX_i       </b></a></td>    <td align="center">Geometrical (required)</td>    <td align="center">Jy km  s<sup>-1</sup></td>    <td align="left">Point source (total) flux of ith disk</td>  </tr>
 <tr>    <td align="left"><a href="model_geometry.html#CLNR">        <b>CLNR          </b></a></td>    <td align="center">Geometrical (default 1)</td>    <td align="center">&nbsp; </td>    <td align="left">Number of sub-clouds per cloud</td>  </tr>
@@ -241,7 +241,7 @@ Contents:
 <tr>    <td align="left"><a href="model_geometry.html#LS0_i">       <b>LS0_i         </b></a></td>    <td align="center">Geometrical (default 0)</td>    <td align="center">arcsec </td>    <td align="left">Shift along the projected minor axis, ith disk, i = 2, 3, ...</td>  </tr>
 <tr>    <td align="left"><a href="model_geometry.html#LTYPE">       <b>LTYPE         </b></a></td>    <td align="center">Geometrical (default 0)</td>    <td align="center"> </td>    <td align="left">Vertical density distribution: 0: constant, 1: Gaussian, 2: sech<sup>2</sup>, 3: exponential, 4: Lorentzian </td>  </tr>
 <tr>    <td align="left"><a href="model_geometry.html#LTYPE_i">     <b>LTYPE_i       </b></a></td>    <td align="center">Geometrical (default 0)</td>    <td align="center"> </td>    <td align="left">Vertical density distribution: 0: constant, 1: Gaussian, 2: sech<sup>2</sup>, 3: exponential, 4: Lorentzian, ith disk, i = 2, 3, ... </td>  </tr>
-<tr>    <td align="left"><a href="model_fitting.html#MAXITER">      <b>MAXITER       </b></a></td>    <td align="center">Fitting (required)</td>    <td align="center"> &nbsp; </td>    <td align="left"> Maximum number of model calculations per iteration (<a href="model_fitting.html#FITMODE">FITMODE=</a> 2 only) </td>  </tr>
+<tr>    <td align="left"><a href="model_fitting.html#MAXITER">      <b>MAXITER       </b></a></td>    <td align="center">Fitting (required)</td>    <td align="center"> &nbsp; </td>    <td align="left"> Maximum number of iterations for the complete fitting process </td>  </tr>
 <tr>    <td align="left"><a href="model_fitting.html#MINDELTA">     <b>MINDELTA      </b></a></td>    <td align="center">Fitting (default variable)</td>    <td align="center">Defined with <a href="model_fitting.html#VARY">VARY=</td>    <td align="left">Fitting grid normalisation (minimal stepwidth)</td>       </tr>
 <tr>    <td align="left"><a href="model_fitting.html#"MODERATE=>     <b>MODERATE      </b></a></td>    <td align="center">Fitting (default variable)</td>    <td align="center">&nbsp;</a></td>    <td align="left">Loops to interpolate between fit parameters</td>  </tr>
 <tr>    <td align="left"><a href="modelling_strategy.html#NCORES">  <b>NCORES        </b></a></td>    <td align="center">Generic (required)</td>    <td align="center">&nbsp;</td>    <td align="left">Number of computing cores</td>  </tr>
@@ -591,7 +591,7 @@ We provide old TiRiFiC versions that still depend on <a href="http://www.astro.r
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Thu Sep 17 14:59:18 SAST 2015
+Last modified: Thu Feb 16 11:50:05 SAST 2017
 <!-- hhmts end -->
 <br><a href="mailto:jozsa@ska.ac.za">Gyula J&oacute;zsa</a>
 </div>
