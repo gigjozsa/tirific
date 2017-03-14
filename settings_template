@@ -1,0 +1,67 @@
+# This part has to be edited by the user. tirific depends on the
+# existence of several external libraries, which have to be provided
+# by the user. Those libraries are non-standard, but quite common,
+# such that you can easily install them. We leave it to you to install
+# the libraries in a convenient form.
+
+# Default number of disks, can be changed at runtime by the user
+NDISKS = 2
+
+# Compile with possibility to do a primary beam correction (YES/NO)
+PBCORR = YES
+
+# CC is the compiler to use
+CC = gcc
+# CFLAGS is the flags to use the compiler with
+CFLAGS = -Wall -pedantic -O4 -I/usr/include/malloc
+
+# The operating system (At the moment chose between MAC_OS_X and LINUX
+OS = LINUX
+
+# Compile with open mp (YES/NO)? Note that this means that fftw is optimally compiled with the --enable-openmp option (personally I used the Ubuntu synaptic version, which seems to work)
+OPENMP = YES
+# Opem MP compiler options
+OPENMPCOMP = -fopenmp
+# Open MP linker options
+OPENMPLIB = -fopenmp
+
+# external directories containing include files
+
+# This is the standard include 
+STDDIR = /usr/include/
+
+# This is the math library include file and most probably at this location
+MATHDIR = /usr/include/
+
+# This is the fftw include directory. It should contain the file fftw3.h
+FFTWDIR = /usr/include/
+
+# This is the position of the parent directory of the gsl directory
+GSLDIR = /dop237_1/jozsa/libs/include
+
+# This is the directory in which the wcs include files reside
+WCSDIR = /usr/local/include/wcslib
+
+# Pgplot directory
+PGPDIR = /dop237_1/jozsa/software/pgplot
+
+# external libraries
+
+# The math library
+MATHLIB = 
+
+# The fftw3f library, alternatively
+# -Ldirectory_in_which_the_file_libfftw3f.a_is -lfftw3f
+FFTWLIB = -lfftw3f -lfftw3
+
+# The gsl library linker flags-, alternatively
+GSLLIB = -L/dop237_1/jozsa/libs/lib -lgsl -lgslcblas
+
+# The wcs library
+WCSLIB = -L/usr/local/lib/ -lwcs
+
+# Pgplot linker flags, for Mac OS, maybe -L$(PGPDIR) -lcpgplot -lpgplot $(X11LIB) -lpng -laquaterm -Wl,-framework -Wl,Foundation  -W1,-AppKit 
+PGPLIB = -L$(PGPDIR) -lcpgplot -lpgplot -L/usr/X11R6/lib -lX11
+
+# Readline library
+READLINELIB= -lreadline

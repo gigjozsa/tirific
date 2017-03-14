@@ -1,0 +1,217 @@
+Comment= prompting is on
+PROMPT= 1
+
+Comment= The logfile name
+LOGNAME= data.log
+Comment= Use 8 cores
+NCORES= 8
+
+Comment= Name of the input data set, use full velocity axis and full stokes axis, the stokes axis is 1 pixel wide
+INSET= eso121-g6.fits
+Comment= Keyword obsolete
+# BOX= 
+Comment= Name of the output data set, which has the same dimensions as the input data set
+OUTSET=  eso121-g6_out_00.fits
+Comment= Update the output data set every 10000000th model calculation, i.e. never
+OUTCUBUP=  10000000.0
+
+Comment= Minor FWHM of the synthesised beam read from cube.
+# BMIN= 21.94
+Comment= Major FWHM of the synthesised beam
+# BMAJ= 28.61
+Comment= Position angle of the synthesised beam
+# BPA= 14.3
+Comment= Rms noise in the data cube
+RMS= 0.002
+
+Comment= Number of disks
+NDISKS= 2
+Comment= Number of rings
+NUR= 11
+Comment= Ring radii in arcsec, always start with 0
+    RADI= 0 20 40 60 80 100 120 140 160 180 200
+Comment= Rotation velocity for all rings (first guess), km/s, disk 1
+    VROT= 150
+Comment= Scale height for all rings (first guess), arcsec, disk 1
+      Z0= 2
+Comment= Surface brightness for all rings (first guess), Jy km/s/sqarcs, disk 1
+     SBR= 1E-4
+Comment= Inclination for all rings (first guess), degrees, disk 1
+    INCL= 85
+Comment= Position angle for all rings (first guess), degrees, disk 1
+      PA= 40
+Comment= Central position, right ascension, for all rings (first guess), degrees, disk 1
+    XPOS= 91.875
+Comment= Central position, declination, for all rings (first guess), degrees, disk 1
+    YPOS= -61.80722
+Comment= Systemic velocity for all rings (first guess), km/s, disk 1
+    VSYS= 1185
+Comment= Central azimuthal angle of azimuthal wedge, for all rings (first guess), degrees, disk 1 (means around the approaching side)
+    AZ1P= 0
+Comment= Width of azimuthal wedge, for all rings (first guess), degrees, disk 1 (means half a disk)
+    AZ1W= 180
+
+Comment= Rotation velocity for all rings (first guess), km/s, disk 2, same as disk 1
+    VROT_2= 150
+Comment= Scale height for all rings (first guess), arcsec, disk 2, same as disk 1
+      Z0_2= 2
+Comment= Surface brightness for all rings (first guess), Jy km/s/sqarcs, disk 2, same as disk 1
+     SBR_2= 1E-4
+Comment= Inclination for all rings (first guess), degrees, disk 2, same as disk 1
+    INCL_2= 85
+Comment= Position angle for all rings (first guess), degrees, disk 2, same as disk 1
+      PA_2= 40
+Comment= Central position, right ascension, for all rings (first guess), degrees, disk 2, same as disk 1
+    XPOS_2= 91.875
+Comment= Central position, declination, for all rings (first guess), degrees, disk 2, same as disk 1
+    YPOS_2= -61.80722
+Comment= Systemic velocity for all rings (first guess), km/s, disk 2, same as disk 1
+    VSYS_2= 1185
+Comment= Central azimuthal angle of azimuthal wedge, for all rings (first guess), degrees, disk 2 (means around the receding side), NOT the same as disk 1
+    AZ1P_2= 180
+Comment= Width of azimuthal wedge, for all rings (first guess), degrees, disk 2 (means half a disk)
+    AZ1W_2= 180
+
+Comment= With the settings above, two half disks with the same qualities are build. This is equivalent to 1 full disk. But it is convenient to do this from the beginning, if, at a later stage, one wants to fit two independent halves.
+
+Comment= Global velocity dispersion, km/s
+ CONDISP= 8
+
+Comment= Layer type (sech2), disk 1
+LTYPE= 2.0
+Comment= Layer type (sech2), disk 2, defaults to disk 1 layer type
+LTYPE_2= 
+
+Comment= Cloud flux, Jy km/s, disk 1
+CFLUX= 2e-06
+Comment= Cloud flux, Jy km/s, disk 2, defaults to disk 1 cloud flux
+CFLUX_2= 
+
+Comment= Penalise outliers
+PENALTY= 1.0
+Comment= Do not give quantisation noise any weight in the chisquare evaluation
+WEIGHT= 0
+Comment= separation of sub-rings is 0.5 pixels
+RADSEP= 0.05
+Comment= some seed for the random-number generator
+ISEED= 8981
+
+Comment= use fitmode 2 (golden section)
+FITMODE= 2
+Comment= four loops
+LOOPS= 4
+Comment= maximum number of total iterations, leave to default
+MAXITER= 
+Comment= maximum number of calls per iteration, leave to default
+CALLITE= 
+Comment= size as stopping condition is 4
+SIZE= 4
+
+Comment= we are currently only fitting parameter groups as a whole, so indexing is not necessary
+VARINDX= 
+Comment= parameters to vary. All parameters listed are varied as one parameter (i.e. changes apply to all rings at the same time)
+VARY=       PA 1:11 PA_2 1:11, SBR 1:11 SBR_2 1:11, VROT 1:11 VROT_2 1:11, INCL  1:11 INCL_2  1:11, Z0  1:11 Z0_2  1:11,  XPOS 1:11 XPOS_2 1:11, YPOS 1:11 YPOS_2 1:11, VSYS  1:11  VSYS_2  1:11, CONDISP
+Comment= parameter maximum
+PARMAX=                   360                    1                    800                      180                  100                     360                    180                     10000       80
+Comment= parameter minimum
+PARMIN=                     0                   -1                      0                        0                    0                       0                   -180                         1        1
+Comment= for the consecutive parameters (for FITMODE = 2, these are only DELSTART and DELEND) interpolate for 3 loops
+MODERATE=                   3                    3                      3                        3                    3                       3                      3                         3        3
+Comment= start stepwidth at the beginning of the iteration process
+DELSTART=                   2                 5E-6                      3                        2                    5                   0.005                  0.005                       0.5        2
+Comment= start stepwidth after MODERATE= 3 loops
+DELEND=                     1                 5E-6                      2                        1                    1                   0.001                  0.001                       0.2        1
+Comment= relevant only for FITMODE= 1, kept as an example, number of model calulations at the start of the fitting process
+ITESTART=                  70                   70                     70                       70                   70                      70                     70                        70       70
+Comment= relevant only for FITMODE= 1, kept as an example, number of model calulations after three loops
+ITEEND=                    70                   70                     70                       70                   70                      70                     70                        70       70
+Comment= relevant only for FITMODE= 1, kept as an example, stopping condition: if the model has not changed after a loop by values larger than these numbers, stop
+SATDELT=                  0.2                 1E-6                    0.2                      0.2                    2                  0.0005                 0.0005                      0.05     0.05
+Comment= grid normalisation or minimum step width
+MINDELTA=                0.05                 5E-7                   0.05                     0.05                    1                  0.0002                 0.0002                      0.02     0.02
+
+Comment= no regularisation
+REGPARA= 
+
+Comment= no output table
+TABLE= 
+DISTANCE= 6
+REFRING= 5.0
+BIGTABLE= 
+FRACTION= 
+
+Comment= name of the output default file
+TIRDEF= eso121-g6_out_00.def
+Comment= no median-filtered .def file
+TIRSMO= 
+Comment= numeric accuracy for parameters in default file
+TIRACC= 5.0
+Comment= length of median filter, irrelevant, since we do not produce the median-filtered output
+TIRLEN= 
+
+Comment= no 3D spatial model output
+COOLGAL= 
+COOLBEAM= 20
+
+Comment= no tiltogram output
+TILT= 
+BIGTILT= 
+
+Comment= no inclinogram output
+INCLINO= 
+IN_REFINE= 5.0
+
+Comment= name of output device, a ps file with name eso121-g6_00.ps, portrait format
+GR_DEVICE= eso121-g6_00.ps/vcps 
+Comment= plot radii on abscissa, surface brightness, rotation velocity, position angle, and inclination on ordinate
+GR_PARMS= RADI SBR VROT PA INCL
+Comment= do not plot the sub-rings
+GR_SBRP= 0  
+Comment= print a legend
+GR_LGND= 1    
+Comment= text height is 1
+GR_TXHT= 1   
+Comment= basic symbol height is 0.5 times text height
+GR_SBHT= 0.5   
+Comment= margin to the right is 5 
+GR_MR= 5 
+Comment= margin to the left is 5
+GR_ML= 5
+      
+Comment= symbol for first graph (SBR vs RADI) is a circle
+GR_SYMB_1= -1
+Comments= size of symbol is 1 times basic symbol height (0.5 text height)
+GR_SIZE_1= 1   
+Comments= color is foreground, black
+GR_COL_1= 1  
+Comments= plot lines between data points
+GR_LINES_1= 1
+
+Comment= symbol for second graph (VROT vs RADI) is a circle
+GR_SYMB_2= -1
+Comments= size of symbol is 1 times basic symbol height (0.5 text height)
+GR_SIZE_2= 1   
+Comments= color is foreground, black
+GR_COL_2= 1  
+Comments= plot lines between data points
+GR_LINES_2= 1
+
+Comment= symbol for first graph (PA vs RADI) is a circle
+GR_SYMB_3= -1
+Comments= size of symbol is 1 times basic symbol height (0.5 text height)
+GR_SIZE_3= 1   
+Comments= color is foreground, black
+GR_COL_3= 1  
+Comments= plot lines between data points
+GR_LINES_3= 1
+
+Comment= symbol for first graph (INCL vs RADI) is a circle
+GR_SYMB_4= -1
+Comments= size of symbol is 1 times basic symbol height (0.5 text height)
+GR_SIZE_4= 1   
+Comments= color is foreground, black
+GR_COL_4= 1  
+Comments= plot lines between data points
+GR_LINES_4= 1
+
+

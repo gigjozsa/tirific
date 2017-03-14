@@ -1,0 +1,100 @@
+# This part has to be edited by the user. tirific depends on the
+# existence of several external libraries, which have to be provided
+# by the user. Those libraries are non-standard, but quite common,
+# such that you can easily install them. We leave it to you to install
+# the libraries in a convenient form.
+
+# The version number
+VERSIONNUM = 2.2.5
+PUBDIR = /Users/jozsa/Software/tirific
+
+# Default number of disks, can be changed at runtime by the user
+NDISKS = 2
+
+# Compile with possibility to do a primary beam correction (YES/NO)
+PBCORR = YES
+
+# CC is the compiler to use
+CC = gcc
+# CFLAGS is the flags to use the compiler with
+# CFLAGS = -ggdb -Wall -O0 -pedantic -I/usr/include/malloc
+CFLAGS = -Wall -pedantic -O4 -I/usr/include/malloc
+# CFLAGS = -Wall -pedantic -Os -march=x86-64 -I/usr/include/malloc
+# -I/usr/include/mach
+
+# The operating system (At the moment chose between MAC_OS_X and LINUX
+OS = LINUX
+
+# Compile with open mp (YES/NO)? Note that this means that fftw is optimally compiled with the --enable-openmp option (personally I used the Ubuntu synaptic version, which seems to work)
+OPENMP = YES
+# Opem MP compiler options
+OPENMPCOMP = -fopenmp
+# Open MP linker options
+OPENMPLIB = -fopenmp
+
+# external directories containing include files
+
+# This is the standard include 
+STDDIR = /usr/include/
+
+# directory containing the gipsy include files (obsolete)
+GIPDIR = /home/jozsa/software/gipsy/inc/
+
+# This is the math library include file and most probably at this
+# location
+MATHDIR = /usr/include/
+#/opt/local/include/
+
+# This is the fftw include directory. It should contain the file fftw3.h
+FFTWDIR =  /usr/include/
+
+# This is the position of the parent directory of the gsl directory
+GSLDIR = /Users/jozsa/Software/gsl/gsl-1.15/
+
+# This is the directory in which the g2c include file resides, most probably at this location
+G2CDIR = /usr/include/
+
+# This is the directory in which the wcs include files reside
+WCSDIR = /usr/include/wcslib/
+
+# external libraries
+
+# The gipsy library (obsolete)
+GIPLIB = /home/jozsa/software/gipsy/lib/linux64/giplib.a -lgfortran
+
+# The math library
+MATHLIB = -lm
+
+# The fftw3f library, alternatively
+# -Ldirectory_in_which_the_file_libfftw3f.a_is -lfftw3f
+FFTWLIB = -L/Users/jozsa/Software/fftw/fftw/lib/ -lfftw3f -lfftw3
+
+# The gsl library linker flags-, alternatively
+# -Ldirectory_in_which_the_library_is -lgsl -lgslcblas
+#GSLLIB = -L/opt/local/lib -lgsl -lgslcblas
+GSLLIB = -L/Users/jozsa/Software/gsl/gsl/lib -lgsl -lgslcblas
+
+# The g2c library, alternatively
+# -Ldirectory_in_which_the_library_is -lgsl -lgslcblas
+G2CLIB = 
+# G2CLIB = -L/usr/local/lib/gcc/i686-apple-darwin11/4.2.1 -lgfortran
+# G2CLIB = -L/sw/lib -lg2c
+
+# The wcs library
+WCSLIB = -lwcs
+
+# Pgplot directory
+PGPDIR = /usr/include/
+
+# Pgplot linker flags, for Mac OS, maybe -L$(PGPDIR) -lcpgplot -lpgplot $(X11LIB) -lpng -laquaterm -Wl,-framework -Wl,Foundation  -W1,-AppKit 
+PGPLIB = -lcpgplot -lpgplot -lpng
+
+# This is the directory in which the gft include file resides
+# GFTDIR = /Users/jozsa/Software/gft/
+# GFTDIR2 = ../gft
+
+# gft library linker flags
+# GFTLIB =  -lgsl -lgslcblas -L/Users/jozsa/Software/gft -lgft
+
+# Readline library
+READLINELIB= -lreadline
