@@ -4,7 +4,7 @@ SHELL = /bin/sh
 PATH := .:$(PATH)
 
 # Create a target without a file
-.PHONY: clean virginal cleanplay document qfits
+.PHONY: clean virginal cleanplay document
 
 include settings
 
@@ -219,7 +219,7 @@ OBJTIRIFIC = $(SRC)maths.o\
              $(GFTDIR)pswarm.o
 
 
-$(BIN)tirific: $(OBJTIRIFIC) $(QFITS)
+$(BIN)tirific: $(QFITS) $(OBJTIRIFIC) 
 	@echo '#########################'
 	@echo '# starting tirific #'
 	@echo '#########################'
@@ -243,7 +243,7 @@ document: $(DOCUSOURCES)
 	@echo
 
 # generating the qfits library
-qfits:
+$(QFITS): $(DIR)qfits-6.2.0
 	@echo
 	@echo '####################'
 	@echo '# REBUILDING QFITS #'
