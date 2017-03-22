@@ -1,6 +1,7 @@
 # This is a very simple makefile.
 
 SHELL = /bin/sh
+PATH := .:$(PATH)
 
 # Create a target without a file
 .PHONY: clean virginal cleanplay document qfits
@@ -79,9 +80,6 @@ LOCINC = -I$(LOCINCDIR)
 
 # Source code and object files are in src
 SRC = $(DIR)src/
-
-# Special files to generate the qfits library are in xmemory
-XMEMORY = $(DIR)xmemory/
 
 # The single routine gets into bin
 BIN = $(DIR)bin/
@@ -245,7 +243,7 @@ document: $(DOCUSOURCES)
 	@echo
 
 # generating the qfits library
-qfits: $(XMEMORY)qfits_memory.h $(XMEMORY)qfits_memory.c
+qfits:
 	@echo
 	@echo '####################'
 	@echo '# REBUILDING QFITS #'
@@ -270,5 +268,4 @@ virginal: clean
 	touch $(DIR)qfits-6.2.0; rm -rf $(DIR)qfits-6.2.0
 	touch $(DIR)doc; rm -rf $(DIR)doc
 	touch $(DIR)bin/tirific; rm -f $(DIR)bin/tirific
-	touch $(XMEMORY)qfits_memory.h $(XMEMORY)qfits_memory.c
 	touch $(DOCUSOURCES)
