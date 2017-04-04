@@ -250,6 +250,8 @@ $(QFITS): $(DIR)qfits-6.2.0
 	@echo '####################'
 	@echo
 	cd $(DIR)qfits-6.2.0;\
+	cp configure.pre configure;\
+	cp config.h.in.pre config.h.in
         configure --prefix=$(DIR)qfits-6.2.0/qloc --enable-shared=no;\
         make;\
 	make install
@@ -264,7 +266,7 @@ clean:
 	touch $(SRC)bla.o; rm -f $(SRC)*.o
 	touch $(GFTDIR)bla.o; rm -f $(GFTDIR)*.o
 	touch $(DIR)bin/tirific; rm -f $(DIR)bin/tirific
-	cd $(DIR)qfits-6.2.0; make clean; rm -rf Makefile config.h config.log config.status doc/Doxyfile libtool main/Makefile man/Makefile test/Makefile qloc saft/Makefile src/Makefile stamp-h1
+	cd $(DIR)qfits-6.2.0; make clean; rm -rf configure config.h.in Makefile config.h config.log config.status doc/Doxyfile libtool main/Makefile man/Makefile test/Makefile qloc saft/Makefile src/Makefile stamp-h1
 
 virginal: clean
 	touch $(DIR)qfits-6.2.0; rm -rf $(DIR)qfits-6.2.0
