@@ -251,7 +251,7 @@ $(QFITS): $(DIR)qfits-6.2.0
 	@echo
 	cd $(DIR)qfits-6.2.0;\
 	cp configure.pre configure;\
-	cp config.h.in.pre config.h.in
+	cp config.h.in.pre config.h.in;\
         configure --prefix=$(DIR)qfits-6.2.0/qloc --enable-shared=no;\
         make;\
 	make install
