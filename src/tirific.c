@@ -433,7 +433,7 @@ This was commented hdu stuff
 /*
                tirific.dc1
 
-Program:       TIRIFIC (Version 2.3.7)
+Program:       TIRIFIC (Version 2.3.8)
 
 Purpose:       Fit a tilted-ring model to a datacube
 
@@ -1048,6 +1048,9 @@ typedef struct startinf
 
   /** @brief Indicator if this is the first run or a consecutive one */
   int firstrun;
+
+  /** @brief Indicator of the restartid */
+  int restartid;
 
   /** @brief time stamp for file */
   time_t timestamp;
@@ -6338,7 +6341,7 @@ int main(int argc, char *argv[])
 
   printf("\n");
   printf("####################\n");
-  printf("# TIRIFIC v. 2.3.7 #\n");
+  printf("# TiRiFiC v. 2.3.8 #\n");
   printf("####################\n");
   printf("\n");
 
@@ -6843,8 +6846,8 @@ static startinf *create_startinf(void)
   /* First set all pointers to 0 and initialise some pointers */
   startinfv -> arel = NULL;
   startinfv -> restartname = NULL;
+  startinfv -> restartid = 0;
   startinfv -> firstrun = 1;
-  startinfv -> restartname = NULL;
   /* if (!(startinfv -> restartname =  getfcharray(200, NULL))) */
   /*   goto error; */
   if (!((startinfv -> filestat) = (struct stat *) malloc(sizeof(struct stat)))) {
@@ -6904,7 +6907,9 @@ static startinf *get_startinf(int argc, char **argv)
   char *buffer = NULL;
   int nread, nreturned;
   char *returnedc;
-  int *prompt;
+  int *prompt, *restartid;
+  int restartdef = 0;
+  int defrestartdef = 0;
   int promptdef = 0;
   int keypres;
   char **varystr = NULL;
@@ -6948,10 +6953,19 @@ static startinf *get_startinf(int argc, char **argv)
   if (!(startinfv -> arel = simparse_scn_arel_insert(NULL, "Command line", buffer, NULL)))
     goto error;
 
+  /* An input of restartid != 0 on the command line is an error */
+  if (simparse_scn_arel_readval_int(startinfv -> arel, "RESTARTID", "ID of restart process [0]", 1, &restartdef, 1, 1, 0, 0, &keypres, &nread, &nreturned, &restartid))
+    goto error;
+
+  if (*restartid) {
+    fprintf(stderr, "Error: cannot define RESTARTID=%i, other than RESTARTID=0 on command line.\n(Would lead to an endless loop.)\n", *restartid);
+    goto error;
+  }
+
   /* Read out the file name */
   if (simparse_scn_arel_readval_string(startinfv -> arel, "DEFFILE", "Provide default file name (default: no file).", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &returnedc))
     goto error;
-
+  
   if ((returnedc[0]))
     printf("Using default file with name: %s\n", returnedc);
 
@@ -7002,7 +7016,10 @@ static startinf *get_startinf(int argc, char **argv)
   freeparsed(varystr);
   varystr = NULL;
 
-
+  if (simparse_scn_arel_readval_int(startinfv -> arel, "RESTARTID", "ID of restart process [0]", 1, &restartdef, 1, 1, 0, 0, &keypres, &nread, &nreturned, &restartid))
+    goto error;
+  startinfv -> restartid = *restartid;
+  
   /* The startfile */
   /* sprintf(mes, "Give restartfile name."); */
   /*   for (i = 0; i < 200; ++i) */
@@ -7016,13 +7033,14 @@ static startinf *get_startinf(int argc, char **argv)
 
   free(buffer);
 
-  return startinfv;
+    return startinfv;
   
  error:
   if ((startinfv)) {
     /* Stop the logfile io, also put ndisks = 1, is irrelevant */
     destroy_startinf(startinfv);
   }
+  
   if ((buffer))
     free(buffer);
   if ((startinfv -> arel))
@@ -7093,9 +7111,11 @@ static int loop_restart(startinf *startinfv)
   /* char mes[81]; */
   /* int def, nel, i; */
   char **varystr = NULL;
+  int *restartid;
+  int restartdef = 0;
   int keypres, nread, nreturned;
   simparse_scn_keyvalli **keyvallifile;
-
+  
   /* If the function is called, this should be done */
   startinfv -> firstrun = 0;
 
@@ -7104,12 +7124,21 @@ static int loop_restart(startinf *startinfv)
     
     /* Check if file information can be acquired and fill stuff */
     if (stat(startinfv -> restartname, startinfv -> filestat)) {
+
+      /* Notice that tirific will not wait until the restartfile is created */
       return 0;
     }
     else {
-		fflush(NULL);
-      printf("Waiting for file %s to change.\n", startinfv -> restartname);
-		
+      fflush(NULL);
+      printf("Waiting for file %s to change", startinfv -> restartname);
+      if (startinfv -> restartid) {
+	  if ((keyvallifile = simparse_scn_keyvallilist_gfrfi(startinfv -> arel[2] -> orifilename))) {
+	    printf(" and RESTARTID= %i to change in %s.\n", startinfv -> restartid, startinfv -> arel[2] -> orifilename);
+	  }
+      }
+      else {
+	printf(".\n");
+      }
 		
       /* Run a loop until the timestamps are the same or the file becomes unreadable */
       while (startinfv -> timestamp >= startinfv -> filestat -> st_mtime) {
@@ -7117,25 +7146,35 @@ static int loop_restart(startinf *startinfv)
 			 break;
 		  }
       }
+      printf("File %s has changed.", startinfv -> restartname);
 
       /* Now refresh the input name and read it in again (not sure if this works or if the .def file has to be reread into some buffer before */
 		/* Changed this here */
       cancel_tir(startinfv -> arel, "RESTARTNAME=", 1);
+      
+      /* Just make sure that the file is re-read */
 
-		/* Just make sure that the file is re-read */
-		if (startinfv -> arel && startinfv -> arel[1] && startinfv -> arel[2]) {
-		  if ((keyvallifile = simparse_scn_keyvallilist_gfrfi(startinfv -> arel[2] -> orifilename))) {
-			 simparse_scn_keyvallilist_dest(startinfv -> arel[2] -> keyvallifile);
-			 startinfv -> arel[2] -> keyvallifile = keyvallifile;
-		  }
-		  else {
-			 simparse_scn_arel_timestamp_early(startinfv -> arel[2]);
-		  }
-		}
-
+      /* This may add an extra layer of security of sync */
+      do {
+	if (startinfv -> arel && startinfv -> arel[1] && startinfv -> arel[2]) {
+	  if ((keyvallifile = simparse_scn_keyvallilist_gfrfi(startinfv -> arel[2] -> orifilename))) {
+	    simparse_scn_keyvallilist_dest(startinfv -> arel[2] -> keyvallifile);
+	    startinfv -> arel[2] -> keyvallifile = keyvallifile;
+	  }
+	  else {
+	    simparse_scn_arel_timestamp_early(startinfv -> arel[2]);
+	  }
+	}
+		if (simparse_scn_arel_readval_int(startinfv -> arel, "RESTARTID=", "ID of restart process [0]", 1, &startinfv -> restartid, 1, 1, 0, 0, &keypres, &nread, &nreturned, &restartid)) 
+		  /*	  if (simparse_scn_arel_readval_int(startinfv -> arel, "RESTARTID=", "ID of restart process [0]", 1, &restartdef, 1, 1, 0, 0, &keypres, &nread, &nreturned, &restartid))*/
+	  goto error;
+      } while ((*restartid == startinfv -> restartid) && (startinfv -> restartid != 0));
+	
+      startinfv -> restartid = *restartid;
+	
       if ((startinfv -> restartname)) {
-		  free(startinfv -> restartname);
-		  startinfv -> restartname = NULL;
+	free(startinfv -> restartname);
+	startinfv -> restartname = NULL;
       }
 		
       /* sprintf(mes, "Give restartfile name."); */
@@ -7437,11 +7476,11 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
 
   if (!startinfv -> firstrun)
     return loginfv;
-  
+
   /* Try to allocate */
   if (!(log = create_loginf()))
     goto error;
-  
+
 #ifdef OPENMPTIR
   /* The very first thing to do is to ask for the number of cores */
   log -> ncores = 1;
@@ -7460,7 +7499,7 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
 #else
   log -> ncores = 1;
 #endif
-  
+
   /* First thing to do is the logfile and the text logfile */
   
   /* The logfile */
@@ -7479,7 +7518,7 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
   
   /* This puts an \0 to the end of the text */
   /* termsinglestr(log -> logname); */
-  
+
   /* The text logfile */
   if (simparse_scn_arel_readval_string(startinfv -> arel, "TEXTLOG", "Provide text logfile name (default: no file).", 0, "", 0, -1, 0, 0, &keypres, &nread, &nreturned, &(log -> textlog)))
     goto error;
@@ -7513,11 +7552,10 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
     /* termsinglestr(log -> progresslog); */
     /* Kamphuis addition end */
     
-    
     /* The result name */
   if (simparse_scn_arel_readval_string(startinfv -> arel, "TABLE", "Give output table name (default: no file).", 0, "", 0, -1, 0, 0, &keypres, &nread, &nreturned, &(log -> table)))
     goto error;
-    
+
     /* for (i = 0; i < 200; ++i) */
     /*   log -> table[i] = ' '; */
     /* log -> table[200] = '\0'; */
@@ -7537,7 +7575,6 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
     log -> distance = 10;
     def = 2;
     
-    
     sprintf(mes,"Distance in Mpc [10]");
     nel = 1;
     userdble_tir(startinfv -> arel, &log -> distance, &nel, &def, "DISTANCE=", mes);
@@ -7549,7 +7586,7 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
     }
 
   return log;
-  
+
  error:
   if ((log)) {
     /* Stop the logfile io, also put ndisks = 1, is irrelevant */
@@ -15597,6 +15634,13 @@ static int putgenresults(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
   anyout_tir(&dev, mes);
 
   /* New Kamphuis */
+  if (startinfv -> restartid) {
+    length = strlen(mes);
+    sprintf(mes+length, 
+	    " R:%i ",          /* current restart-id */
+	    startinfv -> restartid    /* size */
+	    );
+  }
   progressout(startinfv, mes);
 
   /* error source ? */
@@ -17671,7 +17715,9 @@ static int progressout(startinf *startinfv, char *message)
     fprintf(stream,"%s",message);
     fprintf(stream, "\n");
     /* and close again otherwise the file stays unreadable */
-    fclose(stream);  
+        fflush(stream); 
+    fclose(stream);
+     fflush(NULL); 
     }
 
   if ((progname))
