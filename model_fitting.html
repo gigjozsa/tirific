@@ -1321,11 +1321,19 @@ Let's assume <a href="model_geometry.html#NUR">NUR</a> 10. In the example, we sp
     <td align="center"> &nbsp; </td>
     <td align="left"> Give file name for restarting TiRiFiC </td>
   </tr>
+   <tr>
+    <td align="left"><a name="RESTARTID"><b>RESTARTID</b></a></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left">Give ID for restarting tirific</td>
+  </tr>
 </table>
 <p class="par">
-For some purposes, like manual fitting or automated repeated calling of TiRiFiC, it is convenient not to terminate TiRiFiC, but to re-start model construction and the fitting process with changed parameters, without initialising TiRiFiC again (therefore saving time). With the parameter RESTARTNAME, the user specifies a file name. If that file exists, TiRiFiC runs through the fitting process as specified in the input once (or, in the case of <a href="model_fitting.html#LOOPS">LOOPS</a> = 0, it only produces a model), to then wait until the file gets deleted or changes its modification time stamp (like editing the file and saving it or touching the file). Once the time stamp of the file changes or the file is deleted, TiRiFiC starts the model creation and the fitting process again, re-reading all parameters, with a (large) number exceptions: most notably the input and output file names are not read again, and the modes concerning model construction are not read in again, the number of disks and rings is not allowed to change, the RADII and RADSEP are not allowed to change. This avoids the most time intensive initialisation processes when TiRiFiC gets started.
+For some purposes, like manual fitting or automated repeated calling of TiRiFiC, it is convenient not to terminate TiRiFiC, but to re-start model construction and the fitting process with changed parameters, without initialising TiRiFiC again (therefore saving time). With the parameter RESTARTNAME, the user specifies a file name. If that file exists, TiRiFiC runs through the fitting process as specified in the input once (or, in the case of <a href="model_fitting.html#LOOPS">LOOPS</a> = 0, it only produces a model), to then wait until the file gets deleted or changes its modification time stamp (like editing the file and saving it or touching the file). Once the time stamp of the file changes or the file is deleted, TiRiFiC starts the model creation and the fitting process again, re-reading all parameters, with a (large) number exceptions: most notably the input and output file names are not read again, and the modes concerning model construction are not read in again, the number of disks and rings are not allowed to change, the RADII and RADSEP are not allowed to change. This avoids the most time intensive initialisation processes when TiRiFiC gets started. Notice that the modification time stamp has a low precision in some operating systems. This means that the user has either to actively change it or wait some time before the file <a href="model_fitting.html#RESTARTNAME">RESTARTNAME</a> gets modified to initialise TiRiFiC to re-run.
 </p>
-
+<p class="par">
+The parameter <a href="model_fitting.html#RESTARTID">RESTARTID</a> adds a synchronization layer to the restart process. If in the <i>n</i>th run of TiRiFiC <a href="model_fitting.html#RESTARTID">RESTARTID=</a><i>i</i> is set where <i>i</i> != 0 (!= means: not equal) and <a href="model_fitting.html#RESTARTNAME">RESTARTNAME=</a><i>somename</i> is specified, in the <i>(n+1)</i>th TiRiFiC will first wait for the time stamp of <i>somename</i> to change, then re-read the <a href="input_and_syntax.html#DEFFILE">DEFFILE</a> until it specifies <a href="model_fitting.html#RESTARTID">RESTARTID=</a><i>j</i>, where <i>j</i>!=<i>i</i>. This way the user can make sure that a new <a href="input_and_syntax.html#DEFFILE">DEFFILE</a> gets read. <a href="model_fitting.html#RESTARTID">RESTARTID</a> defaults to 0 in the first run, then to the value of <a href="model_fitting.html#RESTARTID">RESTARTID</a> in the previous run. It is advisable to put <a href="model_fitting.html#RESTARTID">RESTARTID</a> at the end of the <a href="input_and_syntax.html#DEFFILE">DEFFILE</a>. This ensures that TiRiFiC reads in the complete 
+</p><a href="input_and_syntax.html#DEFFILE">DEFFILE</a>.
 <hr>
 <h3><a name="Summary fitting parameters">Summary fitting parameters</a></h3>
 
@@ -1546,6 +1554,12 @@ For some purposes, like manual fitting or automated repeated calling of TiRiFiC,
     <td align="center"> &nbsp; </td>
     <td align="left"> Give file name for restarting TiRiFiC </td>
   </tr>
+   <tr>
+    <td align="left"><a href="model_fitting.html#RESTARTID"><b>RESTARTID</b></a></td>
+    <td align="center">Fitting (optional)</td>
+    <td align="center"> &nbsp; </td>
+    <td align="left">Give ID for restarting tirific</td>
+  </tr>
 </table>
 </div>
 </div>
@@ -1565,7 +1579,7 @@ For some purposes, like manual fitting or automated repeated calling of TiRiFiC,
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Wed Apr 5 16:52:09 SAST 2017
+Last modified: Mon Oct 30 13:03:01 SAST 2017
 <!-- hhmts end -->
 <br><a href="mailto:jozsa@ska.ac.za">Gyula J&oacute;zsa</a>
 </div>
