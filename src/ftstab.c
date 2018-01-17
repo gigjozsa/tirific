@@ -3543,9 +3543,9 @@ char *ftstab_gltitl(int titl)
   if (!(gtitl = (char *) malloc(21*sizeof(char))))
     return NULL;
     if (ftstab_putlcoltitl(gtitl, titl) == -1) {
-  free(gtitl);
-  return NULL;
-  }
+      free(gtitl);
+      return NULL;
+    }
   else
     return gtitl;
 }
@@ -3694,11 +3694,13 @@ int ftstab_gltitln_(char *titl)
     if (!(dummy = ftstab_gltitl(i)))
       return -1;
 
-    if (!strcmp(dummy, titl))
+    if (!strcmp(dummy, titl)) {
+      free(dummy);
       break;
-  }
-  if (dummy)
+    }
+
     free(dummy);
+  }
 
   if (i == hdrlist_.n)
     return -1;

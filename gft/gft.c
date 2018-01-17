@@ -3384,6 +3384,10 @@ static int mst_gen_destr(mst_gen *mst_genv)
   FREE_COND(mst_genv -> nopar);
   FREE_COND(mst_genv -> nospar);
   FREE_COND(mst_genv -> nodpar);
+  FREE_COND(mst_genv -> nolbounds);
+  FREE_COND(mst_genv -> noubounds);
+  FREE_COND(mst_genv -> lbounds);
+  FREE_COND(mst_genv -> ubounds);
 
   free(mst_genv);
 

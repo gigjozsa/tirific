@@ -8,7 +8,6 @@
    Check: interpinit, interpover
 
 This was commented hdu stuff
-
    i) Introducing a new singular parameter:
    1. Chose a struct of the four loginf headerinf ringparms and fitparms to include the parameter as a component.
    2. Add the parameter into the identifyer list: Add the parameter identifyer as the last element in the first PRIMPOS list (after comment "Not in first header" but before "Third hdu"). Change all numbers in the PRIMPOS list (also after the comment) such that the numbers following the added identifyer are increased by 1. Increase the PRIMHDN_SINGLE symbolic constant by 1.
@@ -433,7 +432,7 @@ This was commented hdu stuff
 /*
                tirific.dc1
 
-Program:       TIRIFIC (Version 2.3.8)
+Program:       TIRIFIC (Version 2.3.9)
 
 Purpose:       Fit a tilted-ring model to a datacube
 
@@ -2804,44 +2803,6 @@ static double gchsq_gen(double *vector, void *rest);
 */
 /* ------------------------------------------------------------ */
 static double gchsq_gen2(double *vector, void *rest);
-
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-   @fn static char *getfcharray(int length, char *orarray)
-   @brief Returns a fortran compatible char array
-
-   Returns an allocated char array of length length+1 that is
-   terminated, but contains no terminating characters ('\0') in the
-   string. Has to be freed, if NULL is passed for orarray. If orarray
-   is not NULL, orarray will be overwritten to be gipsy compatible,
-   but not allocated.
-
-   @param length (int) Length of text in string
-   @param orarray (char *) Either array of length length or NULL
-
-   @return char *getfcharray: Allocated char array suitable for the use in fortran
-*/
-/* ------------------------------------------------------------ */
-static char *getfcharray(int length, char *orarray);
-
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/**
-   @fn static char *flushfcharray(int length, char *orarray)
-   @brief Flushes a string to be fortran compatible
-
-   Fills the array with blanks and terminates with 0.
-
-   @param length (int) Length of text in string
-   @param orarray (char *) Array of length length
-
-   @return char *getfcharray: Flushed char array suitable for the use in fortran
-*/
-/* ------------------------------------------------------------ */
-static char *flushfcharray(int length, char *orarray);
 
 
 
@@ -6475,6 +6436,8 @@ int main(int argc, char *argv[])
 
   /* finis_c(); */
 
+  fprintf(stderr,"Got here: end\n");
+  
   return 1;
 
  error:
@@ -6599,31 +6562,6 @@ static int tir_fillhd(loginf *log, int i, double radius, double grid)
   log -> grid[i] = grid;
   log -> radius[i] = radius;
   return 0;
-}
-
-/* ------------------------------------------------------------ */
-
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
-/* Returns a gipsy compatible char array */
-
-static char *getfcharray(int length, char *orarray)
-{
-  char *getfcharray;
-
-  if (!orarray) {
-    if (!(getfcharray = (char *) malloc((length+1)*sizeof(char))))
-      return NULL;
-  }
-  else {
-    getfcharray = orarray;
-  }
-
-  flushfcharray(length, getfcharray);
-
-  return getfcharray;
 }
 
 /* ------------------------------------------------------------ */
@@ -6817,22 +6755,6 @@ static int activateftstab(startinf *startinfv, loginf *log, ringparms *rpm)
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Blanks a char array to become gipsy compatible */
-
-static char *flushfcharray(int length, char *orarray)
-{
-  orarray[length--] = '\0';
-  while(length != 0)
-    orarray[--length] = ' ';
-  return orarray;
-}
-
-/* ------------------------------------------------------------ */
-
-
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
 /* Creates a startinf structure */
 
 static startinf *create_startinf(void)
@@ -6907,9 +6829,8 @@ static startinf *get_startinf(int argc, char **argv)
   char *buffer = NULL;
   int nread, nreturned;
   char *returnedc;
-  int *prompt, *restartid;
+  int *prompt = NULL, *restartid = NULL;
   int restartdef = 0;
-  int defrestartdef = 0;
   int promptdef = 0;
   int keypres;
   char **varystr = NULL;
@@ -6962,6 +6883,8 @@ static startinf *get_startinf(int argc, char **argv)
     goto error;
   }
 
+  free(restartid); 
+  
   /* Read out the file name */
   if (simparse_scn_arel_readval_string(startinfv -> arel, "DEFFILE", "Provide default file name (default: no file).", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &returnedc))
     goto error;
@@ -7032,8 +6955,8 @@ static startinf *get_startinf(int argc, char **argv)
   /* termsinglestr(startinfv -> restartname); */
 
   free(buffer);
-
-    return startinfv;
+  free(restartid);
+  return startinfv;
   
  error:
   if ((startinfv)) {
@@ -7043,6 +6966,8 @@ static startinf *get_startinf(int argc, char **argv)
   
   if ((buffer))
     free(buffer);
+  if ((prompt))
+    free(prompt);
   if ((startinfv -> arel))
     simparse_scn_arellist_dest(startinfv -> arel);
 
@@ -7080,19 +7005,19 @@ static int check_restart(startinf *startinfv, hdrinf *hdr, ringparms *rpm, login
     retval = 1;
 
   if ((retval)) {
-	 if ((rpm)) {
-
+    if ((rpm)) {
+      
       /* We read all values into the par array and to be sure make oldpar and par equal */
       tir_get_grid(log, rpm, log -> outarray);
-    
+      
       for (i = 0; i < rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++i)
         rpm -> oldpar[i] = log -> outarray[i];
-    
+      
       changetointern(rpm -> oldpar, rpm -> nur, hdr, rpm -> ndisks);
-
+      
       for (i = 0; i < rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++i)
         rpm -> par[i] = rpm -> oldpar[i];
-	 }
+    }
   }
 
   return retval;
@@ -7111,8 +7036,7 @@ static int loop_restart(startinf *startinfv)
   /* char mes[81]; */
   /* int def, nel, i; */
   char **varystr = NULL;
-  int *restartid;
-  int restartdef = 0;
+  int *restartid = NULL;
   int keypres, nread, nreturned;
   simparse_scn_keyvalli **keyvallifile;
   
@@ -7132,9 +7056,10 @@ static int loop_restart(startinf *startinfv)
       fflush(NULL);
       printf("Waiting for file %s to change", startinfv -> restartname);
       if (startinfv -> restartid) {
-	  if ((keyvallifile = simparse_scn_keyvallilist_gfrfi(startinfv -> arel[2] -> orifilename))) {
+	/* GJnew */
+	/* if ((keyvallifile = simparse_scn_keyvallilist_gfrfi(startinfv -> arel[2] -> orifilename))) { */
 	    printf(" and RESTARTID= %i to change in %s.\n", startinfv -> restartid, startinfv -> arel[2] -> orifilename);
-	  }
+	    /*       } */
       }
       else {
 	printf(".\n");
@@ -7156,6 +7081,8 @@ static int loop_restart(startinf *startinfv)
 
       /* This may add an extra layer of security of sync */
       do {
+	if ((restartid))
+	   free(restartid);
 	if (startinfv -> arel && startinfv -> arel[1] && startinfv -> arel[2]) {
 	  if ((keyvallifile = simparse_scn_keyvallilist_gfrfi(startinfv -> arel[2] -> orifilename))) {
 	    simparse_scn_keyvallilist_dest(startinfv -> arel[2] -> keyvallifile);
@@ -7165,8 +7092,7 @@ static int loop_restart(startinf *startinfv)
 	    simparse_scn_arel_timestamp_early(startinfv -> arel[2]);
 	  }
 	}
-		if (simparse_scn_arel_readval_int(startinfv -> arel, "RESTARTID=", "ID of restart process [0]", 1, &startinfv -> restartid, 1, 1, 0, 0, &keypres, &nread, &nreturned, &restartid)) 
-		  /*	  if (simparse_scn_arel_readval_int(startinfv -> arel, "RESTARTID=", "ID of restart process [0]", 1, &restartdef, 1, 1, 0, 0, &keypres, &nread, &nreturned, &restartid))*/
+	if (simparse_scn_arel_readval_int(startinfv -> arel, "RESTARTID=", "ID of restart process [0]", 1, &startinfv -> restartid, 1, 1, 0, 0, &keypres, &nread, &nreturned, &restartid)) 
 	  goto error;
       } while ((*restartid == startinfv -> restartid) && (startinfv -> restartid != 0));
 	
@@ -7230,13 +7156,17 @@ static int loop_restart(startinf *startinfv)
   if ((varystr)) {
     freeparsed(varystr);
   }
-
+  /* GJnew */
+    if ((restartid))
+      free(restartid); 
   return 0;
   
  error:
   if ((varystr)) {
     freeparsed(varystr);
   }
+  if ((restartid))
+    free(restartid);
   return 1;
   
 }
@@ -7392,10 +7322,11 @@ static hdrinf *create_hdrinf(void)
   /* Allocate and initialise the arrays */
   
   /* Allocate inset, we allow for more than 18 characters */
-  if (!(create_hdrinf ->inset = getfcharray(200, NULL)))
-    goto error;
+  /* if (!(create_hdrinf -> inset = getfcharray(200, NULL)))
+     goto error;*/
   
   /* Allocate coordinate descriptor array */
+  /* GJnew: removed this, lead to leakage */
   /* if (!(create_hdrinf -> insubs = (int *) malloc(MAXNSUBS*sizeof(int)))) */
   /*   goto error; */
 
@@ -7404,10 +7335,6 @@ static hdrinf *create_hdrinf(void)
   /*   goto error; */
 
   return create_hdrinf;
-  
- error:
-  destroy_hdrinf(create_hdrinf);
-  return NULL;
 }
 
 /* ------------------------------------------------------------ */
@@ -8395,6 +8322,12 @@ void destroy_ringparms(ringparms *prm)
     free(prm -> ltype);
   if (prm -> cflux)
     free(prm -> cflux);
+  
+  /* GJnew */
+  if (prm -> allnpoints)
+    free(prm -> allnpoints);
+  if (prm -> fluxpoints)
+    free(prm -> fluxpoints);
 
   if (prm -> sd        != NULL) {for (i = 0; i < prm -> ndisks; ++i) {if (prm -> sd[i]        != NULL) destroy_srd(prm ->  sd[i], prm -> nr);}  free(prm -> sd);}
   if (prm -> inf_sdisv != NULL) {for (i = 0; i < prm -> ndisks; ++i) {if (prm -> inf_sdisv[i] != NULL) destroy_inf_sdis(prm -> inf_sdisv[i]);}  free(prm -> inf_sdisv);}
@@ -9581,6 +9514,8 @@ void destroy_fitparms(fitparms *fit)
     decomp_inlist_dest(fit->index);
   if ((fit -> reg_contv))
     reg_cont_destr(fit -> reg_contv);
+  if ((fit -> adar))
+    free(fit -> adar);
 
   free(fit);
     return;
@@ -11936,9 +11871,11 @@ static int writecoolmodel(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
   varystr = NULL;
 
   /* The default is to do nothing */
-  if (*coolname == '\0')
+  if (*coolname == '\0') {
+    free(coolname);
     return 1;
-
+  }
+  
   /* Now we want the binning number */
   sprintf(mes, "Give cool binning");
   def = 2;
@@ -17372,9 +17309,10 @@ static int coolgal(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
   varystr = NULL;
   
   /* The default is to do nothing */
-  if (*coolname == '\0')
+  if (*coolname == '\0') {
+    free(coolname);
     return 1;
-  
+  }
   /* Now ask if the user wants a specific kind of beam, the default being the max beam */
   sprintf(mes, "Give 3d beam size (arcsec)");
   beam = hdr -> deltgridtouser[0]*((double) hdr -> bmaj);
@@ -18870,6 +18808,7 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
     ftsout_header_destroy(header);
     free(array);
   }
+  free(filename);
 
   return 1;
 
@@ -18983,8 +18922,10 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
 
   
   /* If there was no input we return */
-  if (*br_device == '\0') 
+  if (*br_device == '\0') {
+    free(br_device);
     return 0;
+  }
   
   /* Check if there was a logfile and stop if there wasn't */
 /*   if (*log -> logname == '\0') */
@@ -19397,6 +19338,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
   
   /* If there was no input we return */
   if (*pgdevice == '\0') {
+    free(pgdevice);
     return 0;
   }
   /* Check if there was a logfile and stop if there wasn't */
@@ -22129,9 +22071,11 @@ static int renzo(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm)
   freeparsed(varystr);
   varystr = NULL;
 
- if (*renzoname == '\0')
+  if (*renzoname == '\0') {
+    free(renzoname);
     return 1;
-
+  }
+  
   /* Ask for refinement */
   sprintf(mes, "Give inclinogram refinement:");
   def = 2;
@@ -27025,8 +26969,6 @@ static reg_cont **reg_cont_const(int nregs)
   if (nregs < 0)
     return NULL;
 
-  
-
   if (!(reg_cont_const = (reg_cont **) malloc ((nregs+1)*sizeof(reg_cont *))))
     return NULL;
 
@@ -27071,6 +27013,8 @@ static int reg_cont_destr(reg_cont **reg_contv)
     ++i;
   }
 
+  free(reg_contv);
+  
   return 0;
 }
 

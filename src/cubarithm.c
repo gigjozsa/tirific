@@ -1029,9 +1029,13 @@ void cubarithm_cube_destroy(Cube *cubev)
   if (cubev -> type)  free(cubev -> type);
   if (cubev -> unit)  free(cubev -> unit);
 
+  /* GJnew */
+  if (cubev -> header) qfits_header_destroy(cubev -> header);
   if (cubev -> asciiheader) free(cubev -> asciiheader);
   if (cubev -> points) fftwf_free(cubev -> points);
-  if (cubev -> wcs) wcsvfree(&(cubev -> nwcs), (struct wcsprm **) &(cubev -> wcs));
+  if (cubev -> wcs) {
+    wcsvfree(&(cubev -> nwcs), (struct wcsprm **) &(cubev -> wcs));
+  }
   free(cubev);
 
   return;
@@ -1590,7 +1594,7 @@ int cubarithm_readcube(const char *filename, Cube **cubename, char *errorstr)
   cubenamehook -> nwcs = 0;
 
   /* Enable error messaging */
-  wcserr_enable(1);
+  /* wcserr_enable(1); */
 
   if (wcspih(cubenamehook -> asciiheader, cubenamehook -> header -> n, WCSHDR_all, 2, &nreject, &(cubenamehook -> nwcs), (struct wcsprm **) &(cubenamehook -> wcs))) {
     wcsperr((struct wcsprm *) (cubenamehook -> wcs),"WCS error:");
@@ -1788,7 +1792,7 @@ Cube *cubarithm_copycube(Cube *incubus)
   cpc -> nwcs  = 0;
 
   /* Enable error messaging */
-  wcserr_enable(1);
+  /* wcserr_enable(1); */
 
   /* fprintf(stderr,"cpc -> asciiheader:\n|%s|\nincubus -> asciiheader:\n|%s|\nheader -> n %i\nheaderbytes: %i", incubus -> asciiheader, cpc -> asciiheader, cpc -> header -> n, (int) cpc -> headerbytes); */
 

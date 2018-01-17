@@ -23,7 +23,7 @@
    Revision 1.5  2010/02/17 01:21:40  jozsa
    finished decomp complex
 
-   Revision 1.4  2009/06/19 17:31:59  jozsa
+   Revision 1.4  2009/06/19 17:31:59  jozsa 
    Bug removal evaluating the sep option in parsenext
 
    Revision 1.3  2009/03/27 11:17:12  jozsa
@@ -3457,6 +3457,7 @@ static void simparse_scn_keyvalli_dest(simparse_scn_keyvalli *simparse_scn_keyva
   if ((simparse_scn_keyvalliv -> val))
     free(simparse_scn_keyvalliv -> val);
 
+  /* GJnew */
   free(simparse_scn_keyvalliv);
 
   return;
@@ -3635,7 +3636,7 @@ static simparse_scn_keyvalli **simparse_scn_keyvallilist_gcomm(char **readin)
 
   while ((readin[i])) {
 
-    /* printf("The line to be hacked: |%s|\n", readin[i]); */
+/* printf("The line to be hacked: |%s|\n", readin[i]); */
 
     hacked = sparsenext(" \n\t", "", "", "", "", "", -1, &(readin[i]), &line, 1, 1);
 
@@ -3686,10 +3687,12 @@ static simparse_scn_keyvalli **simparse_scn_keyvallilist_gcomm(char **readin)
       tempval = simparse_copystring("");
     }
 
-    if (!(readin[i+1]))
+    if (!(readin[i+1])) {
+      if ((tempval))
+	free(tempval);
       if (!(tempval = simparse_copystring(readin[i])))
 	goto error;
-
+    }
 
     if ((tempkey)) {
       /* printf("########################\nkey: |%s| val: |%s| line: |%i|\n", tempkey, tempval, citeline); */
@@ -3697,15 +3700,22 @@ static simparse_scn_keyvalli **simparse_scn_keyvallilist_gcomm(char **readin)
       /* Append to list */
       if (!(simparse_scn_keyvallilist_gcomm = simparse_scn_keyvalli_insert(simparse_scn_keyvallilist_gcomm, tempkey, tempval, citeline)))
 	goto error;
+
+      /* GJnew */
+      free(tempkey);
     }
     tempkey = tempkeynext;
     tempkeynext = NULL;
     citeline = line;
     /* printf("\n"); */
     freeparsed(hacked);
+
+    /* GJnew */
+    free(tempval);
     ++i;
   }
-
+  if ((tempkey))
+    free(tempkey);
   return simparse_scn_keyvallilist_gcomm;
 
  error:
@@ -3835,6 +3845,8 @@ void simparse_scn_keyvallilist_dest(simparse_scn_keyvalli **simparse_scn_keyvall
     ++i;
   }
 
+  free(simparse_scn_keyvallilist);
+  
   return;
 }
 
@@ -3888,6 +3900,9 @@ static void simparse_scn_arel_dest(simparse_scn_arel *simparse_scn_arelv)
 
   simparse_scn_keyvallilist_dest(simparse_scn_arelv -> keyvallifile);
 
+  /* GJnew */
+  free(simparse_scn_arelv);
+
   return;
 }
 
@@ -3929,6 +3944,8 @@ void simparse_scn_arellist_dest(simparse_scn_arel **simparse_scn_arellist)
     ++i;
   }
 
+  free(simparse_scn_arellist);
+  
   return;
 }
 
@@ -4053,7 +4070,7 @@ int simparse_scn_arel_upd(simparse_scn_arel *simparse_scn_arelv)
     }
     else {
       if (!(keyvallifile = simparse_scn_keyvallilist_start()))
-		  goto error;
+	goto error;
       action_file = 1;
     }
   }
@@ -4062,6 +4079,7 @@ int simparse_scn_arel_upd(simparse_scn_arel *simparse_scn_arelv)
       goto error;
     action_file = 1;
   }
+
   /* Do replacing and linking */
   if ((action_pre)) {
     simparse_scn_keyvallilist_dest(simparse_scn_arelv -> keyvallipre);
@@ -5104,6 +5122,9 @@ int simparse_scn_arel_readval_gen(simparse_scn_arel **simparse_scn_arellist, cha
     }
     
     /* Deallocate stuff */
+    /* if (intreturn)
+       free(intreturn); */
+
     if ((valintern))
       free(valintern);
     valintern = NULL;
