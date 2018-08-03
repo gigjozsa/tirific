@@ -412,7 +412,7 @@ Edit the <tt>settings</tt> file according to the location of the
     commented and it should be straightforward to set it up. 
 <br>
 <br>
-    <li>Compile qfits</li>
+    <li>Compile qfits (only if you have downloaded TiRiFiC from this page, not required when using the github installation)</li>
 <tt>> make qfits</tt><br>
 should finish successfully. If it does not, try to set the path variable to the local directory:<br>
 <tt>> tcsh</tt> (if you are not using tcsh)<br>
@@ -468,8 +468,10 @@ or put the binary in your path
 Alternatively, copy the <tt>tirific</tt> binary to the directory in which you want to use it.
 </ol>
 
-<h4><a name="Update TiRiFiC">Update TiRiFiC</a></h4>
+<h4><a name="Update TiRiFiC">Update TiRiFiC using the update patch</a></h4>
 <ol class="par">
+  If you have installed TiRiFiC from the github pages, please re-install using github. If you have installed TiRiFiC using the version provided here, proceed with the following steps:
+  <br>
     <li>Copy the tirific installation</li>
 We assume that your latest TiRiFiC installation resides in the directory <tt>pdir/tirific_l.m.n</tt>, and that the newest version on this web page is i.j.k.<br>
    	<tt>> cp -r pdir/tirific_l.m.n pdir/tirific_i.j.k</tt><br>
@@ -537,6 +539,9 @@ Then,<br>
 <tt>> make </tt><br>
 <tt>> cd .. </tt><br>
 <tt>> make </tt>
+<br>
+<br>
+Do not repeat the <tt>> make qfits</tt> step, because it will rebuild the complete qfits directory and erase your modifications.
 </ol>    
 </ol>
 </p>
@@ -562,7 +567,7 @@ Contact <a href="mailto:jozsa@ska.ac.za">Gyula J&oacute;zsa</a>.
 
 <!-- Created: Fri Apr 13 2007 -->
 <!-- hhmts start -->
-Last modified: Wed Jan 17 17:38:44 SAST 2018
+Last modified: Fri Aug 3 15:17:44 SAST 2018
 <!-- hhmts end -->
 <br><a href="mailto:jozsa@ska.ac.za">Gyula J&oacute;zsa</a>
 </div>
