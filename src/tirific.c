@@ -6301,9 +6301,9 @@ int main(int argc, char *argv[])
   char mes[81];
 
   printf("\n");
-  printf("####################\n");
-  printf("# TiRiFiC v. 2.3.8 #\n");
-  printf("####################\n");
+  printf("#####################\n");
+  printf("# TiRiFiC v. 2.3.10 #\n");
+  printf("#####################\n");
   printf("\n");
 
   if (!(startinfv = get_startinf(argc, argv)))
@@ -19252,7 +19252,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
   char mes[200];
   char *pgdevice = NULL;
   
-  char inqstr[20];
+  char inqstr[24];
   int colour;
   int lines;
   int interp;
@@ -19791,7 +19791,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
     nel = 1;
     nradd = 0;
     userint_tir(startinfv -> arel, &nradd, &nel, &def, inqstr, mes);
-    
+
     /* Reserve memory */
     if (nradd > 0) {
       if (!(npadd = (int *) malloc(nradd*sizeof(int))))
@@ -19805,6 +19805,8 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
       if (!(adfill = (int *) malloc(nradd*sizeof(int))))
 	goto error;
       if (!(adlines = (int *) malloc(nradd*sizeof(int))))
+	goto error;
+      if (!(adinterp = (int *) malloc(nradd*sizeof(int))))
 	goto error;
       if (!(adsizer = (float *) malloc(nradd*sizeof(float))))
 	goto error;
@@ -19939,6 +19941,11 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
 	  adinterp[k] = 0;
 	  break;
 	}
+	/***/
+	/***/
+	/***/
+	fprintf(stderr,"Got here");
+	/***/
 	sprintf(inqstr, "GR_INTERPAD_%i_%i=", i, k+1);
 	sprintf(mes, "Interpolation between additional points plot %i (%i), 0: linear, 1: cubic spline, 2: Akima [0]", i, k+1);
 	userint_tir(startinfv -> arel, adinterp+k, &nel, &def, inqstr, mes);
