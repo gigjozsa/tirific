@@ -432,7 +432,7 @@ This was commented hdu stuff
 /*
                tirific.dc1
 
-Program:       TIRIFIC (Version 2.3.9)
+Program:       TIRIFIC (Version 2.3.11)
 
 Purpose:       Fit a tilted-ring model to a datacube
 
@@ -6302,7 +6302,7 @@ int main(int argc, char *argv[])
 
   printf("\n");
   printf("#####################\n");
-  printf("# TiRiFiC v. 2.3.10 #\n");
+  printf("# TiRiFiC v. 2.3.11 #\n");
   printf("#####################\n");
   printf("\n");
 
@@ -6436,7 +6436,7 @@ int main(int argc, char *argv[])
 
   /* finis_c(); */
 
-  fprintf(stderr,"Got here: end\n");
+  /* fprintf(stderr,"Got here: end\n");*/
   
   return 1;
 
@@ -19248,7 +19248,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
   char *varyhstr = NULL;
   char *strbef = NULL;
   
-  int i, j, k, dev, def, nel, inword, nrplts;
+  int i, j, k, dev, def, nel, inword, nrplts, dummy;
   char mes[200];
   char *pgdevice = NULL;
   
@@ -19944,7 +19944,7 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
 	/***/
 	/***/
 	/***/
-	fprintf(stderr,"Got here");
+	/*	fprintf(stderr,"Got here"); */
 	/***/
 	sprintf(inqstr, "GR_INTERPAD_%i_%i=", i, k+1);
 	sprintf(mes, "Interpolation between additional points plot %i (%i), 0: linear, 1: cubic spline, 2: Akima [0]", i, k+1);
@@ -20093,7 +20093,10 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
 	  vhlxs[0] = (xmin+xmax)/2.0-1000000.0*(xmax-xmin);
 	  vhlxs[1] = (xmin+xmax)/2.0+1000000.0*(xmax-xmin);
 	}
+	dummy = gdsc -> interptype_lines;
+	gdsc -> interptype_lines = PGP_I_LINEAR;
 	pgp_lines(gdsc, 2, vhlxs, vhlys, horcarray[j]);
+	gdsc -> interptype_lines = dummy;
       }
       free(horarray);
       free(horcarray);
@@ -20111,7 +20114,11 @@ static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rp
 	  vhlys[0] = (ymin+ymax)/2.0-1000000.0*(ymax-ymin);
 	  vhlys[1] = (ymin+ymax)/2.0+1000000.0*(ymax-ymin);
 	}
+	/* Switch off interpolation scheme before plotting and reinstate */
+	dummy = gdsc -> interptype_lines;
+	gdsc -> interptype_lines = PGP_I_LINEAR;
 	pgp_lines(gdsc, 2, vhlxs, vhlys, vertcarray[j]);
+	gdsc -> interptype_lines = dummy;
       }
       free(vertarray);
       free(vertcarray);
