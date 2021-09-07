@@ -28,40 +28,35 @@ OPENMPLIB = -fopenmp
 # external directories containing include files
 
 # This is the standard include 
-STDDIR = /usr/include/
+STDDIR = /usr/local/include/
 
 # This is the math library include file and most probably at this location
-MATHDIR = /usr/include/
+MATHDIR = /Users/peter/Github/tirific/
 
 # This is the fftw include directory. It should contain the file fftw3.h
-FFTWDIR = /usr/include/
+FFTWDIR = /usr/local/include/
 
 # This is the position of the parent directory of the gsl directory
-GSLDIR = /Users/jozsa/Software/gsl/gsl-1.15/
+GSLDIR = /usr/local/include/
 
 # This is the directory in which the wcs include files reside
-WCSDIR = /usr/include/wcslib
-
-# Pgplot directory
-PGPDIR = /usr/include/
-
-# external libraries
+WCSDIR = /usr/local/include/wcslib
 
 # The math library
 MATHLIB = -lm
 
 # The fftw3f library, alternatively
 # -Ldirectory_in_which_the_file_libfftw3f.a_is -lfftw3f
-FFTWLIB = -lfftw3f -lfftw3
+FFTWLIB = -L/usr/local/lib/ -lfftw3f -lfftw3
 
 # The gsl library linker flags-, alternatively
-GSLLIB = -lgsl -lgslcblas
+GSLLIB = -L/usr/local/lib/ -lgsl -lgslcblas
 
 # The wcs library
-WCSLIB = -lwcs
+WCSLIB = -L/usr/local/lib/ -lwcs
 
 # Pgplot linker flags, for Mac OS, maybe -L$(PGPDIR) -lcpgplot -lpgplot $(X11LIB) -lpng -laquaterm -Wl,-framework -Wl,Foundation  -W1,-AppKit 
-PGPLIB = -lcpgplot -lpgplot -lX11
+PGPLIB = -L/usr/local/lib/ -lcpgplot -lpgplot -lX11
 
 # Readline library
 READLINELIB= -lreadline

@@ -30,9 +30,9 @@ This was commented hdu stuff
    5. Change the code as you like.
 
    iv) Adding a completely new ring parameter (such as dispersion)
-   
+
    1. The place to add the parameter as a new component is the ringparms struct.
-   2. Add the parameter into the identifyer list: Add the parameter identifyer as the last element in the  PXXXXX and XXXXX list. If it is a single parameter, change the NSPARAMS by adding 1, if it is a parameter for all rings, add 1 to the NPARAMS symbolic constant. 
+   2. Add the parameter into the identifyer list: Add the parameter identifyer as the last element in the  PXXXXX and XXXXX list. If it is a single parameter, change the NSPARAMS by adding 1, if it is a parameter for all rings, add 1 to the NPARAMS symbolic constant.
    3.  Change the function hdl_init() by adding the new parameter at exactly the same place that it was added to the identifyer list.
    4. Check the functions dparamtointern(), dinterntoparam(), simpleinterntoglob(), simpleglobtointern(), globtointern(), interntoglob(), changetointern(), get_ringparms(), writeoutarray() for a correct handling of the new parameter. Check the graphics descriptor functions gr_ ...
    5. That should be it. The parameter will be read and written and you can do what you like with it.
@@ -499,7 +499,7 @@ jozsa@astron.nl
 /* #include <ftsoutput.h> */
 /* #include <gridnconvol.h> */
 #include <cubarithm.h>
-#include <pgp.h>
+/*#include <pgp.h> */
 #include <simparse.h>
 #include <fourat.h>
 #include "opsystems.h"
@@ -636,7 +636,7 @@ jozsa@astron.nl
 /* #define ndisks 2 */
 
 
-  
+
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
@@ -709,9 +709,9 @@ jozsa@astron.nl
 #define PSII_PRIMPOS     32 /* PSWARM initial weight */
 #define PSFI_PRIMPOS     33 /* PSWARM final weight */
 #define PSID_PRIMPOS     34 /* PSWARM increase delta */
-#define PSDD_PRIMPOS     35 /* PSWARM decrease delta */                                                            
-#define INTY_PRIMPOS     36 /* interpolation type */                                                            
-#define INDINTY_PRIMPOS  37 /* interpolation type */                                                            
+#define PSDD_PRIMPOS     35 /* PSWARM decrease delta */
+#define INTY_PRIMPOS     36 /* interpolation type */
+#define INDINTY_PRIMPOS  37 /* interpolation type */
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
@@ -881,16 +881,16 @@ jozsa@astron.nl
 
 */
 /* ------------------------------------------------------------ */
-#define PSW_PSSE_DEF 42    /* PSWARM seed */									   
-#define PSW_PSNP_DEF 42	   /* PSWARM number of particles */							   
-#define PSW_PSCO_DEF 0.5   /* PSWARM cognition parameter */							   
-#define PSW_PSSO_DEF 0.5   /* PSWARM social parameter */							   
-#define PSW_PSMV_DEF 0.5   /* PSWARM maximum velocity */							   
-#define PSW_PSNF_DEF 8000  /* PSWARM number of function evaluations to go from initial weight to final weight */  
-#define PSW_PSII_DEF 0.9   /* PSWARM initial weight */								   
-#define PSW_PSFI_DEF 0.4   /* PSWARM final weight */								   
-#define PSW_PSID_DEF 2.	   /* PSWARM increase delta */								   
-#define PSW_PSDD_DEF 0.5   /* PSWARM decrease delta */                                                            
+#define PSW_PSSE_DEF 42    /* PSWARM seed */
+#define PSW_PSNP_DEF 42	   /* PSWARM number of particles */
+#define PSW_PSCO_DEF 0.5   /* PSWARM cognition parameter */
+#define PSW_PSSO_DEF 0.5   /* PSWARM social parameter */
+#define PSW_PSMV_DEF 0.5   /* PSWARM maximum velocity */
+#define PSW_PSNF_DEF 8000  /* PSWARM number of function evaluations to go from initial weight to final weight */
+#define PSW_PSII_DEF 0.9   /* PSWARM initial weight */
+#define PSW_PSFI_DEF 0.4   /* PSWARM final weight */
+#define PSW_PSID_DEF 2.	   /* PSWARM increase delta */
+#define PSW_PSDD_DEF 0.5   /* PSWARM decrease delta */
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
@@ -979,13 +979,13 @@ typedef struct loginf
   int logpres;
 
   /** @brief Name of the text logfile */
-  char *textlog; 
+  char *textlog;
 
   /** @brief Name of the progress logfile Kamphuis addition*/
-  char *progresslog; 
+  char *progresslog;
 
   /** @brief Name of the output table */
-  char *table; 
+  char *table;
 
   /** @brief Distance of object */
   double distance;
@@ -997,7 +997,7 @@ typedef struct loginf
   double yref;
 
   /** @brief Stream of the text logfile */
-  FILE *tstream; 
+  FILE *tstream;
 
   /** @brief An array of length nur*NPARAMS+nur*NDPARAMS+5 containing the output numbers */
   double *outarray;
@@ -1079,7 +1079,7 @@ typedef struct startinf
 typedef struct hdrinf
 {
   /** @brief O/I E The name of the input set */
-  char *inset; 
+  char *inset;
 
     /** @brief The outset name */
   char *outset;
@@ -1091,19 +1091,19 @@ typedef struct hdrinf
   /* int inaxperm[MAXNAX]; */
 
   /** @brief The reference pixels in the set */
-  double setcrpix[3]; 
-  
+  double setcrpix[3];
+
   /** @brief Conversion factor from grid units to userdeltunit */
   double deltgridtouser[3];
-  
+
   /** @brief Conversion factor from grids to userglobunit */
-  double globgridtouser[3]; 
+  double globgridtouser[3];
 
   /** @brief Conversion factor from cuniti to userglobunit always [1., 1., 0.001] */
-  double globsettouser[3]; 
+  double globsettouser[3];
 
   /** @brief The reference values in user units */
-  double userglobcrval[3]; 
+  double userglobcrval[3];
 
   /** @brief The cdelt values in user units */
   double userglobcdelt[3];
@@ -1113,7 +1113,7 @@ typedef struct hdrinf
 
   /** @brief Conversion factor from HI column density to intensity */
   double jygridtouser;
-  
+
   /** @brief E O beam major and minor axis and beam position angle */
   float bmaj, bmin, bpa;
 
@@ -1127,19 +1127,19 @@ typedef struct hdrinf
   double itou;
 
   /** @brief E The size of the cube in axis 1 */
-  int bsize1;  
+  int bsize1;
 
   /** @brief E The size of the cube in axis 1 */
-  int bcsize1;  
+  int bcsize1;
 
   /** @brief E The size of the cube in axis 2 */
-  int bsize2;  
+  int bsize2;
 
   /** @brief The total number of pixels in one plane plus padding */
   int nprof;
-  
+
   /** @brief E Number of subsets, that is the number of planes read */
-  int nsubs; 
+  int nsubs;
 
    /** @brief So-called coordinate words describing axes (obsolete) */
   /* int *cwlo;  */
@@ -1170,13 +1170,13 @@ typedef struct hdrinf
 
   /** @brief The cube himself, pixels only (done) */
   /* float *ori; */
-  
+
   /** @brief The model, pixels only (done) */
-  /* float *model; */ 
+  /* float *model; */
 
   /** @brief The chisquare */
   double chi2;
-  
+
   /** @brief An old chisquare */
   double oldchi2;
 
@@ -1195,7 +1195,7 @@ typedef struct hdrinf
 /**
    @struct varlel
    @brief Element of a linked list, describing the change of the model
-   
+
    varlel is an element of a linked list that describes the change of
    the model. Each element contains a list of numbers (int) that are
    the component numbers of the parameter in the par array of the
@@ -2031,7 +2031,7 @@ typedef struct inf_lc0 {
 } inf_lc0;
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/* 
+/*
    @struct ringparms
    @brief All variables that are needed for the description of the rings
 
@@ -2050,7 +2050,7 @@ typedef struct ringparms
   double *par;
 
   /* Layer type */
-  int *ltype; 
+  int *ltype;
 
   /** @brief Array of same size containing the previous parameters */
   double *oldpar;
@@ -2059,11 +2059,11 @@ typedef struct ringparms
   int *chapar;
 
   /** @brief Subset separation in grids */
-  double radsep; 
+  double radsep;
 
   /** @brief number of subrings */
   int nr;
-  
+
   /** @brief big version of par, for all subrings */
   float *modpar;
 
@@ -2073,7 +2073,7 @@ typedef struct ringparms
   /** @brief array of interpolation lookup objects */
   gsl_interp_accel **gsl_interp_accelarray;
 
-  /** @brief array of smoothing schemes for each parameter: 0: linear 1: spline 2: Akima */ 
+  /** @brief array of smoothing schemes for each parameter: 0: linear 1: spline 2: Akima */
   int *smothcar;
 
   /** @brief array of interpolation objects, for each parameter class one */
@@ -2082,7 +2082,7 @@ typedef struct ringparms
   /** @brief array of interpolation lookup objects */
   gsl_interp_accel **gsl_indinterp_accelarray;
 
-  /** @brief array of smoothing schemes for each parameter for indexing: 0: linear 1: spline 2: Akima */ 
+  /** @brief array of smoothing schemes for each parameter for indexing: 0: linear 1: spline 2: Akima */
   int *smothindcar;
 
   /** @brief dummy of size nur used in interpolation: array of binary values 1: active, 0: indexed */
@@ -2150,19 +2150,19 @@ typedef struct ringparms
   inf_vm2 **inf_vm2v;
   inf_vm3 **inf_vm3v;
   inf_vm4 **inf_vm4v;
-  
+
   /** @brief struct to handle the planar s0 term */
   inf_ra1 **inf_ra1v;
   inf_ra2 **inf_ra2v;
   inf_ra3 **inf_ra3v;
   inf_ra4 **inf_ra4v;
-  
+
   /** @brief struct to handle the planar s0 term */
   inf_ro1 **inf_ro1v;
   inf_ro2 **inf_ro2v;
   inf_ro3 **inf_ro3v;
   inf_ro4 **inf_ro4v;
-  
+
   /** @brief struct to handle the warp s0 term */
   inf_wm0 **inf_wm0v;
   inf_wm1 **inf_wm1v;
@@ -2206,7 +2206,7 @@ typedef struct ringparms
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/* 
+/*
    @struct reg_cont
    @brief A container to handle regularisation
 
@@ -2245,7 +2245,7 @@ typedef struct reg_cont
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/* 
+/*
    @struct fitparms
    @brief All variables that are needed for the description of the fitting process
 
@@ -2258,11 +2258,11 @@ typedef struct fitparms
   varlel *varylist;
 
   /** @brief Number of models to compute */
-  int loops; 
+  int loops;
 
   /** @brief Start annealing factor */
 /*   double anstart; */
-  
+
   /** @brief Stop annealing factor */
 /*   double anend;  */
 
@@ -2270,7 +2270,7 @@ typedef struct fitparms
 /*   int ansteps; */
 
   /** @brief The initialised normal random generator */
-  maths_rstr *normrandstr; 
+  maths_rstr *normrandstr;
 
   /** @brief Random number initialisation */
   int iseed[2];
@@ -2307,46 +2307,46 @@ typedef struct fitparms
 
   /** @brief PSWARM seed */
   int psse;
-  
+
   /** @brief PSWARM number of particles */
   int psnp;
-  
+
   /** @brief PSWARM cognition parameter */
   double psco;
-  
+
   /** @brief PSWARM social parameter */
   double psso;
-  
+
   /** @brief PSWARM maximum velocity */
   double psmv;
-  
+
   /** @brief PSWARM number of function evaluations to go from initial weight to final weight */
   int psnf;
-  
+
   /** @brief PSWARM initial weight */
   double psii;
-  
+
   /** @brief PSWARM final weight */
   double psfi;
-  
+
   /** @brief PSWARM increase delta */
   double psid;
-  
+
   /** @brief PSWARM decrease delta */
   double psdd;
-  
+
   /** @brief The input of vary, saved for output */
   char *varyhstr;
-  
+
   /** @brief  The index and dependencies*/
   decomp_inlist *index;
-  
+
   /** @brief Monitoring: variable to report on the number of point sources contributing to flux*/
   long *fluxpoints;
-  
+
   /** @brief  Container for regularisation */
   reg_cont **reg_contv;
-  
+
   /** @brief Monitoring variable for use in genfit */
   size_t mon_alloops;
 
@@ -2417,7 +2417,7 @@ typedef struct fitparms
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/* 
+/*
    @struct adar
    @brief additional arguments to be read by the fitting function passed to gft
 
@@ -2427,7 +2427,7 @@ typedef struct fitparms
 typedef struct adar
 {
   /** @brief The startinf struct */
-  startinf *startinfv; 
+  startinf *startinfv;
 
   /** @brief The loginf struct */
   loginf *log;
@@ -2444,7 +2444,7 @@ typedef struct adar
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-/* 
+/*
    @struct vector
    @brief A threedimensional vector
 
@@ -2602,7 +2602,7 @@ static int writemodel(hdrinf *origin, ringparms *rpm, fitparms *fit, double *par
 /**
    @fn static int anyout_tir(int *device, char *message)
    @brief wrapper to call anyout_c from gipsy
-   
+
    For the description of the input parameters see GIPSY, char gets
    converted via fchar and int gets converted via cast to fint
 
@@ -2620,7 +2620,7 @@ static int anyout_tir(int *device, char *message);
 /**
    @fn static int anyout_cor(FILE *device, char *message)
    @brief Print a message to device
-   
+
    The function should be preferred to anyout_tir.
 
    @param device      (FILE *) the stream
@@ -2637,7 +2637,7 @@ TIR_ONLY
 /**
    @fn static int error_tir(int *device, char *message)
    @brief wrapper to call error_c from gipsy
-   
+
    For the description of the input parameters see GIPSY, here: issue a message through stderr, abort only for *device == 4
 
    @param device       (int *)
@@ -2656,7 +2656,7 @@ static int error_tir(int *device, char *message);
 /**
    @fn static int cancel_tir(simparse_scn_arel **arel, char *parname, int depth)
    @brief cancelling user input
-   
+
    This is basically synonymous to simparse_scn_arellist.
 
   @param simparse_scn_arellist (simparse_scn_arel **) Allocated simparse_scn_arel NULL-terminated list.
@@ -2676,7 +2676,7 @@ static int cancel_tir(simparse_scn_arel **arel, char *parname, int depth);
 /**
    @fn static int userint_tir(simparse_scn_arel **arel, int *anarray, int *elements, int *defaultstat, char *keyword, char *message)
    @brief wrapper to call userchar_c from gipsy
-   
+
    Attempt to get as close to the gipsy stuff as possible.
 
    @param arel        (simparse_scn_arel **)
@@ -2699,7 +2699,7 @@ static int userint_tir(simparse_scn_arel **arel, int *anarray, int *elements, in
 /**
    @fn static int userdble_tir(simparse_scn_arel **arel, double *anarray, int *elements, int *defaultstat, char *keyword, char *message)
    @brief wrapper to call userchar_c from gipsy
-   
+
    Attempt to get as close to the gipsy stuff as possible.
 
    @param arel        (simparse_scn_arel **) Input struct.
@@ -2722,7 +2722,7 @@ static int userdble_tir(simparse_scn_arel **arel, double *anarray, int *elements
 /**
    @fn static int userreal_tir(simparse_scn_arel **arel, float *anarray, int *elements, int *defaultstat, char *keyword, char *message)
    @brief wrapper to call userreal_c from gipsy
-   
+
    For the description of the input parameters see GIPSY, char gets
    converted via fchar
 
@@ -2815,7 +2815,7 @@ static double gchsq_gen2(double *vector, void *rest);
    all structs and arrays.
 
    @return (success) hdrinf create_hdrinf: Allocated and initialised
-   hdrinf struct\n 
+   hdrinf struct\n
            (error): NULL
 */
 /* ------------------------------------------------------------ */
@@ -2868,7 +2868,7 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv);
    all structs and arrays.
 
    @return (success) startinf create_startinf: Allocated and initialised
-   startinf struct\n 
+   startinf struct\n
            (error): NULL
 */
 /* ------------------------------------------------------------ */
@@ -2952,7 +2952,7 @@ static int check_restart(startinf *startinfv, hdrinf *hdr, ringparms *rpm, login
    timestamp. If that occurs, update startinfv -> startfile from the
    input (command line or .def file) of the parameter RESTARTNAME=.
 
-   @param startinfv (startinf *) A startinf struct 
+   @param startinfv (startinf *) A startinf struct
    @return int loop_restart(): 0 all ok
                                1 malloc problems
 */
@@ -2970,7 +2970,7 @@ static int loop_restart(startinf *startinfv);
    all arrays
 
    @return (success) hdrinf create_hdrinf: Allocated and initialised
-   hdrinf struct\n 
+   hdrinf struct\n
            (error): NULL
 */
 /* ------------------------------------------------------------ */
@@ -3028,7 +3028,7 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv);
    @param parname (char *)  The parameter name
    @param ident (int)       The parameter identification (PXXX)
    @param force (int)       same as def parameter from Gipsy. If 2, hidden, 4 not hidden.
- 
+
   @return int get_parameter_double; 0(success) 1(error)
 */
 /* ------------------------------------------------------------ */
@@ -3046,7 +3046,7 @@ static int get_parameter_double(startinf *startinfv, loginf *log, hdrinf *hdr, r
    @param n (int) Number of subrings to allocate the list for
 
    @return (success) srd *create_srd: Allocated and initialised
-   srd list\n 
+   srd list\n
            (error): NULL
 */
 /* ------------------------------------------------------------ */
@@ -3083,7 +3083,7 @@ static void destroy_srd(srd *sd, int n);
    @param ndisks (int) number of disks
 
    @return (success) ringparms *create_ringparms: Allocated and initialised
-   hdrinf struct\n 
+   hdrinf struct\n
            (error): NULL
 */
 /* ------------------------------------------------------------ */
@@ -3140,7 +3140,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 
 
    @return (success) fitparms *create_fitparms: Allocated and initialised
-   fitparms struct\n 
+   fitparms struct\n
            (error): NULL
 */
 /* ------------------------------------------------------------ */
@@ -3194,17 +3194,17 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 Converts the input as being coordinates given by the user to inernal (grid-) units. Caution!!! For the conversion of absolute map coordinates this function is not appropriate.
  Use globtointern instead!
 
-   RADI    1  
-   VROT    2  
-   Z0      3  
-   SBR    4  
-   INCL    5  
-   PA      6  
-   XPOS    7  
-   YPOS    8  
-   VSYS    9  
+   RADI    1
+   VROT    2
+   Z0      3
+   SBR    4
+   INCL    5
+   PA      6
+   XPOS    7
+   YPOS    8
+   VSYS    9
    CONDISP 10
-   
+
    @param value (double)   value to convert
    @param par   (char)     type of parameter (see above)
    @param hdr   (hdrinf *) The properly configured header description struct
@@ -3225,17 +3225,17 @@ static double dparamtointern(double value, int par, hdrinf *hdr, int ndisks);
 Converts the input as being coordinates given by the user to inernal (grid-) units, used only for differential quantities (as in the fitparms)
  Use globtointern instead!
 
-   RADI    1  
-   VROT    2  
-   Z0      3  
-   SBR    4  
-   INCL    5  
-   PA      6  
-   XPOS    7  
-   YPOS    8  
-   VSYS    9  
+   RADI    1
+   VROT    2
+   Z0      3
+   SBR    4
+   INCL    5
+   PA      6
+   XPOS    7
+   YPOS    8
+   VSYS    9
    CONDISP 10
-   
+
    @param value (double)   value to convert
    @param par   (char)     type of parameter (see above)
    @param hdr   (hdrinf *) The properly configured header description struct
@@ -3256,17 +3256,17 @@ static double ddparamtointern(double value, int par, hdrinf *hdr, int ndisks);
 Converts the input as being inernal (map-) coordinates to units as given by the user. Caution!!! For the conversion of map coordinates this function is, strictly speaking, not appropriate.
  Use globtointern instead!
 
-   RADI    1  
-   VROT    2  
-   Z0      3  
-   SBR    4  
-   INCL    5  
-   PA      6  
-   XPOS    7  
-   YPOS    8  
-   VSYS    9  
+   RADI    1
+   VROT    2
+   Z0      3
+   SBR    4
+   INCL    5
+   PA      6
+   XPOS    7
+   YPOS    8
+   VSYS    9
    CONDISP 10
-   
+
    @param value (double)   value to convert
    @param par   (char)     type of parameter (see above)
    @param hdr   (hdrinf *) The properly configured header description struct
@@ -3287,17 +3287,17 @@ static double dinterntoparam(double value, int par, hdrinf *hdr, int ndisks);
 
 Converts the input as being inernal (map-) coordinates to units as given by the user, used only for differential quantities (as in the fitparms).
 
-   RADI    1  
-   VROT    2  
-   Z0      3  
-   SBR    4  
-   INCL    5  
-   PA      6  
-   XPOS    7  
-   YPOS    8  
-   VSYS    9  
+   RADI    1
+   VROT    2
+   Z0      3
+   SBR    4
+   INCL    5
+   PA      6
+   XPOS    7
+   YPOS    8
+   VSYS    9
    CONDISP 10
-   
+
    @param value (double)   value to convert
    @param par   (char)     type of parameter (see above)
    @param hdr   (hdrinf *) The properly configured header description struct
@@ -3319,15 +3319,15 @@ static double ddinterntoparam(double value, int par, hdrinf *hdr, int ndisks);
    Converts the input globals as being inernal (map-) coordinates to units as
    given by the user in a simple way for the use as min and max.
 
-   RADI    1  
-   VROT    2  
-   Z0      3  
-   SBR    4  
-   INCL    5  
-   PA      6  
-   XPOS    7  
-   YPOS    8  
-   VSYS    9  
+   RADI    1
+   VROT    2
+   Z0      3
+   SBR    4
+   INCL    5
+   PA      6
+   XPOS    7
+   YPOS    8
+   VSYS    9
    CONDISP 10
 
    @param value (double)   value to convert
@@ -3350,17 +3350,17 @@ static double ddinterntoparam(double value, int par, hdrinf *hdr, int ndisks);
    Converts the input globals as being global coordinates to internal
    map units as given by the user in a simplified way, for the use as min and max.
 
-   RADI    1  
-   VROT    2  
-   Z0      3  
-   SBR    4  
-   INCL    5  
-   PA      6  
-   XPOS    7  
-   YPOS    8  
-   VSYS    9  
+   RADI    1
+   VROT    2
+   Z0      3
+   SBR    4
+   INCL    5
+   PA      6
+   XPOS    7
+   YPOS    8
+   VSYS    9
    CONDISP 10
-  
+
    @param value (double)   value to convert
    @param par   (char)     type of parameter (see above)
    @param hdr   (hdrinf *) The properly configured header description struct
@@ -3379,9 +3379,9 @@ static double simpleglobtointern(double value, int par, hdrinf *hdr, int ndisks)
    @fn static double vusertointern(double value, hdrinf *hdr)
    @brief conversion of absolute velocity units
 
-Converts the input as being absolute velocity coordinates given by the user to inernal (grid-) units. 
+Converts the input as being absolute velocity coordinates given by the user to inernal (grid-) units.
 
-   
+
    @param value (double)   value to convert
    @param hdr   (hdrinf *) The properly configured header description struct
 
@@ -3398,7 +3398,7 @@ Converts the input as being absolute velocity coordinates given by the user to i
    @brief conversion of absolute velocity units
 
 Converts the input as being absolute velocity coordinates in the internal map to units given by the user.
-   
+
    @param value (double)   value to convert
    @param hdr   (hdrinf *) The properly configured header description struct
 
@@ -3414,9 +3414,9 @@ Converts the input as being absolute velocity coordinates in the internal map to
    @fn static void globtointern(double *invalue, double *outvalue, hdrinf *hdr)
    @brief conversion of map units
 
-   Converts the input as being (map-) coordinates to internal units. 
+   Converts the input as being (map-) coordinates to internal units.
 
-   
+
    @param invalue (double *)  values to convert, x, y, v.
    @param outvalue (double *)  converted values, x, y, v.
    @param hdr   (hdrinf *) The properly configured header description struct
@@ -3434,9 +3434,9 @@ static void globtointern(double *invalue, double *outvalue, hdrinf *hdr);
    @fn static void interntoglob(double *invalue, double *outvalue, hdrinf *hdr)
    @brief conversion of map units
 
-   Converts the input as being internal units to (map-) coordinates. 
+   Converts the input as being internal units to (map-) coordinates.
 
-   
+
    @param value (double *)  values to convert, x, y, v.
    @param outvalue (double *)  converted values, x, y, v.
    @param hdr   (hdrinf *) The properly configured header description struct
@@ -3452,7 +3452,7 @@ static void interntoglob(double *invalue, double *outvalue, hdrinf *hdr);
 /**
    @fn static void changetointern(double *params, int nur, hdrinf *hdr, int ndisks)
    @brief Change the parameter list params to internal units as if being user units
-   
+
    @param params (double *) parameter list, nur*(NPARAMS+(ndisks-1)*NDPARAMS)+NSPARAMS elements
    @param nur    (int)      number of rings
    @param hdr    (hdrinf *) A properly configured hdrinf struct
@@ -3505,7 +3505,7 @@ static void changetointern(double *params, int nur, hdrinf *hdr, int ndisks);
    dependent on the implementation of the ftstab module, call
    ftstab_hdlreset_() before using:
 
-   "DEFAULT" par2int=0 
+   "DEFAULT" par2int=0
    "RADI"    par2int=1
    "VROT"    par2int=2
    "Z0"      par2int=3
@@ -3650,7 +3650,7 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
    @param radsep  (double)          Radius separation of subring in appropriate units
    @param fitmode (int)             Fit mode to check for
    @param varele  (varlel *)        Parameter list element.
-   @param index   (decomp_inlist *) an index list as defined in simparse 
+   @param index   (decomp_inlist *) an index list as defined in simparse
    @return void
 */
 /* ------------------------------------------------------------ */
@@ -3661,7 +3661,7 @@ static void interpover(ringparms *rpm, double radsep, int fitmode, varlel *varel
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
    @fn static void interpinit(ringparms *rpm, double radsep, int disk)
-   @brief Constructs the modpar array by interpolating over the par array 
+   @brief Constructs the modpar array by interpolating over the par array
 
    This is the same as interpover but without checking the varlel
    list. Should always be used if the par parameter list has been
@@ -3682,15 +3682,15 @@ static void interpinit(ringparms *rpm, double radsep, int disk);
 /**
   @fn static int chkchangep(varlel *varele, int fitmode, int parnr, int nur)
   @brief Help function to interpover: Check if the modpar array has to be changed for a parameter
-  
+
   If in the previous parameter change a change of the parameter has
    occured, this function will return 1, 0 otherways.
-  
+
   @param varele (varlel *) Actual element of the varlel list, or the
   first element in case of fitmode = 0
-  
+
   @param fitmode (int)     Fitmode 0: Metropolis, 1: Golden section
-  parameter information struct 
+  parameter information struct
   @param ringnr  (int)     Number of ring to be checked
   @param nur      (int)     Number of rings
 
@@ -3705,12 +3705,12 @@ static int chkchangep(varlel *varele, int fitmode, int parnr, int nur);
 /**
   @fn static void srprep(ringparms *rpm, int srnr, long mode, int disk)
   @brief Preparation of a srd struct
-  
+
   Precalculations for the calculation of a ring.
-  
+
   @param rpm  (ringparms *) Properly configured ringparms struct
   @param srnr (int *)       Number of the subring (start with 0)
-  @param mode (long)        Dummy at the moment  
+  @param mode (long)        Dummy at the moment
   @param disk (int)         Disk number
 
   @return void
@@ -3724,13 +3724,13 @@ static void srprep(ringparms *rpm, int srnr, long mode, int disk);
 /**
   @fn static long srconst(hdrinf *hdr, ringparms *rpm, int srnr, long mode, int disk)
   @brief Generation of a pointsource list
-  
+
   Generates a pointsource list that is attached to the appropriate srd struct
 
   @param hdr  (hdrinf *)    Properly configured hdrinf struct
   @param rpm  (ringparms *) Properly configured ringparms struct
   @param srnr (int *)       Number of the subring (start with 0)
-  @param mode (long)        Dummy at the moment  
+  @param mode (long)        Dummy at the moment
   @param disk (int)         Disk number
 
   @return long srconst: Number of pointsources outside the cube
@@ -3744,7 +3744,7 @@ static long srconst(hdrinf *hdr, ringparms *rpm, int srnr, long mode, int disk);
 /**
   @fn static int srshape(hdrinf *hdr, ringparms *rpm, float sinaz, float cosaz, int srnr, long mode, int disk)
   @brief Determines the coordinates of a point source
-  
+
   Subroutine to srconst. After the calculation of the azimuth of a
   point source, the coordinates are transformed according to the
   parameters in this function.
@@ -3767,7 +3767,7 @@ static void srshape(ringparms *rpm, float *pp, float sinaz, float cosaz, int srn
 /**
   @fn static void gridpoint_norm(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, float *primbeam, struct srd **sd, int disk, int srnr, long *pnr, int *grid), float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
   @brief Grids a point to a pointsource list
-  
+
   Grids the point point (6 phase-space coords) in a list of pointers to the cube hdr ->
   model. If the point doesn't fit the cube, the pointsource number of
   the subring will be redced by 1, if it fits, pnr will be increased
@@ -3781,7 +3781,7 @@ static void srshape(ringparms *rpm, float *pp, float sinaz, float cosaz, int srn
   @param srnr   (int)         Number of the subring (start with 0)
   @param pnr    (long *)       Number of the pointsource (start with 0)
   @param pp     (float *)     Number of the subring (start with 0)
-  @param signum  (int)         Indicates negative point source, dummy in this function  
+  @param signum  (int)         Indicates negative point source, dummy in this function
   @param npoints (long *)     Number of maximal points in specific structure
   @param disk (int)         Disk number
 
@@ -3799,7 +3799,7 @@ static void gridpoint_norm(hdrinf *hdr, float *modpar, int nr, struct srd **sd, 
 /**
   @fn static void gridpoint_mixed(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, float *primbeam, struct srd **sd, int disk, int srnr, long *pnr, int *grid), float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
   @brief Grids a point to a pointsource list
-  
+
   Grids the point point (6 phase-space coords) in a list of pointers
   to the cube hdr -> model. If the point doesn't fit the cube, the
   pointsource number of the subring will be redced by 1, if it fits,
@@ -3833,7 +3833,7 @@ static void gridpoint_mixed(hdrinf *hdr, float *modpar, int nr, struct srd **sd,
 /**
   @fn static int srput_norm(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long *pnr, long grid), struct sdr **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
   @brief Puts a pointsource list on a cube
-  
+
   Puts the srnrth pointsource list in rpm on the cube by adding the
   flux in the list pointwise. In case of exclusively positive or exclusively negative clouds.
 
@@ -3849,7 +3849,7 @@ static void gridpoint_mixed(hdrinf *hdr, float *modpar, int nr, struct srd **sd,
   @return void
 */
 /* ------------------------------------------------------------ */
-#ifdef PBCORR 
+#ifdef PBCORR
 static int srput_norm(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long grid), struct srd **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
 #else
 static int srput_norm(struct srd **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
@@ -3860,7 +3860,7 @@ static int srput_norm(struct srd **sd, float *modpar, int nr, double *cflux, dou
 /**
   @fn static int srput_mixed(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long *pnr, long grid), struct sdr **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
   @brief Puts a pointsource list on a cube
-  
+
   Puts the srnrth pointsource list in rpm on the cube by adding the
   flux in the list pointwise. In case of mixed positive and negative clouds.
 
@@ -3955,7 +3955,7 @@ static void destroyinlistel(inlistel *first);
    @param string (char *) Input string
    @int   array  (int *)  Array to contain a and b
    @param max    (int)    The maximum value that may be read
- 
+
    @return (success) int decodestr 1
            (error) 0
 */
@@ -4150,7 +4150,7 @@ static int chprm_gen(double *parms, varlel *varylist, double *newpar);
    within a factor two of the largest possible integer then integer
    overflow could occur.  DOUBLE PRECISION FUNCTION
    fdev(option,nran,iran,idum) Type of distribution function for the
-   random deviates.  
+   random deviates.
    Options:
 
    option = 1 -- Gaussian deviates.
@@ -4246,7 +4246,7 @@ static int open_hdu_3(loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit);
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
-  @fn static int create_hdu_2(char *logname, varlel *varylist, varlel **pointarray, int nur, hdrinf *hdr) 
+  @fn static int create_hdu_2(char *logname, varlel *varylist, varlel **pointarray, int nur, hdrinf *hdr)
 
   @brief Creates a second hdu of a fits table and puts the fit
   information contained in the varlel ll to the fits table
@@ -4257,7 +4257,7 @@ static int open_hdu_3(loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit);
 
   @param logname    (char *)    The name of the logfile
   @param varylist   (varlel *)  A properly configured varylist
-  @param pointarray (varlel **) Array with pointers to varlels of the size of elements of deltas given by the user   
+  @param pointarray (varlel **) Array with pointers to varlels of the size of elements of deltas given by the user
   @param nur        (int)       Number of rings
   @param hdr        (hdrinf *)  Properly configured headerinf struct
 
@@ -4271,7 +4271,7 @@ static int open_hdu_3(loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit);
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
-  @fn static int change_hdu_2(varlel *varylist, varlel **pointarray, int nur, hdrinf *hdr) 
+  @fn static int change_hdu_2(varlel *varylist, varlel **pointarray, int nur, hdrinf *hdr)
 
   @brief Creates a second hdu of a fits table and puts the fit
   information contained in the varlel ll to the fits table
@@ -4281,7 +4281,7 @@ static int open_hdu_3(loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit);
   table. For a proper functionality make sure that the first hdu is already created and the second is opened. This is only of use if both tables have the identical size.
 
   @param varylist   (varlel *)  A properly configured varylist
-  @param pointarray (varlel **) Array with pointers to varlels of the size of elements of deltas given by the user   
+  @param pointarray (varlel **) Array with pointers to varlels of the size of elements of deltas given by the user
   @param nur        (int)       Number of rings
   @param hdr        (hdrinf *)  Properly configured headerinf struct
 
@@ -4389,7 +4389,7 @@ static int open_hdu_3(loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit);
   @param mindelta  (double *) Parameter list with mindelta values
   @param hdr       (hdrinf *) Properly configured hdrinf struct
   @param log       (loginf *) Properly configured loginf struct
-  
+
   @return int fillhdvarele 1 In case of an error, 0 if everything is ok
 */
 /* ------------------------------------------------------------ */
@@ -4456,7 +4456,7 @@ static int putgenresults(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
 */
 /* ------------------------------------------------------------ */
 static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit);
-  
+
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -4524,7 +4524,7 @@ static int writebigasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringp
   @fn static int coolgal(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit)
   @brief Produces a 3d fits image of the model.
 
-  Prompts the user for a name (hidden) of an output cube. This will be a 3d image of the galaxy. As a smoothing value the largest hpbw is used in all three directions. This function will deallocate and reallocate the model and the original cube, such that this function should be called last before the program is being left. The extension of the output cube in the third dimension is the largest dimension in x-y. 
+  Prompts the user for a name (hidden) of an output cube. This will be a 3d image of the galaxy. As a smoothing value the largest hpbw is used in all three directions. This function will deallocate and reallocate the model and the original cube, such that this function should be called last before the program is being left. The extension of the output cube in the third dimension is the largest dimension in x-y.
 
   @param  startinfv (startinf *)  Properly configured startinf struct
   @param  log (loginf *)    Properly configured loginf struct
@@ -4570,7 +4570,7 @@ static qfits_header *makecoolhdr(hdrinf *hdr, double beamsizeindeg);
 /* ------------------------------------------------------------ */
 static int makecoolpoints(Cube *cube, hdrinf *hdr, ringparms *rpm, fitparms *fit);
 
-  
+
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
@@ -4578,15 +4578,15 @@ static int makecoolpoints(Cube *cube, hdrinf *hdr, ringparms *rpm, fitparms *fit
   @brief Copies a part of the tirific input to a stream
 
   @param stream  (FILE *) An open stream
-  @param keyword (char *) Name of the keyword as given in gipsy  
+  @param keyword (char *) Name of the keyword as given in gipsy
   @param input   (char *) Allocated string of length VARYHSTRELES (including terminating '\0')
   @return tirout_a (success) 0
                    (error) 1
-*/ 
+*/
 /* ------------------------------------------------------------ */
 static int tirout_a(simparse_scn_arel **arel, FILE *stream, char *keyword);
 
-  
+
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
@@ -4604,7 +4604,7 @@ static int tirout_a(simparse_scn_arel **arel, FILE *stream, char *keyword);
 /* ------------------------------------------------------------ */
 static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fit, int nrplts);
 
-  
+
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -4620,7 +4620,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
           (error)   0
 */
 /* ------------------------------------------------------------ */
-static int progressout(startinf *startinfv, char *message);  
+static int progressout(startinf *startinfv, char *message);
 
 
 
@@ -4636,7 +4636,7 @@ static int progressout(startinf *startinfv, char *message);
           (error)   0
 */
 /* ------------------------------------------------------------ */
-static int progressfinished(startinf *startinfv);  
+static int progressfinished(startinf *startinfv);
 
 
 
@@ -4746,7 +4746,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
           (error)   0
 */
 /* ------------------------------------------------------------ */
-static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit);
+/* static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit); */
 
 
 
@@ -4780,7 +4780,7 @@ static int get_graphnr(char *string, int ndisks);
   @param scale (float *)  The scale from left hand border to right hand border of a plot (output)
    @param scale (float *) The zero from left hand border to right hand border of a plot (output)
    @param ndisks (int)    Number of disks
- 
+
   @return (success) int get_graphnr: Number of the graphics number as defined by _GRAPHNR plus NPARAMS
           (error)   0
 */
@@ -4880,7 +4880,7 @@ static void gr_filllegend(int ident, char *string, int ndisks);
   @param errarr
   @param larray (float *)         Array containing the subring parameters
   @param ndisks (int)             Number of disks
-  
+
   @return (success) 1
           (error)   0
 */
@@ -4921,7 +4921,7 @@ static int gr_deleteindexed(int nur, int ident, float *xarray, float *yarray, fl
   @fn static int get_graphident(char *string, char *axis, char *unit, char *altunit, char *legend, int ndisks)
   @brief Returns the identifyer of a graphics output
 
-  The function returns the identifyer of a graphics output identifyer. The value is not negative if the string input is identified with a variable parameter, or with a valid other graphics output keystring. In case of a variable parameter identifyer, this is identical with the RADI, etc identifyer, otherways with the NPARAMS+WANGLE_GRAPHNR, ... . At the same time the strings axis unit and legend are filled with appropriate values to produce an output with the pgp module. If the value of axis, unit, and legend are NULL, this is no error. If, however, one of those is not NULL, the strings must have at least a minimum length as given below. 
+  The function returns the identifyer of a graphics output identifyer. The value is not negative if the string input is identified with a variable parameter, or with a valid other graphics output keystring. In case of a variable parameter identifyer, this is identical with the RADI, etc identifyer, otherways with the NPARAMS+WANGLE_GRAPHNR, ... . At the same time the strings axis unit and legend are filled with appropriate values to produce an output with the pgp module. If the value of axis, unit, and legend are NULL, this is no error. If, however, one of those is not NULL, the strings must have at least a minimum length as given below.
 
   @param string  (char *) Input string that should be scanned
   @param axis    (char *) Output, axis descriptor string (at least 4 characters)
@@ -5151,7 +5151,7 @@ static int chkb_azi (ringparms *rpm, fitparms *fit);
   @brief Initialises the rng internal to the calulation of sdis
 
   @param rpm  (void *)   properly allocated ringparms struct
-  @param srnr (int)      sub-ring number 
+  @param srnr (int)      sub-ring number
   @param disk    (int)         disk number
 
   @return void
@@ -5167,7 +5167,7 @@ static void rndmf_init_gau_act(void *rpm, int srnr, int i, int disk);
   @brief dummy function doing nothing instead of rndmf_init_sdis_act
 
   @param rpm  (void *)   meaningless
-  @param srnr (int)      meaningless 
+  @param srnr (int)      meaningless
   @param disk    (int)         disk number
 
   @return void
@@ -5306,7 +5306,7 @@ static void gau_getaz(ringparms *rpm, int pgaip, maths_rstrf *randstr, int pgaid
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
-  @fn static void pr_vver_rota_act(void *rpm, float *vz, float *vz2, int srnr, int disk) 
+  @fn static void pr_vver_rota_act(void *rpm, float *vz, float *vz2, int srnr, int disk)
   @brief Adds the cosine component when rotating about
   inclination, in case that the vertical velocity is nonzero
 
@@ -5673,7 +5673,7 @@ static void smi_getcloudnumber_norm(void *rpm, int srnr, int disk);
   @brief Initialises the rng internal to the calulation of sdis
 
   @param rpm  (void *)   properly allocated ringparms struct
-  @param srnr (int)      sub-ring number 
+  @param srnr (int)      sub-ring number
   @param disk (int)         disk number
 
   @return void
@@ -5738,7 +5738,7 @@ static void setoutrange_azi_pas(int *outofrange);
 
   @param azi        (float *)     Azimuth
   @param ranges     (float[2][4]) the ranges to check (these are 8 ranges)
-  @param outofrnage (int *)       Output: outofrange changes to 0 if the azimuth is in the range defined by ranges         
+  @param outofrnage (int *)       Output: outofrange changes to 0 if the azimuth is in the range defined by ranges
   @param i          (int)         Sub-range to check 0 or 1
   @return void
 */
@@ -5763,7 +5763,7 @@ static void pr_azi_pas(float *azi, float ranges[2][4], int *outofrange, int i);
   @param sinaz      (float)   sine of the azimuth
   @param cosaz      (float)   cosine of the azimuth
   @param srnr       (int)     sub-ring number
-  @param outofrnage (int *)   outofrange 0 means do a normal shaping, 1 means do "nothing"         
+  @param outofrnage (int *)   outofrange 0 means do a normal shaping, 1 means do "nothing"
   @param disk (int)         disk number
 
   @return void
@@ -5785,7 +5785,7 @@ static int srshape_azi_pas(void *rpm, float *pp, float sinaz, float cosaz, int s
 
   @param rpm        (void *)  Properly structured ringparms struct
   @param srnr       (int)     sub-ring number
-  @param outofrange (int)     outofrange 0 means do a normal shaping, 1 means do "nothing"         
+  @param outofrange (int)     outofrange 0 means do a normal shaping, 1 means do "nothing"
   @param signum     (int)     Dummy probably
   @param disk (int)         disk number
 
@@ -6060,7 +6060,7 @@ static int tir_fillhd(loginf *log, int i, double radius, double grid);
   @brief Fill a simparse decomp struct with parameter information
 
   @param rpm                (ringparms) properly configured ringparms struct
-  @param decomp_controlv    (decomp_control *)  Allocated simparse decomp control structure 
+  @param decomp_controlv    (decomp_control *)  Allocated simparse decomp control structure
 
   @return 0: success
           1: memory problems
@@ -6078,7 +6078,7 @@ static int dec_fill(ringparms *rpm, decomp_control *decomp_controlv);
   same function pas doesn't do anything.
 
   @param rpm  (ringparms *)   properly allocated ringparms struct
-  @param srnr (int)      sub-ring number 
+  @param srnr (int)      sub-ring number
   @param disk (int)      disk number
 
   @return void
@@ -6096,7 +6096,7 @@ static void alloc_pbcfac_pas(ringparms *rpm, int srnr, int disk);
   same function pas doesn't do anything.
 
   @param rpm  (ringparms *)   properly allocated ringparms struct
-  @param srnr (int)      sub-ring number 
+  @param srnr (int)      sub-ring number
   @param disk (int)      disk number
 
   @return void
@@ -6114,7 +6114,7 @@ static void dealloc_pbcfac_pas(ringparms *rpm, int srnr, int disk);
   same function pas doesn't do anything.
 
   @param hdr    (hdrinf *)                  properly allocated headerinf struct
-  @param sd     (struct srd *[ndisks])      sub-ring array 
+  @param sd     (struct srd *[ndisks])      sub-ring array
   @param disk   (int)                       disk number
   @param srnr   (int)                       sub-ring number
   @param pnr    (long *)                      point number
@@ -6136,7 +6136,7 @@ static void fill_pbcfac_pas(hdrinf *hdr, struct srd **sd, int disk, int srnr, lo
 
   same function pas doesn't do anything.
 
-  @param sd     (struct srd **)      sub-ring array 
+  @param sd     (struct srd **)      sub-ring array
   @param disk   (int)                disk number
   @param srnr   (int)                sub-ring number
   @param pnr    (long)               point number
@@ -6234,7 +6234,7 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
    first that has been specified on input with the function
    reg_cont_get() will be read as an input vector into reg_contv[i] ->
    fc to then determine the ratio of the modes specified on
-   input. This is done in the following way (see fourat.h): 
+   input. This is done in the following way (see fourat.h):
 
    i) the input array is interpolated (or extrapolated) between the active elements as
    specified in REGPARA=.
@@ -6310,13 +6310,13 @@ int main(int argc, char *argv[])
     goto error;
 
   while (check_restart(startinfv, hdr, rpm, log)) {
-    
+
     if (!(log = get_loginf(startinfv, log)))
       goto error;
 
     if (!(hdr = get_hdrinf(startinfv, log, hdr)))
       goto error;
-    
+
     if (!(rpm = get_ringparms(startinfv, log, hdr, rpm)))
       goto error;
 
@@ -6328,14 +6328,14 @@ int main(int argc, char *argv[])
       goto error;
     }
 
-    
+
     /*   else if (j == 2) */
     /*     ; */
     /*   else if (j == 0)  */
-    
-    prepout(log, hdr, rpm);    
 
-    if (fit -> fitmode == METROPOLIS) { 
+    prepout(log, hdr, rpm);
+
+    if (fit -> fitmode == METROPOLIS) {
     /*       if (!metropolis(log, hdr, rpm, fit)) { */
     /* 	goto error; */
     /*       } */
@@ -6344,10 +6344,10 @@ int main(int argc, char *argv[])
     /*       } */
         ;
       }
-      else if (fit -> fitmode == GOLDEN_SECTION) { 
+      else if (fit -> fitmode == GOLDEN_SECTION) {
         if (!golden_section(startinfv, log, hdr, rpm, fit))
     	goto error;
-	
+
         if (!putgoldresults(log, rpm, fit))
     	goto error;
       }
@@ -6358,45 +6358,45 @@ int main(int argc, char *argv[])
         if (!putgenresults(startinfv, log, hdr, rpm, fit))
     	goto error;
       }
-    
+
     /* put the results in an ascii table */
     writeasctable(startinfv, log, hdr, rpm, fit);
-    
+
     /* Put the results for each subring in an ascii table */
     writebigasctable(startinfv, log, hdr, rpm, fit);
 
     /* Graphics */
-    nrplts = graphout(startinfv, log, hdr, rpm, fit);
-   
+    /* nrplts = graphout(startinfv, log, hdr, rpm, fit);
+
     nrplts = ((nrplts))?nrplts:1;
-   
-    briggsout(startinfv, log, hdr, rpm, fit);
-   
+
+    briggsout(startinfv, log, hdr, rpm, fit); */
+
     /* Output of a def file */
     tirout(startinfv, log, rpm, fit, nrplts);
-    
+
 
     /* Output of a histogram */
     /*   histout(rpm); */
-    
+
     /* Rectify output */
     /*   rectout(log, hdr, rpm, fit); */
-    
+
     /* Tiltogram output */
     tiltout(startinfv, log, hdr, rpm, fit);
-    
+
     /* Write the output cube */
     i = 1;
     if ((*hdr -> outset != '\0')) {
-    
+
       /* We read all values into the par array */
       tir_get_grid(log, rpm, log -> outarray);
-    
+
       for (i = 0; i < rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++i)
         rpm -> oldpar[i] = log -> outarray[i];
-    
+
       changetointern(rpm -> oldpar, rpm -> nur, hdr, rpm -> ndisks);
-    
+
       /* Now we write it */
       writemodel(hdr, rpm, fit, rpm -> oldpar, fit -> index);
     }
@@ -6409,7 +6409,7 @@ int main(int argc, char *argv[])
 
     /* Cool again */
     writecoolmodel(startinfv, log, hdr, rpm, fit, rpm -> oldpar, fit -> index);
- 
+
     if ((log -> tstream))
       fclose(log -> tstream);
     log -> tstream = NULL;
@@ -6437,7 +6437,7 @@ int main(int argc, char *argv[])
   /* finis_c(); */
 
   /* fprintf(stderr,"Got here: end\n");*/
-  
+
   return 1;
 
  error:
@@ -6599,45 +6599,45 @@ static int activateftstab(startinf *startinfv, loginf *log, ringparms *rpm)
   /* initialise */
   /* Initialise the table content object */
   ftstab_flush_();
-  
+
   /* Virginalise the header information table */
   ftstab_hdlreset_();
-  
+
   /* Initialising the logfile info: change */
-  
+
   /* This defines possible table items, their numbers (PPARAM+1),
      type, unit, scaling, it does not create a table */
   hdl_init(rpm -> ndisks);
 
 
   if ((log -> logname)) {
-    
+
     /* Check if the logfile already exists and tell the user if yes */
     if (!(rename(log -> logname, log -> logname))) {
       sprintf(mes, "LOGFILE present");
       anyout_tir(&anint,mes);
       logfile_present = 1;
     }
-    
+
     if (!startinfv -> firstrun){
       sprintf(mes, "multiple runs, will overwrite LOGFILE");
       anyout_tir(&anint,mes);
       logfile_present = 1;
     }
-      
+
     /* open */
     /* returns 0 if file is present and could not be opened, 2 if no file is present and could also not be opened, something else if there is an error. (name,
        extension, mode (2: append), extension, history header, don't
        care.) Have to admit that this is a bit obscure, so I hope it still works.*/
     log -> logpres = ftstab_fopen(log -> logname, 1, 2, 1);
-    
+
     /* An error occured connected to the opening of the logfile, inform the user */
     if (log -> logpres && (log -> logpres != 2)) {
       sprintf(mes, "LOGFILE faulty");
       anyout_tir(&anint,mes);
       logfile_faulty = 1;
     }
-    
+
     if (!(log -> logpres)) {
       sprintf(mon_key, "CREATOR");
       if (ftstab_getcard(0, mon_key, value, 1)) {
@@ -6645,7 +6645,7 @@ static int activateftstab(startinf *startinfv, loginf *log, ringparms *rpm)
 	  logfile_not_tir = 1;
 	}
       }
-      else 
+      else
 	logfile_not_tir = 1;
 
       if (logfile_not_tir) {
@@ -6653,7 +6653,7 @@ static int activateftstab(startinf *startinfv, loginf *log, ringparms *rpm)
 	anyout_tir(&anint,mes);
       }
     }
-    
+
 
     /* Ask what to do (only if this is a single run) */
     if ((logfile_present)) {
@@ -6669,9 +6669,9 @@ static int activateftstab(startinf *startinfv, loginf *log, ringparms *rpm)
 	anint = 0;
 	sprintf(mes, "0, 1, or 2 [0]?");
 	userint_tir(startinfv -> arel, &anint, &nel, &def, "ACTION", mes);
-      
+
 	/* fprintf("", startinf -> arel -> keyvallipre -> key); */
-	
+
 	/* We proceed and at the moment reset PROCEED */
 	/* cancel_tir(startinfv -> arel, "ACTION=", 0); */
       }
@@ -6698,7 +6698,7 @@ static int activateftstab(startinf *startinfv, loginf *log, ringparms *rpm)
 	  goto error;
 	}
       }
-      
+
       /* If the logfile was faulty, we close anyway */
       else if (logfile_faulty) {
 	ftstab_close_();
@@ -6714,29 +6714,29 @@ static int activateftstab(startinf *startinfv, loginf *log, ringparms *rpm)
 
     /* I think the following should only be done if a file is not present, in which case the answer is 2 */
     if (log -> logpres == 2) {
-      
+
       /* create a column, check what happens if there is already a table
 	 object, success is 1, not 0 (verra old code) */
       ftstab_inithd(1L);
-      
+
       /* now fill the column with information, columns start at 0 */
 /*       output = ftstab_fillhd(0L, NPARAMS+(rpm -> ndisks-1)*NDPARAMS+NSPARAMS+PRIMHDN_SINGLE+SECHDN_MULTI+CHISQ_TABNR, COLTYPE_DOUBLE, 0.0, -1.0); */
       ftstab_fillhd(0L, NPARAMS+(rpm -> ndisks-1)*NDPARAMS+NSPARAMS+(LASTSING_PRIMPOS+NUMB_MDPRIMPOS*rpm -> ndisks)+SECHDN_MULTI+CHISQ_TABNR, COLTYPE_DOUBLE, 0.0, -1.0);
     }
-            
+
     /* Now open the file and put some text there (or vice versa) */
     if (log -> logpres) {
       ftstab_genhd(0);
-      
+
       /* probably the only thing that we'll do */
       sprintf(mon_key, "CREATOR");
       sprintf(value, "TIRIFIC");
-      
+
       ftstab_putcard(0, mon_key, value);
-      
+
       if ((log -> logpres = ftstab_fopen(log -> logname, 1, 2, 1))) {
 	goto error;
-      }  
+      }
     }
 
   }
@@ -6760,11 +6760,11 @@ static int activateftstab(startinf *startinfv, loginf *log, ringparms *rpm)
 static startinf *create_startinf(void)
 {
   startinf *startinfv;
-  
+
   /* Allocate the struct */
   if (!(startinfv = (startinf *) malloc(sizeof(startinf))))
     return NULL;
-  
+
   /* First set all pointers to 0 and initialise some pointers */
   startinfv -> arel = NULL;
   startinfv -> restartname = NULL;
@@ -6775,9 +6775,9 @@ static startinf *create_startinf(void)
   if (!((startinfv -> filestat) = (struct stat *) malloc(sizeof(struct stat)))) {
     goto error;
   }
-  
+
   return startinfv;
-  
+
  error:
   destroy_startinf(startinfv);
   return NULL;
@@ -6820,7 +6820,7 @@ static void destroy_startinf(startinf *startinfv)
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 /* Initialisation of the program concerning info from the dataset */
-static startinf *get_startinf(int argc, char **argv) 
+static startinf *get_startinf(int argc, char **argv)
 {
   startinf *startinfv;
   /* char mes[81]; */
@@ -6838,7 +6838,7 @@ static startinf *get_startinf(int argc, char **argv)
   /* Try to allocate */
   if (!(startinfv = create_startinf()))
     goto error;
-  
+
   /* Get the command line into a buffer */
 
   /* first count */
@@ -6864,7 +6864,7 @@ static startinf *get_startinf(int argc, char **argv)
     blen = blen + blin;
     if (i < (argc - 1))
       buffer[blen] = ' ';
-    else 
+    else
       buffer[blen] = '\0';
 
     ++blen;
@@ -6883,12 +6883,12 @@ static startinf *get_startinf(int argc, char **argv)
     goto error;
   }
 
-  free(restartid); 
-  
+  free(restartid);
+
   /* Read out the file name */
   if (simparse_scn_arel_readval_string(startinfv -> arel, "DEFFILE", "Provide default file name (default: no file).", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &returnedc))
     goto error;
-  
+
   if ((returnedc[0]))
     printf("Using default file with name: %s\n", returnedc);
 
@@ -6925,7 +6925,7 @@ static startinf *get_startinf(int argc, char **argv)
 
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "RESTARTNAME", "Give restartfile name.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr))
     goto error;
-  
+
   if ((varystr[0])) {
     if (!(startinfv -> restartname = simparse_copystring(varystr[0]))) {
       goto error;
@@ -6942,7 +6942,7 @@ static startinf *get_startinf(int argc, char **argv)
   if (simparse_scn_arel_readval_int(startinfv -> arel, "RESTARTID", "ID of restart process [0]", 1, &restartdef, 1, 1, 0, 0, &keypres, &nread, &nreturned, &restartid))
     goto error;
   startinfv -> restartid = *restartid;
-  
+
   /* The startfile */
   /* sprintf(mes, "Give restartfile name."); */
   /*   for (i = 0; i < 200; ++i) */
@@ -6957,13 +6957,13 @@ static startinf *get_startinf(int argc, char **argv)
   free(buffer);
   free(restartid);
   return startinfv;
-  
+
  error:
   if ((startinfv)) {
     /* Stop the logfile io, also put ndisks = 1, is irrelevant */
     destroy_startinf(startinfv);
   }
-  
+
   if ((buffer))
     free(buffer);
   if ((prompt))
@@ -7006,15 +7006,15 @@ static int check_restart(startinf *startinfv, hdrinf *hdr, ringparms *rpm, login
 
   if ((retval)) {
     if ((rpm)) {
-      
+
       /* We read all values into the par array and to be sure make oldpar and par equal */
       tir_get_grid(log, rpm, log -> outarray);
-      
+
       for (i = 0; i < rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++i)
         rpm -> oldpar[i] = log -> outarray[i];
-      
+
       changetointern(rpm -> oldpar, rpm -> nur, hdr, rpm -> ndisks);
-      
+
       for (i = 0; i < rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++i)
         rpm -> par[i] = rpm -> oldpar[i];
     }
@@ -7039,13 +7039,13 @@ static int loop_restart(startinf *startinfv)
   int *restartid = NULL;
   int keypres, nread, nreturned;
   simparse_scn_keyvalli **keyvallifile;
-  
+
   /* If the function is called, this should be done */
   startinfv -> firstrun = 0;
 
   /* Check if file is named */
   if (strlen(startinfv -> restartname)) {
-    
+
     /* Check if file information can be acquired and fill stuff */
     if (stat(startinfv -> restartname, startinfv -> filestat)) {
 
@@ -7064,7 +7064,7 @@ static int loop_restart(startinf *startinfv)
       else {
 	printf(".\n");
       }
-		
+
       /* Run a loop until the timestamps are the same or the file becomes unreadable */
       while (startinfv -> timestamp >= startinfv -> filestat -> st_mtime) {
 		  if (stat(startinfv -> restartname, startinfv -> filestat)) {
@@ -7076,7 +7076,7 @@ static int loop_restart(startinf *startinfv)
       /* Now refresh the input name and read it in again (not sure if this works or if the .def file has to be reread into some buffer before */
 		/* Changed this here */
       cancel_tir(startinfv -> arel, "RESTARTNAME=", 1);
-      
+
       /* Just make sure that the file is re-read */
 
       /* This may add an extra layer of security of sync */
@@ -7092,36 +7092,36 @@ static int loop_restart(startinf *startinfv)
 	    simparse_scn_arel_timestamp_early(startinfv -> arel[2]);
 	  }
 	}
-	if (simparse_scn_arel_readval_int(startinfv -> arel, "RESTARTID=", "ID of restart process [0]", 1, &startinfv -> restartid, 1, 1, 0, 0, &keypres, &nread, &nreturned, &restartid)) 
+	if (simparse_scn_arel_readval_int(startinfv -> arel, "RESTARTID=", "ID of restart process [0]", 1, &startinfv -> restartid, 1, 1, 0, 0, &keypres, &nread, &nreturned, &restartid))
 	  goto error;
       } while ((*restartid == startinfv -> restartid) && (startinfv -> restartid != 0));
-	
+
       startinfv -> restartid = *restartid;
-	
+
       if ((startinfv -> restartname)) {
 	free(startinfv -> restartname);
 	startinfv -> restartname = NULL;
       }
-		
+
       /* sprintf(mes, "Give restartfile name."); */
       /* for (i = 0; i < 200; ++i) */
       /* 	startinfv -> restartname[i] = ' '; */
       /* startinfv -> restartname[200] = '\0'; */
-		
+
       /* def = 4; */
       /* nel = 1; */
       /* userchar_tir(startinfv -> restartname, &nel, &def, "RESTARTNAME=", mes); */
       /* termsinglestr(startinfv -> restartname); */
-		
+
       /* Let's do this by default */
       if (varystr) {
 		  freeparsed(varystr);
 		  varystr = NULL;
       }
-		
+
       if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "RESTARTNAME", "Give name of file to restart.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr))
 		  goto error;
-      
+
       if ((varystr[0])) {
 		  if (!(startinfv -> restartname = simparse_copystring(varystr[0]))) {
 			 goto error;
@@ -7138,7 +7138,7 @@ static int loop_restart(startinf *startinfv)
 		/* *** */
 /*       if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "BILLIBULLY", "Give name of file to restart.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr)) */
 /* 		  goto error; */
-      
+
 /*       if ((varystr[0])) { */
 /* 		  fprintf(stderr,"bill: |%s|\n",varystr[0]); */
 /*       } */
@@ -7158,9 +7158,9 @@ static int loop_restart(startinf *startinfv)
   }
   /* GJnew */
     if ((restartid))
-      free(restartid); 
+      free(restartid);
   return 0;
-  
+
  error:
   if ((varystr)) {
     freeparsed(varystr);
@@ -7168,7 +7168,7 @@ static int loop_restart(startinf *startinfv)
   if ((restartid))
     free(restartid);
   return 1;
-  
+
 }
 
 /* ------------------------------------------------------------ */
@@ -7182,11 +7182,11 @@ static int loop_restart(startinf *startinfv)
 static loginf *create_loginf(void)
 {
   loginf *log;
-  
+
   /* Allocate the struct */
   if (!(log = (loginf *) malloc(sizeof(loginf))))
     return NULL;
-  
+
   /* First set all pointers to 0 and initialise some pointers */
   log -> logname = NULL;
   log -> logpres = 1;
@@ -7217,7 +7217,7 @@ static loginf *create_loginf(void)
   log -> table = NULL;
 
   return log;
-  
+
  /* error: */
   /* Note: at this point, number of disks is unknown, but also irrelevant */
   /* destroy_loginf(log, 1); */
@@ -7300,7 +7300,7 @@ static hdrinf *create_hdrinf(void)
   /* Allocate the struct */
   if (!(create_hdrinf = (hdrinf *) malloc(sizeof(hdrinf))))
     return NULL;
-  
+
   /* First set all pointers to 0 */
   create_hdrinf -> inset = NULL;
   /* create_hdrinf -> insubs = NULL; */
@@ -7320,11 +7320,11 @@ static hdrinf *create_hdrinf(void)
 
 
   /* Allocate and initialise the arrays */
-  
+
   /* Allocate inset, we allow for more than 18 characters */
   /* if (!(create_hdrinf -> inset = getfcharray(200, NULL)))
      goto error;*/
-  
+
   /* Allocate coordinate descriptor array */
   /* GJnew: removed this, lead to leakage */
   /* if (!(create_hdrinf -> insubs = (int *) malloc(MAXNSUBS*sizeof(int)))) */
@@ -7350,7 +7350,7 @@ static void destroy_hdrinf(hdrinf *hdr)
   /* Make it safer against unwarranted use */
   if (!(hdr))
     return;
- 
+
   if (hdr -> inset !=  NULL)
     free(hdr -> inset);
   /* if (hdr ->insubs != NULL) */
@@ -7391,7 +7391,7 @@ static void destroy_hdrinf(hdrinf *hdr)
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 /* Initialisation of the program concerning info from the dataset */
-static loginf *get_loginf(startinf *startinfv, loginf *loginfv) 
+static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
 {
   loginf *log;
   char mes[81];
@@ -7412,9 +7412,9 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
   /* The very first thing to do is to ask for the number of cores */
   log -> ncores = 1;
   def = 5;
-  
+
   sprintf(mes, "Give maximum number of cores. [1]");
-  
+
   nel = 1;
   userint_tir(startinfv -> arel, &log -> ncores, &nel, &def, "NCORES=", mes);
   while (log -> ncores < 1) {
@@ -7428,7 +7428,7 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
 #endif
 
   /* First thing to do is the logfile and the text logfile */
-  
+
   /* The logfile */
   if (simparse_scn_arel_readval_string(startinfv -> arel, "LOGNAME", "Provide logfile name (default: no file).", 0, "", 0, -1, 0, 0, &keypres, &nread, &nreturned, &(log -> logname)))
     goto error;
@@ -7437,12 +7437,12 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
   /* for (i = 0; i < 200; ++i) */
   /*   log -> logname[i] = ' '; */
   /* log -> logname[200] = '\0'; */
-  
+
   /* Formerly def = 5 */
   /* def = 5; */
   /* nel = 1; */
   /* userchar_tir(log -> logname, &nel, &def, "LOGNAME=", mes); */
-  
+
   /* This puts an \0 to the end of the text */
   /* termsinglestr(log -> logname); */
 
@@ -7454,14 +7454,14 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
     /*   log -> textlog[i] = ' '; */
     /* log -> textlog[200] = '\0'; */
     /* def = 2; */
-    
+
     /* sprintf(mes, "Give text logfile name."); */
     /* nel = 1; */
     /* userchar_tir(log -> textlog, &nel, &def, "TEXTLOG=", mes); */
-    
+
     /* This puts an \n to the end of the text */
     /* termsinglestr(log -> textlog); */
-    
+
     /* The Prgress LOG  Kamphuis addition */
   if (simparse_scn_arel_readval_string(startinfv -> arel, "PROGRESSLOG", "Provide progress logfile name (default: no file).", 0, "", 0, -1, 0, 0, &keypres, &nread, &nreturned, &(log -> progresslog)))
     goto error;
@@ -7470,15 +7470,15 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
     /*   log -> progresslog[i] = ' '; */
     /* log -> progresslog[200] = '\0'; */
     /* def = 2; */
-    
+
     /* sprintf(mes, "Give progress logfile name."); */
     /* nel = 1; */
     /* userchar_tir(log -> progresslog, &nel, &def, "PROGRESSLOG=", mes); */
-    
+
     /* This puts an \n to the end of the text */
     /* termsinglestr(log -> progresslog); */
     /* Kamphuis addition end */
-    
+
     /* The result name */
   if (simparse_scn_arel_readval_string(startinfv -> arel, "TABLE", "Give output table name (default: no file).", 0, "", 0, -1, 0, 0, &keypres, &nread, &nreturned, &(log -> table)))
     goto error;
@@ -7486,22 +7486,22 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
     /* for (i = 0; i < 200; ++i) */
     /*   log -> table[i] = ' '; */
     /* log -> table[200] = '\0'; */
-    
-    
+
+
     /* sprintf(mes, "Give output table name."); */
     /* nel = 1; */
     /* def = 2; */
-    
+
     /* userchar_tir(log -> table, &nel, &def, "TABLE=", mes); */
-    
+
     /* This puts an \0 to the end of the text */
     /* termsinglestr(log -> table); */
-    
-    
+
+
     /* Now get the distance of the object */
     log -> distance = 10;
     def = 2;
-    
+
     sprintf(mes,"Distance in Mpc [10]");
     nel = 1;
     userdble_tir(startinfv -> arel, &log -> distance, &nel, &def, "DISTANCE=", mes);
@@ -7529,7 +7529,7 @@ static loginf *get_loginf(startinf *startinfv, loginf *loginfv)
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 /* Initialisation of the program concerning info from the dataset */
-static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv) 
+static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
 {
   hdrinf *hdr = NULL; /* The output */
 
@@ -7546,7 +7546,7 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
   /* char manual = 0; */ /* Signal for manual input */
 
   /* char ciax[9]; */ /* Keyword holder */
-  /* char value[21]; */ /* Value holder */ 
+  /* char value[21]; */ /* Value holder */
   /* int i,j; */         /* Control variable */
 
   /* double deltsettouser[3]; */ /* Conversion factor from cuniti to userdeltunit */
@@ -7583,7 +7583,7 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
 	hdrinfv -> outset = NULL;
 	if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "OUTSET", "Give output cube name.", 0, NULL, 0, 1, 0, 0, &keypres, &nread, &nreturned, &stringlist))
 	  goto error;
-  
+
 	if ((stringlist[0])) {
 	  if (!(hdrinfv -> outset = simparse_copystring(stringlist[0]))) {
 	    goto error;
@@ -7593,7 +7593,7 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
 	  if (!(hdrinfv -> outset = simparse_copystring("")))
 	    goto error;
 	}
-	
+
 	freeparsed(stringlist);
 	stringlist = NULL;
       }
@@ -7668,13 +7668,13 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
   /* dev = 0; */
   /* class = 1; */
   /* classdim = 2; */
-  
+
   /* Get information about input dataset */
   hdr -> nsubs = hdr -> oric -> size_v;
 
   /* hdr -> nsubs = gdsinp_tir(hdr -> inset, hdr -> insubs, &maxnsubs, &def, "INSET=", mes, &dev, hdr -> inaxperm, inaxcount, &maxnax, &class, &classdim); */
   /* termsinglestr(hdr -> inset); */
-  
+
   /* A box has to be defined inside the specified set, on default whole dataset , not exactly understood */
   /* sprintf((mes), "Give area of operation."); */
   /* def = 1; */
@@ -7682,17 +7682,17 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
   /* option = 1; */
   /* gdsbox_tir(blo, bhi, hdr -> inset, hdr -> insubs, &maxnsubs, &def, "BOX=", mes, &dev, &option); */
   /* def = 0; */
-  
+
   /* The degree of error is not warning (1) but fatal (4) */
   /* outerr = 4; */
-  
+
   /* Check the dataset */
   /* for (i = 0; i < 3; ++i) { */
-    
+
     /* This is a simple check if CTYPEi is present in the header */
     /* err = 0; */
     /* sprintf(ciax, "CTYPE%i", hdr -> inaxperm[i]); */
-    
+
     /* /\* For level refer to the description *\/ */
     /* level = 0; */
     /* for (j = 0; j < 20; ++j) */
@@ -7703,7 +7703,7 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
     /* 	sprintf(mes, "Header: CTYPE%i not found.", i); */
     /* 	error_tir(&outerr, mes); */
     /*   } */
-      
+
       /* This is a simple check if CUNITi is present in the header */
       /* err = 0; */
       /* sprintf(ciax, "CUNIT%i", hdr -> inaxperm[i]); */
@@ -7715,7 +7715,7 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
       /* 	sprintf(mes, "Header: CUNIT%i not found.", i); */
       /* 	error_tir(&outerr, mes); */
       /* } */
-      
+
       /* This is a check whether the cunit can be converted to modelspacunit, modelmapunit, respectively. At the same time deltsettouser and  globsettouser is filled with that conversion factor */
       /* if (i < 2) { */
       /* 	err = factor_tir(value, userdeltunit, deltsettouser+i); */
@@ -7735,17 +7735,17 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
       /* 	factor_tir(value, user3globunit, hdr -> globsettouser+i); */
       /* 	err = 0; */
       /* } */
- 
-  hdr -> globsettouser[0] = 1.;     
-  hdr -> globsettouser[1] = 1.;     
-  hdr -> globsettouser[2] = 0.001;     
-        
+
+  hdr -> globsettouser[0] = 1.;
+  hdr -> globsettouser[1] = 1.;
+  hdr -> globsettouser[2] = 0.001;
+
       /* Now check the cdelt */
       /* sprintf(ciax, "CDELT%i",  hdr -> inaxperm[i]); */
       /* for (j = 0; j < 20; ++j) */
       /* 	value[j] = ' '; */
       /* value[20] = '\0'; */
-      
+
       /* level = 0; */
       /* gdsd_rdble_tir(hdr -> inset, ciax, &level, setcdelt+i, &err); */
       /* if (err < 0) { */
@@ -7753,13 +7753,13 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
       /* 	error_tir(&outerr, mes); */
       /* } */
       /* err = 0; */
-      
+
       /* Now the crpix */
       /* sprintf(ciax, "CRPIX%i",  hdr -> inaxperm[i]); */
       /* for (j = 0; j < 20; ++j) */
       /* 	value[j] = ' '; */
       /* value[20] = '\0'; */
-      
+
       /* For level refer to the description */
       /* level = 0; */
       /* gdsd_rdble_tir(hdr -> inset, ciax, &level, hdr -> setcrpix+i, &err); */
@@ -7767,17 +7767,17 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
       /* 	sprintf(mes, "Header: CRPIX%i not found.", i); */
       /* 	error_tir(&dev, mes); */
       /* } */
-      
-  hdr -> setcrpix[0] = hdr -> oric -> refpix_x;     
-  hdr -> setcrpix[1] = hdr -> oric -> refpix_y;     
-  hdr -> setcrpix[2] = hdr -> oric -> refpix_v;     
+
+  hdr -> setcrpix[0] = hdr -> oric -> refpix_x;
+  hdr -> setcrpix[1] = hdr -> oric -> refpix_y;
+  hdr -> setcrpix[2] = hdr -> oric -> refpix_v;
 
   /* Now the crval */
   /* sprintf(ciax, "CRVAL%i",  hdr -> inaxperm[i]); */
   /* for (j = 0; j < 20; ++j) */
   /* 	value[j] = ' '; */
   /* value[20] = '\0'; */
-  
+
   /* For level refer to the description */
   /* level = 0; */
   /* gdsd_rdble_tir(hdr -> inset, ciax, &level, setcrval+i, &err); */
@@ -7785,17 +7785,17 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
   /* 	sprintf(mes, "Header: CRVAL%i not found.", i); */
   /* 	error_tir(&dev, mes); */
   /* } */
-      
+
   /* hdr -> setcrval[0] = hdr -> oric -> refval_x;      */
   /* hdr -> setcrval[1] = hdr -> oric -> refval_y;      */
   /* hdr -> setcrval[2] = hdr -> oric -> refval_v;      */
-     
+
   /* The cdelt of the axis in user units, the size of a grid in user units */
   /* userdeltcdelt[i] = setcdelt[i]*deltsettouser[i]; */
   hdr -> userglobcdelt[0] = hdr -> oric -> delt_x*hdr -> globsettouser[0];
   hdr -> userglobcdelt[1] = hdr -> oric -> delt_y*hdr -> globsettouser[1];
   hdr -> userglobcdelt[2] = hdr -> oric -> delt_v*hdr -> globsettouser[2];
-      
+
       /* The conversion factors for the user */
   hdr -> deltgridtouser[0] = fabs(hdr -> oric -> delt_x*DEGTOARCSEC);
   hdr -> deltgridtouser[1] = fabs(hdr -> oric -> delt_y*DEGTOARCSEC);
@@ -7806,14 +7806,14 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
   hdr -> globgridtouser[2] = fabs(hdr -> oric -> delt_v*hdr -> globsettouser[2]);
 
       /* hdr -> globgridtouser[i] = fabs(hdr -> userglobcdelt[i]); */
-      
+
       /* The reference values of the axis in user units */
-  hdr -> userglobcrval[0] = hdr -> oric -> refval_x*1.;     
-  hdr -> userglobcrval[1] = hdr -> oric -> refval_y*1.;     
-  hdr -> userglobcrval[2] = hdr -> oric -> refval_v*hdr -> globsettouser[2];     
-    
+  hdr -> userglobcrval[0] = hdr -> oric -> refval_x*1.;
+  hdr -> userglobcrval[1] = hdr -> oric -> refval_y*1.;
+  hdr -> userglobcrval[2] = hdr -> oric -> refval_v*hdr -> globsettouser[2];
+
   hdr -> signv = -hdr -> oric -> delt_v/fabs(hdr -> oric -> delt_v);
-    
+
   /* Calculate the size of the cube in grids along axis 1 and 2 */
   /* hdr -> bsize1=bhi[0]-blo[0]+1; */
   /* hdr -> bsize2=bhi[1]-blo[1]+1; */
@@ -7822,21 +7822,21 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
 
   /* This is to make a bit more space, take care for allocation */
   hdr -> bcsize1= 2*(hdr -> bsize1/2+1);
-    
-    
+
+
     /* The size of the cube in grids along axis 3 is given by hdr -> nsubs, get the values of the max and min grid */
     /* i = 0; */
     /* blo[2] = gdsc_grid_tir(hdr -> inset, hdr -> inaxperm+2, hdr -> insubs+i, &err); */
     /* i = hdr -> nsubs-1; */
     /* bhi[2] = gdsc_grid_tir(hdr -> inset, hdr -> inaxperm+2, hdr -> insubs+i, &err); */
-    
+
     /* Get beam properties */
     /* BUGFIX: removed the possibility to read beam properties from header */
-    
+
     /* First check whether this goes automatic */
   err = 0;
 
-    /* If the cdelt is the same for both spatial axes, go on */ 
+    /* If the cdelt is the same for both spatial axes, go on */
   if (fabs(hdr -> userglobcdelt[0]) != fabs(hdr -> userglobcdelt[1])) {
     anyout_tir(&outerr, "cdelt of axis1 and axis2 are different");
     err = 1;
@@ -7844,27 +7844,27 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
 
 
   /* err = 0; */
-  
+
   /* check if major axis can be read from the dataset */
   /* gdsd_rdble_tir(hdr -> inset, "BMAJ", &level, &vardouble, &err); */
   /* if (err < 0) */
-  
+
   /* This is a signal have it manually */
   /* 	manual = 1; */
   /* else { */
   /* 	outerr = 0; */
-  
+
   /* This is done under the assumption that the beam is given in set units, i.e. degrees */
   hdr -> bmaj = (float) hdr -> oric -> bmaj/fabs(hdr -> oric -> delt_y);
   /*       sprintf(mes, "Beam major axis in arcsec: %f", hdr -> bmaj*fabs(setcdelt[0])); */
   /*       anyout_tir(&outerr, mes); */
   /* } */
   /* err = 0; */
-  
+
   /* check if minor axis can be read from the dataset */
   /* gdsd_rdble_tir(hdr -> inset, "BMIN", &level, &vardouble, &err); */
   /* if (err < 0) */
-  
+
   /* This is a signal have it manually */
   /* 	manual = 1; */
   /* else { */
@@ -7876,11 +7876,11 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
   /*       anyout_tir(&outerr, mes); */
   /* } */
   /* err = 0; */
-  
+
   /* check for the bpa */
   /* gdsd_rdble_tir(hdr -> inset, "BPA", &level, &vardouble, &err); */
   /* if (err < 0) */
-  
+
   /* This is a signal have it manually */
   /* 	manual = 1; */
   /* else { */
@@ -7891,42 +7891,42 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
   /*       anyout_tir(&outerr, mes); */
   /*   } */
   /* } */
-  
+
   /* If the cdelts are different we pose a warning and enforce manual reading */
   /* else { */
   /*   outerr = 0; */
   /*   anyout_tir(&outerr, "cdelt of axis1 and axis2 are different"); */
   /* } */
-  
+
   /* Read beam properties manually */
-  
-  
+
+
   /* BUGFIX: removed the possibility to read beam properties from header. This caused too much confusion */
   /* manual = 1; */
-  
+
   /* The beam major and minor axis has to be read in manually */
   if ((hdr -> bmaj <= 0) || (err) ) {
 
     /* If a proper logfile is present, we set a default and the beam properties are hidden */
     def = 4;
-    
+
     sprintf(mes, "Give HPBW of the gaussian beam, major axis, in arcsec.");
     nel = 1;
     userreal_tir(startinfv -> arel, &hdr -> bmaj, &nel, &def, "BMAJ=", mes);
-    
+
     sprintf(mes, "Give HPBW of the gaussian beam, minor axis, in arcsec.");
     nel = 1;
     userreal_tir(startinfv -> arel, &hdr -> bmin, &nel, &def, "BMIN=", mes);
-    
+
     sprintf(mes, "Give BPA of the gaussian beam in degrees.");
     nel = 1;
     userreal_tir(startinfv -> arel, &hdr -> bpa, &nel, &def, "BPA=", mes);
-    
+
     /* Convert from arcsec to grids */
     hdr -> bmaj = hdr -> bmaj/hdr -> deltgridtouser[0];
     hdr -> bmin = hdr -> bmin/hdr -> deltgridtouser[0];
   }
-  
+
   /* Check for the correct intensity units */
   err = 0;
   /* for (j = 0; j < 20; ++j) */
@@ -7946,27 +7946,27 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
   /*   outerr = 1; */
   /*   error_tir(&outerr, "No units in the maps found."); */
   /* } */
-  
+
   /* Allocate memory for cwlo and -hi */
   /* if (!(hdr -> cwhi = (int *) malloc(hdr -> nsubs*sizeof(int)))) */
   /*   goto error; */
   /* if (!(hdr -> cwlo = (int *) malloc(hdr -> nsubs*sizeof(int)))) */
   /*   goto error; */
-  
+
   /* check the subset grid and set it: The grid value is the relative position with respect to the reference pixel as integer */
   /* for (i = 0; i < 0+hdr -> nsubs; ++i) { */
   /*   hdr -> cwlo[i] = gdsc_fill_tir(hdr -> inset,hdr -> insubs+i, blo); */
   /*   hdr -> cwhi[i] = gdsc_fill_tir(hdr -> inset,hdr -> insubs+i, bhi); */
   /* } */
-  
+
   /* Input of rms */
   err = 0;
   /* level = 0 ; */
   /* gdsd_rreal_tir(hdr -> inset, "RMS", &level, &hdr -> rms, &err); */
   /* if (err < 0) { */
   def = 4;
-  
-  
+
+
   sprintf(mes, "Give sigma_rms for input map in map units. [Jy/beam]");
   nel = 1;
   userreal_tir(startinfv -> arel, &hdr -> rms, &nel, &def, "RMS=", mes);
@@ -7979,11 +7979,11 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
     userreal_tir(startinfv -> arel, &hdr -> rms, &nel, &def, "RMS=", mes);
   }
   /* } */
-  
-  /* Determine conversion factor for HI column density => intensity */  
+
+  /* Determine conversion factor for HI column density => intensity */
   hdr -> itou = HICONVERSION;
-  
-  
+
+
   sprintf(mes, "Give intensity to surface density conversion");
   def = 2;
   nel = 1;
@@ -7995,13 +7995,13 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
       cancel_tir(startinfv -> arel, "ITOU=", 2);
       def = 1;
     }
-    else 
+    else
       err = 1;
   }
-  
+
   /* Get rest frequency */
   hdr -> rfreq = HIRESFREQ;
-  
+
   sprintf(mes, "Give rest frequency");
   def = 2;
   nel = 1;
@@ -8013,44 +8013,44 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
       cancel_tir(startinfv -> arel, "RFREQ=", 2);
       def = 1;
     }
-    else 
+    else
       err = 1;
   }
-  
+
   /*******************/
   /*******************/
-  
-  
+
+
   /* Don't try to do this again! */
   /*  hdr -> cd2i = 1.5147016e-21 + fabs(hdr -> cdelt3)*pow(hdr -> cdelt3*hdr -> midgrid/hdr -> freq0+2.9979246e5/hdr -> drval3, 2); */
   /* Determine conversion factor for Jy/arcsec^2 to Jy/pixel, deltgridtouser is in arcsec */
   hdr -> jygridtouser = hdr -> deltgridtouser[2]/fabs(hdr -> deltgridtouser[0]*hdr -> deltgridtouser[1]);
-  
-  
+
+
   /* This could in principle be done elsewhere..., but we can also place it here */
   hdr -> nprof = hdr -> bsize1*hdr -> bsize2;
-  
+
   /* Reserve memory */
   /* if (!(hdr -> ori = (float *) malloc_engalmod(hdr -> bcsize1*hdr -> bsize2*hdr -> nsubs*sizeof(float)))) { */
   /*   dev = 0; */
   /*   anyout_tir(&dev, "Not enough memory to hold a single cube"); */
   /*   goto error; */
   /* } */
-  
+
   /* if (!(hdr -> model = (float *) malloc_engalmod(hdr -> bcsize1*hdr -> bsize2*hdr -> nsubs*sizeof(float)))) { */
   /*   anyout_tir(&dev, "Not enough memory to hold two cubes"); */
   /*   goto error; */
   /* } */
-  
+
   /* Default is nothing */
   /* for (i = 0; i < 200; ++i) */
   /*   hdr -> outset[i] = ' '; */
   /* hdr -> outset[200] = '\0'; */
   /* def = 5; */
-  
+
   /* class = 1; */
   /* i = 0; */
-  
+
   /* sprintf(mes, "Give output set"); */
   /* while(!(i)) { */
   /*   userchar_tir(hdr -> outset, &class, &def, "OUTSET=", mes); */
@@ -8065,22 +8065,22 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
   /* 	++i; */
   /* } */
   /* termsinglestr(hdr -> outset); */
-  
+
   /* If there is an outset, we will open it, else we terminate it */
   /* if ((hdr -> outset[0])) { */
   /*   i = 1; */
   /* Copy the information of inset to outset prior to reading it */
   /* gdsasn_tir("INSET=", "OUTSET", &i); */
   /* gdscss_tir("OUTSET", blo, bhi); */
-  
+
   /* def = 102; */
   /* class = 0; */
   /* gdsout_tir(hdr -> outset, outsubs, &hdr -> nsubs, &def, "OUTSET", "mes", &class , outaxperm, outaxcount, &maxnax); */
-  
+
   /* We want to get the number to refresh the output cube */
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "OUTSET", "Give output cube name.", 0, NULL, 0, 1, 0, 0, &keypres, &nread, &nreturned, &stringlist))
     goto error;
-  
+
   if ((stringlist[0])) {
     if (!(hdr -> outset = simparse_copystring(stringlist[0])))
       goto error;
@@ -8089,19 +8089,19 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
     if (!(hdr -> outset = simparse_copystring("")))
       goto error;
   }
-  
+
   freeparsed(stringlist);
-  
+
   /* Default */
   hdr -> outcubup = 1000000;
-  
+
   def = 2;
   nel = 1;
   class = 0;
-  
+
   while (!(class)) {
     userint_tir(startinfv -> arel, &(hdr -> outcubup), &nel, &def, "OUTCUBUP=", mes);
-    
+
     if (hdr -> outcubup < 1) {
       sprintf(mes, "Outcubup is least 1!");
       cancel_tir(startinfv -> arel, "OUTCUBUP=", 2);
@@ -8112,12 +8112,12 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
       ++class;
     }
   }
-  
-  
-  
+
+
+
   /* Finished */
   return hdr;
-  
+
  error:
   if (hdr)
     destroy_hdrinf(hdr);
@@ -8126,7 +8126,7 @@ static hdrinf *get_hdrinf(startinf *startinfv, loginf *log, hdrinf *hdrinfv)
     destroy_loginf(log, 1);
   if (stringlist)
     freeparsed(stringlist);
-  
+
   return NULL;
 }
 
@@ -8247,7 +8247,7 @@ static ringparms *create_ringparms(int ndisks)
 
 
   return create_ringparms;
-  
+
  error:
   destroy_ringparms(create_ringparms);
   return NULL;
@@ -8261,7 +8261,7 @@ static ringparms *create_ringparms(int ndisks)
 
 /* Destroys a ringparms structure */
 void destroy_ringparms(ringparms *prm)
-{  
+{
 
   int i;
 
@@ -8290,7 +8290,7 @@ void destroy_ringparms(ringparms *prm)
     }
     free(prm -> gsl_interp_accelarray);
   }
-    
+
   if ((prm -> smothcar))
     free(prm -> smothcar);
   if ((prm -> gsl_indinterparray)) {
@@ -8322,7 +8322,7 @@ void destroy_ringparms(ringparms *prm)
     free(prm -> ltype);
   if (prm -> cflux)
     free(prm -> cflux);
-  
+
   /* GJnew */
   if (prm -> allnpoints)
     free(prm -> allnpoints);
@@ -8506,7 +8506,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
   ringparms *rpm;
   double globin[3];  /* For the conversion of coordinates in map units */
   double globout[3]; /* For the conversion of coordinates in map units */
-  
+
   /* Private control and changing variables */
   int def;      /* Any default mode */
   int nel;      /* Number of elements */
@@ -8540,14 +8540,14 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
   def = 2;
   ndisks = 0;
   nel = 1;
-  
+
   userint_tir(startinfv -> arel, &ndisks, &nel, &def, "NDISKS=", mes);
-  
+
   if (ndisks < 1)
     ndisks = NDISKS;
-  
+
   /* Get the struct */
-  if (!(rpm = create_ringparms(ndisks))) 
+  if (!(rpm = create_ringparms(ndisks)))
     goto error;
   }
   else {
@@ -8565,20 +8565,20 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
     /* Get the number of rings */
     /* Default */
     def = 0;
-    
+
     i = 0;
     sprintf(mes, "Give number of rings.");
     while (!(i)) {
       nel = 1;
       userint_tir(startinfv -> arel, &rpm -> nur, &nel, &def, "NUR=", mes);
-      
+
       if (rpm -> nur < 2) {
 	sprintf(mes, "At least 2!");
 	cancel_tir(startinfv -> arel, "NUR=", 2);
 	i = 0;
       }
       else {
-	
+
 	/* Do some allocation that hides some variables in this function */
 	if (!(rpm -> par = (double *) malloc((rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(double))))
 	  goto error;
@@ -8597,7 +8597,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 	for (j = 0; j < rpm -> ndisks*NDPARAMS; ++j)
 	  rpm -> gsl_interparray[j] = NULL;
 	if (!(rpm -> gsl_interp_accelarray = (gsl_interp_accel **) malloc(rpm -> ndisks*NDPARAMS*sizeof(gsl_interp_accel *))))
-	      goto error;	
+	      goto error;
 	for (j = 0; j < rpm -> ndisks*NDPARAMS; ++j)
 	  rpm -> gsl_interp_accelarray[j] = NULL;
 	if (!(rpm -> smothcar = (int *) malloc(rpm -> ndisks*NDPARAMS*sizeof(int))))
@@ -8607,7 +8607,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 	for (j = 0; j < rpm -> ndisks*NDPARAMS; ++j)
 	  rpm -> gsl_indinterparray[j] = NULL;
 	if (!(rpm -> gsl_indinterp_accelarray = (gsl_interp_accel **) malloc(rpm -> ndisks*NDPARAMS*sizeof(gsl_interp_accel *))))
-	      goto error;	
+	      goto error;
 	for (j = 0; j < rpm -> ndisks*NDPARAMS; ++j)
 	  rpm -> gsl_indinterp_accelarray[j] = NULL;
 	if (!(rpm -> smothindcar = (int *) malloc(rpm -> ndisks*NDPARAMS*sizeof(int))))
@@ -8620,7 +8620,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 	  goto error;
 	if (!(rpm -> radar = (double *) malloc(rpm -> nur * sizeof(double))))
 	  goto error;
-	
+
 	++i;
       }
     }
@@ -8634,11 +8634,11 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
       goto error;
     if (!(log -> regist   = (double *) malloc (((NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS+OUTTABNR) * sizeof(double))))
       goto error;
-    
+
     /* Get the subring width in grid units */
     /* Default */
     rpm -> radsep = 0.75;
-    
+
     sprintf(mes, "Give subring width (grids)");
     def = 2;
     nel = 1;
@@ -8650,14 +8650,14 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 	cancel_tir(startinfv -> arel, "RADSEP=", 2);
 	def = 1;
       }
-      else 
+      else
 	err = 1;
     }
 
     /* Get the default interpolation method */
     /* 0: linear, 1: natural spline, default 0 */
     inty = INTERP_LINEAR;
-    
+
     sprintf(mes, "Give default interpolation type");
     def = 2;
     nel = 1;
@@ -8669,7 +8669,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 	cancel_tir(startinfv -> arel, "INTY=", 2);
 	def = 1;
       }
-      else 
+      else
 	err = 1;
     }
 
@@ -8689,7 +8689,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 	intytype = gsl_interp_linear;
       }
       break;
-    
+
     case INTERP_AKIMA:
       if (rpm -> nur > 4) {
 	intytype = gsl_interp_akima;
@@ -8729,7 +8729,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
         /* Get the default interpolation method */
     /* 0: linear, 1: natural spline, default 0 */
     indinty = inty;
-    
+
     sprintf(mes, "Give default interpolation type");
     def = 2;
     nel = 1;
@@ -8741,7 +8741,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 	cancel_tir(startinfv -> arel, "INDINTY=", 2);
 	def = 1;
       }
-      else 
+      else
 	err = 1;
     }
 
@@ -8760,7 +8760,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 	indintytype = gsl_interp_linear;
       }
       break;
-    
+
     case INTERP_AKIMA:
       if (rpm -> nur > 4) {
 	indintytype = gsl_interp_akima;
@@ -8798,34 +8798,34 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
     }
 
     /* Now get all sorts of parameters */
-    
+
     /* Radii is the most complicated */
     err = 0;
     while (!(err)) {
       get_parameter_double(startinfv, log, hdr, rpm, "Give Radii. (arcsec)", "RADI=", PRADI, 4);
-      
+
       /* Enforce the first radius to be 0 */
       if (rpm -> par[0] != 0.0) {
 		  sprintf(mes, "First radius has to be 0.0");
 		  anyout_tir(&err, mes);
-		  
-		  /* The difference to reject is unclear to me */  
+
+		  /* The difference to reject is unclear to me */
 		  cancel_tir(startinfv -> arel, "RADI=", 2);
       }
       else {
-		  
+
 		  /* Now check whether the modpar array can be constructed */
 		  /* Identify the number of subrings, the max radius of a subring is the max radius in parameter struct plus the half of the width of a subring, which is ususally 0.75 pixels  */
 		  rpm -> nr = ((int) (rpm -> par[(PRADI+1)*rpm -> nur-1]/rpm -> radsep-0.5))+1;
-		  
+
 		  /* ndisk construction */
 		  /* Allocation of subring array */
 		  if (!(rpm -> modpar = (float *) malloc((NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nr*sizeof(float))))
 			 goto error;
-		  
+
 		  err = 1;
 		  for (i = 1; i < rpm -> nur; ++i) {
-			 
+
 			 /* Check if the choice of radii is sensible */
 			 if ((rpm -> par[PRADI*rpm -> nur+i-1]+rpm -> radsep) >= (rpm -> par[PRADI*rpm -> nur+i])) {
 				sprintf(mes, "Radius separation too small or radii not in increasing order.");
@@ -8917,9 +8917,9 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
   get_parameter_double(startinfv, log, hdr, rpm, "Give Right Ascensions of ring centres. (degrees)",                "XPOS=", PXPOS, 2);
   get_parameter_double(startinfv, log, hdr, rpm, "Give Declinations of ring centres. (degrees)",                    "YPOS=", PYPOS, 2);
   get_parameter_double(startinfv, log, hdr, rpm, "Give systemic velocities of rings in (km/s).",                    "VSYS=", PVSYS, 2);
-  
-  /* We do this ndisks time */										 
-  for (disk = 1; disk < rpm -> ndisks; ++disk) {									 
+
+  /* We do this ndisks time */
+  for (disk = 1; disk < rpm -> ndisks; ++disk) {
     sprintf(placer, "VROT_%i=", disk+1);get_parameter_double(startinfv, log, hdr, rpm, "Give circular velocities. (km/s)",                                placer, PRPARAMS+disk*NDPARAMS+PVROT, 2);
     sprintf(placer, "VRAD_%i=", disk+1);get_parameter_double(startinfv, log, hdr, rpm, "Give radial velocities. (km/s)",                                  placer, PRPARAMS+disk*NDPARAMS+PVRAD, 2);
     sprintf(placer, "VVER_%i=", disk+1);get_parameter_double(startinfv, log, hdr, rpm, "Give vertical velocities. (km/s)",                                placer, PRPARAMS+disk*NDPARAMS+PVVER, 2);
@@ -9006,9 +9006,9 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
       globin[0] = rpm -> par[(PRPARAMS+disk*NDPARAMS+PXPOS)*rpm -> nur+i];
       globin[1] = rpm -> par[(PRPARAMS+disk*NDPARAMS+PYPOS)*rpm -> nur+i];
       globin[2] = rpm -> par[(PRPARAMS+disk*NDPARAMS+PVSYS)*rpm -> nur+i];
-      
+
       globtointern(globin, globout, hdr);
-      
+
       rpm -> par[(PRPARAMS+disk*NDPARAMS+PXPOS)*rpm -> nur+i] = globout[0];
       rpm -> par[(PRPARAMS+disk*NDPARAMS+PYPOS)*rpm -> nur+i] = globout[1];
       rpm -> par[(PRPARAMS+disk*NDPARAMS+PVSYS)*rpm -> nur+i] = globout[2];
@@ -9018,7 +9018,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
   /* Global velocity dispersion */
   /* Default */
     def = 0;
-  
+
 
   sprintf(mes, "Give global velicity dipersion (km/s)");
   nel = 1;
@@ -9032,7 +9032,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
     cancel_tir(startinfv -> arel, "CONDISP=", 0);
   }
   userdble_tir(startinfv -> arel, rpm -> par+(pcondisp)*rpm -> nur, &nel, &def, "CONDISP=", mes);
-  
+
   /* it should be positive */
   while (rpm -> par[(pcondisp)*rpm -> nur] < 0) {
     sprintf(mes, "Negative velocity dispersion not allowed.");
@@ -9049,7 +9049,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 
   sprintf(mes, "Give type of layer. [list options]");
   nel = 1;
- 
+
   if (!startinfv -> firstrun) {
     cancel_tir(startinfv -> arel, "LTYPE=", 0);
   }
@@ -9071,7 +9071,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 
   /* Do this ndisks-1 times more */
   for (i = 1; i < rpm -> ndisks; ++i) {
-    
+
     sprintf(placer, "LTYPE_%i=", i+1);
     if (!startinfv -> firstrun) {
       cancel_tir(startinfv -> arel, placer, 0);
@@ -9080,10 +9080,10 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
     /* The layer type */
     rpm -> ltype[i] = rpm -> ltype[i-1];
     def = 2;
-    
+
     sprintf(mes, "Give type of layer %i. [list options]", i+1);
     nel = 1;
-    
+
     dummy = 0;
 
     while(!(dummy)) {
@@ -9121,7 +9121,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
   }
 
   for (i = 1; i < rpm -> ndisks; ++i) {
-    
+
     sprintf(placer, "CFLUX_%i=", i+1);
     if (!startinfv -> firstrun) {
       cancel_tir(startinfv -> arel, placer, 0);
@@ -9129,8 +9129,8 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 
       rpm -> cflux[i] = rpm -> cflux[i-1];
       def = 2;
-    
-    
+
+
     sprintf(mes,"Cloud flux (%i) in (Jy*km/s) [1E-5]", i+1);
     nel = 1;
     userdble_tir(startinfv -> arel, rpm -> cflux+i, &nel, &def, placer, mes);
@@ -9155,7 +9155,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
   sprintf(mes, "Give noise weighting (0.0 means inf). [%f]", rpm -> weight);
   nel = 1;
   userreal_tir(startinfv -> arel, &rpm -> weight, &nel, &def, "WEIGHT=", mes);
-  
+
   /* Input PENALTY */
     rpm -> penalty = 1.0;
     def = 2;
@@ -9163,7 +9163,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
     sprintf(mes, "Give Penalty for outlyers [%f]", rpm -> penalty);
   nel = 1;
   userdble_tir(startinfv -> arel, &rpm -> penalty, &nel, &def, "PENALTY=", mes);
-  
+
   /* Now we recalculate the penalty */
   rpm -> penalty = rpm -> cflux[0]*rpm -> penalty*SQRTOFPIHALF*((double) hdr -> bmaj)*((double) hdr -> bmaj)*((double) hdr -> bmin)*((double) hdr -> bmin)*HPBWTOSIGMATOFORTH/((double)(hdr -> rms*hdr -> rms));
 
@@ -9177,10 +9177,10 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 
   def = 2;
   nel = 1;
-  pbtel = 0;  
-  
-  userint_tir(startinfv -> arel, &pbtel, &nel, &def, "PBTEL=", mes);  
-  
+  pbtel = 0;
+
+  userint_tir(startinfv -> arel, &pbtel, &nel, &def, "PBTEL=", mes);
+
   /* We only take action if something gets specified */
   if ((pbtel > 0) && (pbtel <= PBNTELS)) {
 
@@ -9196,16 +9196,16 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
     def = 2;
     nel = 2;
     userdble_tir(startinfv -> arel, pbrefpix, &nel, &def, "PBREFPIX=", mes);
-    
+
     /* Ask for reference frequency */
     sprintf(mes, "Give pbc reference frequency (GHz) [1.4]");
     pbreffreq = HIRESFREQ*1.0E-9;
     def = 2;
     nel = 2;
     err = 1;
-    
+
     userdble_tir(startinfv -> arel, &pbreffreq, &nel, &def, "PBREFFREQ=", mes);
-    
+
     switch(pbtel) {
     case PBWSRT:
     case PBWSRT_2:
@@ -9218,15 +9218,15 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 	  anyout_tir(&dev, "Must lie between 0.5 and 8.0");
 	  cancel_tir(startinfv -> arel, "PBREFFREQ=", 2);
 	  pbreffreq = HIRESFREQ*1.0E-9;
-	  userdble_tir(startinfv -> arel, &pbreffreq, &nel, &def, "PBREFFREQ=", mes);	
-	}    
+	  userdble_tir(startinfv -> arel, &pbreffreq, &nel, &def, "PBREFFREQ=", mes);
+	}
       }
       break;
-      
+
     default:
       ;
     }
-   
+
     switch(pbtel) {
     case PBWSRT:
     case PBWSRT_2:
@@ -9238,7 +9238,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
       /* neclecting the frequency dependency results in an error of 1-2/1000 at half power. The uncertainty in the parameters is much larger */
       /* An experiment shows that this conforms with the miriad primary beam correction for the WSRT at a level of 0.002 percent, so to float precision level */
       /* A communication with T.A. results in the fact that one should use c = 68 instead. Details are here:  Popping & Braun 2008, A&A 479, 903 */
-          
+
       switch(pbtel) {
       case PBWSRT:
 	pbwsrtconst = PBWSRTCONST_1;
@@ -9258,12 +9258,12 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 	   pbradius = (pbwsrtconst*pbreffreq*sqrt(pbdoublev1*pbdoublev1+pbdoublev2*pbdoublev2));
 	  if (pbradius < PIHALF)
 	    hdr -> primbeam[i+hdr -> bsize1*j] = pow(cos(pbradius),6);
-	  else 
+	  else
 	    hdr -> primbeam[i+hdr -> bsize1*j] = 0.0;
 	}
-      } 
+      }
       break;
-      
+
     default:
       break;
     }
@@ -9311,7 +9311,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 /*       i = 1; */
 /*   } */
   mode = rpm -> mode*2;
-  if ((rpm -> weight)) 
+  if ((rpm -> weight))
     ++mode;
 
 /*   sprintf(obsmes, */
@@ -9336,7 +9336,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 /*   anyout_tir(&obsint, obsmes); */
 
   /* Try to initialise the chisquare machinery */
-  while (mode >= 0 && mode < 8) {   
+  while (mode >= 0 && mode < 8) {
     if (!initchisquare_c(hdr -> oric -> points, hdr -> modelc -> points, hdr -> bsize1, hdr -> bsize2, hdr -> nsubs, hdr -> bmaj, hdr -> bmin, hdr -> bpa, 1, rpm -> cflux[0], hdr -> rms, mode, 2*(hdr -> bsize1/2+1), &hdr -> chi2, rpm -> weight, rpm -> inimode, log -> ncores)) {
     mode = mode-2;
     j = 0;
@@ -9349,11 +9349,11 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
   j = 4;
   if (mode < 8)
     error_tir(&j,"Error initializing chi^2 derivation control.");
-  
+
   /* Write inset data into ori array  (has been done since long)*/
   /* nel = 0; */
   /* def = 4; */
-  
+
   /* for (i = 0; i < hdr -> nsubs; ++i) { */
   /*   j=i*hdr -> nprof; */
   /*   gdsi_read_tir(hdr -> inset, hdr -> cwlo+i, hdr -> cwhi+i, hdr -> ori+j, &hdr -> nprof, &k, &nel); */
@@ -9361,10 +9361,10 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
   /*     error_tir(&def, "Unable to read inset."); */
   /*   } */
   /* } */
-  
+
   /* close inset (not needed anymore ?) */
   /* gds_close_tir(hdr -> inset, &def); */
-  
+
   /* Now the cube has to be rearranged, because it is padded */
   /* for(k = hdr -> nsubs-1; k >= 0; --k) { */
   /*   for(j = hdr -> bsize2-1; j >= 0; --j) { */
@@ -9375,11 +9375,11 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
   /* } */
 
   /* The cube has changed, therefore we need to do this */
-  engalmod_chflgs(); 
+  engalmod_chflgs();
 
   /* Also, we change the nprof */
   hdr -> nprof = hdr -> bcsize1*hdr -> bsize2;
-  
+
 
   /* We initialise the sd array */
   for (i = 0; i < rpm -> ndisks; ++i) {
@@ -9401,9 +9401,9 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
   /* First from the log if present */
     rpm -> iseed2 = 1803;
     def = 2;
-   
+
   sprintf(mes, "Give one integer to initialize RNG. [1803]");
-  
+
   if (!startinfv -> firstrun)
     cancel_tir(startinfv -> arel, "ISEED=", 0);
 
@@ -9424,18 +9424,18 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
   }
 
   return rpm;
-  
+
   error:
   destroy_ringparms(rpm);
   if (hdr)
     destroy_hdrinf(hdr);
   if (log)
     destroy_loginf(log, rpm -> ndisks);
-  
+
   return NULL;
-  
+
   }
-  
+
   /* ------------------------------------------------------------ */
 
 
@@ -9624,7 +9624,7 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
   sprintf(mes, "Give fitting mode 2: golden section, 3: simplex [2]");
   nel = 1;
   userint_tir(startinfv -> arel, &fit -> fitmode, &nel, &def, "FITMODE=", mes);
-  
+
   if ((fit -> fitmode == METROPOLIS)) {
     sprintf(mes, "Method not existent (currently no Metropolis)");
     anyout_tir(&def, mes);
@@ -9674,26 +9674,26 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
   sprintf(mes, "Give number of loops to process. [500000]");
   nel = 1;
   userint_tir(startinfv -> arel, &fit -> loops, &nel, &def, "LOOPS=", mes);
-    
+
   /* Get the total maximum number of iterations */
   if (fit -> fitmode > GOLDEN_SECTION) {
     fit -> maxiter = 5000000;
     def = 1;
-    
+
     sprintf(mes, "Give maximum number of total iterations. [5000000]");
     nel = 1;
     userint_tir(startinfv -> arel, &fit -> maxiter, &nel, &def, "MAXITER=", mes);
-    
+
     fit -> callite = 5000000;
     def = 1;
-    
+
     sprintf(mes, "Give maximum number of steps per iteration. [5000000]");
     nel = 1;
     userint_tir(startinfv -> arel, &fit -> callite, &nel, &def, "CALLITE=", mes);
-    
+
     fit -> size = 1.0;
     def = 1;
-    
+
     sprintf(mes, "Give stop size relative to minsteps. [1.0]");
     nel = 1;
     userdble_tir(startinfv -> arel, &fit -> size, &nel, &def, "SIZE=", mes);
@@ -9732,11 +9732,11 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
     userdble_tir(startinfv -> arel, &fit -> psmv, &nel, &def, "PSMV=", mes);
 
     fit -> psnf = PSW_PSNF_DEF;
-    def = 2;    
+    def = 2;
     sprintf(mes, "Number of Evaluations from initial inertia to final inertia for PSWARM. [8000]");
     nel = 1;
     userint_tir(startinfv -> arel, &fit -> psnf, &nel, &def, "PSNF=", mes);
-    
+
     fit -> psii = PSW_PSII_DEF;
     def = 2;
     sprintf(mes, "Give initial inertia for PSWARM. [0.9]");
@@ -9750,7 +9750,7 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
     userdble_tir(startinfv -> arel, &fit -> psfi, &nel, &def, "PSFI=", mes);
 
     fit -> psid = PSW_PSID_DEF;
-    def = 2;    
+    def = 2;
     sprintf(mes, "Give increase factor for delta for grid search. [2.0]");
     nel = 1;
     userdble_tir(startinfv -> arel, &fit -> psid, &nel, &def, "PSID=", mes);
@@ -9777,22 +9777,22 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 /*   ftstab_flush_(); */
 /*   ftstab_hdlreset_(); */
 /*   hdl_init(); */
-  
+
   /* Now open the second hdu, if possible and if we expect one */
 /*   if ((log -> logname) && !(log -> logpres)) { */
-    
+
 /*      Try to open the file to check if it is already present */
 /*     log -> logpres = ftstab_fopen(log -> logname, 2, 2, 1); */
-    
+
 /*     Furthermore we will simply overwrite the extension  */
 /*     ftstab_close_(); */
 /*     ftstab_flush_();   */
 /*     ftstab_hdlreset_(); */
 /*     hdl_init(); */
 /*     log -> logpres = 1; */
-    
+
 /*   } */
-  
+
   /*****************************/
   /******* new way to read parameters ********/
   /*****************************/
@@ -9804,26 +9804,26 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
   /*   goto error; */
   /* if (!(varyhstr = getfcharray(VARYHSTRELES, NULL))) */
   /*   goto error; */
-  
+
   /* get the dcp control structure */
   if (!(decomp_controlv = decomp_init()))
     goto error;
-  
+
   /* Fill the dcp control structure with parameter information */
   if ((dec_fill(rpm, decomp_controlv)))
     goto error;
-  
+
     /* Now get the indexed parameters, for that we know only one group */
   decomp_putsep(decomp_controlv, '\0', '\0', ':');
-  
+
   errcode = 2;
-  
+
   /* Get the index array */
   neill = 0;
   while (errcode) {
-    
+
     def = 1;
-    
+
     /* nel = usertext_tir(varyhstr, &def, "VARINDX=",mes); */
     /* varyhstr[nel] = '\0'; */
     if (simparse_scn_arel_readval_string(startinfv -> arel, "VARINDX", "Give fitting index.", 0, "", 0, -1, neill, 0, &keypres, &nreadl, &nreturned, &varyhstr)) {
@@ -9836,7 +9836,7 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 	varyhstr[i] = varyhstr[i]+'A'-'a';
       ++i;
     }
-    
+
     /* Interpret this */
     if ((errcode = decomp_get(decomp_controlv, varyhstr, &decomp_listelv, 0))){
       if (errcode == 1)
@@ -9853,23 +9853,23 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
       }
     }
   }
-  
+
   /* Now use this to prepare an index and change the input method */
   decomp_index(decomp_controlv, (decomp_listelv) -> nuel, (decomp_listelv) -> poli);
-  
+
   /* Deallocate what we don't need anymore, or rather, again */
   decomp_list_dest(decomp_listelv);
   decomp_listelv = NULL;
-  
+
   errcode = 1;
   k = 0;
-  
+
   /* Get the vary array */
   neill = 0;
   while (errcode) {
     nel = 0;
     def = 1;
-    
+
     if (errcode == 2)
       cancel_tir(startinfv -> arel, "VARY=", 2);
     sprintf(mes, "Give fit parameters");
@@ -9887,7 +9887,7 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 
       /* Read in and make a decomp-interpretable string of varysing and varymult */
       nel = 0;
-      
+
       if ((errcode == 2) && (k == 1))
 	cancel_tir(startinfv -> arel, "VARYSING=", 2);
       /* sprintf(mes, "Give fit parameters, single"); */
@@ -9903,7 +9903,7 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 
       if (!(inputofvarysing = sparsenext(" \t", "", "", "", "", "", -1, &varyhstr, &anint, 1, 1)))
 	goto error;
-      
+
       if (errcode == 2 && (k == 1))
 	cancel_tir(startinfv -> arel, "VARYMULT=", 2);
       /* sprintf(mes, "Give fit parameters, multi"); */
@@ -9928,15 +9928,15 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
       }
       if (!(varyhstr = gluetodecomp(inputofvarymult, inputofvarysing)))
 	goto error;
-      
+
       if (inputofvarysing)
 	freeparsed(inputofvarysing);
       inputofvarysing = NULL;
-      
+
       if (inputofvarymult)
 	freeparsed(inputofvarymult);
       inputofvarymult = NULL;
-      
+
       k = 1;
     }
 
@@ -9947,9 +9947,9 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 	varyhstr[i] = varyhstr[i]+'A'-'a';
       ++i;
     }
-    
+
     decomp_putsep(decomp_controlv, ',', '!', ':');
-    
+
     /* Interpret this */
     if ((errcode = decomp_get(decomp_controlv, varyhstr, &decomp_listelv, 0))){
       if (errcode == 1)
@@ -9967,7 +9967,7 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
   /* We safe the varyhstr */
   fit -> varyhstr = varyhstr;
   varyhstr = NULL;
-  
+
   /* We create the index list */
   if (!(fit -> index = decomp_inlist_init()))
     goto error;
@@ -9976,11 +9976,11 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
       printf("Syntax error in VARINDX\n");
     goto error;
   }
-  
+
   /* Now that we have that array, we can get the other parameters, allocate space for that: count the numbers of parameters needed */
   k = 0;
   /* m = 0; */
-  
+
   if (decomp_listelv) {
     i = 0;
     while ((decomp_listelv+i) -> nuel != -1) {
@@ -9998,13 +9998,13 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
   /* I think this makes no sense, except to make it freeable at the end of this function */
   /* if (!(varyhstr = getfcharray(VARYHSTRELES, NULL))) */
   /*   goto error; */
-  
+
   /* Do some allocations */
-  
+
   /* Allocate the pointarray */
   if (!(pointarray = (varlel **) malloc(k*sizeof(varlel *))))
     goto error;
-  
+
   /* Allocate the other stuff */
   if (!(parmax = (double *) malloc(k*sizeof(double))))
     goto error;
@@ -10024,7 +10024,7 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
     goto error;
   if (!(mindelta = (double *) malloc(k*sizeof(double))))
     goto error;
-  
+
   /* Read in all the stuff from the logfile */
   nel = k;
 
@@ -10033,25 +10033,25 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
     goto error;
 
   /* Now read in everything from the input */
-  
-  /* Get the steps */  
+
+  /* Get the steps */
   /*   sprintf(mes, "Give maximal variation deltas (in the same order)"); */
   /*   def = 4; */
   /*   userdble_tir(startinfv -> arel, steps, &nel, &def, "STEPS=", mes); */
-  
+
   /* Now read in everything from the user input */
-  
+
   /* The default is +inf */
   /* for (i = 0; i < k; ++i) { */
   /*   parmax[i] = DBL_MAX; */
   /*   parmin[i] = -DBL_MAX; */
   /*   moderate[i] = 0; */
-    
+
   /* } */
 
   /* We have created defaults, and the user is allowed to make use of them, hence no longer def = 4, but def = 2 */
   def = 2;
-  
+
   /* Get the parmax */
   sprintf(mes, "Give parameter maximum (in the same order)");
   userdble_tir(startinfv -> arel, parmax, &nel, &def, "PARMAX=", mes);
@@ -10059,7 +10059,7 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
   /* Get the parmin */
   sprintf(mes, "Give parameter minimum (in the same order)");
   userdble_tir(startinfv -> arel, parmin, &nel, &def, "PARMIN=", mes);
-  
+
   /* Get the moderating steps */
   if (fit -> fitmode != PSWARM) {
     sprintf(mes, "Give moderating steps (in the same order)");
@@ -10096,11 +10096,11 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
   if (fit -> fitmode >= GOLDEN_SECTION) {
     /* Get the itestart */
     /* defaul = defaul%4; */
-    
+
     if (fit -> fitmode == GOLDEN_SECTION) {
       sprintf(mes, "Give starting number of iterations");
       nread = userint_tir(startinfv -> arel, itestart, &nel, &def, "ITESTART", mes);
-      
+
       /* I have no patience programming a warning. If a negative value is
 	 given, it will be changed to positive and 0 will be changed to 1 */
       for (i = 0; i < k; ++i) {
@@ -10113,18 +10113,18 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 	    itestart[i] = itestart[i-1];
 	}
       }
-      
+
       /* Get the iteend */
       /* Defaults to itestart */
       /* if (def%4 == 1) {  */
       /* 	for (i = 0; i < k; ++i) */
       /* 	  iteend[i] = itestart[i]; */
       /* } */
-      
+
       /* def = def%4; */
       sprintf(mes, "Give final number of iterations (in the same order)");
       nread = userint_tir(startinfv -> arel, iteend, &nel, &def, "ITEEND", mes);
-      
+
       /* I have no patience programming a warning. If a negative value is
 	 given, it will be changed to positive and 0 will be changed to 1 */
       for (i = 0; i < k; ++i) {
@@ -10142,7 +10142,7 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
       /* 	defaul |= 4; */
       /* if (def != 2) */
       /* 	def |= 4; */
-    
+
       /* Get the satisfaction delta*/
       sprintf(mes, "Give the satisfaction deltas (in the same order)");
       userdble_tir(startinfv -> arel, satdelt, &nel, &def, "SATDELT=", mes);
@@ -10188,7 +10188,7 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 
   if (!(fit -> varylist = create_varylist_from_dcp(hdr, decomp_listelv, parmax, parmin, moderate, delstart, delend, itestart, iteend, satdelt, mindelta, rpm -> nur, rpm -> ndisks)))
     goto error;
-  
+
   /* At the end we will check out and initialise certain behaviour dependent on the choice of parameters */
 
   /* ndisk construction */
@@ -10255,7 +10255,7 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 /*       goto error; */
 /*   } */
 /*   ftstab_close_(); */
-  
+
   /* Make a flush and don't forget to recreate the hdrlist */
 /*   ftstab_flush_(); */
 /*   ftstab_hdlreset_(); */
@@ -10271,10 +10271,10 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
   }
   fit -> dof = ((double) (hdr -> bsize1*hdr -> bsize2*hdr -> nsubs)/(CONVTHREEDBEAM*hdr -> bmaj*hdr -> bmin))-((double) i);
 
-  
+
   /* Now make the arrangements for the minimiser */
   if (fit -> fitmode > GOLDEN_SECTION) {
-    
+
     /* Count the number of parameters and put them in */
     varele = fit -> varylist;
     i = 0;
@@ -10300,7 +10300,7 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
     /* Allocate a double array for generic use */
 /*     if (!(array = (double *) malloc (i*sizeof(double)))) */
 /*       goto error; */
-    
+
     /* Now put in the start parameters, is done in genfit */
 /*     i = 0; */
 /*     varele = fit -> varylist; */
@@ -10310,8 +10310,8 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
 /*       varele = varele -> next; */
 /*     } */
 /*     gft_mst_put(fit -> gft_mstv, array, GFT_INPUT_SPAR); */
-  } 
-  
+  }
+
   /* Reset the touched array */
   for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i) {
     rpm -> chapar[i] = 1;
@@ -10343,32 +10343,32 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
   /* Deallocate things */
   if ((array))
     free(array);
-  
+
   if ((pointarray))
     free(pointarray);
-    
+
   if (varylist && varylist != fit -> varylist)
     destroyvarlel(varylist);
-  
+
   /* if ((varystr)) { */
   /*   free(varystr); */
   /* } */
-  
+
   if ((varyhstr))
     free(varyhstr);
 
   if ((flistel))
     destroyinlistel(flistel);
-  
-  if ((decomp_controlv)) 
+
+  if ((decomp_controlv))
     decomp_dest(decomp_controlv);
 
   if ((decomp_listelv))
     decomp_list_dest(decomp_listelv);
-  
+
   if (inputofvarysing)
     freeparsed(inputofvarysing);
-  
+
   if (inputofvarymult)
     freeparsed(inputofvarymult);
 
@@ -10376,63 +10376,63 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
     goto error;
 
   return fit;
-  
+
  error:
   destroy_fitparms(fit);
-  
+
   if ((adarv))
     free(adarv);
-  
+
   if (varylist)
     destroyvarlel(varylist);
-  
+
   if ((flistel))
     destroyinlistel(flistel);
-  
+
   if ((varystr)) {
     free(varystr);
   }
   if ((varyhstr))
     free(varyhstr);
-  
+
   /* Allocate the pointarray */
   if ((pointarray))
     free(pointarray);
-  
+
   /* Allocate the */
   if ((parmax))
     free(parmax);
-  
+
   /* Allocate the */
   if ((parmin))
     free(parmin);
-    
+
   /* Allocate the */
   if ((moderate))
     free(moderate);
-    
+
   /* Allocate the */
   if ((delstart))
     free(delstart);
-    
+
   /* Allocate the */
   if ((delend))
     free(delend);
-    
+
   /* Allocate the */
   if ((itestart))
     free(itestart);
-    
+
   /* Allocate the */
   if ((iteend))
     free(iteend);
-    
+
   if ((satdelt))
     free(satdelt);
-    
+
   if ((mindelta))
     free(mindelta);
-    
+
   if ((array))
     free(array);
 
@@ -10442,15 +10442,15 @@ static fitparms *get_fitparms(startinf *startinfv, loginf *log, hdrinf *hdr, rin
   if (inputofvarymult)
     freeparsed(inputofvarymult);
 
-  if ((decomp_controlv)) 
+  if ((decomp_controlv))
     decomp_dest(decomp_controlv);
-  
+
   if ((decomp_listelv))
     decomp_list_dest(decomp_listelv);
 
   /*   if ((elements)) */
   /*     free(elements); */
-      /******/   
+      /******/
 
   return NULL;
 }
@@ -10469,7 +10469,7 @@ static  varlel *create_varylist_from_dcp(hdrinf *hdr, decomp_listel *decomp_list
   /******/
 /*   int obsint = 0; */
 /*   char obsmes[200]; */
-  /******/   
+  /******/
 
   if (!(decomp_listelv))
     goto error;
@@ -10481,25 +10481,25 @@ static  varlel *create_varylist_from_dcp(hdrinf *hdr, decomp_listel *decomp_list
 
   while (((decomp_listelv+i) -> nuel) != -1) {
     varylist -> nelem = (decomp_listelv + i) -> nuel;
-    
+
     if (varylist -> nelem > 0) {
       if (!((varylist -> elements) = (int *) malloc(varylist -> nelem * sizeof(int))))
 		  goto error;
-    
-    
-      for (j = 0; j < varylist -> nelem; ++j) 
+
+
+      for (j = 0; j < varylist -> nelem; ++j)
 		  varylist -> elements[j] = (decomp_listelv+i) -> poli[j];
 
       /* poli[j] is the list of elements PXPOS etc., meaning that poli[0] points to the appropriate parameter */
-      
+
       varylist -> parmax   = simpleglobtointern(parmax[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);
-      varylist -> parmin   = simpleglobtointern(parmin[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);   
-      varylist -> moderate = moderate[(decomp_listelv + i) -> grnr]; 
-      varylist -> delstart = ddparamtointern(delstart[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks); 
-      varylist -> delend   = ddparamtointern(delend[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);   
-      varylist -> itestart = itestart[(decomp_listelv + i) -> grnr]; 
-      varylist -> iteend   = iteend[(decomp_listelv + i) -> grnr];   
-      varylist -> satdelt  = ddparamtointern(satdelt[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);  
+      varylist -> parmin   = simpleglobtointern(parmin[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);
+      varylist -> moderate = moderate[(decomp_listelv + i) -> grnr];
+      varylist -> delstart = ddparamtointern(delstart[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);
+      varylist -> delend   = ddparamtointern(delend[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);
+      varylist -> itestart = itestart[(decomp_listelv + i) -> grnr];
+      varylist -> iteend   = iteend[(decomp_listelv + i) -> grnr];
+      varylist -> satdelt  = ddparamtointern(satdelt[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);
       varylist -> mindelta = ddparamtointern(mindelta[(decomp_listelv + i) -> grnr], varylist -> nelem > 0?varylist -> elements[0]/nur+1:0, hdr, ndisks);
       varylist -> indicator = 0;
 
@@ -10507,11 +10507,11 @@ static  varlel *create_varylist_from_dcp(hdrinf *hdr, decomp_listel *decomp_list
     }
     ++i;
   }
-  
+
   varylist -> nelem = -1;
   varylist -> elements = NULL;
-  
-  
+
+
   /* The next stuff is a bit unfortunate, but we need a NULL-terminated list */
   varylist = varyfirst;
 
@@ -10527,9 +10527,9 @@ static  varlel *create_varylist_from_dcp(hdrinf *hdr, decomp_listel *decomp_list
     free(varylist);
     return NULL;
   }
-  
+
   return varyfirst;
-  
+
  error:
   destroyvarlel(varyfirst);
   return NULL;
@@ -10549,19 +10549,19 @@ static int create_defaults_from_dcp(hdrinf *hdr, decomp_listel *decomp_listelv, 
   /******/
 /*   int obsint = 0; */
 /*   char obsmes[200]; */
-  /******/   
+  /******/
 
   if (!(decomp_listelv))
     goto error;
 
   while (((decomp_listelv+i) -> nuel) != -1) {
-    
+
     if ((decomp_listelv + i) -> nuel > 0) {
 
       parnum = (decomp_listelv+i) -> poli[0];
 
       /* poli[j] is the list of elements PXPOS etc., meaning that poli[0] points to the appropriate parameter */
-      
+
       if (tirific_defaults_fitdefromident(parnum, nur, ndisks, fitmode, TIRIDENT_PARMAX  , &value)) return 1; parmax  [(decomp_listelv + i) -> grnr] = value;
       if (tirific_defaults_fitdefromident(parnum, nur, ndisks, fitmode, TIRIDENT_PARMIN  , &value)) return 1; parmin  [(decomp_listelv + i) -> grnr] = value;
       if (tirific_defaults_fitdefromident(parnum, nur, ndisks, fitmode, TIRIDENT_MODERATE, &value)) return 1; moderate[(decomp_listelv + i) -> grnr] = value;
@@ -10574,9 +10574,9 @@ static int create_defaults_from_dcp(hdrinf *hdr, decomp_listel *decomp_listelv, 
     }
     ++i;
   }
-  
+
   return 0;
-  
+
  error:
   return 1;
 }
@@ -10594,7 +10594,7 @@ static double simpleglobtointern(double value, int par, hdrinf *hdr, int ndisks)
 
   condisp = (NPARAMS + (ndisks - 1)*NDPARAMS)+1;
 
-  if (par == RADI) 
+  if (par == RADI)
     return value/hdr -> deltgridtouser[0];
 
   if (par == (condisp))
@@ -10614,13 +10614,13 @@ static double simpleglobtointern(double value, int par, hdrinf *hdr, int ndisks)
     return value/hdr -> deltgridtouser[2]*hdr -> deltgridtouser[0];
   if (par == DVVE)
     return value/hdr -> deltgridtouser[2]*hdr -> deltgridtouser[0];
-  if (par == ZDRO)    
+  if (par == ZDRO)
     return value/hdr -> deltgridtouser[0];
-  if (par == ZDRA)    
+  if (par == ZDRA)
     return value/hdr -> deltgridtouser[0];
-  if (par == ZDVE)    
+  if (par == ZDVE)
     return value/hdr -> deltgridtouser[0];
-  if (par == Z0)    
+  if (par == Z0)
      /* Formerly) deltgridtouser[2]; */
     return value/hdr -> deltgridtouser[0];
   if (par == SBR)
@@ -10680,12 +10680,12 @@ static double simpleglobtointern(double value, int par, hdrinf *hdr, int ndisks)
     return DEGTORAD*value;
   if (par == INCL)
     return DEGTORAD*value;
-  if (par == PA) 
+  if (par == PA)
     return DEGTORAD*(value+180);
     /* globtointern */
-  if (par == XPOS)   
+  if (par == XPOS)
     return (value - hdr -> userglobcrval[0])/hdr -> userglobcdelt[0]+(hdr -> setcrpix[0]-1.0);
-  if (par == YPOS)   
+  if (par == YPOS)
     return (value - hdr -> userglobcrval[1])/hdr -> userglobcdelt[1]+(hdr -> setcrpix[1]-1.0);
   if (par == VSYS)
     return (value - hdr -> userglobcrval[2])/hdr -> userglobcdelt[2]+(hdr -> setcrpix[2]-1.0);
@@ -10761,9 +10761,9 @@ static double simpleglobtointern(double value, int par, hdrinf *hdr, int ndisks)
     return value/hdr -> deltgridtouser[0];
   if (par == WM4P)
     return DEGTORAD*value;
-  if (par == LS0) 
+  if (par == LS0)
     return value/hdr -> deltgridtouser[0];
-  if (par == LC0) 
+  if (par == LC0)
     return value/hdr -> deltgridtouser[0];
 
       return value;
@@ -10800,13 +10800,13 @@ static double dparamtointern(double value, int par, hdrinf *hdr, int ndisks)
     return value/hdr -> deltgridtouser[2]*hdr -> deltgridtouser[0];
   if (DVVE == par)
     return value/hdr -> deltgridtouser[2]*hdr -> deltgridtouser[0];
-  if (ZDRO == par)    
+  if (ZDRO == par)
     return value/hdr -> deltgridtouser[0];
-  if (ZDRA == par)    
+  if (ZDRA == par)
     return value/hdr -> deltgridtouser[0];
-  if (ZDVE == par)    
+  if (ZDVE == par)
     return value/hdr -> deltgridtouser[0];
-  if (Z0 == par)    
+  if (Z0 == par)
     return value/hdr -> deltgridtouser[0];
   if (SBR == par)
     return value/hdr -> jygridtouser;
@@ -10864,11 +10864,11 @@ static double dparamtointern(double value, int par, hdrinf *hdr, int ndisks)
     return DEGTORAD*value;
   if (INCL == par)
     return DEGTORAD*value;
-  if (PA == par) 
+  if (PA == par)
     return DEGTORAD*(value+180);
-  if (XPOS == par)   
+  if (XPOS == par)
     return value/hdr -> globgridtouser[0];
-  if (YPOS == par)   
+  if (YPOS == par)
     return value/hdr -> globgridtouser[1];
   if (VSYS == par)
     return value/hdr -> globgridtouser[2];
@@ -10945,9 +10945,9 @@ static double dparamtointern(double value, int par, hdrinf *hdr, int ndisks)
     return value/hdr -> deltgridtouser[0];
   if (WM4P == par)
     return DEGTORAD*value;
-  if (LC0 == par) 
+  if (LC0 == par)
     return value/hdr -> deltgridtouser[0];
-  if (LS0 == par) 
+  if (LS0 == par)
     return value/hdr -> deltgridtouser[0];
     return value;
 }
@@ -10982,13 +10982,13 @@ static double ddparamtointern(double value, int par, hdrinf *hdr, int ndisks)
     return value/hdr -> deltgridtouser[2]*hdr -> deltgridtouser[0];
   if (DVVE == par)
     return value/hdr -> deltgridtouser[2]*hdr -> deltgridtouser[0];
-  if (Z0 == par)    
+  if (Z0 == par)
     return value/hdr -> deltgridtouser[0];
-  if (ZDRO == par)    
+  if (ZDRO == par)
     return value/hdr -> deltgridtouser[0];
-  if (ZDRA == par)    
+  if (ZDRA == par)
     return value/hdr -> deltgridtouser[0];
-  if (ZDVE == par)    
+  if (ZDVE == par)
     return value/hdr -> deltgridtouser[0];
   if (SBR == par)
     return value/hdr -> jygridtouser;
@@ -11046,11 +11046,11 @@ static double ddparamtointern(double value, int par, hdrinf *hdr, int ndisks)
     return DEGTORAD*value;
   if (INCL == par)
     return DEGTORAD*value;
-  if (PA == par) 
+  if (PA == par)
     return DEGTORAD*(value);
-  if (XPOS == par)   
+  if (XPOS == par)
     return value/hdr -> globgridtouser[0];
-  if (YPOS == par)   
+  if (YPOS == par)
     return value/hdr -> globgridtouser[1];
   if (VSYS == par)
     return value/hdr -> globgridtouser[2];
@@ -11127,9 +11127,9 @@ static double ddparamtointern(double value, int par, hdrinf *hdr, int ndisks)
     return value/hdr -> deltgridtouser[0];
   if (WM4P == par)
     return DEGTORAD*value;
-  if (LC0 == par) 
+  if (LC0 == par)
     return value/hdr -> deltgridtouser[0];
-  if (LS0 == par) 
+  if (LS0 == par)
     return value/hdr -> deltgridtouser[0];
 
     return value;
@@ -11155,7 +11155,7 @@ static double dinterntoparam(double value, int par, hdrinf *hdr, int ndisks)
 
   par = (par-NSSDPARAMS-1)%NDPARAMS + NSSDPARAMS + 1;
 
-  if (VROT == par)   
+  if (VROT == par)
     return value*hdr -> deltgridtouser[2];
   if (VRAD == par)
     return value*hdr -> deltgridtouser[2];
@@ -11167,13 +11167,13 @@ static double dinterntoparam(double value, int par, hdrinf *hdr, int ndisks)
     return value*hdr -> deltgridtouser[2]/hdr -> deltgridtouser[0];
   if (DVVE == par)
     return value*hdr -> deltgridtouser[2]/hdr -> deltgridtouser[0];
-  if (Z0 == par)     
+  if (Z0 == par)
     return value*hdr -> deltgridtouser[1];
-  if (ZDRO == par)     
+  if (ZDRO == par)
     return value*hdr -> deltgridtouser[1];
-  if (ZDRA == par)     
+  if (ZDRA == par)
     return value*hdr -> deltgridtouser[1];
-  if (ZDVE == par)     
+  if (ZDVE == par)
     return value*hdr -> deltgridtouser[1];
   if (SBR == par)
     return value*hdr -> jygridtouser;
@@ -11231,11 +11231,11 @@ static double dinterntoparam(double value, int par, hdrinf *hdr, int ndisks)
     return RADTODEG*value;
   if (INCL == par)
     return RADTODEG*value;
-  if (PA == par) 
+  if (PA == par)
     return RADTODEG*value-180;
-  if (XPOS == par)   
+  if (XPOS == par)
     return value*hdr -> globgridtouser[0];
-  if (YPOS == par)   
+  if (YPOS == par)
     return value*hdr -> globgridtouser[1];
   if (VSYS == par)
     return value*hdr -> globgridtouser[2];
@@ -11294,9 +11294,9 @@ static double dinterntoparam(double value, int par, hdrinf *hdr, int ndisks)
     return value*hdr -> deltgridtouser[2];
   if (RO4P == par)
     return RADTODEG*value;
-  if (VM0A == par) 
+  if (VM0A == par)
     return value*hdr -> deltgridtouser[2];
-  if (WM0A == par) 
+  if (WM0A == par)
     return value*hdr -> deltgridtouser[0];
   if (WM1A == par)
     return value*hdr -> deltgridtouser[0];
@@ -11314,9 +11314,9 @@ static double dinterntoparam(double value, int par, hdrinf *hdr, int ndisks)
     return value*hdr -> deltgridtouser[0];
   if (WM4P == par)
     return RADTODEG*value;
-  if (LC0 == par) 
+  if (LC0 == par)
     return value*hdr -> deltgridtouser[0];
-  if (LS0 == par) 
+  if (LS0 == par)
     return value*hdr -> deltgridtouser[0];
 
     return value;
@@ -11342,7 +11342,7 @@ static double ddinterntoparam(double value, int par, hdrinf *hdr, int ndisks)
 
   par = (par-NSSDPARAMS-1)%NDPARAMS + NSSDPARAMS + 1;
 
-  if (VROT == par)   
+  if (VROT == par)
     return value*hdr -> deltgridtouser[2];
   if (VRAD == par)
     return value*hdr -> deltgridtouser[2];
@@ -11354,13 +11354,13 @@ static double ddinterntoparam(double value, int par, hdrinf *hdr, int ndisks)
     return value*hdr -> deltgridtouser[2]/hdr -> deltgridtouser[0];
   if (DVVE == par)
     return value*hdr -> deltgridtouser[2]/hdr -> deltgridtouser[0];
-  if (ZDRO == par)     
+  if (ZDRO == par)
     return value*hdr -> deltgridtouser[1];
-  if (ZDRA == par)     
+  if (ZDRA == par)
     return value*hdr -> deltgridtouser[1];
-  if (ZDVE == par)     
+  if (ZDVE == par)
     return value*hdr -> deltgridtouser[1];
-  if (Z0 == par)     
+  if (Z0 == par)
     return value*hdr -> deltgridtouser[1];
   if (SBR == par)
     return value*hdr -> jygridtouser;
@@ -11418,11 +11418,11 @@ static double ddinterntoparam(double value, int par, hdrinf *hdr, int ndisks)
     return RADTODEG*value;
   if (INCL == par)
     return RADTODEG*value;
-  if (PA == par) 
+  if (PA == par)
     return RADTODEG*value;
-  if (XPOS == par)   
+  if (XPOS == par)
     return value*hdr -> globgridtouser[0];
-  if (YPOS == par)   
+  if (YPOS == par)
     return value*hdr -> globgridtouser[1];
   if (VSYS == par)
     return value*hdr -> globgridtouser[2];
@@ -11485,9 +11485,9 @@ static double ddinterntoparam(double value, int par, hdrinf *hdr, int ndisks)
     return value*hdr -> deltgridtouser[2];
   if (RO4P == par)
     return RADTODEG*value;
-  if (VM0A == par) 
+  if (VM0A == par)
     return value*hdr -> deltgridtouser[2];
-  if (WM0A == par) 
+  if (WM0A == par)
     return value*hdr -> deltgridtouser[0];
   if (WM1A == par)
     return value*hdr -> deltgridtouser[0];
@@ -11505,13 +11505,13 @@ static double ddinterntoparam(double value, int par, hdrinf *hdr, int ndisks)
     return value*hdr -> deltgridtouser[0];
   if (WM4P == par)
     return RADTODEG*value;
-  if (LC0 == par) 
+  if (LC0 == par)
     return value*hdr -> deltgridtouser[0];
-  if (LS0 == par) 
+  if (LS0 == par)
     return value*hdr -> deltgridtouser[0];
 
     return value;
-  
+
 }
 
 /* ------------------------------------------------------------ */
@@ -11564,7 +11564,7 @@ static void globtointern(double *invalue, double *outvalue, hdrinf *hdr)
 
   /* Now do the transformation, it should work */
   /* cotrans_tir(hdr -> inset, &hdr -> insubs[vint], dbldbl, outvalue, &transformation); */
- 
+
  /* Now we have grids that we have to transform to maps */
   /* outvalue[0] = outvalue[0]+hdr -> setcrpix[0]-1; */
   /* outvalue[1] = outvalue[1]+hdr -> setcrpix[1]-1; */
@@ -11642,7 +11642,7 @@ static void changetointern(double *params, int nur, hdrinf *hdr, int ndisks)
   int condisp, pcondisp;
 
 /*   for (i = 0; i < nur; ++i) { */
-      
+
     /* Some of the easily convertable thingies */
 /*     params[PRADI*nur+i] = dparamtointern(params[PRADI*nur+i], RADI, hdr); */
 /*   } */
@@ -11661,9 +11661,9 @@ static void changetointern(double *params, int nur, hdrinf *hdr, int ndisks)
       globin[0] = params[(j+PXPOS)*nur+i];
       globin[1] = params[(j+PYPOS)*nur+i];
       globin[2] = params[(j+PVSYS)*nur+i];
-      
+
       globtointern(globin, globout, hdr);
-      
+
       params[(j+PXPOS)*nur+i] = globout[0];
       params[(j+PYPOS)*nur+i] = globout[1];
       params[(j+PVSYS)*nur+i] = globout[2];
@@ -11756,7 +11756,7 @@ static int writemodel(hdrinf *origin, ringparms *rpm, fitparms *fit, double *par
 
   for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
     rpm -> chapar[i] = 1;
-  
+
   if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
     goto error;
 
@@ -11855,7 +11855,7 @@ static int writecoolmodel(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "COOLGAL", "Give cool name.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr))
     goto error;
-  
+
   if ((varystr[0])) {
     if (!(coolname = simparse_copystring(varystr[0]))) {
       goto error;
@@ -11866,7 +11866,7 @@ static int writecoolmodel(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
       goto error;
     }
   }
-  
+
   freeparsed(varystr);
   varystr = NULL;
 
@@ -11875,7 +11875,7 @@ static int writecoolmodel(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
     free(coolname);
     return 1;
   }
-  
+
   /* Now we want the binning number */
   sprintf(mes, "Give cool binning");
   def = 2;
@@ -11893,7 +11893,7 @@ static int writecoolmodel(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
       hdr -> coolbin = 1;
       def = 1;
     }
-  } 
+  }
 
   /* Now ask if the user wants a specific kind of beam, the default being the max beam */
   sprintf(mes, "Give 3d beam size (arcsec)");
@@ -11913,18 +11913,18 @@ static int writecoolmodel(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
       beam = hdr -> deltgridtouser[0]*((double) hdr -> bmaj);
       def = 1;
     }
-  } 
-  
+  }
+
   /* Transfer the beam into deg */
   beam = hdr -> globgridtouser[0]*beam/hdr -> deltgridtouser[0];
-  
+
   /* Make a header, if the beam is 0, we normalise everything such that the units get right */
   if (!(header = makecoolhdr(hdr, ((beam))?beam:sqrt(TWOPI)/(hdr -> globgridtouser[0]*0.42466090014401))))
     return 1;
-  
+
   /* Transfer the beam back to grid units */
   beam = beam*hdr -> coolbin/(hdr -> globgridtouser[0]);
-    
+
   /* Now arrange the cube */
   if (!(thecube = (Cube *) malloc(sizeof(Cube))))
     goto error;
@@ -11982,7 +11982,7 @@ static int writecoolmodel(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 
   for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
     rpm -> chapar[i] = 1;
-  
+
   /* correct dependent parameters */
   if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
     goto error;
@@ -11993,12 +11993,12 @@ static int writecoolmodel(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
     /* Convolve it */
   sincosofangle[0] = 0;
   sincosofangle[1] = 1;
-  
+
   if (!(expfcs = expofacsfft(0.42466090014401*beam, 0.42466090014401*beam, 0.42466090014401*beam, sincosofangle))) {
     ftsout_header_destroy(header);
     return 1;
   }
-  
+
   /* Now, the normalisation is the fifth factor, we multiply it with this */
   expfcs[4] = expfcs[4]*sqrtf(TWOPI)*0.42466090014401*beam;
 
@@ -12098,7 +12098,7 @@ static void prepout(loginf *log, hdrinf *hdr, ringparms *rpm)
    /* Put the title */
    ftstab_putcoltitl(key, i);
    fprintf(log -> tstream, "%6s", key);
-   
+
    /* Now with an underscore the radius */
    fprintf(log -> tstream, "_%04.1f ", dinterntoparam(rpm -> par[PRADI+j], RADI, hdr, rpm -> ndisks));
  }
@@ -12148,10 +12148,10 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
   size_t npar;
   size_t asize_t = 1, hereiter;
   int maxmod, anintege; /* maximum occurrence of moderate */
-  
+
   int i,j,k;
   varlel *nextvarlel;
-  
+
   /* This block is for reporting at the end only */
   char mes[2160]; /* Any message: this is really not clever hardcoding. For many disks this will cause a crash */
   int dev = 1;
@@ -12169,7 +12169,7 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
       maxmod = nextvarlel -> moderate;
     nextvarlel = nextvarlel -> next;
   }
-  
+
   /* Now ensure that the indexed parameters are aligned */
   for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
     rpm -> chapar[i] = chkchangep(fit -> varylist, fit -> fitmode, i, rpm -> nur);
@@ -12179,32 +12179,32 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
     goto error;
 
   interpover(rpm, rpm -> radsep, 0, NULL, fit -> index);
-  
+
   /* The degrees of freedom are determined by the amount of variable
      parameters, we do it VERY roughly. If there is a parameter varied
      twice, this is not true anymore. Independent pixels are
      determined by the assumption that HPBW in v is two pixels */
   indpoints = (double) (hdr -> bsize1*hdr -> bsize2*hdr -> nsubs)/(CONVTHREEDBEAM*hdr -> bmaj*hdr -> bmin);
   gft_mst_put(fit -> gft_mstv, &indpoints, GFT_INPUT_INDPOINTS);
-      
+
   /* Get the number of function calls per iteration */
   hereiter = fit -> callite;
   gft_mst_put(fit -> gft_mstv, &hereiter, GFT_INPUT_NCALLS_ST);
-    
+
   /* Do the first initialisation */
   gft_mst_act(fit -> gft_mstv, GFT_ACT_INIT);
-  
+
   /* Now check if there are enough loops, iterations, and parameters to fit */
   if (npar > 0 && fit -> loops > 0 && fit -> maxiter > 0) {
-    
+
     /* allocate */
     if (!(dblarray = (double *) malloc(npar*sizeof(double))))
       goto error;
-    
+
     /* The stopsize is 1 */
     *dblarray = fit -> size;
     gft_mst_put(fit -> gft_mstv, dblarray, GFT_INPUT_STOPSIZE);
-    
+
     /* Get the number of total iterations left to be made */
     hereiter = fit -> maxiter;
     gft_mst_put(fit -> gft_mstv, &hereiter, GFT_INPUT_NITERS);
@@ -12221,10 +12221,10 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
       *dblarray = fit -> psfi; gft_mst_put(fit -> gft_mstv, dblarray, GFT_INPUT_PSFININ);
       *dblarray = fit -> psid; gft_mst_put(fit -> gft_mstv, dblarray, GFT_INPUT_PSINCDE);
       *dblarray = fit -> psdd; gft_mst_put(fit -> gft_mstv, dblarray, GFT_INPUT_PSDECDE);
-    }  
+    }
     /* As long as there is moderation, we do this */
     while (fit -> loopnr <= fit -> loops && fit -> loopnr <= maxmod) {
-      
+
      /* The first guess is in rpm -> par */
       nextvarlel = fit -> varylist;
       i = 0;
@@ -12234,10 +12234,10 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
 	++i;
       }
       gft_mst_put(fit -> gft_mstv, dblarray, GFT_INPUT_SPAR);
-      
+
       /* Choose the origin to be identical */
       gft_mst_put(fit -> gft_mstv, dblarray, GFT_INPUT_OPAR);
-      
+
       /* Calculate the start deltas */
       nextvarlel = fit -> varylist;
       i = 0;
@@ -12263,10 +12263,10 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
       /* Put the number of loops to 1 */
       asize_t = 1;
       gft_mst_put(fit -> gft_mstv, &asize_t, GFT_INPUT_LOOPS);
-      
+
       /* Now DO it */
       gft_mst_act(fit -> gft_mstv, GFT_ACT_START);
-       
+
       /* At the end, in this loop, copy the results to the parameters */
       gft_mst_get(fit -> gft_mstv, dblarray, GFT_OUTPUT_SOLPAR);
 
@@ -12274,7 +12274,7 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
       j = 0;
       while ((nextvarlel)) {
 	change = dblarray[j] - rpm -> par[nextvarlel -> elements[0]];
-	
+
 	/* Every adressant of elements will be changed by the same amount */
 	for (i = 0; i < nextvarlel -> nelem; ++i)
 	  rpm -> par[nextvarlel -> elements[i]] = rpm -> par[nextvarlel -> elements[i]]+change;
@@ -12286,17 +12286,17 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
       for (i = rpm -> nur*NSSDPARAMS; i < rpm ->nur *(NSSDPARAMS+NDPARAMS*rpm -> ndisks); ++i)
 	rpm -> chapar[i] = chkchangep(fit -> varylist, fit -> fitmode, i, rpm -> nur);
       /*    rpm -> chapar[i] = 1; */
-      
+
       if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
 	goto error;
-      
+
       ++fit -> loopnr;
     }
-    
+
     /* The rest of the loops is run within the gft, possibly getting errors */
-    
+
     if (fit -> loopnr <= fit -> loops) {
-      
+
       /* The first guess is in rpm -> par */
       nextvarlel = fit -> varylist;
       i = 0;
@@ -12306,10 +12306,10 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
 	++i;
       }
       gft_mst_put(fit -> gft_mstv, dblarray, GFT_INPUT_SPAR);
-      
+
       /* Choose the origin to be identical */
       gft_mst_put(fit -> gft_mstv, dblarray, GFT_INPUT_OPAR);
-      
+
       /* Get the start deltas */
       nextvarlel = fit -> varylist;
       i = 0;
@@ -12319,7 +12319,7 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
 	++i;
       }
       gft_mst_put(fit -> gft_mstv, dblarray, GFT_INPUT_DPAR);
-      
+
       /* Calculate the satisfaction deltas or grid normalisation */
       /* ERROR SOURCE: This is done many times, but positioning it in front of the loops will lead to a segfault. This is a noted but in gft */
       nextvarlel = fit -> varylist;
@@ -12334,14 +12334,14 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
       /* Put the number of loops to the remaining number of loops */
       asize_t = fit -> loops - fit -> loopnr+1;
       gft_mst_put(fit -> gft_mstv, &asize_t, GFT_INPUT_LOOPS);
-      
+
       /* Now DO it */
       gft_mst_act(fit -> gft_mstv, GFT_ACT_START);
     }
   }
   else {
     /* No iterations have been made, which means that we have to do something */
-    
+
     i = gft_mst_act(fit -> gft_mstv, GFT_ACT_INIT);
 
     /* Some initialisation here? */
@@ -12358,7 +12358,7 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
     gft_mst_get(fit -> gft_mstv, &fit -> mon_stopsize  , GFT_OUTPUT_STOPSIZE);
     fit -> mon_maxiter = fit -> maxiter;
     fit -> mon_loops = fit -> loops;
-    
+
     varele = fit -> varylist;
     i = 0;
     if (fit -> mon_npar_cur > -1) {
@@ -12371,7 +12371,7 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
     else {
       sprintf(fit -> mon_key,"GEN");
     }
-    
+
     fit -> mon_dsize = ddinterntoparam(fit -> mon_dsize, (*varele -> elements)/rpm -> nur+1, hdr, rpm -> ndisks);
     for (k = 0; k < fit -> mon_npar; ++k) {
       fit -> mon_dpar[k] = ddinterntoparam(fit -> mon_dpar[k], (*varele -> elements)/rpm -> nur+1, hdr, rpm -> ndisks);
@@ -12417,22 +12417,22 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
 	    (double) fit -> mon_repnpoints[0]);
     for (disk = 1; disk < rpm -> ndisks; ++disk) {
       length = strlen(mes);
-      sprintf(mes+length, 
+      sprintf(mes+length,
 	      "/%.1E",       /* Number of pointsources */
 	      (double) fit -> mon_repnpoints[disk]);
     }
     length = strlen(mes);
-    sprintf(mes+length, 
+    sprintf(mes+length,
 	    " F:%+.1E",     /* Total flux */
 	    fit -> mon_totalflux[0]);
     for (disk = 1; disk < rpm -> ndisks; ++disk) {
       length = strlen(mes);
-      sprintf(mes+length, 
+      sprintf(mes+length,
 	      "/%+.1E",
 	      fit -> mon_totalflux[disk]);
     }
     length = strlen(mes);
-    sprintf(mes+length, 
+    sprintf(mes+length,
 	    " C:%.3E "          /* current chisquare */
 /* 	    "B:%.3E "  */         /* current best (solution) chisquare */
 	    "S:%+.1E",      /* Current size */
@@ -12442,7 +12442,7 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
 	    );
   }
   else {
-    sprintf(mes, "Start\n");                   
+    sprintf(mes, "Start\n");
   }
   anyout_tir(&dev, mes);
 
@@ -12478,7 +12478,7 @@ static int genfit(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm,
   }
 
   fit -> mon_dsize = ddinterntoparam(fit -> mon_dsize, (*varele -> elements)/rpm -> nur+1, hdr, rpm -> ndisks);
-  
+
   for (k = 0; k < fit -> mon_npar; ++k) {
     fit -> mon_dpar[k] = ddinterntoparam(fit -> mon_dpar[k], (*varele -> elements)/rpm -> nur+1, hdr, rpm -> ndisks);
   }
@@ -12526,11 +12526,11 @@ static double gchsq_gen_start(double *vector, void *rest)
   /* Change them */
     /* If they get out of range, we multiply the chisquare by OUTRANGEFAC */
   chimult = pow(OUTRANGEFAC,chprm_gen(vector, adarv -> fit -> varylist, adarv -> rpm -> par));
-  
+
   /* Now ensure that the indexed parameters are aligned */
   for (i = adarv -> rpm -> nur*NSSDPARAMS; i < adarv -> rpm ->nur *(NSSDPARAMS+NDPARAMS*adarv -> rpm -> ndisks); ++i)
     adarv -> rpm -> chapar[i] = 1;
-  
+
   if (changedependent(adarv -> rpm, adarv -> rpm -> par, adarv -> fit -> index, adarv -> rpm -> chapar) < 0)
     goto error;
 
@@ -12539,7 +12539,7 @@ static double gchsq_gen_start(double *vector, void *rest)
 
   /* Do make the model */
   galmod(adarv -> hdr, adarv -> rpm, GENFIT, adarv -> fit -> varylist, adarv -> fit -> index, adarv -> fit -> fluxpoints, adarv -> fit -> npoints);
-  
+
   /* Get the chisquare, formerly using PCONDISP (NPARAMS + (ndisks - 1)*NDPARAMS) */
   gchsq_genv = getchisquare_c(adarv -> rpm -> par[((NPARAMS + (adarv -> rpm -> ndisks - 1)*NDPARAMS))*adarv -> rpm -> nur]);
 
@@ -12547,7 +12547,7 @@ static double gchsq_gen_start(double *vector, void *rest)
   gft_mst_get(adarv -> fit -> gft_mstv, &adarv -> fit -> mon_alloops   , GFT_OUTPUT_ALLOOPS);
 
   gchsq_genv = reg_do(adarv -> fit -> reg_contv, (adarv -> fit -> mon_alloops == adarv -> fit -> loops)?adarv -> fit -> loops - 1:adarv -> fit -> mon_alloops, gchsq_genv);
-  
+
   /* Correct the chisquare taking into account the outliers */
   adarv -> hdr -> chi2 = chimult*(gchsq_genv+((double) adarv -> rpm -> outpoints)*adarv -> rpm -> penalty);
 
@@ -12586,7 +12586,7 @@ static double gchsq_gen_start(double *vector, void *rest)
   for (i = 0; i < adarv -> fit -> mon_npar; ++i) {
     adarv -> fit -> mon_dpar[i] = ddinterntoparam(adarv -> fit -> mon_dpar[i], (*varele -> elements)/adarv -> rpm -> nur+1, adarv -> hdr, adarv -> rpm -> ndisks);
   }
-  
+
   adarv -> fit -> mon_ring = (*varele -> elements)%adarv -> rpm -> nur+1;
   for (disk = 0; disk < adarv -> rpm -> ndisks; ++disk){
     adarv -> fit -> mon_repnpoints[disk] = adarv -> fit -> npoints[disk];
@@ -12641,7 +12641,7 @@ static double gchsq_gen(double *vector, void *rest)
 
   /* report what we have, if textlog, we assume that it has been written already */
   if (!(adarv -> fit -> recnr)) {
-    sprintf(mes, "Start recalling\n");                   
+    sprintf(mes, "Start recalling\n");
     anyout_tir(&dev, mes);
     adarv -> fit -> mon_dsize = 0;
   }
@@ -12668,7 +12668,7 @@ static double gchsq_gen(double *vector, void *rest)
 	    adarv -> fit -> mon_dsize,
 	    dpar);
     length = strlen(mes);
-    sprintf(mes+length, 
+    sprintf(mes+length,
 	    " C:%.9E "          /* current chisquare */
 /* 	    "B:%.3E "  */         /* current best (solution) chisquare */
 	    "S:%+.1E",      /* Current size */
@@ -12676,7 +12676,7 @@ static double gchsq_gen(double *vector, void *rest)
 /* 	    adarv -> fit -> mon_bestchisq,      */                /* current minimum chisquare */
 	    adarv -> fit -> mon_size                           /* Current size */
 	    );
-  
+
   anyout_tir(&dev, mes);
 
   /*Output of a progress file Kamphuis addition */
@@ -12686,12 +12686,12 @@ static double gchsq_gen(double *vector, void *rest)
   /* chimult = pow(OUTRANGEFAC,chprm_gen(vector, adarv -> fit -> varylist, adarv -> rpm -> par)); */
   pow(OUTRANGEFAC,chprm_gen(vector, adarv -> fit -> varylist, adarv -> rpm -> par));
 /*   if (chprm_gen(vector, adarv -> fit -> varylist, adarv -> rpm -> par)) */
-    
+
 /*     If they get out of range, we multiply the chisquare by OUTRANGEFAC  */
 /*     chimult = OUTRANGEFAC; */
 /*   else */
 /*     chimult = 1.0; */
- 
+
     /* Now ensure that the indexed parameters are aligned */
   for (i = adarv -> rpm -> nur*NSSDPARAMS; i < adarv -> rpm->nur *(NSSDPARAMS+NDPARAMS*adarv -> rpm->ndisks); ++i) {
     adarv -> rpm -> chapar[i] = chkchangep(adarv -> fit -> varylist, adarv -> fit -> fitmode, i, adarv -> rpm -> nur);
@@ -12712,12 +12712,12 @@ static double gchsq_gen(double *vector, void *rest)
 /*   for (disk = 0; disk < rpm -> ndisks; ++disk) { */
 /*     adarv -> fit -> fluxpoints[disk] = fluxpoints[disk]; */
 /*   } */
-  
+
   ++adarv -> fit -> recnr;
-  
+
     /* Produce output */
     writeoutputread(adarv -> log, adarv -> hdr, adarv -> rpm, adarv -> fit, 0, adarv -> fit -> dof, adarv -> fit -> recnr, -1.0);
-    
+
 
 /* Now keep everything in mind for the next iteration */
   gft_mst_get(adarv -> fit -> gft_mstv, &adarv -> fit -> mon_alloops   , GFT_OUTPUT_ALLOOPS);
@@ -12810,7 +12810,7 @@ static double gchsq_gen2(double *vector, void *rest)
 
   /* report what we have, if textlog, we assume that it has been written already */
   if (!(adarv -> fit -> mon_allcalls)) {
-    sprintf(mes, "Start\n");                   
+    sprintf(mes, "Start\n");
     anyout_tir(&dev, mes);
     adarv -> fit -> mon_dsize = 0;
   }
@@ -12841,22 +12841,22 @@ static double gchsq_gen2(double *vector, void *rest)
 	    (double) adarv -> fit -> mon_repnpoints[0]);
     for (disk = 1; disk < adarv -> rpm -> ndisks; ++disk) {
       length = strlen(mes);
-      sprintf(mes+length, 
+      sprintf(mes+length,
 	      "/%.1E",       /* Number of pointsources */
 	      (double) adarv -> fit -> mon_repnpoints[disk]);
     }
     length = strlen(mes);
-    sprintf(mes+length, 
+    sprintf(mes+length,
 	    " F:%+.1E",     /* Total flux */
 	    adarv -> fit -> mon_totalflux[0]);
     for (disk = 1; disk < adarv -> rpm -> ndisks; ++disk) {
       length = strlen(mes);
-      sprintf(mes+length, 
+      sprintf(mes+length,
 	      "/%+.1E",
 	      adarv -> fit -> mon_totalflux[disk]);
     }
     length = strlen(mes);
-    sprintf(mes+length, 
+    sprintf(mes+length,
 	    " C:%.7E "          /* current chisquare */
 /* 	    "B:%.3E "  */         /* current best (solution) chisquare */
 	    "S:%+.1E",      /* Current size */
@@ -12864,7 +12864,7 @@ static double gchsq_gen2(double *vector, void *rest)
 /* 	    adarv -> fit -> mon_bestchisq,      */                /* current minimum chisquare */
 	    adarv -> fit -> mon_size                           /* Current size */
 	    );
-  
+
   anyout_tir(&dev, mes);
 
   /*Output of a progress file Kamphuis addition */
@@ -12873,12 +12873,12 @@ static double gchsq_gen2(double *vector, void *rest)
    /* Change them */
   chimult = pow(OUTRANGEFAC,chprm_gen(vector, adarv -> fit -> varylist, adarv -> rpm -> par));
 /*   if (chprm_gen(vector, adarv -> fit -> varylist, adarv -> rpm -> par)) */
-    
+
 /*     If they get out of range, we multiply the chisquare by OUTRANGEFAC  */
 /*     chimult = OUTRANGEFAC; */
 /*   else */
 /*     chimult = 1.0; */
- 
+
   /* Now ensure that the indexed parameters are aligned */
   for (i = adarv -> rpm -> nur*NSSDPARAMS; i < adarv -> rpm->nur *(NSSDPARAMS+NDPARAMS*adarv -> rpm->ndisks); ++i)
     adarv -> rpm -> chapar[i] = chkchangep(adarv -> fit -> varylist, adarv -> fit -> fitmode, i, adarv -> rpm -> nur);
@@ -12905,19 +12905,19 @@ static double gchsq_gen2(double *vector, void *rest)
   for (disk = 0; disk < adarv -> rpm -> ndisks; ++disk) {
     adarv -> fit -> fluxpoints[disk] = adarv -> rpm -> fluxpoints[disk];
   }
-  
+
   ++adarv -> fit -> recnr;
-  
+
   /* Write an output cube */
   if ((*adarv -> hdr -> outset != '\0')) {
     if (!(adarv -> fit -> recnr%adarv -> hdr -> outcubup)) {
 
       /*   for (i = 0; i < adarv -> rpm -> nur*(NPARAMS+(adarv -> rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++i) */
       /*     adarv -> rpm -> oldpar[i] = adarv -> rpm -> par[i]; */
-      
+
       writemodel(adarv -> hdr, adarv -> rpm, adarv -> fit, adarv -> rpm -> par, adarv -> fit -> index);
     }
-  }    
+  }
 
 
     /* Produce output */
@@ -12925,7 +12925,7 @@ static double gchsq_gen2(double *vector, void *rest)
 
     /* correct this fitting */
     writeoutput(adarv -> log, adarv -> hdr, adarv -> rpm, adarv -> fit, 0, adarv -> fit -> dof, adarv -> fit -> recnr, -1.0);
-    
+
     /* Read out the same number, it might have changed by an epsilon */
     gchsq_genv = adarv -> hdr -> oldchi2;
 
@@ -12971,7 +12971,7 @@ static double gchsq_gen2(double *vector, void *rest)
     adarv -> fit -> mon_totalflux[disk] = adarv -> fit -> fluxpoints[disk]*adarv -> rpm -> cflux[disk]*adarv -> hdr -> deltgridtouser[2];
   }
 
-    
+
     return gchsq_genv;
 
  error:
@@ -12993,25 +12993,25 @@ static void interpinit(ringparms *rpm, double radsep, int disk)
   /* float dpardr[NPARAMS]; */
   /* float dr; */
   int n2, n1;
-  
+
 
   /* In the modpar array interpolate over all rings */
   for (i = 1; i < rpm -> nur; ++i) {
-    
+
     /* This is the actual width between two radii */
     /* Obsolete when using GSL */
     /* width = rpm -> par[PRADI*rpm -> nur+i] - rpm -> par[PRADI*rpm -> nur+i-1]; */
-    
+
     /* These are the rings to be calculated */
-    n2 = (int) (rpm -> par[PRADI*rpm -> nur+i]/radsep-0.5); 
-    n1 = ((int) (rpm -> par[PRADI*rpm -> nur+i-1]/radsep+0.5)); 
-    
+    n2 = (int) (rpm -> par[PRADI*rpm -> nur+i]/radsep-0.5);
+    n1 = ((int) (rpm -> par[PRADI*rpm -> nur+i-1]/radsep+0.5));
+
     /* in-between two rings, the slope is determined */
 /* 	for (j = NPARAMS+(disk-1)*NDPARAMS; j < NPARAMS+disk*NDPARAMS; ++j) { */
 
 
     for (jp = NPARAMS-NDPARAMS; jp < NPARAMS; ++jp) {
-      
+
       j = jp + disk*NDPARAMS;
 
       /* If the parameter is in the list */
@@ -13030,7 +13030,7 @@ static void interpinit(ringparms *rpm, double radsep, int disk)
 /* #pragma  omp parallel for schedule(dynamic) */
 /* #endif */
     for (jp = NPARAMS-NDPARAMS; jp < NPARAMS; ++jp) {
-      
+
       j = jp + disk*NDPARAMS;
 
       /* If the parameter is in the list */
@@ -13062,7 +13062,7 @@ static void interpinit(ringparms *rpm, double radsep, int disk)
     /* Now change the pre-processed parameters and terminate the pointsource lists */
     for (k = n1; k <= n2; ++k)
       srprep(rpm, k, 0, disk);
-  } 
+  }
 }
 
 
@@ -13081,8 +13081,8 @@ static void interpover(ringparms *rpm, double radsep, int fitmode, varlel *varel
   /* float dpardr[NPARAMS]; */
   /* float dr; */
   int n1, n2, s, e;
-  
-  
+
+
   /* Check if we initialise */
   if (!(varele)) {
     for (disk = 0; disk < rpm -> ndisks; ++disk) {
@@ -13093,9 +13093,9 @@ static void interpover(ringparms *rpm, double radsep, int fitmode, varlel *varel
 
   /* Switch on all indicators right to a range that should be interpolated over, depending on interpolation method */
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
-    
+
     for (jp = 0; jp < NDPARAMS; ++jp) {
-      
+
       for (i = 1; i < rpm -> nur; ++i) {
 	if (rpm -> chapar[(NDPARAMS*disk+jp+NSSDPARAMS)*rpm -> nur+i])
 	  break;
@@ -13128,7 +13128,7 @@ static void interpover(ringparms *rpm, double radsep, int fitmode, varlel *varel
       }
     }
   }
-  
+
   /* printf("paraf:"); */
   /* for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i) */
   /*   if (rpm -> chapar[i]) */
@@ -13136,14 +13136,14 @@ static void interpover(ringparms *rpm, double radsep, int fitmode, varlel *varel
   /* printf(" "); */
 
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
-    
+
     /* In the modpar array interpolate over all rings */
     for (i = 1; i < rpm -> nur; ++i) {
-      
+
 	/* These are the subrings to be calculated */
-      n2 = (int) (rpm -> par[PRADI*rpm -> nur+i]/radsep-0.5); 
-      n1 = ((int) (rpm -> par[PRADI*rpm -> nur+i-1]/radsep+0.5)); 
-      
+      n2 = (int) (rpm -> par[PRADI*rpm -> nur+i]/radsep-0.5);
+      n1 = ((int) (rpm -> par[PRADI*rpm -> nur+i-1]/radsep+0.5));
+
       /* D*mn GSL! GSL interpolation is not compatible with OMP anyway */
       /* #ifdef OPENMPTIR */
       /* #pragma omp parallel for schedule(dynamic) */
@@ -13151,22 +13151,22 @@ static void interpover(ringparms *rpm, double radsep, int fitmode, varlel *varel
       for (jp = 0; jp < NDPARAMS; ++jp) {
 
 	j = NSSDPARAMS+jp+disk*NDPARAMS;
-	
+
 	/* If the parameter is in the list */
 	if (rpm -> chapar[j*rpm -> nur+i]) {
-	  
+
 	  /* Obsolete when using GSL */
 	  /* dpardr[jp]= (rpm -> par[j*rpm -> nur+i]-rpm -> par[j*rpm -> nur+i-1])/width; */
-	  
+
 	  /* GSL Re-initialise interpolation, don't know if required, but well ... */
 	  gsl_interp_accel_reset(rpm -> gsl_interp_accelarray[j-NSSDPARAMS]);
-	  
+
 	  for (k = n1; k <= n2; ++k) {
-	    /* Obsolete when using GSL */	    
+	    /* Obsolete when using GSL */
 	    /* dr = rpm -> modpar[PRADI*rpm -> nr+k]-rpm -> par[PRADI*rpm -> nur+i-1]; */
-	    
+
 	    /* for each parameter the intepolation is done */
-	    /* Obsolete when using GSL */	    
+	    /* Obsolete when using GSL */
 	    /* rpm -> modpar[j*rpm -> nr+k] = rpm -> par[j*rpm -> nur+i-1]+dpardr[jp]*dr; */
 	    rpm -> modpar[j*rpm -> nr+k] = gsl_interp_eval (rpm -> gsl_interparray[j-NSSDPARAMS], rpm -> par, rpm -> par + rpm -> nur*j, rpm -> modpar[PRADI*rpm -> nr+k], rpm -> gsl_interp_accelarray[j-NSSDPARAMS]);
 	  }
@@ -13203,40 +13203,40 @@ static void srprep(ringparms *rpm, int srnr, long mode, int disk)
   (*(rpm -> inf_gauv[disk] -> srpr1))((void *) rpm, srnr, 1, disk);
   (*(rpm -> inf_gauv[disk] -> srpr2))((void *) rpm, srnr, 2, disk);
   (*(rpm -> inf_gauv[disk] -> srpr3))((void *) rpm, srnr, 3, disk);
-  
+
   /* Reset the number of point sources */
-  rpm -> sd[disk][srnr].n = 
-    rpm -> sd[disk][srnr].nneg =  
+  rpm -> sd[disk][srnr].n =
+    rpm -> sd[disk][srnr].nneg =
     rpm -> sd[disk][srnr].npos = 0;
-  rpm -> sd[disk][srnr].nharmnorm = 
-    rpm -> sd[disk][srnr].ngaussian[0] = 
-    rpm -> sd[disk][srnr].ngaussian[1] = 
-    rpm -> sd[disk][srnr].ngaussian[2] = 
+  rpm -> sd[disk][srnr].nharmnorm =
+    rpm -> sd[disk][srnr].ngaussian[0] =
+    rpm -> sd[disk][srnr].ngaussian[1] =
+    rpm -> sd[disk][srnr].ngaussian[2] =
     rpm -> sd[disk][srnr].ngaussian[3] = 0;
-  
+
   /* Calculate the cloudnumber, rounded down; this will fill the harmnorm variables */
   (*(rpm -> inf_smiv[disk] -> getcloudnumber))((void *) rpm, srnr, disk);
   (*(rpm -> inf_gauv[disk] -> getcloudnumber0))((void *) rpm, srnr, 0, disk);
   (*(rpm -> inf_gauv[disk] -> getcloudnumber1))((void *) rpm, srnr, 1, disk);
   (*(rpm -> inf_gauv[disk] -> getcloudnumber2))((void *) rpm, srnr, 2, disk);
   (*(rpm -> inf_gauv[disk] -> getcloudnumber3))((void *) rpm, srnr, 3, disk);
-  
+
   /* Change the number of point sources and the cloud flux */
   (*(rpm -> inf_sdisv[disk] -> chclfl))((void *) rpm, srnr, disk);
-  
+
   rpm -> sd[disk][srnr].pllength = rpm -> sd[disk][srnr].n;
-  
+
   /* We decide to change the cloudflux a bit instead of accepting an error in the ringflux */
   /*   rpm -> sd[disk][srnr].pf = ringflux/rpm -> sd[disk][srnr].n; */
-  
+
   if (rpm -> sd[disk][srnr].n > 0) {
-    
+
     /* We calculate cos's and sins and reset the random number generator */
     rpm -> sd[disk][srnr].sini=sinf(rpm -> modpar[(PRPARAMS+disk*NDPARAMS+PINCL)*rpm -> nr+srnr]);
     rpm -> sd[disk][srnr].cosi=cosf(rpm -> modpar[(PRPARAMS+disk*NDPARAMS+PINCL)*rpm -> nr+srnr]);
     rpm -> sd[disk][srnr].sinp=sinf(rpm -> modpar[(PRPARAMS+disk*NDPARAMS+PPA)*rpm -> nr+srnr]);
     rpm -> sd[disk][srnr].cosp=cosf(rpm -> modpar[(PRPARAMS+disk*NDPARAMS+PPA)*rpm -> nr+srnr]);
-    
+
     /* prepare the subrings for harmonics info */
     /* velocity */
     (*(rpm -> inf_vm1v[disk] -> srprs))((void *) rpm, srnr, disk);
@@ -13246,8 +13246,8 @@ static void srprep(ringparms *rpm, int srnr, long mode, int disk)
     (*(rpm -> inf_vm3v[disk] -> srprs))((void *) rpm, srnr, disk);
     (*(rpm -> inf_vm3v[disk] -> srprc))((void *) rpm, srnr, disk);
     (*(rpm -> inf_vm4v[disk] -> srprs))((void *) rpm, srnr, disk);
-    (*(rpm -> inf_vm4v[disk] -> srprc))((void *) rpm, srnr, disk); 
-    
+    (*(rpm -> inf_vm4v[disk] -> srprc))((void *) rpm, srnr, disk);
+
     (*(rpm -> inf_ra1v[disk] -> srprs))((void *) rpm, srnr, disk);
     (*(rpm -> inf_ra1v[disk] -> srprc))((void *) rpm, srnr, disk);
     (*(rpm -> inf_ra2v[disk] -> srprs))((void *) rpm, srnr, disk);
@@ -13255,8 +13255,8 @@ static void srprep(ringparms *rpm, int srnr, long mode, int disk)
     (*(rpm -> inf_ra3v[disk] -> srprs))((void *) rpm, srnr, disk);
     (*(rpm -> inf_ra3v[disk] -> srprc))((void *) rpm, srnr, disk);
     (*(rpm -> inf_ra4v[disk] -> srprs))((void *) rpm, srnr, disk);
-    (*(rpm -> inf_ra4v[disk] -> srprc))((void *) rpm, srnr, disk); 
-    
+    (*(rpm -> inf_ra4v[disk] -> srprc))((void *) rpm, srnr, disk);
+
     (*(rpm -> inf_ro1v[disk] -> srprs))((void *) rpm, srnr, disk);
     (*(rpm -> inf_ro1v[disk] -> srprc))((void *) rpm, srnr, disk);
     (*(rpm -> inf_ro2v[disk] -> srprs))((void *) rpm, srnr, disk);
@@ -13264,8 +13264,8 @@ static void srprep(ringparms *rpm, int srnr, long mode, int disk)
     (*(rpm -> inf_ro3v[disk] -> srprs))((void *) rpm, srnr, disk);
     (*(rpm -> inf_ro3v[disk] -> srprc))((void *) rpm, srnr, disk);
     (*(rpm -> inf_ro4v[disk] -> srprs))((void *) rpm, srnr, disk);
-    (*(rpm -> inf_ro4v[disk] -> srprc))((void *) rpm, srnr, disk); 
-    
+    (*(rpm -> inf_ro4v[disk] -> srprc))((void *) rpm, srnr, disk);
+
     /* warps */
     (*(rpm -> inf_wm1v[disk] -> srprs))((void *) rpm, srnr, disk);
     (*(rpm -> inf_wm1v[disk] -> srprc))((void *) rpm, srnr, disk);
@@ -13274,13 +13274,13 @@ static void srprep(ringparms *rpm, int srnr, long mode, int disk)
     (*(rpm -> inf_wm3v[disk] -> srprs))((void *) rpm, srnr, disk);
     (*(rpm -> inf_wm3v[disk] -> srprc))((void *) rpm, srnr, disk);
     (*(rpm -> inf_wm4v[disk] -> srprs))((void *) rpm, srnr, disk);
-    (*(rpm -> inf_wm4v[disk] -> srprc))((void *) rpm, srnr, disk); 
-    
+    (*(rpm -> inf_wm4v[disk] -> srprc))((void *) rpm, srnr, disk);
+
     /* Azimuth ranges */
-    (*(rpm -> inf_aziv[disk] -> srpr0))((void *) rpm, srnr, 0, disk); 
-    (*(rpm -> inf_aziv[disk] -> srpr1))((void *) rpm, srnr, 1, disk); 
+    (*(rpm -> inf_aziv[disk] -> srpr0))((void *) rpm, srnr, 0, disk);
+    (*(rpm -> inf_aziv[disk] -> srpr1))((void *) rpm, srnr, 1, disk);
   }
-  
+
   /* free the pointsource list */
   if ((rpm -> sd[disk][srnr].pl)) {
     free(rpm -> sd[disk][srnr].pl);
@@ -13289,9 +13289,9 @@ static void srprep(ringparms *rpm, int srnr, long mode, int disk)
 #ifdef PBCORR
   rpm -> dealloc_pbcfac(rpm, srnr, disk);
 #endif
-  
-  
-  
+
+
+
   return;
 }
 /* ------------------------------------------------------------ */
@@ -13311,16 +13311,16 @@ static void gridpoint_norm(hdrinf *hdr, float *modpar, int nr, struct srd **sd, 
 
   /* of course we could make it even shorter, but we'll leave it at that. Next thingy is to grid the pointsource */
   grid[0] = roundnormal(modpar[(PRPARAMS+disk*NDPARAMS+PXPOS)*nr+srnr]-pp[1]);
-  
+
   if (grid[0] >= 0 && grid[0] < hdr -> bsize1) {
-    
+
     grid[1] = roundnormal(modpar[(PRPARAMS+disk*NDPARAMS+PYPOS)*nr+srnr]+pp[0]);
     if (grid[1] >= 0 && grid[1] < hdr -> bsize2) {
       /* */
       grid[2] = roundnormal((modpar[(PRPARAMS+disk*NDPARAMS+PVSYS)*nr+srnr]+hdr -> signv*pp[5]));
       /*       grid[2] = roundnormal((modpar[(PRPARAMS+disk*NDPARAMS+PVSYS)*nr+srnr]+pp[4])); */
       if (grid[2] >= 0 && grid[2] < hdr -> nsubs) {
-	
+
 	/* This is the position in the linear cube array */
 	sd[disk][srnr].pl[*pnr] = hdr -> modelc -> points +(grid[0]+ hdr -> bcsize1*(grid[1])+hdr -> nprof*(grid[2]));
 
@@ -13365,19 +13365,19 @@ static void gridpoint_mixed(hdrinf *hdr, float *modpar, int nr, struct srd **sd,
 #endif
 {
   int grid[3];
-  
+
   /* of course we could make it even shorter, but we'll leave it at that. Next thingy is to grid the pointsource */
   grid[0] = roundnormal(modpar[(PRPARAMS+disk*NDPARAMS+PXPOS)*nr+srnr]-pp[1]);
-  
+
   if (grid[0] >= 0 && grid[0] < hdr -> bsize1) {
-    
+
     grid[1] = roundnormal(modpar[(PRPARAMS+disk*NDPARAMS+PYPOS)*nr+srnr]+pp[0]);
     if (grid[1] >= 0 && grid[1] < hdr -> bsize2) {
       /* For the sake of clarity, we kill the subsnuma operation in the source, in principle thus allowing only for the radio convention for velocity, but gaining an understanding of the code. What is seen here should not be done. It's really not what anyone should wish for. */
       grid[2] = roundnormal((modpar[(PRPARAMS+disk*NDPARAMS+PVSYS)*nr+srnr]+hdr -> signv*pp[5]));
       /*       grid[2] = roundnormal((modpar[(PRPARAMS+disk*NDPARAMS+PVSYS)*nr+srnr]+pp[4])); */
       if (grid[2] >= 0 && grid[2] < hdr -> nsubs) {
-	
+
 	/* This is the position in the linear cube array */
 	if (signum) {
 	  sd[disk][srnr].pl[sd[disk][srnr].npos] = hdr -> modelc -> points +(grid[0]+ hdr -> bcsize1*(grid[1])+hdr -> nprof*(grid[2]));
@@ -13448,16 +13448,16 @@ static void gridpoint_normcool(hdrinf *hdr, float *modpar, int nr, struct srd **
 
   /* of course we could make it even shorter, but we'll leave it at that. Next thingy is to grid the pointsource */
   grid[0] = roundnormal((modpar[(PRPARAMS+disk*NDPARAMS+PXPOS)*nr+srnr]-pp[1])*((float) hdr->coolbin));
-  
+
   if (grid[0] >= 0 && grid[0] < hdr -> coolcube -> size_x) {
-    
+
     grid[1] = roundnormal((modpar[(PRPARAMS+disk*NDPARAMS+PYPOS)*nr+srnr]+pp[0])*((float) hdr->coolbin));
     if (grid[1] >= 0 && grid[1] < hdr -> coolcube -> size_y) {
       /* */
       grid[2] = roundnormal(hdr -> coolhalfc+pp[2]*((float) hdr->coolbin));
       /*       grid[2] = roundnormal((modpar[(PRPARAMS+disk*NDPARAMS+PVSYS)*nr+srnr]+pp[4])); */
       if (grid[2] >= 0 && grid[2] < hdr -> coolcube -> size_v) {
-	
+
 	/* This is the position in the linear cube array */
 	sd[disk][srnr].pl[*pnr] = hdr -> coolcube -> points +(grid[0]+ hdr -> coolcube -> size_x*(grid[1])+hdr -> nprofcool*(grid[2]));
 
@@ -13502,19 +13502,19 @@ static void gridpoint_mixedcool(hdrinf *hdr, float *modpar, int nr, struct srd *
 #endif
 {
   int grid[3];
-  
+
   /* of course we could make it even shorter, but we'll leave it at that. Next thingy is to grid the pointsource */
   grid[0] = roundnormal((modpar[(PRPARAMS+disk*NDPARAMS+PXPOS)*nr+srnr]-pp[1])*((float) hdr->coolbin));
-  
+
   if (grid[0] >= 0 && grid[0] < hdr -> coolcube -> size_x) {
-    
+
     grid[1] = roundnormal((modpar[(PRPARAMS+disk*NDPARAMS+PYPOS)*nr+srnr]+pp[0])*((float) hdr->coolbin));
     if (grid[1] >= 0 && grid[1] < hdr -> bsize2) {
       /* For the sake of clarity, we kill the subsnuma operation in the source, in principle thus allowing only for the radio convention for velocity, but gaining an understanding of the code. What is seen here should not be done. It's really not what anyone should wish for. */
       grid[2] = roundnormal(hdr -> coolhalfc+pp[2]*((float) hdr->coolbin));
       /*       grid[2] = roundnormal((modpar[(PRPARAMS+disk*NDPARAMS+PVSYS)*nr+srnr]+pp[4])); */
       if (grid[2] >= 0 && grid[2] < hdr -> coolcube -> size_v) {
-	
+
 	/* This is the position in the linear cube array */
 	if (signum) {
 	  sd[disk][srnr].pl[sd[disk][srnr].npos] = hdr -> coolcube -> points +(grid[0]+ hdr -> coolcube -> size_x*(grid[1])+hdr -> nprofcool*(grid[2]));
@@ -13699,7 +13699,7 @@ static long srconst(hdrinf *hdr, ringparms *rpm, int srnr, long mode, int disk)
   int signum;
   long npoints, j;
   int dummyint;
-  
+
 
 
   /* First check if we do anything but remembering */
@@ -13728,7 +13728,7 @@ static long srconst(hdrinf *hdr, ringparms *rpm, int srnr, long mode, int disk)
       sprintf(mes, "Too many pointsources, increase PFLUX");
       error_tir(&err, mes);
     }
-    
+
 #ifdef PBCORR
     rpm -> alloc_pbcfac(rpm, srnr, disk);
 #endif
@@ -13741,8 +13741,8 @@ static long srconst(hdrinf *hdr, ringparms *rpm, int srnr, long mode, int disk)
   /* Initialise random generators */
   rpm -> sd[disk][srnr].iseed2[1] = srnr+disk;
   maths_rndmf_init(rpm -> sd[disk][srnr].iseed2, rpm -> sd[disk][srnr].permrandstr);
-  
-  /* reset the  zprof */ 
+
+  /* reset the  zprof */
   zprof(6, rpm -> sd[disk][srnr].permrandstr, &(rpm -> sd[disk][srnr].y2));
 
   /* Do the same for variable functions */
@@ -13808,13 +13808,13 @@ static long srconst(hdrinf *hdr, ringparms *rpm, int srnr, long mode, int disk)
     if ((rpm -> sd[disk][srnr].ngaussian[i])) {
 
       npoints = npoints + rpm -> sd[disk][srnr].ngaussian[i];
-      
+
       /* Determine point source flux */
-      
+
       signum = rpm -> modpar[((PRPARAMS+disk*NDPARAMS+PGA1A)+3*i)*rpm -> nr+srnr] > 0?1:0;
 
       while (j < npoints) {
-	
+
 	/* Calculate azimuth sine and cosine, Gaussian */
 	gau_getaz(rpm, (PRPARAMS+disk*NDPARAMS+PGA1P)+3*i, rpm -> sd[disk][srnr].grandstr[i], i, &az, &sinaz, &cosaz, srnr, disk);
 
@@ -13823,22 +13823,22 @@ static long srconst(hdrinf *hdr, ringparms *rpm, int srnr, long mode, int disk)
 	(*(rpm -> inf_aziv[disk] -> setoutrange))(&(rpm -> sd[disk][srnr].outofrange));
 	(*(rpm -> inf_aziv[disk] -> pr0))(&az, rpm -> sd[disk][srnr].ranges, &(rpm -> sd[disk][srnr].outofrange), 0);
  	(*(rpm -> inf_aziv[disk] -> pr1))(&az, rpm -> sd[disk][srnr].ranges, &(rpm -> sd[disk][srnr].outofrange), 1);
-	
+
 	/* Put the point source where it belongs */
 	dummyint = (*(rpm -> inf_aziv[disk] -> srshape))(rpm, pp, sinaz, cosaz, srnr, rpm -> sd[disk][srnr].outofrange, disk);
-	
+
 	/* 	srshape(rpm, pp, sinaz, cosaz, srnr); */
-	
+
 	/* Add ring-dependent dispersion, if activated (why here and not in srshape?) */
 	(*(rpm -> inf_sdisv[disk] -> pr))((void *) rpm, pp+5, &az, srnr, disk);
-	
+
 #ifdef PBCORR
 	/* Grid the point sources */
 	(*(rpm -> sd[disk][srnr].gridpoint))(hdr, rpm -> fill_pbcfac, rpm -> modpar, rpm -> nr, rpm -> sd, srnr, &j, pp, signum, &npoints, disk);
 #else
 	/* Grid the point sources */
 	(*(rpm -> sd[disk][srnr].gridpoint))(hdr, rpm -> modpar, rpm -> nr, rpm -> sd, srnr, &j, pp, signum, &npoints, disk);
-#endif	
+#endif
 	/* Correct for the number of point sources if necessary */
 	(*(rpm -> inf_aziv[disk] -> corrp))((void *) rpm, srnr, &(rpm -> sd[disk][srnr].outofrange), signum);
 
@@ -13877,14 +13877,14 @@ static long srconstcool(hdrinf *hdr, ringparms *rpm, int srnr, long mode, int di
   int signum;
   long npoints, j;
   int dummyint;
-  
+
 
   /* First check if we do anything but remembering */
   /* if (rpm -> sd[disk][srnr].pl) { */
 /*     remember((void **) &rpm -> sd[disk][srnr].pl); */
   /*   return rpm -> sd[disk][srnr].outpoints = rpm -> sd[disk][srnr].outn/rpm -> sd[disk][srnr].nsubcl; */
   /* } */
-  
+
   /* Now we try to allocate */
   if ((rpm -> sd[disk][srnr].n)){
     if (!(rpm -> sd[disk][srnr].pl = (float **) malloc(rpm -> sd[disk][srnr].n*sizeof(float *)))) {
@@ -13905,7 +13905,7 @@ static long srconstcool(hdrinf *hdr, ringparms *rpm, int srnr, long mode, int di
       sprintf(mes, "Too many pointsources, increase PFLUX");
       error_tir(&err, mes);
     }
-    
+
 #ifdef PBCORR
     rpm -> alloc_pbcfac(rpm, srnr, disk);
 #endif
@@ -13918,8 +13918,8 @@ static long srconstcool(hdrinf *hdr, ringparms *rpm, int srnr, long mode, int di
   /* Initialise random generators */
   rpm -> sd[disk][srnr].iseed2[1] = srnr+disk;
   maths_rndmf_init(rpm -> sd[disk][srnr].iseed2, rpm -> sd[disk][srnr].permrandstr);
-  
-  /* reset the  zprof */ 
+
+  /* reset the  zprof */
   zprof(6, rpm -> sd[disk][srnr].permrandstr, &(rpm -> sd[disk][srnr].y2));
 
   /* Do the same for variable functions */
@@ -13985,13 +13985,13 @@ static long srconstcool(hdrinf *hdr, ringparms *rpm, int srnr, long mode, int di
     if ((rpm -> sd[disk][srnr].ngaussian[i])) {
 
       npoints = npoints + rpm -> sd[disk][srnr].ngaussian[i];
-      
+
       /* Determine point source flux */
-      
+
       signum = rpm -> modpar[((PRPARAMS+disk*NDPARAMS+PGA1A)+3*i)*rpm -> nr+srnr] > 0?1:0;
 
       while (j < npoints) {
-	
+
 	/* Calculate azimuth sine and cosine, Gaussian */
 	gau_getaz(rpm, (PRPARAMS+disk*NDPARAMS+PGA1P)+3*i, rpm -> sd[disk][srnr].grandstr[i], i, &az, &sinaz, &cosaz, srnr, disk);
 
@@ -14000,22 +14000,22 @@ static long srconstcool(hdrinf *hdr, ringparms *rpm, int srnr, long mode, int di
 	(*(rpm -> inf_aziv[disk] -> setoutrange))(&(rpm -> sd[disk][srnr].outofrange));
 	(*(rpm -> inf_aziv[disk] -> pr0))(&az, rpm -> sd[disk][srnr].ranges, &(rpm -> sd[disk][srnr].outofrange), 0);
  	(*(rpm -> inf_aziv[disk] -> pr1))(&az, rpm -> sd[disk][srnr].ranges, &(rpm -> sd[disk][srnr].outofrange), 1);
-	
+
 	/* Put the point source where it belongs */
 	dummyint = (*(rpm -> inf_aziv[disk] -> srshape))(rpm, pp, sinaz, cosaz, srnr, rpm -> sd[disk][srnr].outofrange, disk);
-	
+
 	/* 	srshape(rpm, pp, sinaz, cosaz, srnr); */
-	
+
 	/* Add ring-dependent dispersion, if activated (why here and not in srshape?) */
 /* 	(*(rpm -> inf_sdisv[disk] -> pr))((void *) rpm, pp+5, &az, srnr, disk); */
-	
+
 #ifdef PBCORR
 	/* Grid the point sources */
 	(*(rpm -> sd[disk][srnr].gridpoint))(hdr, rpm -> fill_pbcfac, rpm -> modpar, rpm -> nr, rpm -> sd, srnr, &j, pp, signum, &npoints, disk);
 #else
 	/* Grid the point sources */
 	(*(rpm -> sd[disk][srnr].gridpoint))(hdr, rpm -> modpar, rpm -> nr, rpm -> sd, srnr, &j, pp, signum, &npoints, disk);
-#endif	
+#endif
 	/* Correct for the number of point sources if necessary */
 	(*(rpm -> inf_aziv[disk] -> corrp))((void *) rpm, srnr, &(rpm -> sd[disk][srnr].outofrange), signum);
 
@@ -14043,11 +14043,11 @@ static void srshape(ringparms *rpm, float *pp, float sinaz, float cosaz, int srn
 {
   float r;
   float pp2[6];
-    
+
   /* The probability for the radius is weighted by r, and this is no approximation, hence a speed brake, should be removed at some point */
   r = sqrtf((rpm -> modpar[PRADI*rpm -> nr+srnr]-0.5*rpm -> radsep)*(rpm -> modpar[PRADI*rpm -> nr+srnr]-0.5*rpm -> radsep)+2*rpm -> radsep*rpm -> modpar[PRADI*rpm -> nr+srnr]*maths_rndmf(rpm -> sd[disk][srnr].permrandstr));
-  
-  
+
+
   /* Calculate the coordinates of the point source before rotation */
     pp[0] = cosaz*r;
     pp[1] = sinaz*r;
@@ -14064,7 +14064,7 @@ static void srshape(ringparms *rpm, float *pp, float sinaz, float cosaz, int srn
     (*(rpm -> inf_ro2v[disk] -> prc))((void *) rpm, pp+4, srnr, sinaz, cosaz, disk);
     (*(rpm -> inf_ro3v[disk] -> prc))((void *) rpm, pp+4, srnr, sinaz, cosaz, disk);
     (*(rpm -> inf_ro4v[disk] -> prc))((void *) rpm, pp+4, srnr, sinaz, cosaz, disk);
- 
+
     /* vertical gradient in rotation velocity */
     (*(rpm -> inf_dvrov[disk] -> pr)) ((void *) rpm, pp, srnr, sinaz, cosaz, disk);
 
@@ -14080,7 +14080,7 @@ static void srshape(ringparms *rpm, float *pp, float sinaz, float cosaz, int srn
     (*(rpm -> inf_ra2v[disk] -> prc))((void *) rpm, pp+4, srnr, sinaz, cosaz, disk);
     (*(rpm -> inf_ra3v[disk] -> prc))((void *) rpm, pp+4, srnr, sinaz, cosaz, disk);
     (*(rpm -> inf_ra4v[disk] -> prc))((void *) rpm, pp+4, srnr, sinaz, cosaz, disk);
- 
+
     /* vertical gradient in radial velocity */
     (*(rpm -> inf_dvrav[disk] -> pr)) ((void *) rpm, pp, srnr, sinaz, cosaz, disk);
 
@@ -14161,11 +14161,11 @@ static void srshapecool(ringparms *rpm, float *pp, float sinaz, float cosaz, int
 {
   float r;
   float pp2[6];
-    
+
   /* The probability for the radius is weighted by r, and this is no approximation, hence a speed brake, should be removed at some point */
   r = sqrtf((rpm -> modpar[PRADI*rpm -> nr+srnr]-0.5*rpm -> radsep)*(rpm -> modpar[PRADI*rpm -> nr+srnr]-0.5*rpm -> radsep)+2*rpm -> radsep*rpm -> modpar[PRADI*rpm -> nr+srnr]*maths_rndmf(rpm -> sd[disk][srnr].permrandstr));
-  
-  
+
+
   /* Calculate the coordinates of the point source before rotation */
     pp[0] = cosaz*r;
     pp[1] = sinaz*r;
@@ -14182,7 +14182,7 @@ static void srshapecool(ringparms *rpm, float *pp, float sinaz, float cosaz, int
     /* (*(rpm -> inf_ro2v[disk] -> prc))((void *) rpm, pp+4, srnr, sinaz, cosaz, disk); */
     /* (*(rpm -> inf_ro3v[disk] -> prc))((void *) rpm, pp+4, srnr, sinaz, cosaz, disk); */
     /* (*(rpm -> inf_ro4v[disk] -> prc))((void *) rpm, pp+4, srnr, sinaz, cosaz, disk); */
- 
+
     /* vertical gradient in rotation velocity */
     /* (*(rpm -> inf_dvrov[disk] -> pr)) ((void *) rpm, pp, srnr, sinaz, cosaz, disk); */
 
@@ -14198,7 +14198,7 @@ static void srshapecool(ringparms *rpm, float *pp, float sinaz, float cosaz, int
     /* (*(rpm -> inf_ra2v[disk] -> prc))((void *) rpm, pp+4, srnr, sinaz, cosaz, disk); */
     /* (*(rpm -> inf_ra3v[disk] -> prc))((void *) rpm, pp+4, srnr, sinaz, cosaz, disk); */
     /* (*(rpm -> inf_ra4v[disk] -> prc))((void *) rpm, pp+4, srnr, sinaz, cosaz, disk); */
- 
+
     /* vertical gradient in radial velocity */
     /* (*(rpm -> inf_dvrav[disk] -> pr)) ((void *) rpm, pp, srnr, sinaz, cosaz, disk); */
 
@@ -14288,15 +14288,15 @@ static int chkchangep(varlel *varele, int fitmode, int parnr, int nur)
   /* If fitmode is Golden Section, we check only the actual varele element */
   if ((fitmode == GOLDEN_SECTION)) {
     for (i = 0; i < varele -> nelem; ++i) {
-      
+
       /* If the ring itself or the ting before has been changed, we return */
       if (parnr == varele -> elements[i])
 	return 1;
-      
+
       /* Don't know whether the second logical is a good idea */
       /* if ((parnr == param+1) && ((param+1)%nur)) */
       /* 	return 1; */
-      
+
       /* for (j = 0; j < index -> nuel; ++j) { */
       /* 	if (index -> inpal[j] == varele -> elements[i] || index -> inpah[j] == varele -> elements[i]) { */
       /* 	  if (parnr == (param = index -> ipa[j])) { */
@@ -14309,7 +14309,7 @@ static int chkchangep(varlel *varele, int fitmode, int parnr, int nur)
       /* }       */
     }
   }
-  
+
   /* Fitmode is Metropolis, we check the whole list */
   else {
     /* k = 0; */
@@ -14353,7 +14353,7 @@ static int chkchangep(varlel *varele, int fitmode, int parnr, int nur)
       /* ++k; */
     }
   }
-  
+
   /* The parameter is not in there */
   return 0;
 }
@@ -14377,10 +14377,10 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
 
   if (!(index -> nuel))
     return 0;
-  
+
   /* index is strictly sorted */
   counts = 0;
-  
+
   /* BUGFIX: this outer loop is required to catch a situation where a parameter is interpolated over but does not belong to a group which is fitted */
   while (counts < index -> nuel) {
   /* loop over all parameters except the radii */
@@ -14393,7 +14393,7 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
 	break;
       }
     }
-    
+
     /* Only if there was a change, we need to interpolate in that group */
     if (i < rpm -> nur) {
 	for (i = 0; i < rpm -> nur; ++i) {
@@ -14408,12 +14408,12 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
 	  }
      }
       /* fprintf(stderr,"got here2\n"); */
-      
+
       /* Now evaluate a few situations */
-      
+
       /* If there has been no dependent parameter, we do not need to do anything */
       if (nactive != rpm -> nur) {
-	
+
 	/* Only one active parameter for all */
 	if (nactive == 1) {
 	  for (i = 0; i < rpm -> nur; ++i) {
@@ -14421,7 +14421,7 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
 	    chapar[j*rpm -> nur + i] = 1;
 	  }
 	}
-	
+
 	/* Otherwise interpolation */
 	else {
 	  i = 0;
@@ -14451,39 +14451,39 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
 	      ++k;
 	    }
 	  }
-	  
+
 	  /* Interpolate: use the appropriate mode, same as defined in rpm -> smothcar (user input indy) unless number of available points is 2, which entails linear */
-	  
+
 	  /* This we need in any case */
 	  if (!(gsl_interp_accelv = gsl_interp_accel_alloc()))
 	    goto error;
-	  
+
 	  /* Linear */
 	  if ((k < 3) || rpm -> smothindcar[j-NPARAMS+NDPARAMS] == INTERP_LINEAR  ) {
 	    if (!(gsl_interpv = gsl_interp_alloc (gsl_interp_linear, k)))
 	      goto error;
 	  }
-	  
+
 	  /* Spline */
 	  else if (k < 5 || rpm -> smothindcar[j-NPARAMS+NDPARAMS] == INTERP_CSPLINE) {
 	    if (!(gsl_interpv = gsl_interp_alloc (gsl_interp_cspline, k)))
 	      goto error;
 	  }
-	  
+
 	  /* Akima */
 	  else if (rpm -> smothindcar[j-NPARAMS+NDPARAMS] == INTERP_AKIMA) {
 	    if (!(gsl_interpv = gsl_interp_alloc (gsl_interp_akima, k)))
 	      goto error;
 	  }
-	  
+
 	  /* Something's wrong */
 	  else
 	    goto error;
-	  
+
 	  gsl_interp_init (gsl_interpv, rpm -> radar, rpm -> interar, k);
-	  
+
 	  /* Now interpolate where required */
-	  
+
 	  for (i = 0; i < rpm -> nur; ++i) {
 	    /* fprintf(stderr,"got here number: %i %i\n", i, rpm -> actarray[i]); */
 	    if (!(rpm -> actarray[i])) {
@@ -14497,7 +14497,7 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
 	    }
 	  }
 	}
-	
+
 	gsl_interp_free(gsl_interpv);
 	gsl_interp_accel_free(gsl_interp_accelv);
       }
@@ -14524,10 +14524,10 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
   /*      par[index -> ipa[i]] = par[index -> inpal[i]]+(par[PRADI*rpm -> nur+index -> ripa[i]]-par[PRADI*rpm -> nur+index -> rinpal[i]])*(par[index -> inpah[i]]-par[index -> inpal[i]])/(par[PRADI*rpm -> nur+index -> rinpah[i]] - par[PRADI*rpm -> nur+index -> rinpal[i]]);
 	  }
 	  } */
-  
-  
+
+
   return index -> nuel;
-  
+
  error:
   if (gsl_interpv)
     gsl_interp_free(gsl_interpv);
@@ -14545,29 +14545,29 @@ static int changedependent(ringparms *rpm, double *par, decomp_inlist *index, in
 static int galmod(hdrinf *hdr, ringparms *rpm, int fitmode, varlel *varele, decomp_inlist *index, long *fluxpoints, int *allnpoints)
 { int i;
   int disk, allnpoint = 0;
-  
+
   interpover(rpm, rpm -> radsep, fitmode, varele, index);
-  
+
 
   /* Initialise the model array */
   /*   for (i = 0; i < hdr -> bcsize1*hdr -> bsize2*hdr -> nsubs; ++i) */
-  
+
 #ifdef OPENMPTIR
 #pragma omp parallel for schedule(dynamic)
 #endif
   for (i = 0; i < hdr -> nprof*hdr -> nsubs; ++i)
 	hdr -> modelc -> points[i] = 0;
-  
+
   /* Initialise the chisquare */
   /*    hdr -> chi2 = 0; */
-  
+
   rpm -> outpoints = 0;
 
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
-    
-    allnpoints[disk] = 0; 
-    fluxpoints[disk] = 0; 
-    
+
+    allnpoints[disk] = 0;
+    fluxpoints[disk] = 0;
+
     /* Do all the loops */
 #ifdef OPENMPTIR
 #pragma omp parallel for schedule(dynamic)
@@ -14617,7 +14617,7 @@ static int galmodcool(hdrinf *hdr, ringparms *rpm, int fitmode, varlel *varele, 
 { int i;
   int disk, allnpoint = 0;
   int numpixs;
-  
+
   interpover(rpm, rpm -> radsep, fitmode, varele, index);
 
   /* Initialise the model array */
@@ -14628,16 +14628,16 @@ static int galmodcool(hdrinf *hdr, ringparms *rpm, int fitmode, varlel *varele, 
 #endif
   for (i = 0; i < numpixs; ++i)
 	hdr -> coolcube -> points[i] = 0;
-  
+
   /* Initialise the chisquare */
   /*    hdr -> chi2 = 0; */
-  
+
   rpm -> outpoints = 0;
 
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
-    
-    allnpoints[disk] = 0; 
-    fluxpoints[disk] = 0; 
+
+    allnpoints[disk] = 0;
+    fluxpoints[disk] = 0;
 
     /* Make sure that the correct function is linked for srconst */
     if (rpm -> inf_aziv[disk] -> srshape == srshape_azi_act) {
@@ -14662,7 +14662,7 @@ static int galmodcool(hdrinf *hdr, ringparms *rpm, int fitmode, varlel *varele, 
 	rpm -> sd[disk][i].gridpoint = gridpoint_mixedcool;
       }
     }
-        
+
     /* Do all the loops */
 #ifdef OPENMPTIR
 #pragma omp parallel for schedule(dynamic)
@@ -14699,7 +14699,7 @@ static int galmodcool(hdrinf *hdr, ringparms *rpm, int fitmode, varlel *varele, 
     else {
       rpm -> inf_aziv[disk] -> srshape = srshape_azi_pas;
     }
-    
+
     if (rpm -> inf_sdisv[disk] -> repeater == sdis_repeater_actcool) {
       rpm -> inf_sdisv[disk] -> repeater = sdis_repeater_act;
     }
@@ -14737,23 +14737,23 @@ static int chprm_gen(double *parms, varlel *varylist, double *newpar)
   int i,j = 0;
   int outofrange = 0;
   double oldzero = 0.0;
-  
+
   /* As long as there is any element of varylist we continue */
   while ((varylist)) {
-    
+
     varylist -> indicator = 0;
-    
+
     oldzero = newpar[varylist -> elements[0]];
-    
+
     if (!(parms[j] == oldzero)) {
-      
+
       varylist -> indicator = 1;
       /* Every adressant of elements will be changed by the same amount */
       for (i = 0; i < varylist -> nelem; ++i) {
 	newpar[varylist -> elements[i]] = newpar[varylist -> elements[i]]-oldzero+parms[j];
-	
+
 	/* And it will be checked whether on of them is out of range */
-	if (maths_checkinbetw(varylist -> parmax, varylist -> parmin, newpar[varylist -> elements[i]])) {	  
+	if (maths_checkinbetw(varylist -> parmax, varylist -> parmin, newpar[varylist -> elements[i]])) {
 	  ++outofrange;
 	}
       }
@@ -14761,7 +14761,7 @@ static int chprm_gen(double *parms, varlel *varylist, double *newpar)
     ++j;
     varylist = varylist -> next;
   }
-  
+
   return outofrange;
 }
 
@@ -14783,7 +14783,7 @@ static void writeoutput(loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit,
     writeoutarray(log, hdr, rpm, rpm -> oldpar, accept, hdr -> oldchi2, modcount, dof, -1.0);
 
   if ((log -> tstream)) {
-    fprintf(log -> tstream, "%7i ",  (int) log -> outarray[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+LOOPNR_TABNR]); 
+    fprintf(log -> tstream, "%7i ",  (int) log -> outarray[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+LOOPNR_TABNR]);
     for (i = 0; i < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur + NSPARAMS; ++i) {
       fprintf(log -> tstream, "%12.9e ", log -> outarray[i]);
     }
@@ -14791,7 +14791,7 @@ static void writeoutput(loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit,
     fprintf(log -> tstream, "%.16e ", log -> outarray[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS-1+RCHISQ_TABNR]);
     fprintf(log -> tstream, "%9i\n", (int) log -> outarray[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS-1+ACCEPT_TABNR]);
   }
-  
+
   if (!(log -> logpres)) {
     ftstab_appendrow_(log -> outarray+(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS-1+CHISQ_TABNR);
   }
@@ -14824,7 +14824,7 @@ static void writeoutputread(loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *
     writeoutarray(log, hdr, rpm, rpm -> oldpar, accept, hdr -> oldchi2, modcount, dof, -1.0);
 
   if ((log -> tstream)) {
-    fprintf(log -> tstream, "%7i ",  (int) log -> outarray[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+LOOPNR_TABNR]); 
+    fprintf(log -> tstream, "%7i ",  (int) log -> outarray[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+LOOPNR_TABNR]);
     for (i = 0; i < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur + NSPARAMS; ++i) {
       fprintf(log -> tstream, "%12.9e ", log -> outarray[i]);
     }
@@ -14832,7 +14832,7 @@ static void writeoutputread(loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *
     fprintf(log -> tstream, "%.16e ", log -> outarray[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS-1+RCHISQ_TABNR]);
     fprintf(log -> tstream, "%9i\n", (int) log -> outarray[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS-1+ACCEPT_TABNR]);
   }
-  
+
   tir_put_register(log, rpm, log -> outarray);
 
   /* Comment on it */
@@ -14951,7 +14951,7 @@ void writeoutarray(loginf *log, hdrinf *hdr, ringparms *rpm, double *par, char a
       globin[2] = par[(PRPARAMS+disk*NDPARAMS+PVSYS)*rpm -> nur+i];
 
       interntoglob(globin, globout, hdr);
-   
+
       log -> outarray[(PRPARAMS+disk*NDPARAMS+PXPOS)*rpm -> nur+i] = globout[0];
       log -> outarray[(PRPARAMS+disk*NDPARAMS+PYPOS)*rpm -> nur+i] = globout[1];
       log -> outarray[(PRPARAMS+disk*NDPARAMS+PVSYS)*rpm -> nur+i] = globout[2];
@@ -15081,12 +15081,12 @@ static void writeoutarrayerr(hdrinf *hdr, ringparms *rpm, double *par, double *e
   pcondisp = (NPARAMS + (rpm -> ndisks - 1)*NDPARAMS);
   condisp = pcondisp +1;
   errors[(pcondisp)*rpm -> nur] = ddinterntoparam(par[(pcondisp)*rpm -> nur], condisp, hdr, rpm -> ndisks);
-  
+
   /* Chisquare */
   errors[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS-1+CHISQ_TABNR] = chisquare;
 
   errors[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS-1+RCHISQ_TABNR] = chisquare/dof;
-  
+
   /* Acceptance */
   errors[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS-1+ACCEPT_TABNR] = (double) accept;
 
@@ -15114,23 +15114,23 @@ static float zprof(int option, maths_rstrf *permrandstr, float *y2)
 
   switch (option) {
   case 1:
-    if (*y2 < -1000.0) { 
-      
+    if (*y2 < -1000.0) {
+
       /* According to http://www.taygeta.com/random/gaussian.html a gaussian distribution with sigma = 1 and mean 0, unfortunately two independent numbers are generated */
       do {
 	x1 = 2.0*maths_rndmf(permrandstr)-1.0;
 	x2 = 2.0*maths_rndmf(permrandstr)-1.0;
 	w = x1*x1+x2*x2;
     } while (w >= 1.0);
-      
+
       w = sqrtf((-2.0*logf(w))/w);
       y1 = x1*w;
       *y2 = x2*w;
-    } 
-     else { 
+    }
+     else {
        y1 = *y2;
        *y2 = -1024.0;
-     } 
+     }
     break;
 
     /* Sech2 */
@@ -15141,37 +15141,37 @@ static float zprof(int option, maths_rstrf *permrandstr, float *y2)
     /* Note that this is the same as 0.5 log(p/(1-p)) if p varies from 0 to 1, so this is correct */
     y1 = atanhf(x1);
     break;
-    
+
     /* exponential exp(-|x|)/2 or with Z0 exp(-|x/Z0|)/(2*Z0) (normalised to 1) */
   case 3:
     while (!((x1 = 2.0*maths_rndmf(permrandstr)-1.0)))
       ;
-    if (x1 > 0.0) 
+    if (x1 > 0.0)
       y1 = -logf(x1);
-    else if (x1 < 0.0) 
+    else if (x1 < 0.0)
       y1 = logf(-x1);
     break;
-    
+
   case 4:
-    /* Lorentzian layer: (1/pi)/(x^2+1) or with Z0: Z0/(pi*(x^2+Z0^2)) (normalised to 1) */ 
+    /* Lorentzian layer: (1/pi)/(x^2+1) or with Z0: Z0/(pi*(x^2+Z0^2)) (normalised to 1) */
     while (!((x1 = 2.0*maths_rndmf(permrandstr)-1.0)-1.0))
       ;
 
     /* this is correct */
     y1 = tanf(PIHALF*x1);
     break;
-    
+
   case 6:
     *y2 = -1024.0;
     y1 = 0.0;
     break;
-    
+
   default:
     /* Uniform layer 1/2 for -1<x<1 0 otherwise or with Z0: 1/(2*Z0) for -Z0<z<Z0 0 otherwise */
     y1 = 2.0*maths_rndmf(permrandstr)-1.0;
     break;
   }
-  
+
   return y1;
 }
 
@@ -15240,14 +15240,14 @@ static int hdl_init(int ndisks)
   if (ftstab_hdladditem("VM3P", "ANGLE"     , "deg"               , 0.0,    1.0) < 0)    { return 0;}
   if (ftstab_hdladditem("VM4A", "VELO"      , "km/s"              , 0.0,    1.0) < 0)    { return 0;}
   if (ftstab_hdladditem("VM4P", "ANGLE"     , "deg"               , 0.0,    1.0) < 0)    { return 0;}
-  if (ftstab_hdladditem("WM0A", "ANGLE"     , "arcsec"            , 0.0,    1.0) < 0)    { return 0;}       
-  if (ftstab_hdladditem("WM1A", "ANGLE"     , "arcsec"            , 0.0,    1.0) < 0)    { return 0;}       
-  if (ftstab_hdladditem("WM1P", "ANGLE"     , "deg"               , 0.0,    1.0) < 0)    { return 0;}       
-  if (ftstab_hdladditem("WM2A", "ANGLE"     , "arcsec"            , 0.0,    1.0) < 0)    { return 0;}       
-  if (ftstab_hdladditem("WM2P", "ANGLE"     , "deg"               , 0.0,    1.0) < 0)    { return 0;}       
-  if (ftstab_hdladditem("WM3A", "ANGLE"     , "arcsec"            , 0.0,    1.0) < 0)    { return 0;}       
-  if (ftstab_hdladditem("WM3P", "ANGLE"     , "deg"               , 0.0,    1.0) < 0)    { return 0;}       
-  if (ftstab_hdladditem("WM4A", "ANGLE"     , "arcsec"            , 0.0,    1.0) < 0)    { return 0;}       
+  if (ftstab_hdladditem("WM0A", "ANGLE"     , "arcsec"            , 0.0,    1.0) < 0)    { return 0;}
+  if (ftstab_hdladditem("WM1A", "ANGLE"     , "arcsec"            , 0.0,    1.0) < 0)    { return 0;}
+  if (ftstab_hdladditem("WM1P", "ANGLE"     , "deg"               , 0.0,    1.0) < 0)    { return 0;}
+  if (ftstab_hdladditem("WM2A", "ANGLE"     , "arcsec"            , 0.0,    1.0) < 0)    { return 0;}
+  if (ftstab_hdladditem("WM2P", "ANGLE"     , "deg"               , 0.0,    1.0) < 0)    { return 0;}
+  if (ftstab_hdladditem("WM3A", "ANGLE"     , "arcsec"            , 0.0,    1.0) < 0)    { return 0;}
+  if (ftstab_hdladditem("WM3P", "ANGLE"     , "deg"               , 0.0,    1.0) < 0)    { return 0;}
+  if (ftstab_hdladditem("WM4A", "ANGLE"     , "arcsec"            , 0.0,    1.0) < 0)    { return 0;}
   if (ftstab_hdladditem("WM4P", "ANGLE"     , "deg"               , 0.0,    1.0) < 0)    { return 0;}
   if (ftstab_hdladditem("LS0" , "ANGLE"     , "arcsec"            , 0.0,    1.0) < 0)    { return 0;}
   if (ftstab_hdladditem("LC0" , "ANGLE"     , "arcsec"            , 0.0,    1.0) < 0)    { return 0;}
@@ -15321,14 +15321,14 @@ static int hdl_init(int ndisks)
     sprintf(placer, "VM3P_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "deg",                0.0,    1.0) < 0)         { return 0;}
     sprintf(placer, "VM4A_%i", disk+1);       if (ftstab_hdladditem(placer, "VELO",       "km/s",               0.0,    1.0) < 0)         { return 0;}
     sprintf(placer, "VM4P_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "deg",                0.0,    1.0) < 0)         { return 0;}
-    sprintf(placer, "WM0A_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "arcsec",             0.0,    1.0) < 0)         { return 0;}       
-    sprintf(placer, "WM1A_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "arcsec",             0.0,    1.0) < 0)         { return 0;}       
-    sprintf(placer, "WM1P_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "deg",                0.0,    1.0) < 0)         { return 0;}       
-    sprintf(placer, "WM2A_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "arcsec",             0.0,    1.0) < 0)         { return 0;}       
-    sprintf(placer, "WM2P_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "deg",                0.0,    1.0) < 0)         { return 0;}       
-    sprintf(placer, "WM3A_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "arcsec",             0.0,    1.0) < 0)         { return 0;}       
-    sprintf(placer, "WM3P_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "deg",                0.0,    1.0) < 0)         { return 0;}       
-    sprintf(placer, "WM4A_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "arcsec",             0.0,    1.0) < 0)         { return 0;}       
+    sprintf(placer, "WM0A_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "arcsec",             0.0,    1.0) < 0)         { return 0;}
+    sprintf(placer, "WM1A_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "arcsec",             0.0,    1.0) < 0)         { return 0;}
+    sprintf(placer, "WM1P_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "deg",                0.0,    1.0) < 0)         { return 0;}
+    sprintf(placer, "WM2A_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "arcsec",             0.0,    1.0) < 0)         { return 0;}
+    sprintf(placer, "WM2P_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "deg",                0.0,    1.0) < 0)         { return 0;}
+    sprintf(placer, "WM3A_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "arcsec",             0.0,    1.0) < 0)         { return 0;}
+    sprintf(placer, "WM3P_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "deg",                0.0,    1.0) < 0)         { return 0;}
+    sprintf(placer, "WM4A_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "arcsec",             0.0,    1.0) < 0)         { return 0;}
     sprintf(placer, "WM4P_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "deg",                0.0,    1.0) < 0)         { return 0;}
     sprintf(placer, "LS0_%i" , disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "arcsec",             0.0,    1.0) < 0)         { return 0;}
     sprintf(placer, "LC0_%i" , disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "arcsec",             0.0,    1.0) < 0)         { return 0;}
@@ -15348,7 +15348,7 @@ static int hdl_init(int ndisks)
     sprintf(placer, "RA3P_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "deg",                0.0,    1.0) < 0)         { return 0;}
     sprintf(placer, "RA4A_%i", disk+1);       if (ftstab_hdladditem(placer, "VELO",       "km/s",               0.0,    1.0) < 0)         { return 0;}
     sprintf(placer, "RA4P_%i", disk+1);       if (ftstab_hdladditem(placer, "ANGLE",      "deg",                0.0,    1.0) < 0)         { return 0;}
-  }      
+  }
 
   if (ftstab_hdladditem("CONDISP" , "VELO"   , "km/s"        , 0.0, 1.0) < 0)    { return 0;}
   if (ftstab_hdladditem("BMAJ"    , "ANGLE"  , "arcsec"      , 0.0, 1.0) < 0)    { return 0;}
@@ -15469,7 +15469,7 @@ static int putgenresults(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
   if (gft_mst_get(fit -> gft_mstv, &solchisq, GFT_OUTPUT_SOLCHSQ)) {
     if (!gft_mst_get(fit -> gft_mstv, &fit -> mon_bestchisq, GFT_OUTPUT_BESTCHISQ))
       solpres = 2;
-    else 
+    else
       solpres = 0;
   }
 
@@ -15478,22 +15478,22 @@ static int putgenresults(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
   /* Allocate the error array */
   if (!(errors = (double *) malloc(((NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS+OUTTABNR)*sizeof(double))))
     goto error;
-    
+
 
   /* Get the number of elements in varlist */
   if (solpres) {
     gft_mst_get(fit -> gft_mstv, &size_tv, GFT_OUTPUT_NPAR);
-    
+
     /* Allocate a double array of this length */
     if ((size_tv)) {
       if (!(array = (double *) malloc (size_tv*sizeof(double))))
 		  goto error;
     }
-    
+
     if ((solpres == 1)) {
       for (i = 0; i < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS+OUTTABNR; ++i)
 		  errors[i] = 0.0;
-		
+
       /* Get the best-fit parameters therein */
       if (gft_mst_get(fit -> gft_mstv, array, GFT_OUTPUT_SOLPAR)) {
 		  free(array);
@@ -15514,7 +15514,7 @@ static int putgenresults(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
   if (solpres){
     chimult = pow(OUTRANGEFAC,chprm_gen(array, fit -> varylist, rpm -> par));
 /*     if (chprm_gen(array, fit -> varylist, rpm -> par)) */
-    
+
 /*       If they get out of range, we multiply the chisquare by OUTRANGEFAC  */
 /*       chimult = OUTRANGEFAC; */
 /*     else */
@@ -15535,34 +15535,34 @@ static int putgenresults(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
   /* Do make the model */
   galmod(hdr, rpm, GENFIT, fit -> varylist, fit -> index, fit -> fluxpoints, fit -> npoints);
 
-  /* Get the chisquare */  
+  /* Get the chisquare */
 
   /* use here the usual replacement of PCONDISP */
   doublev = chimult*(reg_do(fit -> reg_contv, (fit -> mon_alloops == fit -> loops)?fit -> loops - 1:fit -> mon_alloops, getchisquare_c(rpm -> par[((NPARAMS + (rpm -> ndisks - 1)*NDPARAMS))*rpm -> nur]))+((double) rpm -> outpoints)*rpm -> penalty);
 
   /* report */
-  sprintf(mes, 
+  sprintf(mes,
 	  "Finished "      /* Fitting */
 	  "N:%d",          /* Number of pointsources */
 	  fit -> npoints[0]);
   for (disk = 1; disk < rpm -> ndisks; ++disk) {
     length = strlen(mes);
-    sprintf(mes+length, 
+    sprintf(mes+length,
 	    "/%d",       /* Number of pointsources */
 	    fit -> npoints[disk]);
   }
   length = strlen(mes);
-  sprintf(mes+length, 
+  sprintf(mes+length,
 	  " F:%.2E",     /* Total flux */
 	  fit -> fluxpoints[0]*rpm -> cflux[0]*hdr -> deltgridtouser[2]);
   for (disk = 1; disk < rpm -> ndisks; ++disk) {
     length = strlen(mes);
-    sprintf(mes+length, 
+    sprintf(mes+length,
 	    "/%.2E",
 	    fit -> fluxpoints[disk]*rpm -> cflux[disk]*hdr -> deltgridtouser[2]);
   }
   length = strlen(mes);
-  sprintf(mes+length, 
+  sprintf(mes+length,
 	  " C:%E "          /* current chisquare */
 	  " S:%E ",          /* size */
 			 doublev,      /* current minimum chisquare */
@@ -15573,7 +15573,7 @@ static int putgenresults(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
   /* New Kamphuis */
   if (startinfv -> restartid) {
     length = strlen(mes);
-    sprintf(mes+length, 
+    sprintf(mes+length,
 	    " R:%i ",          /* current restart-id */
 	    startinfv -> restartid    /* size */
 	    );
@@ -15598,7 +15598,7 @@ static int putgenresults(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
 
   /* make the output array */
  writeoutarray(log, hdr, rpm, rpm -> par, 1, doublev, fit -> recnr, fit -> dof, -1.0);
- 
+
   /* Errors are 0 if there are none, we use the par array to indicate that */
   for (i = 0; i < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur + NSPARAMS; ++i)
     rpm -> par[i] = 0.0;
@@ -15606,7 +15606,7 @@ static int putgenresults(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
   /* get the errors */
   if (!gft_mst_get(fit -> gft_mstv, array, GFT_OUTPUT_SOLERR))
     chprm_gen(array, fit -> varylist, rpm -> par);
-    
+
   /* Go through the parameters */
   writeoutarrayerr(hdr, rpm, rpm -> par, errors, 1, 0.0, 0, fit -> dof);
 
@@ -15625,7 +15625,7 @@ static int putgenresults(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
 
   if ((errors))
     free(errors);
- 
+
   if ((array))
     free(array);
 
@@ -15676,7 +15676,7 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 
   /* Get the number of elements in the varlist */
   varele = fit -> varylist;
-  
+
   i = 0;
   while (varele) {
     ++i;
@@ -15688,11 +15688,11 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
      parameters, we do it VERY roughly. If there is a parameter varied
      twice, this is not true anymore */
   /* dof = (hdr -> bsize1-1)*hdr -> bsize2* hdr -> nsubs-i; */
-  
+
   /* We allocate the prevresult array */
   if (!(prevresult = (double *) malloc(nmax*sizeof(double))))
     return 0;
-  
+
   /* Now get the number of big loops */
 /*   if (ftstab_get_rownr_()) */
 /*     bigloops = (fit -> loopnr)/i+1+!((fit -> loopnr)%i); */
@@ -15700,7 +15700,7 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
   bigloops = 0;
 /*   } */
   bigloops = (fit -> loopnr != 0)?(fit -> loopnr-1)/i+1:0;
-  
+
   /* Now put the pointer to the next element in the varlel */
   if ((fit -> loopnr))
     i = (fit -> loopnr-1)%i;
@@ -15710,7 +15710,7 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
   varele = fit -> varylist;
   for (j = 0; j < i; ++j)
     varele = varele -> next;
-  
+
   for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
     rpm -> chapar[i] = 1;
 
@@ -15735,7 +15735,7 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
   if ((fit -> loopnr)) {
     hdr -> oldchi2 = log -> outarray[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS+CHISQ_TABNR-1];
     satisfied = log -> outarray[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS+ACCEPT_TABNR-1];
-  }  
+  }
   else {
 
      /* addendum: change penalising strategy also for this task */
@@ -15744,7 +15744,7 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
      while(varele2) {
        for (i = 0; i < varele2 -> nelem; ++i) {
 	 if (maths_checkinbetw(varele2 -> parmax, varele2 -> parmin, rpm -> par[varele2 -> elements[i]])) {
-	   
+
 	   /* If they get out of range, we multiply the chisquare by OUTRANGEFAC */
 	   chimult = chimult*OUTRANGEFAC;
 	   break;
@@ -15758,7 +15758,7 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 
     /* Get the chisquare */
     hdr -> chi2 = getchisquare_c(rpm -> par[((NPARAMS + (rpm -> ndisks - 1)*NDPARAMS))*rpm -> nur]);
- 
+
     /* Regularise */
     hdr -> chi2 = reg_do(fit -> reg_contv, fit -> loopnr, hdr -> chi2);
 
@@ -15770,13 +15770,13 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 
     /* Copy it */
     hdr -> oldchi2 = hdr -> chi2;
-    
+
     /* Write the output */
     satisfied = 1;
-    
+
     /* Starting */
     sprintf(mes, "START");
-    
+
     anyout_tir(&def, mes);
     writeoutput(log, hdr, rpm, fit, satisfied, fit -> dof, bigloops, globiter);
     ++fit -> loopnr;
@@ -15785,48 +15785,48 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 
   /* This will run until the bigloops is reached */
   while (bigloops <= fit -> loops) {
-    
+
     /* We go through the varylist */
     while(varele) {
-       
+
       /* Record where we started */
       for (i = 0; i < varele -> nelem; ++i)
 	prevresult[i] = rpm -> oldpar[varele -> elements[i]];
-      
+
       /* Reset the old chisquare */
       /* chi2_old = hdr -> oldchi2 ; */
-      
+
       globiter_old = globiter;
-      
+
       /* Calculate the delta */
       if (bigloops - varele -> moderate <= 0)
 	delta = (bigloops-1)*(varele -> delend-varele -> delstart)/varele -> moderate+varele -> delstart;
       else
 	delta = varele -> delend;
-      
-      
+
+
       delta_start = delta;
-      
+
       /* Calculate the number of steps */
       if (bigloops - varele -> moderate <= 0)
 	maxiter = ((bigloops-1)*(varele -> iteend-varele -> itestart))/varele -> moderate+varele -> itestart;
       else
 	maxiter = varele -> iteend;
-      
+
       /* The first iteration */
       curiter = 0;
       accept = 1;
-      
+
       /* We go on searching until we find a lower chisquare and then a higher chisquare */
       while (1) {
- 
+
 	/* If the maximum number of iterations is reached break out, deeply disappointed */
 	if (curiter == maxiter) {
 	  accept = 0;
 	  satisfied = 0;
 	  break;
 	}
- 
+
 	/* Change the params */
 	for (i = 0; i < varele -> nelem; ++i)
 	  rpm -> par[varele -> elements[i]] = rpm -> oldpar[varele -> elements[i]] + delta;
@@ -15838,7 +15838,7 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
      while(varele2) {
        for (i = 0; i < varele2 -> nelem; ++i) {
 	 if (maths_checkinbetw(varele2 -> parmax, varele2 -> parmin, rpm -> par[varele2 -> elements[i]])) {
-	   
+
 	   /* If they get out of range, we multiply the chisquare by OUTRANGEFAC */
 	   chimult = chimult*OUTRANGEFAC;
 	   break;
@@ -15861,74 +15861,74 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
      galmod(hdr, rpm, 1, varele, fit -> index, rpm -> fluxpoints, fit -> npoints);
 
 	++globiter;
- 
+
 	/* Get the chisquare */
 	hdr -> chi2 = getchisquare_c(rpm -> par[((NPARAMS + (rpm -> ndisks - 1)*NDPARAMS))*rpm -> nur]);
- 
+
 	/* Regularise */
 	hdr -> chi2 = reg_do(fit -> reg_contv, bigloops-1, hdr -> chi2);
 	fit -> mon_alloops = bigloops-1;
 
 	/* Correct the chisquare taking into account the outliers, don't know if that is necessary here... */
 	hdr -> chi2 = chimult*(hdr -> chi2+((double) rpm -> outpoints)*rpm -> penalty);
- 
+
 	/* 	ftstab_putcoltitl(key, ftstab_get_coltit(*varele -> elements+1)); */
 	ftstab_putcoltitl(key, (*varele -> elements)/rpm -> nur+1);
 
 	/* Report Search minimum, big loops, keyword loops, total models, keyword, first ringnumber, keyword models/maxmodels, number of pointsources, total flux, current minimum chisquare, trial chisquare, difference, current stepwidth, start stepwidth. In principle, this should be a status report, but gipsy... crashes when you interrupt the task if you change the length MSGLEN of the status line in taskcom.h */
-	sprintf(mes, 
+	sprintf(mes,
 		"SM "         /* Searching minimum */
 		"BL:%li "       /* Big loops */
 		"KL:%li "       /* Keyword loops */
 		"TM:%i "     /* Total models */
-		"KW:%s "       /* Keyword */ 
+		"KW:%s "       /* Keyword */
 		"FR:%i "       /* First ringnumber */
 		"KM:%i"        /* Keyword models */
 		"/%i "         /* Keyword maxmodels */
 		"NP:%d",       /* Number of pointsources */
-		bigloops,                /* Big loops */         
-		fit -> loopnr,                       /* Keyword loops */        
-		globiter,                /* Total models */        
-		key,                 /* Keyword */ 
-		(*varele -> elements/rpm -> nur < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS))?*varele -> elements%rpm -> nur+1:1,                  /* First ringnumber */  
-		globiter-globiter_old,                      /* Keyword models */        
-		maxiter,                /* Keyword maxmodels */        
-		fit -> npoints[0]);               /* Number of pointsources */       
+		bigloops,                /* Big loops */
+		fit -> loopnr,                       /* Keyword loops */
+		globiter,                /* Total models */
+		key,                 /* Keyword */
+		(*varele -> elements/rpm -> nur < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS))?*varele -> elements%rpm -> nur+1:1,                  /* First ringnumber */
+		globiter-globiter_old,                      /* Keyword models */
+		maxiter,                /* Keyword maxmodels */
+		fit -> npoints[0]);               /* Number of pointsources */
 	for (disk = 1; disk < rpm -> ndisks; ++disk) {
 	  length = strlen(mes);
-	  sprintf(mes+length, 
+	  sprintf(mes+length,
 		  "/%d",       /* Number of pointsources */
 		  fit -> npoints[disk]);
 	}
 	length = strlen(mes);
-	sprintf(mes+length, 
+	sprintf(mes+length,
 		" TF:%.2E",     /* Total flux */
 		rpm -> fluxpoints[0]*rpm -> cflux[0]);
 	for (disk = 1; disk < rpm -> ndisks; ++disk) {
 	  length = strlen(mes);
-	  sprintf(mes+length, 
+	  sprintf(mes+length,
 		  "/%.2E",
 		  rpm -> fluxpoints[disk]*rpm -> cflux[disk]);
 	}
- 
+
 	length = strlen(mes);
-	sprintf(mes+length, 
+	sprintf(mes+length,
 		" CC:%E "       /* current minimum chisquare */
 		"DC:%+.1E "       /* Difference */
 		"SW:%+.2E"       /* Current stepwidth */
 		"/%.2E "         /* Start stepwidth */
-		"AC:%i",      /* Acceptance flag */                                          
-		hdr -> oldchi2,               /* current minimum chisquare */       
-		hdr -> oldchi2-hdr -> chi2,                                                     /* Difference */ 
-		ddinterntoparam(delta, (*varele -> elements)/rpm -> nur +1, hdr, rpm -> ndisks),         /* Current stepwidth */        
-		ddinterntoparam(delta_start, (*varele -> elements)/rpm -> nur +1, hdr, rpm -> ndisks),   /* Start stepwidth */           
-		satisfied               /* Acceptance flag */           
-		);                              
+		"AC:%i",      /* Acceptance flag */
+		hdr -> oldchi2,               /* current minimum chisquare */
+		hdr -> oldchi2-hdr -> chi2,                                                     /* Difference */
+		ddinterntoparam(delta, (*varele -> elements)/rpm -> nur +1, hdr, rpm -> ndisks),         /* Current stepwidth */
+		ddinterntoparam(delta_start, (*varele -> elements)/rpm -> nur +1, hdr, rpm -> ndisks),   /* Start stepwidth */
+		satisfied               /* Acceptance flag */
+		);
 	anyout_tir(&def, mes);
 
 	/* Now compare */
 	if (hdr -> chi2 >= hdr -> oldchi2) {
-   
+
 	  /* If the number of iterations is larger than 1, we stop it here */
 	  if (curiter > 0) {
 	    delta = BFAC*delta;
@@ -15941,7 +15941,7 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 	  }
 	}
 	else {
-   
+
 	  /* Now overwrite the oldparams */
 	  for (i = 0; i < varele -> nelem; ++i)
 	    rpm -> oldpar[varele -> elements[i]] = rpm -> oldpar[varele -> elements[i]] + delta;
@@ -15953,42 +15953,42 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 
 	  /* Now enlarge the delta and accept the chisquare */
 	  hdr -> oldchi2 = hdr -> chi2;
-	  if (curiter < MAGNIFICNR) 
+	  if (curiter < MAGNIFICNR)
 	    delta = AFAC*delta;
 	}
- 
+
 	++curiter;
       }
-      
+
       /* search = 1; */
-      
+
       if ((accept)) {
 	/* We go on searching to find the minimum in the knowledge that we are nearly there */
 	while (1) {
-   
+
 	  /* If the maximum number of iterations is reached break out, deeply disappointed */
 	  if (curiter == maxiter) {
 	    satisfied = 0;
 	    break;
 	  }
-   
+
 	  /* Change the delta */
 	  delta = BFAC * delta;
-   
+
 	  /* Check if we break out because of too small deltas*/
 	  if (fabs(delta) < varele -> mindelta)
 	    break;
-   
+
 	  for (i = 0; i < varele -> nelem; ++i)
 	    rpm -> par[varele -> elements[i]] = rpm -> oldpar[varele -> elements[i]] + delta;
-   
+
      /* addendum: change penalising strategy also for this task */
      varele2 = fit -> varylist;
      chimult = 1.0;
      while(varele2) {
        for (i = 0; i < varele2 -> nelem; ++i) {
 	 if (maths_checkinbetw(varele2 -> parmax, varele2 -> parmin, rpm -> par[varele2 -> elements[i]])) {
-	   
+
 	   /* If they get out of range, we multiply the chisquare by OUTRANGEFAC */
 	   chimult = chimult*OUTRANGEFAC;
 	   break;
@@ -16004,81 +16004,81 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
        goto error;
 
      /* We don't have to check whether we broke out of range */
-     
+
      /* Do it */
      galmod(hdr, rpm, 1, varele, fit -> index, rpm -> fluxpoints, fit -> npoints);
      ++globiter;
-     
+
      /* Get the chisquare */
 	  hdr -> chi2 = getchisquare_c(rpm -> par[((NPARAMS + (rpm -> ndisks - 1)*NDPARAMS))*rpm -> nur]);
-   
+
 	  /* Regularise */
 	  hdr -> chi2 = reg_do(fit -> reg_contv, bigloops-1, hdr -> chi2);
 	  fit -> mon_alloops = bigloops-1;
 
 	  /* Correct the chisquare taking into account the outliers, don't know if that is necessary here... */
 	  hdr -> chi2 = chimult*(hdr -> chi2+((double) rpm -> outpoints)*rpm -> penalty);
-   
+
 	  /* Report Found minimum, big loops,  total models, keyword loops, keyword, first ringnumber, keyword models/maxmodels, number of pointsources, total flux, current minimum chisquare, trial chisquare, difference, current stepwidth, start stepwidth */
-   
+
 	  /* Report Search minimum, big loops, keyword loops, total models, keyword, first ringnumber, keyword models/maxmodels, number of pointsources, total flux, current minimum chisquare, trial chisquare, difference, current stepwidth, start stepwidth */
-	  sprintf(mes, 
+	  sprintf(mes,
 		  "FM "         /* Searching minimum */
 		  "BL:%li "       /* Big loops */
 		  "KL:%li "       /* Keyword loops */
 		  "TM:%i "     /* Total models */
-		  "KW:%s "       /* Keyword */ 
+		  "KW:%s "       /* Keyword */
 		  "FR:%i "       /* First ringnumber */
 		  "KM:%i"        /* Keyword models */
 		  "/%i "         /* Keyword maxmodels */
 		  "NP:%d",       /* Number of pointsources */
-		  bigloops,                /* Big loops */         
-		  fit -> loopnr,                       /* Keyword loops */        
-		  globiter,                /* Total models */        
-		  key,                 /* Keyword */ 
-		  (*varele -> elements/rpm -> nur < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS))?*varele -> elements%rpm -> nur+1:1,                  /* First ringnumber */  
-		  globiter-globiter_old,                      /* Keyword models */        
-		  maxiter,                /* Keyword maxmodels */        
-		  fit -> npoints[0]);               /* Number of pointsources */       
+		  bigloops,                /* Big loops */
+		  fit -> loopnr,                       /* Keyword loops */
+		  globiter,                /* Total models */
+		  key,                 /* Keyword */
+		  (*varele -> elements/rpm -> nur < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS))?*varele -> elements%rpm -> nur+1:1,                  /* First ringnumber */
+		  globiter-globiter_old,                      /* Keyword models */
+		  maxiter,                /* Keyword maxmodels */
+		  fit -> npoints[0]);               /* Number of pointsources */
 	  for (disk = 1; disk < rpm -> ndisks; ++disk) {
 	    length = strlen(mes);
-	    sprintf(mes+length, 
+	    sprintf(mes+length,
 		    "/%d",       /* Number of pointsources */
 		    fit -> npoints[disk]);
 	  }
 	  length = strlen(mes);
-	  sprintf(mes+length, 
+	  sprintf(mes+length,
 		  " TF:%.2E",     /* Total flux */
 		  rpm -> fluxpoints[0]*rpm -> cflux[0]);
 	  for (disk = 1; disk < rpm -> ndisks; ++disk) {
 	    length = strlen(mes);
-	    sprintf(mes+length, 
+	    sprintf(mes+length,
 		    "/%.2E",
 		    rpm -> fluxpoints[disk]*rpm -> cflux[disk]);
 	  }
- 
+
 	  length = strlen(mes);
-	  sprintf(mes+length, 
+	  sprintf(mes+length,
 		  " CC:%E "       /* current minimum chisquare */
 		  "DC:%+.1E "       /* Difference */
 		  "SW:%+.2E"       /* Current stepwidth */
 		  "/%.2E "         /* Start stepwidth */
-		  "AC:%i",      /* Acceptance flag */                                          
-		  hdr -> oldchi2,               /* current minimum chisquare */       
-		  hdr -> oldchi2-hdr -> chi2,                                                     /* Difference */ 
-		  ddinterntoparam(delta, (*varele -> elements)/rpm -> nur+1, hdr, rpm -> ndisks),         /* Current stepwidth */        
-		  ddinterntoparam(delta_start, (*varele -> elements)/rpm -> nur+1, hdr, rpm -> ndisks),   /* Start stepwidth */           
-		  satisfied               /* Acceptance flag */           
+		  "AC:%i",      /* Acceptance flag */
+		  hdr -> oldchi2,               /* current minimum chisquare */
+		  hdr -> oldchi2-hdr -> chi2,                                                     /* Difference */
+		  ddinterntoparam(delta, (*varele -> elements)/rpm -> nur+1, hdr, rpm -> ndisks),         /* Current stepwidth */
+		  ddinterntoparam(delta_start, (*varele -> elements)/rpm -> nur+1, hdr, rpm -> ndisks),   /* Start stepwidth */
+		  satisfied               /* Acceptance flag */
 		  );
 	  anyout_tir(&def, mes);
-   
+
 	  /* Now compare */
 	  if (hdr -> chi2 >= hdr -> oldchi2) {
 	    delta = -delta;
 	  }
 	  else {
 	    /* Now overwrite the oldparams */
-     
+
 	    for (i = 0; i < varele -> nelem; ++i)
 	      rpm -> oldpar[varele -> elements[i]] = rpm -> oldpar[varele -> elements[i]] + delta;
 
@@ -16094,40 +16094,40 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 	  ++curiter;
 	}
       }
-      
+
       /*Output of a progress file Kamphuis addition */
       progressout(startinfv, mes);
 
       /* We have to check whether we have changed too much to be satisfied */
       if ((satisfied)) {
-	
+
 	/* We only have to check one variable */
 	if (fabs(rpm -> oldpar[varele -> elements[0]]-prevresult[0]) > varele -> satdelt) {
 	  satisfied = 0;
 	}
       }
-      
-      /* Check the range of the params, this is old */ 
+
+      /* Check the range of the params, this is old */
       /* Deleted everything START */
       /*       for (i = 0; i < varele -> nelem; ++i) { */
       /* 	if (maths_checkinbetw(varele -> parmax, varele -> parmin, rpm -> oldpar[varele -> elements[i]])) { */
-      
+
       /* Comment on that */
       /* 	  sprintf(mes, "Parameter out of range, interpolating"); */
       /* 	  anyout_tir(&def, mes); */
-      
+
       /***************/
       /* This is new */
       /***************/
-      
+
       /* Find out what has happened */
-      /* mdelt = 0 */	  
+      /* mdelt = 0 */
       /* 	  mdelt = fabs(prevresult[i] - rpm -> oldpar[varele -> elements[i]])/2.0; */
-      
+
       /* 	  if (varele -> parmax > varele -> parmin) { */
       /* 	    if (rpm -> oldpar[varele -> elements[i]] < varele -> parmin) { */
       /* 	      while (i < varele -> nelem) { */
-      /* 		mdelt = (((prevresult[i]-varele -> parmin)/2.0) < mdelt)?((prevresult[i]-varele -> parmin)/2.0):mdelt; */ 
+      /* 		mdelt = (((prevresult[i]-varele -> parmin)/2.0) < mdelt)?((prevresult[i]-varele -> parmin)/2.0):mdelt; */
       /* 		mdelt = (fabs(prevresult[i]-varele -> parmin) < mdelt)?(fabs(prevresult[i]-varele -> parmin)/2.0):mdelt; */
       /* 		++i; */
       /* 	      } */
@@ -16135,7 +16135,7 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
       /* 	    } */
       /* 	    else { */
       /* 	      while (i < varele -> nelem) { */
-      /* 				mdelt = (((varele -> parmax-prevresult[i])/2.0) < mdelt)?(((varele -> parmax-prevresult[i])/2.0)/2.0):mdelt; */ 
+      /* 				mdelt = (((varele -> parmax-prevresult[i])/2.0) < mdelt)?(((varele -> parmax-prevresult[i])/2.0)/2.0):mdelt; */
       /* 		mdelt = (fabs(prevresult[i]-varele -> parmax) < mdelt)?(fabs(prevresult[i]-varele -> parmax)/2.0):mdelt; */
       /* 		++i; */
       /* 	      } */
@@ -16152,77 +16152,77 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
       /* 	    } */
       /* 	    else { */
       /* 	      while (i < varele -> nelem) { */
-      /* 		 		mdelt = (((varele -> parmin-prevresult[i])/2.0) < mdelt)?(((varele -> parmin-prevresult[i])/2.0)/2.0):mdelt; */ 
+      /* 		 		mdelt = (((varele -> parmin-prevresult[i])/2.0) < mdelt)?(((varele -> parmin-prevresult[i])/2.0)/2.0):mdelt; */
       /* 		mdelt = (fabs(prevresult[i]-varele -> parmin) < mdelt)?(fabs(prevresult[i]-varele -> parmin)/2.0):mdelt; */
       /* 		++i; */
       /* 	      } */
       /* 	    } */
       /* 	  } */
-      
+
       /* change all the values: new */
       /* 	  for (i = 0; i < varele -> nelem; ++i) */
       /* 	    rpm -> par[varele -> elements[i]] = rpm -> oldpar[varele -> elements[i]] = prevresult[i]+mdelt; */
-      
+
       /* check out the indexed parameters */
       /* 	  changedependent(rpm, rpm -> par, fit -> index); */
       /* 	  changedependent(rpm, rpm -> oldpar, fit -> index); */
-      
+
       /* write back all the values: old */
       /*    for (i = 0; i < varele -> nelem; ++i) */
       /*      rpm -> par[varele -> elements[i]] = rpm -> oldpar[varele -> elements[i]] = prevresult[i]; */
-	  
+
       /* This is crucial at that point */
       /* 	  interpover(rpm, rpm -> radsep, 1, varele, fit -> index); */
-	  
+
       /* Do it */
       /*  	  galmod(hdr, rpm, 1, varele, fit -> index, fluxpoints, fit -> npoints); */
-   
+
       /* Get the chisquare */
       /*  	  hdr -> chi2 = getchisquare_c(rpm -> par[(PCONDISP)*rpm -> nur]); */
-      
+
       /* Regularise */
       /* 	  hdr -> chi2 = reg_do(fit -> reg_contv, bigloops-1, hdr -> chi2); */
       /* 	  fit -> mon_alloops = bigloops-1; */
-      
+
       /* Correct the chisquare taking into account the outliers, don't know if that is necessary here... */
       /* 	  hdr -> chi2 = hdr -> chi2+((double) rpm -> outpoints)*rpm -> penalty; */
-      
+
       /* 	  hdr -> oldchi2 = hdr -> chi2; */
 
       /* 	  satisfied = 0; */
       /* 	  break; */
       /* 	} */
       /*       } */
-     
+
       /* BUGFIXED? The following lines were not present in the previous version */
       /* Write oldpar into par */
       for (i = 0; i < varele -> nelem; ++i)
 	rpm -> par[varele -> elements[i]] = rpm -> oldpar[varele -> elements[i]];
-      
+
       /* check out the indexed parameters */
       for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
 	rpm -> chapar[i] = 1;
 
       if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
 	goto error;
-      
+
       /* BUGFIX: This seems to be very important in order not to loose pointsources; if not done, a pointsource list might be terminated the wrong way */
       interpover(rpm, rpm -> radsep, 1, varele, fit -> index);
-      
+
       writeoutput(log, hdr, rpm, fit, satisfied, fit -> dof, fit -> loopnr, globiter);
 
       varele = varele -> next;
-      
+
       /* Now we document on the results */
       ++fit -> loopnr;
-      
+
       if ((*hdr -> outset != '\0')) {
 	if (!(fit -> loopnr%hdr -> outcubup)) {
 	  writemodel(hdr, rpm, fit, rpm -> oldpar, fit -> index);
 	}
       }
     }
-    
+
     /* If we are still satisfied, we break, because we have results, which is documented also in outarray[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS-1+ACCEPT_TABNR] */
     if ((satisfied)) {
       break;
@@ -16230,7 +16230,7 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 
     /* We start at the start of the varylist again */
     varele = fit -> varylist;
-    
+
     ++bigloops;
     satisfied = 1;
   }
@@ -16252,22 +16252,22 @@ static int golden_section(startinf *startinfv, loginf *log, hdrinf *hdr, ringpar
 static int putgoldresults(loginf *log, ringparms *rpm, fitparms *fit)
 {
   int i;
-  
+
   /* The best value is at the end */
 /*   ftstab_get_row(fit -> loopnr, log -> outarray); */
 /* This is probably stupid, but, well... */
   tir_get_register(log, rpm, log -> outarray);
-  
+
   /* Put it to the grid */
   for (i = 0; i < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS+OUTTABNR; ++i)
 /*     ftstab_fillhd(i, ftstab_get_coltit(i+1), ftstab_get_coltyp(i+1), COLRADI_DEFAULT, log -> outarray[i]); */
-    tir_fillhd(log, i, COLRADI_DEFAULT, log -> outarray[i]);  
+    tir_fillhd(log, i, COLRADI_DEFAULT, log -> outarray[i]);
 
 
   /* Apply the changes */
 /*   if (!ftstab_clearhd(0)) */
 /*     goto error; */
-  
+
   return 1;
 }
 
@@ -16316,7 +16316,7 @@ static int writeasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
   /* First check if there was an input */
   if (*log -> table == '\0')
     return 1;
-  
+
   /* Also check if there was a logfile and stop if there wasn't */
 /*   if (*log -> logname == '\0') */
 /*     return 0; */
@@ -16331,14 +16331,14 @@ static int writeasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
       sprintf(mes, "REFRING: impossible number");
       cancel_tir(startinfv -> arel, "REFRING=", 2);
       def = 4;
-    } 
+    }
     else
       err = 0;
   }
 
   /* Try to open the output file */
   if (!(stream = fopen(log -> table, "r"))) {
-    
+
     /* If the file doesn't exist we compose a header */
     if (!(stream = fopen(log -> table, "w"))) {
       return 0;
@@ -16349,16 +16349,16 @@ static int writeasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
       return 0;
     fprintf(stream, "\n");
   }
-  
+
   /* Now we put some general information, commented */
   fprintf(stream, "# tirific version 1\n");
   fprintf(stream, "# logfile: %s\n", log -> logname);
-  
-  
+
+
   if (fit -> fitmode >= GOLDEN_SECTION) {
     fprintf(stream, "# fitmode was golden section or higher\n");
     fprintf(stream, "# last acceptance was (1 accepted, 0 not accepted): %f\n", log -> outarray[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS+ACCEPT_TABNR-1]);
-  }  
+  }
   else {
     fprintf(stream, "# fitmode was metropolis\n");
   }
@@ -16367,7 +16367,7 @@ static int writeasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
 /* ftstab_get_colgrd((NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS+CHISQ_TABNR),  */
 /* ftstab_get_colgrd((NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS+RCHISQ_TABNR)); */
   fprintf(stream, "# Chisquare: %f\n# Reduced Chisquare: %f\n", tir_get_colgrd(log, rpm, (NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS+CHISQ_TABNR), tir_get_colgrd(log, rpm, (NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS+RCHISQ_TABNR));
-  
+
   /* We comment the header */
   fprintf(stream, "# ");
 
@@ -16441,7 +16441,7 @@ static int writeasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
 
     for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
       rpm -> chapar[i] = chkchangep(fit -> varylist, fit -> fitmode, i, rpm -> nur);
-    
+
     if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
       goto error;
 
@@ -16478,7 +16478,7 @@ static int writeasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
 	delta = tir_get_colrad(log, rpm, i*rpm -> nur+j);
  fprintf(stream, "%+.12E %+.12E ", value, delta);
       }
-      
+
       /* The single parameters */
       for (i = 0; i < NSPARAMS; ++i) {
 	value = tir_get_colgrd(log, rpm, (NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+i+1);
@@ -16487,7 +16487,7 @@ static int writeasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
       }
 
       /* Now the specials */
-      
+
       /* Calculate the radius in kpc */
       value = tir_get_colgrd(log, rpm, PRADI*rpm -> nur+j);
       delta = tir_get_colrad(log, rpm, PRADI*rpm -> nur+j);
@@ -16496,7 +16496,7 @@ static int writeasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
       value = value*1000*log -> distance*TWOPI/(360*60*60);
       delta = delta*1000*log -> distance*TWOPI/(360*60*60);
       fprintf(stream, "%+.12E %+.12E ", value, delta);
-      
+
       /* Calculate the approximate frequency */
       vsys = tir_get_colgrd(log, rpm, PVSYS*rpm -> nur+j);
       nu = (SPEEDOFLIGHT-vsys)*hdr -> rfreq/SPEEDOFLIGHT;
@@ -16508,7 +16508,7 @@ static int writeasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
       value = hdr -> itou*value*pow(hdr -> rfreq/nu,4);
       delta = hdr -> itou*delta*pow(hdr -> rfreq/nu,4);
       fprintf(stream, "%+.12E %+.12E ", value, delta);
- 
+
       /* Now we convert to Msol/pc^2 */
       value = UTOSOLAR*value;
       delta = UTOSOLAR*delta;
@@ -16519,7 +16519,7 @@ static int writeasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
       nv[0] = sin(rpm -> par[PINCL*rpm -> nur+j-1])*sin(rpm -> par[PPA*rpm -> nur+j-1]);
       nv[1] = -sin(rpm -> par[PINCL*rpm -> nur+j-1])*cos(rpm -> par[PPA*rpm -> nur+j-1]);
       nv[2] = cos(rpm -> par[PINCL*rpm -> nur+j-1]);
-      
+
       /* Here is the scalar product with the reference ring */
       value = nv[0]*nrefr[0]+nv[1]*nrefr[1]+nv[2]*nrefr[2];
 
@@ -16650,7 +16650,7 @@ static int writeasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringparm
 
       fprintf(stream, "\n  ");
     }
-    
+
   fclose(stream);
   return 1;
 
@@ -16709,7 +16709,7 @@ static int writebigasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringp
 
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "BIGTABLE", "Give big table name.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr))
     goto error;
-  
+
   if ((varystr[0])) {
     if (!(key = simparse_copystring(varystr[0]))) {
       goto error;
@@ -16720,20 +16720,20 @@ static int writebigasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringp
       goto error;
     }
   }
-  
+
   freeparsed(varystr);
   varystr = NULL;
-  
+
   /* If there is no input we stop here */
   if (*key == '\0') {
     free(key);
     return 1;
   }
-  
+
   /* Check if there was a logfile and stop if there wasn't */
   /*   if (*log -> logname == '\0') */
   /*     return 0; */
-  
+
   /* Get the reference ring */
   sprintf(mes, "Give reference ring for warp angle calculation");
   while ((err)) {
@@ -16742,14 +16742,14 @@ static int writebigasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringp
       sprintf(mes, "REFRING: impossible number");
       cancel_tir(startinfv -> arel, "REFRING=", 2);
       def = 4;
-    } 
+    }
     else
       err = 0;
   }
 
   /* Try to open the output file */
   if (!(stream = fopen(key, "r"))) {
-    
+
     /* If the file doesn't exist we compose a header */
     if (!(stream = fopen(key, "w"))) {
       return 0;
@@ -16760,16 +16760,16 @@ static int writebigasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringp
       return 0;
     fprintf(stream, "\n");
   }
-  
+
   /* Now we put some general information, commented */
   fprintf(stream, "# tirific version 1\n");
   fprintf(stream, "# logfile: %s\n", log -> logname);
-  
-  
+
+
   if (fit -> fitmode >= GOLDEN_SECTION) {
     fprintf(stream, "# fitmode was golden section\n");
     fprintf(stream, "# last acceptance was (1 accepted, 0 not accepted): %f\n", log -> outarray[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+NSPARAMS+ACCEPT_TABNR-1]);
-  }  
+  }
   else {
     fprintf(stream, "# fitmode was metropolis\n");
   }
@@ -16843,7 +16843,7 @@ static int writebigasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringp
 
     for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
       rpm -> chapar[i] = 1;
-    
+
     if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
       goto error;
 
@@ -16872,7 +16872,7 @@ static int writebigasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringp
     nrefr[0] = sinf(DEGTORAD*rpm -> par[PINCL*rpm -> nur+rring-1])*sinf(DEGTORAD*rpm -> par[PPA*rpm -> nur+rring-1]);
     nrefr[1] = -sinf(DEGTORAD*rpm -> par[PINCL*rpm -> nur+rring-1])*cosf(DEGTORAD*rpm -> par[PPA*rpm -> nur+rring-1]);
     nrefr[2] = cosf(DEGTORAD*rpm -> par[PINCL*rpm -> nur+rring-1]);
- 
+
     /* Now we read in the values */
     for (j = 0; j < rpm -> nr; ++j) {
       for (i = 0; i < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS); ++i) {
@@ -16885,33 +16885,33 @@ static int writebigasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringp
  fprintf(stream, "%+.12E ", value);
       }
       /* Now the specials */
-      
+
       /* Calculate the radius in kpc */
       value = rpm -> modpar[PRADI*rpm -> nr+j];
-      
+
       /* Let's be slow, as this is only output */
       value = value*1000*log -> distance*TWOPI/(360*60*60);
       fprintf(stream, "%+.12E ", value);
-      
+
       /* Calculate the approximate frequency */
       vsys = rpm -> modpar[PVSYS*rpm -> nr+j];
       nu = (SPEEDOFLIGHT-vsys)*hdr -> rfreq/SPEEDOFLIGHT;
-      
+
       value = rpm -> modpar[PSBR*rpm -> nr+j];
 
       /* The intensity in the restframe scales like */
       value = hdr -> itou*value*pow(hdr -> rfreq/nu,4);
       fprintf(stream, "%+.12E ", value);
- 
+
       /* Now we convert to Msol/pc^2 */
       value = UTOSOLAR*value;
       fprintf(stream, "%+.12E ", value);
-    
+
       /* Get the normal vector of the current ring */
       nv[0] = sin(DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j])*sin(DEGTORAD*rpm -> modpar[PPA*rpm -> nr+j]);
       nv[1] = -sin(DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j])*cos(DEGTORAD*rpm -> modpar[PPA*rpm -> nr+j]);
       nv[2] = cos(DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j]);
-      
+
       /* Here is the scalar product with the reference ring */
       value = nv[0]*nrefr[0]+nv[1]*nrefr[1]+nv[2]*nrefr[2];
 
@@ -17087,7 +17087,7 @@ static int writebigasctable(startinf *startinfv, loginf *log, hdrinf *hdr, ringp
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 /* Make a qfits header suitable for coolgal output */
-static qfits_header *makecoolhdr(hdrinf *hdr, double beamsizeindeg) 
+static qfits_header *makecoolhdr(hdrinf *hdr, double beamsizeindeg)
 {
   /* char key[9]; */
   char value[21];
@@ -17098,11 +17098,11 @@ static qfits_header *makecoolhdr(hdrinf *hdr, double beamsizeindeg)
   qfits_header *header = NULL;
 
   /* The bitpix is -32 */
-  if (!(header = ftsout_putcard(header, "BITPIX","-32"))) 
+  if (!(header = ftsout_putcard(header, "BITPIX","-32")))
     goto error;
 
   /* The number of axes is set to three */
-  if (!ftsout_putcard(header, "NAXIS","3")) 
+  if (!ftsout_putcard(header, "NAXIS","3"))
     goto error;
 
   /* Now get the axis numbers */
@@ -17121,7 +17121,7 @@ static qfits_header *makecoolhdr(hdrinf *hdr, double beamsizeindeg)
   /* May contain an extension */
   if (!ftsout_putcard(header, "EXTEND","T"))
     goto error;
-  
+
   /* These are clear */
   if (!ftsout_putcard(header, "BSCALE","1"))
     goto error;
@@ -17132,7 +17132,7 @@ static qfits_header *makecoolhdr(hdrinf *hdr, double beamsizeindeg)
   if (!ftsout_putcard(header, "BUNIT","'JY*(KM/S)/BEAM'"))
     goto error;
 
-  /* The cdelt is taken from the hdr struct, this should be ok with the unit being DEGREE*/  
+  /* The cdelt is taken from the hdr struct, this should be ok with the unit being DEGREE*/
   sprintf(value, "%.12E", hdr -> userglobcdelt[0]/((double) hdr -> coolbin));
   if (!ftsout_putcard(header, "CDELT1", value))
     goto error;
@@ -17159,8 +17159,8 @@ static qfits_header *makecoolhdr(hdrinf *hdr, double beamsizeindeg)
     goto error;
   /* if (!ftsout_putcard(header, "CUNIT1", "'DEGREE            '")) */
   /*   goto error; */
-  
-  /* The cdelt is taken from the hdr struct, this should be ok with the unit being DEGREE*/  
+
+  /* The cdelt is taken from the hdr struct, this should be ok with the unit being DEGREE*/
   sprintf(value, "%.12E", hdr -> userglobcdelt[1]/((double) hdr -> coolbin));
   if (!ftsout_putcard(header, "CDELT2", value))
     goto error;
@@ -17236,9 +17236,9 @@ static qfits_header *makecoolhdr(hdrinf *hdr, double beamsizeindeg)
     goto error;
 
   return header;
-  
+
  error:
-  if ((header)) 
+  if ((header))
     ftsout_header_destroy(header);
   header = NULL;
   return header;
@@ -17263,7 +17263,7 @@ static int coolgal(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
   double beam;
   float *expfcs;
   float sincosofangle[2];
-    
+
   char **varystr = NULL;
   int keypres, nread, nreturned;
 
@@ -17275,7 +17275,7 @@ static int coolgal(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
   /* coolname[200] = '\0'; */
   /* def = 2; */
   /* nel = 1; */
-  
+
   /* userchar_tir(coolname, &nel, &def, "COOLGAL=", mes); */
   /* termsinglestr(coolname); */
 
@@ -17293,7 +17293,7 @@ static int coolgal(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
 
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "COOLGALPAST", "Give cool name.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr))
     goto error;
-  
+
   if ((varystr[0])) {
     if (!(coolname = simparse_copystring(varystr[0]))) {
       goto error;
@@ -17304,10 +17304,10 @@ static int coolgal(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
       goto error;
     }
   }
-  
+
   freeparsed(varystr);
   varystr = NULL;
-  
+
   /* The default is to do nothing */
   if (*coolname == '\0') {
     free(coolname);
@@ -17331,18 +17331,18 @@ static int coolgal(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
       beam = hdr -> deltgridtouser[0]*((double) hdr -> bmaj);
       def = 1;
     }
-  } 
-  
+  }
+
   /* Transfer the beam into deg */
   beam = hdr -> globgridtouser[0]*beam/hdr -> deltgridtouser[0];
-  
+
   /* Make a header, if the beam is 0, we normalise everything such that the units get right */
   if (!(header = makecoolhdr(hdr, ((beam))?beam:sqrt(TWOPI)/(hdr -> globgridtouser[0]*0.42466090014401))))
     return 1;
-  
+
   /* Transfer the beam back to grid units */
   beam = beam/hdr -> globgridtouser[0];
-    
+
   /* Now arrange the cube */
   thecube.refpix_x = 0;
   thecube.refpix_y = 0;
@@ -17352,11 +17352,11 @@ static int coolgal(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
   thecube.size_v = (thecube.size_x > thecube.size_y)?thecube.size_x:thecube.size_y;
   thecube.scale = 1.0;
   thecube.padding = 0;
-  
+
   /* After that, we can deallocate to get some memory, but first I try
      not to do so and see how that works. */
-  
-/* We read in the values, this should be possible and make sense */ 
+
+/* We read in the values, this should be possible and make sense */
     tir_get_grid(log, rpm, log -> outarray);
 
   for (i = 0; i < rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++i)
@@ -17364,7 +17364,7 @@ static int coolgal(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
 
   /*     Convert the read parameter list to internal units */
   changetointern(rpm -> par, rpm -> nur, hdr, rpm -> ndisks);
-  
+
 
   /* provide some info */
   nel=1;
@@ -17376,20 +17376,20 @@ static int coolgal(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
     ftsout_header_destroy(header);
     return 1;
   }
-  
+
   /* Make the cube */
   makecoolpoints(&thecube, hdr, rpm, fit);
 
   /* Convolve it */
   sincosofangle[0] = 0;
   sincosofangle[1] = 1;
-  
+
   if (!(expfcs = expofacsfft(0.42466090014401*beam, 0.42466090014401*beam, 0.42466090014401*beam, sincosofangle))) {
     ftsout_header_destroy(header);
     free(thecube.points);
     return 1;
   }
-  
+
   /* Now, the normalisation is the fifth factor, we multiply it with this */
   expfcs[4] = expfcs[4]*sqrtf(TWOPI)*0.42466090014401*beam;
 
@@ -17458,24 +17458,24 @@ static int makecoolpoints(Cube *cube, hdrinf *hdr, ringparms *rpm, fitparms *fit
   z0 = ((float) cube -> size_v)/2;
 
   interpover(rpm, rpm -> radsep, 0, NULL, fit -> index);
-  
+
   /* Initialise the model array */
-  cuberase(cube); 
-  
+  cuberase(cube);
+
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
 
     /* Do all the loops */
     for (i = 0; i < rpm -> nr; ++i) {
-      
+
       /* Calculate the ringflux */
       ringflux = TWOPI*rpm -> modpar[PRADI*rpm -> nr+i]*rpm -> radsep*rpm -> modpar[(PRPARAMS+disk*NDPARAMS+PSBR)*rpm -> nr+i];
       /* Calculate the cloudnumber, rounded down, Kamphuis bugfix */
       nc = (int) (ringflux/rpm -> cflux[disk]);
-      
+
       /* We decide to change the cloudflux a bit instead of accepting an error in the ringflux */
       cfluxcorr = ringflux/nc;
       if (nc > 0) {
-	
+
 	/* We calculate cos's and sins and reset the random number generator */
 	sininc=sinf(rpm -> modpar[(PRPARAMS+disk*NDPARAMS+PINCL)*rpm -> nr+i]);
 	cosinc=cosf(rpm -> modpar[(PRPARAMS+disk*NDPARAMS+PINCL)*rpm -> nr+i]);;
@@ -17483,21 +17483,21 @@ static int makecoolpoints(Cube *cube, hdrinf *hdr, ringparms *rpm, fitparms *fit
 	cospa=cosf(rpm -> modpar[(PRPARAMS+disk*NDPARAMS+PPA)*rpm -> nr+i]);
 	rpm -> sd[disk][i].iseed2[1] = i;
 	maths_rndmf_init(rpm -> sd[disk][i].iseed2, rpm -> sd[disk][i].permrandstr);
-	
-	/* reset the  zprof */ 
+
+	/* reset the  zprof */
 	zprof(6, rpm -> sd[disk][i].permrandstr, &(rpm -> sd[disk][i].y2));
-	
+
 	/* now create the clouds and grid them */
 	for (j = 0; j < nc; ++j) {
-	  
+
 	  /* The probability for the #radius is weighted by r, and this is no approximation */
 	  r = sqrtf((rpm -> modpar[PRADI*rpm -> nr+i]-0.5*rpm -> radsep)*(rpm -> modpar[PRADI*rpm -> nr+i]-0.5*rpm -> radsep)+2*rpm -> radsep*rpm -> modpar[PRADI*rpm -> nr+i]*maths_rndmf(rpm -> sd[disk][i].permrandstr));
-	  
+
 	  /* Azimuth is easy */
 	  az = TWOPI*maths_rndmf(rpm -> sd[disk][i].permrandstr);
 	  cosaz = cosf(az);
 	  sinaz = sinf(az);
-	  
+
 	  /* Now, these are the cartesian coordinates, if you look face-on at the ring in the system of the ring, x eastwards, y to the north, z along los from you to the source */
 	  /*       x = cosaz*r; */
 	  /*       y = sinaz*r; */
@@ -17505,7 +17505,7 @@ static int makecoolpoints(Cube *cube, hdrinf *hdr, ringparms *rpm, fitparms *fit
 	  /*       vx = -sinaz*modpar[PVROT*rpm -> nr+i]; */
 	  /*       vy = cosaz*modpar[PVROT*rpm -> nr+i]; */
 	  /*       vz = 0; */
-	  
+
 	  /* Now, the whole system will be rotated about the x-axis with the amount of the inclination */
 	  /*       xp  = x; */
 	  /*       yp  = cosinc*y-sininc*z; */
@@ -17513,16 +17513,16 @@ static int makecoolpoints(Cube *cube, hdrinf *hdr, ringparms *rpm, fitparms *fit
 	  /*       vxp = vx; */
 	  /*       vyp = cosinc*vy-sininc*vz; */
 	  /*       vzp = sininc*vy+cosinc*vz; */
-	  
- 
+
+
 	  /*  Now we rotate about the z-axis with pa, because in this module the pa is defined as the angle with the minor axis */
 	  /*       x = xp*cos(-pa)-yp*sin(-pa)    or x = xp*cospa-yp*sinpa;      */
 	  /*       y = xp*sin(-pa)+yp*cos(-pa)    or y = xp*sinpa+yp*cospa;     */
-	  /*       z = zp;                        or z = zp;                     */         
+	  /*       z = zp;                        or z = zp;                     */
 	  /*       vx = vxp*cos(-pa)-vyp*sin(-pa) or vx = vxp*cospa-vyp*sinpa;   */
 	  /*       vy = vxp*sin(-pa)+vyp*cos(-pa) or vy = vxp*sinpa+vyp*cospa;  */
 	  /*       vz = vzp;                      or vz = vzp;                   */
-	
+
 	  /*  z = zprof(rpm -> ltype[0], rpm -> permrandstr)*rpm -> modpar[PZ0*rpm -> nr+i]; */
 	  /*  x = (cosaz*r)*cospa-(cosinc*(sinaz*r)-sininc*z)*sinpa;  */
 	  /*  y = (cosaz*r)*sinpa+(cosinc*(sinaz*r)-sininc*z)*cospa; */
@@ -17533,7 +17533,7 @@ static int makecoolpoints(Cube *cube, hdrinf *hdr, ringparms *rpm, fitparms *fit
 	  pp[0] = cosaz*r;
 	  pp[1] = sinaz*r;
 	  pp[2] = zprof(rpm -> ltype[disk],  rpm -> sd[disk][i].permrandstr, &(rpm -> sd[disk][i].y2))*rpm -> modpar[(PRPARAMS+disk*NDPARAMS+PZ0)*rpm -> nr+i];
-	  
+
 	  (*(rpm -> inf_wm1v[disk] -> prs))((void *) rpm, pp+2, i, sinaz, cosaz, disk);
 	  (*(rpm -> inf_wm2v[disk] -> prs))((void *) rpm, pp+2, i, sinaz, cosaz, disk);
 	  (*(rpm -> inf_wm3v[disk] -> prs))((void *) rpm, pp+2, i, sinaz, cosaz, disk);
@@ -17543,32 +17543,32 @@ static int makecoolpoints(Cube *cube, hdrinf *hdr, ringparms *rpm, fitparms *fit
 	  (*(rpm -> inf_wm3v[disk] -> prc))((void *) rpm, pp+2, i, sinaz, cosaz, disk);
 	  (*(rpm -> inf_wm4v[disk] -> prc))((void *) rpm, pp+2, i, sinaz, cosaz, disk);
 	  (*(rpm -> inf_wm0v[disk] -> pr)) ((void *) rpm, pp+2, i, sinaz, cosaz, disk);
-	
+
 	  /* Now rotate about the x-axis by i */
 	  pp2[0] = pp[0];
 	  pp2[1] = pp[1]*cosinc-pp[2]*sininc;
 	  pp2[2] = pp[1]*sininc+pp[2]*cosinc;
-	  
+
 	  /* Now we shift */
-	  
+
 	  (*(rpm -> inf_lc0v[disk] -> pr))((void *) rpm, pp2+0, i, sinaz, cosaz, disk);
 	  (*(rpm -> inf_ls0v[disk] -> pr))((void *) rpm, pp2+1, i, sinaz, cosaz, disk);
-	  
+
 	  /* Now rotate about the z-axis by pa */
 	  pp[0] = pp2[0]*cospa-pp2[1]*sinpa;
 	  pp[1] = pp2[0]*sinpa+pp2[1]*cospa;
 	  pp[2] = pp2[2];
-	  
+
 	  /* Here's the shortcut version */
 	  /*     pp[0] = pp2[0]*cospa-pp2[1]*sinpa; */
 	  /*     pp[1] = pp2[0]*sinpa+pp2[1]*cospa; */
 	  /*     pp[2] = pp[1]*sininc+pp[2]*cosinc; */
-	  
+
 	  /* of course we could make it even shorter, but we'll leave it at that. Next thingy is to grid the pointsource */
 	  grid[0] = roundnormal(rpm -> modpar[(PRPARAMS+disk*NDPARAMS+PXPOS)*rpm -> nr+i]-pp[1]);
-	  
+
 	  if (grid[0] >= 0 && grid[0] < cube -> size_x) {
-	    
+
 	    grid[1] = roundnormal(rpm -> modpar[(PRPARAMS+disk*NDPARAMS+PYPOS)*rpm -> nr+i]+pp[0]);
 	    if (grid[1] >= 0 && grid[1] < cube -> size_y) {
 	      /* For the sake of clearity, we kill the subsnuma operation in the source, in principle thus allowing only for the radio convention for velocity, but gaining an understanding of the code. What is seen here should not be done. It's really not what anyone should wish for. */
@@ -17577,7 +17577,7 @@ static int makecoolpoints(Cube *cube, hdrinf *hdr, ringparms *rpm, fitparms *fit
 		++totflux;
 		/* This is the position in the linear cube array */
 		k = grid[0]+ cube -> size_x*(grid[1]+cube -> size_y*grid[2]);
-		
+
 		cube -> points[k] = cube -> points[k]+cfluxcorr;
 	      }
 	    }
@@ -17616,7 +17616,7 @@ static int progressout(startinf *startinfv, char *message)
   /*   progname[i] = ' '; */
   /* } */
   /* progname[200] = '\0'; */
- 
+
   /* Ask the user what to do */
   /* sprintf(mes, "Give a progress file name for no point actually when you can read this"); */
   /* userchar_tir(progname, &nel, &def, "PROGRESSLOG=", mes); */
@@ -17625,7 +17625,7 @@ static int progressout(startinf *startinfv, char *message)
 
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "PROGRESSLOG", "Give a progress file name for no point actually when you can read this.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr))
     goto error;
-  
+
   if ((varystr[0])) {
     if (!(progname = simparse_copystring(varystr[0]))) {
       goto error;
@@ -17636,26 +17636,26 @@ static int progressout(startinf *startinfv, char *message)
       goto error;
     }
   }
-  
+
   freeparsed(varystr);
   varystr = NULL;
 
   /* i = 0; */
   currentname = progname;
-  
+
   if (*currentname != '\0') {
-      
+
       /* Try to open the output, we overwrite */
     if (!(stream = fopen(currentname, "w")))
       goto error;
-      
+
       /* Now put the first line, copy from input */
     fprintf(stream,"%s",message);
     fprintf(stream, "\n");
     /* and close again otherwise the file stays unreadable */
-        fflush(stream); 
+        fflush(stream);
     fclose(stream);
-     fflush(NULL); 
+     fflush(NULL);
     }
 
   if ((progname))
@@ -17663,9 +17663,9 @@ static int progressout(startinf *startinfv, char *message)
   if ((varystr))
     freeparsed(varystr);
   return 0;
-  
+
   error:
-  
+
   if ((progname))
     free(progname);
   if ((varystr))
@@ -17698,8 +17698,8 @@ static int progressfinished(startinf *startinfv)
   /*   progname[i] = ' '; */
   /* } */
   /* progname[200] = '\0'; */
- 
-  
+
+
   /* Ask the user what to do */
   /* sprintf(mes, "Give a progress file name for no point actually when you can read this"); */
   /* userchar_tir(progname, &nel, &def, "PROGRESSLOG=", mes); */
@@ -17710,7 +17710,7 @@ static int progressfinished(startinf *startinfv)
 
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "PROGRESSLOG", "Give a progress file name for no point actually when you can read this.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr))
     goto error;
-  
+
   if ((varystr[0])) {
     if (!(progname = simparse_copystring(varystr[0]))) {
       goto error;
@@ -17721,23 +17721,23 @@ static int progressfinished(startinf *startinfv)
       goto error;
     }
   }
-  
+
   freeparsed(varystr);
   varystr = NULL;
 
   currentname = progname;
-  
+
   if (*currentname != '\0') {
-      
+
       /* Try to open the output, we append */
     if (!(stream = fopen(currentname, "a")))
       goto error;
-      
+
       /* Now put the first line, copy from input */
     fprintf(stream,"<STATUS> Tirific Finished");
     fprintf(stream, "\n");
     /* and close again otherwise the file stays unreadable */
-    fclose(stream);  
+    fclose(stream);
     }
 
   if ((progname))
@@ -17745,15 +17745,15 @@ static int progressfinished(startinf *startinfv)
   if ((varystr))
     freeparsed(varystr);
   return 1;
-  
+
   error:
-  
+
   if ((progname))
     free(progname);
   if ((varystr))
     freeparsed(varystr);
   return 0;
-} 
+}
 
 /* ------------------------------------------------------------ */
 
@@ -17804,21 +17804,21 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
   /* } */
   /* defname[200] = '\0'; */
   /* deintername[200] = '\0'; */
-  
+
   /* Ask the user what to do */
   /* sprintf(mes, "Give a .def file name for best results output"); */
   /* userchar_tir(defname, &nel, &def, "TIRDEF=", mes); */
   /* termsinglestr(defname); */
-  
+
   /* sprintf(mes, "Give a file name for smoothed results output"); */
   /* userchar_tir(deintername, &nel, &def, "TIRSMO=", mes); */
   /* termsinglestr(deintername); */
-  
+
   /* cancel_tir(startinfv -> arel, "TIRDEF"); */
 
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "TIRDEF", "Give a progress file name for no point actually when you can read this.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr))
     goto error;
-  
+
   if ((varystr[0])) {
     if (!(defname = simparse_copystring(varystr[0]))) {
       goto error;
@@ -17829,7 +17829,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
       goto error;
     }
   }
-  
+
   freeparsed(varystr);
   varystr = NULL;
 
@@ -17837,7 +17837,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
 
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "TIRSMO", "Give a progress file name for no point actually when you can read this.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr))
     goto error;
-  
+
   if ((varystr[0])) {
     if (!(deintername = simparse_copystring(varystr[0]))) {
       goto error;
@@ -17848,7 +17848,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
       goto error;
     }
   }
-  
+
   freeparsed(varystr);
   varystr = NULL;
 
@@ -17863,10 +17863,10 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
       def = 4;
       cancel_tir(startinfv -> arel, "TIRACC=", 2);
     }
-    else 
+    else
       --i;
   }
-  
+
   def = 2;
   if (*deintername != '\0') {
     /* Smoothing kernel is a Hanning function h(k) = (Sum_l =
@@ -17890,10 +17890,10 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
 	def = 4;
 	cancel_tir(startinfv -> arel, "TIRLEN=", 2);
       }
-      else 
+      else
 	--i;
     }
-    
+
     /* Allocate the array for smoothing */
     /* if (!(smarray = (double *) malloc((rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(double)))) */
     /* 	  goto error; */
@@ -17912,14 +17912,14 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
       def = 4;
       cancel_tir(startinfv -> arel, "TIRNR=", 2);
     }
-    else 
+    else
       --i;
   }
-  
+
   /* Now allocate the radius array */
   if (!(radii = (double *) malloc(nrings*sizeof(double))))
     goto error;
-  
+
   /* We read all values into the outarray */
   tir_get_grid(log, rpm, log -> outarray);
 
@@ -17940,7 +17940,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
     for (ringnr = 0; (ringnr < nrings) && (ringnr < rpm -> nur); ++ringnr) {
       radii[ringnr] = rpm -> par[PRADI*rpm -> nur+ringnr];
     }
-    
+
     /* Fill the rest, extrapolating with the last stepwidth, this should work */
     while (ringnr < nrings) {
       radii[ringnr] = 2*radii[ringnr-1]-radii[ringnr-2];
@@ -17989,7 +17989,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
       }
     }
   }
-  
+
 
 
   /* Now we should have a proper array with radii */
@@ -18000,15 +18000,15 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
   sprintf(format+1, "+.%iE", acc);
   if (acc > 9)
     sprintf(format+6, " ");
-  else 
+  else
     sprintf(format+5, " ");
   *format2 = '%';
   sprintf(format2+1, "+.%iE", acc+3);
   if (acc > 6)
     sprintf(format2+6, " ");
-  else 
+  else
     sprintf(format2+5, " ");
-  
+
   i = 0;
   currentname = defname;
 
@@ -18026,13 +18026,13 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
   }
 
   while (i < 2) {
-    
+
     if (*currentname != '\0') {
-      
+
       /* Try to open the output, we overwrite */
       if (!(stream = fopen(currentname, "w")))
 	goto error;
-      
+
       /* Now put the first line, copy from input */
       tirout_a(startinfv -> arel, stream, "LOGNAME=");
       /* Action should be taken over from prompt */
@@ -18057,7 +18057,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
       tirout_a(startinfv -> arel, stream, "NDISKS=");
       fprintf(stream, "NUR= %i", nrings);
       fprintf(stream, "\n");
- 
+
       /* Now it depends on the file we are outputting */
       if (currentname == defname) {
 	reparray = rpm -> par;
@@ -18067,11 +18067,11 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
 
 	/* Here, we have to filter */
 	for (j = 0; j < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS); ++j) {
-	  
+
 	  /* Important: do not Hanning smooth the radii */
 	  if (j != PRADI) {
 	  {
-     	    
+
 	    for (k = 0; k < rpm -> nur; ++k) {
 
 	      smsum = 0.0;
@@ -18099,15 +18099,15 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
 
 		/* Sort the array */
 	      /* maths_bubble(smarray, len); */
-       
+
 	      /* if (!(j == PRADI) && ((n = ((j-NSSDPARAMS)%NDPARAMS + NSSDPARAMS)) == PXPOS || n == PYPOS)) */
 	      /* 	fprintf(stream, format2, smarray[(len-1)/2]); */
 	      /* else */
 	      /* 	fprintf(stream, format, smarray[(len-1)/2]); */
-	      
+
 	    }
 	  }
-      
+
 	}
 	}
 	reparray = log -> outarray;
@@ -18122,7 +18122,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
       fprintf(stream, "\n");
 
       for (j = NSSDPARAMS; j < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS); ++j) {
-	
+
 	/************/
 	/************/
 	k = 0;
@@ -18132,28 +18132,28 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
 	    ++k;
 	}
 	if (k < rpm -> nur) {
-	  
+
 	  /************/
-	  
+
 	  /* Put the title */
 	  ftstab_putcoltitl(key, j+1);
 	  fprintf(stream, "%8s= ", key);
-	  	  
+
 	    for (m = 0; m < nrings; ++m) {
-	      
+
 	      /* Not sure if this is required, but do it anyway */
 	      gsl_interp_accel_reset(rpm -> gsl_interp_accelarray[j-NSSDPARAMS]);
-	      
+
 	      /* Very sure that this is a requirement; a test has shown */
 	      /* gsl_interp_init(rpm -> gsl_interparray[j-NSSDPARAMS],rpm -> par+PRADI*rpm -> nur, rpm -> par + rpm -> nur*j, rpm -> nur); */
 	      gsl_interp_init(rpm -> gsl_interparray[j-NSSDPARAMS],reparray+PRADI*rpm -> nur, reparray + rpm -> nur*j, rpm -> nur);
-	      
+
 	      /* Search the first radius that is greater than the current, don't care about efficiency */
 	      /* for (k = 1; k < rpm -> nur; ++k) { */
 	      /* 	if (radii[m] < reparray[PRADI*rpm -> nur+k]) */
 	      /* 	  break; */
 	      /* } */
-	      
+
 	      /* Now we can interpolate or extrapolate */
 	      /* Check for radius here */
 	      if ( radii[m] < reparray[PRADI*rpm -> nur+rpm -> nur-1]) {
@@ -18171,31 +18171,31 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
 	      else {
 	      	fprintf(stream, format, dpdr);
 	      }
-	    } 
+	    }
 	    fprintf(stream, "\n");
-	}   
+	}
       }
-      
+
       for (j = 0; j < NSPARAMS; ++j) {
 	  ftstab_putcoltitl(key, (NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+j+1);
 	  fprintf(stream, "%8s= ", key);
 	  fprintf(stream, format, rpm -> par[(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur+j]);
 	}
-            
 
-   
+
+
       fprintf(stream, "\n");
       tirout_a(startinfv -> arel, stream, "LTYPE=");
       for (disk = 1; disk < rpm -> ndisks; ++disk) {
-	sprintf(placer, "LTYPE_%i=" , disk+1);	
+	sprintf(placer, "LTYPE_%i=" , disk+1);
 	tirout_a(startinfv -> arel, stream, placer);
       }
-      
+
       /* Now put the rest of the input to the file */
       fprintf(stream, "\n");
       tirout_a(startinfv -> arel, stream, "CFLUX=");
       for (disk = 1; disk < rpm -> ndisks; ++disk) {
-	sprintf(placer, "CFLUX_%i=" , disk+1);	
+	sprintf(placer, "CFLUX_%i=" , disk+1);
 	tirout_a(startinfv -> arel, stream, placer);
       }
       tirout_a(startinfv -> arel, stream, "PENALTY=");
@@ -18212,7 +18212,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
       tirout_a(startinfv -> arel, stream, "SIZE=");
       tirout_a(startinfv -> arel, stream, "INTY=");
       tirout_a(startinfv -> arel, stream, "INDINTY=");
-      
+
       /* We want to hide the whole pswarm issue from the user, so we only spit it out if there have been changes to the defaults */
       if (fit -> psse != PSW_PSSE_DEF) tirout_a(startinfv -> arel, stream, "PSSE=");
       if (fit -> psnp != PSW_PSNP_DEF) tirout_a(startinfv -> arel, stream, "PSNP=");
@@ -18224,7 +18224,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
       if (fit -> psfi != PSW_PSFI_DEF) tirout_a(startinfv -> arel, stream, "PSFI=");
       if (fit -> psid != PSW_PSID_DEF) tirout_a(startinfv -> arel, stream, "PSID=");
       if (fit -> psdd != PSW_PSDD_DEF) tirout_a(startinfv -> arel, stream, "PSDD=");
-	
+
       fprintf(stream, "\n");
       /*       tirout_a(startinfv -> arel, stream, "ANSTART="); */
       /*       tirout_a(startinfv -> arel, stream, "ANEND="); */
@@ -18341,7 +18341,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
     currentname = deintername;
     ++i;
   }
-  
+
   if (startinfv -> arel[2]) {
     startinfv -> arel[2] -> timestamp = restimest;
   }
@@ -18352,7 +18352,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
     log -> outarray[i] = rpm -> par[i];
   }
 
-  
+
   free(radii);
   if ((defname))
     free(defname);
@@ -18361,7 +18361,7 @@ static int tirout(startinf *startinfv, loginf *log, ringparms *rpm, fitparms *fi
   if ((varystr))
     freeparsed(varystr);
   return 1;
-  
+
  error:
   if ((radii))
     free(radii);
@@ -18408,11 +18408,11 @@ static int tirout_a(simparse_scn_arel **arel, FILE *stream, char *keyword)
   /*     input[i] = ' '; */
   /*   } */
   /*   input[i] = '\0'; */
-    
+
     /* Get the value */
     /* length = usertext_tir(input, &def, keyword,mes); */
     /* input[length] = '\0'; */
-    
+
     /* Copy it into the file */
   /*   fprintf(stream, "%s %s\n", keyword); */
   /* } */
@@ -18451,7 +18451,7 @@ static int get_parameter_double(startinf *startinfv, loginf *log, hdrinf *hdr, r
   for (i = 0; i < rpm -> nur; ++i)
     *(rpm -> par + rpm -> nur*ident+i) = 0.0;
   def = force;
-    
+
   nel = 0;
 
   /* This is the third parameter sequence */
@@ -18459,10 +18459,10 @@ static int get_parameter_double(startinf *startinfv, loginf *log, hdrinf *hdr, r
     cancel_tir(startinfv -> arel, parname, 0);
 
   nel = userdble_tir(startinfv -> arel, rpm -> par+ident*rpm -> nur, &rpm -> nur, &def, parname, mess);
-  
+
   if (!nel)
     nel = rpm -> nur;
-  
+
   /* Check for errors and extrapolate */
 
   for (i = 0; i < rpm -> nur; ++i) {
@@ -18475,7 +18475,7 @@ static int get_parameter_double(startinf *startinfv, loginf *log, hdrinf *hdr, r
       }
     }
   }
-    
+
   return 0;
 }
 
@@ -18510,7 +18510,7 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
   /*   filename[i] = ' '; */
   /* } */
   /* filename[200] = '\0'; */
-  
+
   /* sprintf(mes, "Give a filename for a tiltogram output"); */
   /* userchar_tir(filename, &nel, &def, "TILT=", mes); */
   /* termsinglestr(filename); */
@@ -18519,7 +18519,7 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
 
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "TILT", "Give a filename for a tiltogram output.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr))
     goto error;
-  
+
   if ((varystr[0])) {
     if (!(filename = simparse_copystring(varystr[0]))) {
       goto error;
@@ -18530,28 +18530,28 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
       goto error;
     }
   }
-  
+
   freeparsed(varystr);
   varystr = NULL;
 
-  
+
   if (*filename != '\0') {
-    
+
     if (rpm -> nur < 2)
       return 1;
-    
+
     /* Read in the values */
     tir_get_grid(log, rpm, log -> outarray);
-    
+
     /* Make a header */
     /* The bitpix is -32 */
-    if (!(header = ftsout_putcard(header, "BITPIX","-32"))) 
+    if (!(header = ftsout_putcard(header, "BITPIX","-32")))
       goto error;
-    
+
     /* The number of axes is set to three */
-    if (!ftsout_putcard(header, "NAXIS","2")) 
+    if (!ftsout_putcard(header, "NAXIS","2"))
       goto error;
-    
+
     /* Now get the axis numbers */
     sprintf(value, "%i", rpm -> nur);
     if (!ftsout_putcard(header, "NAXIS1",value))
@@ -18559,67 +18559,67 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
     sprintf(value, "%i", rpm -> nur);
     if (!ftsout_putcard(header, "NAXIS2",value))
       goto error;
-    
+
     /* May contain an extension */
     if (!ftsout_putcard(header, "EXTEND","T"))
       goto error;
-    
+
     /* These are clear */
     if (!ftsout_putcard(header, "BSCALE","1"))
       goto error;
     if (!ftsout_putcard(header, "BZERO","0"))
       goto error;
-    
+
     /* The bunit is Jy*km/s/beam, while this is the 3d beam */
     if (!ftsout_putcard(header, "BUNIT","'deg               '"))
       goto error;
-    
-    /* The cdelt is the difference between the first two rings */  
+
+    /* The cdelt is the difference between the first two rings */
     sprintf(value, "%.12E", log -> outarray[PRADI*rpm -> nur+1]-log -> outarray[PRADI*rpm -> nur]);
     if (!ftsout_putcard(header, "CDELT1", value))
       goto error;
-    
+
     /* The crpix is 1 */
     sprintf(value, "%.12E", 1.0);
     if (!ftsout_putcard(header, "CRPIX1", value))
       goto error;
-    
+
     /* The crval in user units -> arcsec is 0 */
     sprintf(value, "%.12E", 0.0);
     if (!ftsout_putcard(header, "CRVAL1", value))
       goto error;
-    
+
     /* ctype is angle ... */
     if (!ftsout_putcard(header, "CTYPE1", "'ANGLE   '"))
       goto error;
     if (!ftsout_putcard(header, "CUNIT1", "'arcsec            '"))
       goto error;
-    
-    /* The cdelt is the difference between the first two rings */  
+
+    /* The cdelt is the difference between the first two rings */
     sprintf(value, "%.12E", log -> outarray[PRADI*rpm -> nur+1]-log -> outarray[PRADI*rpm -> nur]);
     if (!ftsout_putcard(header, "CDELT2", value))
       goto error;
-    
+
     /* The crpix is 1 */
     sprintf(value, "%.12E", 1.0);
     if (!ftsout_putcard(header, "CRPIX2", value))
       goto error;
-    
+
     /* The crval in user units -> arcsec is 0 */
     sprintf(value, "%.12E", 0.0);
     if (!ftsout_putcard(header, "CRVAL2", value))
       goto error;
-    
+
     /* ctype is angle ... */
     if (!ftsout_putcard(header, "CTYPE2", "'ANGLE   '"))
       goto error;
     if (!ftsout_putcard(header, "CUNIT2", "'arcsec            '"))
       goto error;
-    
+
     /* After that allocate the memory */
     if (!(array = (float *) malloc(rpm -> nur*rpm -> nur*sizeof(float))))
       goto error;
-    
+
     /* Convert to internal units (radian) */
     for (i = 0; i < (NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nur + NSPARAMS; ++i) {
       rpm -> par[i] = log -> outarray[i];
@@ -18632,7 +18632,7 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
       nrefr[0] = sin(rpm -> par[PINCL*rpm -> nur+i])*sinf(rpm -> par[PPA*rpm -> nur+i]);
       nrefr[1] = -sin(rpm -> par[PINCL*rpm -> nur+i])*cosf(rpm -> par[PPA*rpm -> nur+i]);
       nrefr[2] = cos(rpm -> par[PINCL*rpm -> nur+i]);
-      
+
       /* Now we read in the values */
       for (j = 0; j < rpm -> nur; ++j) {
  nr[0] = sin(rpm -> par[PINCL*rpm -> nur+j])*sinf(rpm -> par[PPA*rpm -> nur+j]);
@@ -18656,11 +18656,11 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
   /*   filename[i] = ' '; */
   /* } */
   /* filename[i] = '\0'; */
-  
+
   /* sprintf(mes, "Give a filename for a big tiltogram output"); */
   /* userchar_tir(filename, &nel, &def, "BIGTILT=", mes); */
   /* termsinglestr(filename); */
-  
+
   if ((filename)){
     free(filename);
     filename = NULL;
@@ -18670,7 +18670,7 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
 
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "BIGTILT", "Give a filename for a big tiltogram output", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr))
     goto error;
-  
+
   if ((varystr[0])) {
     if (!(filename = simparse_copystring(varystr[0]))) {
       goto error;
@@ -18681,26 +18681,26 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
       goto error;
     }
   }
-  
+
   freeparsed(varystr);
   varystr = NULL;
 
   if (*filename != '\0') {
-    
+
     if (rpm -> nr < 2)
       return 1;
-    
+
     /* Make a header */
     /* The bitpix is -32 */
     header = NULL;
 
-    if (!(header = ftsout_putcard(header, "BITPIX","-32"))) 
+    if (!(header = ftsout_putcard(header, "BITPIX","-32")))
       goto error;
-    
+
     /* The number of axes is set to three */
-    if (!ftsout_putcard(header, "NAXIS","2")) 
+    if (!ftsout_putcard(header, "NAXIS","2"))
       goto error;
-    
+
     /* Now get the axis numbers */
     sprintf(value, "%i", rpm -> nr);
     if (!ftsout_putcard(header, "NAXIS1",value))
@@ -18708,63 +18708,63 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
     sprintf(value, "%i", rpm -> nr);
     if (!ftsout_putcard(header, "NAXIS2",value))
       goto error;
-    
+
     /* May contain an extension */
     if (!ftsout_putcard(header, "EXTEND","T"))
       goto error;
-    
+
     /* These are clear */
     if (!ftsout_putcard(header, "BSCALE","1"))
       goto error;
     if (!ftsout_putcard(header, "BZERO","0"))
       goto error;
-    
+
     /* The bunit is Jy*km/s/beam, while this is the 3d beam */
     if (!ftsout_putcard(header, "BUNIT","'deg     '"))
       goto error;
-    
-    /* The cdelt is the width of one ring */  
+
+    /* The cdelt is the width of one ring */
     sprintf(value, "%.12E", dinterntoparam(rpm -> radsep, RADI, hdr, rpm -> ndisks));
     if (!ftsout_putcard(header, "CDELT1", value))
       goto error;
-    
+
     /* The crpix is 1 */
     sprintf(value, "%.12E", 1.0);
     if (!ftsout_putcard(header, "CRPIX1", value))
       goto error;
-    
+
     /* The crval in user units -> arcsec is 1/2 radsep */
     sprintf(value, "%.12E", dinterntoparam(rpm -> radsep, RADI, hdr, rpm -> ndisks)/2);
     if (!ftsout_putcard(header, "CRVAL1", value))
       goto error;
-    
+
     /* ctype is angle ... */
     if (!ftsout_putcard(header, "CTYPE1", "'ANGLE             '"))
       goto error;
     if (!ftsout_putcard(header, "CUNIT1", "'arcsec            '"))
       goto error;
-    
-    /* The cdelt is the width of one ring */  
+
+    /* The cdelt is the width of one ring */
     sprintf(value, "%.12E", dinterntoparam(rpm -> radsep, RADI, hdr, rpm -> ndisks));
     if (!ftsout_putcard(header, "CDELT2", value))
       goto error;
-    
+
     /* The crpix is 1 */
     sprintf(value, "%.12E", 1.0);
     if (!ftsout_putcard(header, "CRPIX2", value))
       goto error;
-    
+
     /* The crval in user units -> arcsec is 1/2 radsep */
     sprintf(value, "%.12E", dinterntoparam(rpm -> radsep, RADI, hdr, rpm -> ndisks)/2);
     if (!ftsout_putcard(header, "CRVAL2", value))
       goto error;
-    
+
     /* ctype is angle ... */
     if (!ftsout_putcard(header, "CTYPE2", "'ANGLE             '"))
       goto error;
     if (!ftsout_putcard(header, "CUNIT2", "'arcsec            '"))
       goto error;
-    
+
     /* After that allocate the memory */
     if (!(array = (float *) malloc(rpm -> nr*rpm -> nr*sizeof(float))))
       goto error;
@@ -18789,7 +18789,7 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
       nrefr[0] = sin(rpm -> modpar[PINCL*rpm -> nr+i])*sinf(rpm -> modpar[PPA*rpm -> nr+i]);
       nrefr[1] = -sin(rpm -> modpar[PINCL*rpm -> nr+i])*cosf(rpm -> modpar[PPA*rpm -> nr+i]);
       nrefr[2] = cos(rpm -> modpar[PINCL*rpm -> nr+i]);
-      
+
       /* Now we read in the values */
       for (j = 0; j < rpm -> nr; ++j) {
  nr[0] = sin(rpm -> modpar[PINCL*rpm -> nr+j])*sinf(rpm -> modpar[PPA*rpm -> nr+j]);
@@ -18831,7 +18831,7 @@ static int tiltout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm
 /* Produces the tip-lon output of tirific  */
 
 static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit)
-{  
+{
   char mes[81];
   int i, j, ok, nel, def, dev;
 
@@ -18865,7 +18865,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
   char **varystr = NULL;
 
   /**************/
-   /**************/ 
+   /**************/
 /*     int obsint = 0;   */
 /*     char obsmes[80];   */
   /**************/
@@ -18894,7 +18894,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
   /*   br_device[j] = ' '; */
   /* } */
   /* br_device[200] = '\0'; */
-  
+
   /* sprintf(mes, "Give graphics (pgplot) device:"); */
   /* def = 2; */
   /* nel = 1; */
@@ -18905,7 +18905,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
 
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "BR_DEVICE", "Give a progress file name for no point actually when you can read this.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr))
     goto error;
-  
+
   if ((varystr[0])) {
     if (!(br_device = simparse_copystring(varystr[0]))) {
       goto error;
@@ -18916,21 +18916,21 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
       goto error;
     }
   }
-  
+
   freeparsed(varystr);
   varystr = NULL;
 
-  
+
   /* If there was no input we return */
   if (*br_device == '\0') {
     free(br_device);
     return 0;
   }
-  
+
   /* Check if there was a logfile and stop if there wasn't */
 /*   if (*log -> logname == '\0') */
 /*     return 0; */
-  
+
   /* Ask for the reference position angle, default 0 */
   sprintf(mes, "Give Briggs reference position angle");
   br_pa = 0;
@@ -18966,7 +18966,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
       cancel_tir(startinfv -> arel, "BR_ANNR=", 2);
       def = 0;
     }
-    else 
+    else
       ok = 1;
   }
 
@@ -18986,7 +18986,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
       cancel_tir(startinfv -> arel, "BR_SWDTH=", 2);
       def = 1;
     }
-    else 
+    else
       ok = 1;
   }
 
@@ -19006,7 +19006,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
       cancel_tir(startinfv -> arel, "BR_CWDTH=", 2);
       def = 1;
     }
-    else 
+    else
       ok = 1;
   }
 
@@ -19026,7 +19026,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
       cancel_tir(startinfv -> arel, "BR_LWDTH=", 2);
       def = 1;
     }
-    else 
+    else
       ok = 1;
   }
 
@@ -19047,7 +19047,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
   /* Allocate memory */
     if (!(xarray = (float *) malloc((rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(float))))
     goto error;
-  
+
     if (!(yarray = (float *) malloc((rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(float))))
     goto error;
 
@@ -19056,7 +19056,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
 
     if (!(xlarray = (float *) malloc((rpm -> nr*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(float))))
     goto error;
-  
+
     if (!(ylarray = (float *) malloc((rpm -> nr*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(float))))
     goto error;
 
@@ -19066,11 +19066,11 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
   /* And then into the par array */
   for (j = 0; j < rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++j)
     rpm -> par[j] = log -> outarray[j];
-  
+
   /* Interpolate over */
   for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
     rpm -> chapar[i] = 1;
-  
+
   if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
     goto error;
 
@@ -19083,7 +19083,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
     nrefr[0] = sin(DEGTORAD*rpm -> par[PINCL*rpm -> nur+j])*sin(DEGTORAD*rpm -> par[PPA*rpm -> nur+j]);
     nrefr[1] = -sin(DEGTORAD*rpm -> par[PINCL*rpm -> nur+j])*cos(DEGTORAD*rpm -> par[PPA*rpm -> nur+j]);
     nrefr[2] = cos(DEGTORAD*rpm -> par[PINCL*rpm -> nur+j]);
-    
+
     /* Rotate the ring clockwise about the LOS */
     rota[0] = cos(pa)*nrefr[0]+sin(pa)*nrefr[1];
     rota[1] = -sin(pa)*nrefr[0]+cos(pa)*nrefr[1];
@@ -19112,7 +19112,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
     nrefr[0] = sin(DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j])*sin(DEGTORAD*rpm -> modpar[PPA*rpm -> nr+j]);
     nrefr[1] = -sin(DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j])*cos(DEGTORAD*rpm -> modpar[PPA*rpm -> nr+j]);
     nrefr[2] = cos(DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j]);
-    
+
     /* Rotate the ring clockwise about the LOS */
     rota[0] = cos(pa)*nrefr[0]+sin(pa)*nrefr[1];
     rota[1] = -sin(pa)*nrefr[0]+cos(pa)*nrefr[1];
@@ -19122,8 +19122,8 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
     rota[1] = cos(inc)*rota[1]+sin(inc)*rota[2];
 
     /* Finally get back to the original position with a clockwise rotation about the LOS */
-     xlarray[j] = cos(pa)*rota[0]-sin(pa)*rota[1]; 
-     ylarray[j] = sin(pa)*rota[0]+cos(pa)*rota[1]; 
+     xlarray[j] = cos(pa)*rota[0]-sin(pa)*rota[1];
+     ylarray[j] = sin(pa)*rota[0]+cos(pa)*rota[1];
      xlarray[j] = rota[0];
      ylarray[j] = rota[1];
 
@@ -19161,7 +19161,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
     br_angl[j] = sin(DEGTORAD*br_angl[j]);
 
   /* Now pass it to the graphics */
-  pgp_opendev(br_device);
+  /*  pgp_opendev(br_device); */
 
 
   pa_float = br_pa;
@@ -19173,16 +19173,17 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
   /* then plot */
   if (!numplpts)
     numplpts = 1;
-  pgp_polar(numplpts, xarray, yarray, rpm -> nr, xlarray, ylarray, br_annr, br_angl, (br_refl)?(&pa_float):NULL, br_lwdth, br_cwdth, br_swdth, br_col);
+  /* pgp_polar(numplpts, xarray, yarray, rpm -> nr, xlarray, ylarray, br_annr, br_angl, (br_refl)?(&pa_float):NULL, br_lwdth, br_cwdth, br_swdth, br_col); */
 
   /* Once we got here, we ask the user if to continue */
+  /*
   sprintf(mes, "Continue (Press return)?");
   def = 1;
   nel = 1;
   userint_tir(startinfv -> arel, &br_swdth, &nel, &def, "BR_CONT=", mes);
-
+  */
   /* Then we stop it */
-  pgp_end();
+  /*  pgp_end(); */
 
     free(xarray);
     free(xlarray);
@@ -19225,1004 +19226,7 @@ static int briggsout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *r
 
 /* Produces the graphics output of tirific  */
 
-static int graphout(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm, fitparms *fit)
-{
-  pgp_gdsc *gdsc = NULL;
-  float *xarray = NULL;
-  float *xarray2 = NULL;
-  float *yarray = NULL;
-  float *yerrarray = NULL;
-  float *xlarray = NULL;
-  float *ylarray = NULL;
-  float xmin;
-  float xmax;
-  float ymin;
-  float ymax;
-  int bars;
-  float barwidth;
-  int posrefr;
-  double xrefp;
-  double yrefp;
-  
-  char **varystr = NULL;
-  char *varyhstr = NULL;
-  char *strbef = NULL;
-  
-  int i, j, k, dev, def, nel, inword, nrplts, dummy;
-  char mes[200];
-  char *pgdevice = NULL;
-  
-  char inqstr[24];
-  int colour;
-  int lines;
-  int interp;
-  int errbars;
-  int symb;
-  int fill;
-  float sizer;
-  
-  char leftdeschi[8];
-  char rightdeschi[8];
-  char leftdesclo[30];
-  char rightdesclo[30];
-  char bottomdeschi[8];
-  char bottomdesclo[30];
-  char topdesclo[30];
-  char topdeschi[30];
-  
-  float lrzero;
-  float lrscale;
-  float btzero;
-  float btscale;
-  int xlog;
-  int ylog;
-  int numplpts, ident;
-  
-  char legend[80];
-  
-  int pltlegend;
-  
-  int nradd = 0;
-  int *npadd = NULL;
-  float **xval = NULL;
-  float **yval = NULL;
-  float **errb = NULL;
-  int *erad = NULL;
-  int *adcol = NULL;
-  int *adfill = NULL;
-  int *adsymb = NULL;
-  int *adlines = NULL;
-  int *adinterp = NULL;
-  float *adsizer = NULL; 
-  
-  int verln, horln;
-  float *vertarray = NULL, *horarray = NULL;
-  int *vertcarray = NULL, *horcarray = NULL;
-  float vhlxs[2],vhlys[2];
-  
-  int keypres, nread, nreturned;
-  
-  
-  
-  /* Ask the user for the output device */
-  /* for (i = 0; i < 200; ++i) { */
-  /*   pgdevice[i] = ' '; */
-  /* } */
-  /* pgdevice[200] = '\0'; */
-  
-  /* sprintf(mes, "Give graphics (pgplot) device:"); */
-  /* def = 2; */
-  /* nel = 1; */
-  /* userchar_tir(pgdevice, &nel, &def, "GR_DEVICE=", mes); */
-  /* termsinglestr(pgdevice); */
-  
-  /* cancel_tir(startinfv -> arel, "GR_DEVICE"); */
-  
-  if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "GR_DEVICE", "Give graphics (pgplot) device.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr)) {
-    goto error;
-  }
-  
-  if ((varystr[0])) {
-    if (!(pgdevice = simparse_copystring(varystr[0]))) {
-      goto error;
-    }
-  }
-  else {
-    if (!(pgdevice = simparse_copystring(""))) {
-      goto error;
-    }
-  }
-  
-  freeparsed(varystr);
-  varystr = NULL;
-  
-  /* If there was no input we return */
-  if (*pgdevice == '\0') {
-    free(pgdevice);
-    return 0;
-  }
-  /* Check if there was a logfile and stop if there wasn't */
-  /*   if (*log -> logname == '\0') */
-  /*     return 0; */
-  
-  /* Allocate the complicated varystr */
-  if (!(varystr = (char **) malloc(MAXGRAPHS*sizeof(char *))))
-    goto error;
-  /* if (!(varyhstr = getfcharray(VARYHSTRELES, NULL))) */
-  /*   goto error; */
-  
-  /* Then ask for the things to plot */
-  /* sprintf(mes, "Give parameters to plot"); */
-  /* def = 0; */
-  /* nel = usertext_tir(varyhstr, &def, "GR_PARMS=",mes); */
-  
-  /* Terminate the string */
-  /* varyhstr[nel] = '\0'; */
-  
-  if ((varyhstr))
-    free(varyhstr);
-  if (simparse_scn_arel_readval_string(startinfv -> arel, "GR_PARMS", "Give parameters to plot.", 0, "", 0, -1, 0, 0, &keypres, &nread, &nreturned, &varyhstr)) {
-    goto error;
-  }
-  
-  /* Change the case if it is lower case */
-  i = 0;
-  while (varyhstr[i]) {
-    if (varyhstr[i] >= 'a' && varyhstr[i] <= 'z')
-      varyhstr[i] = varyhstr[i]+'A'-'a';
-    ++i;
-  }
-  
-  /* Now hack it into peaces, fill varystr, ignoring wrong parameters */
-  inword = 0;
-  i = 0;
-  nrplts = 0;
-  
-  while (varyhstr[i] != '\0') {
-    
-    if ((inword)) {
-      if (varyhstr[i] == ' ' || varyhstr[i] == '\t') {
-	varyhstr[i] = '\0';
-	
-	if ((ident = get_graphident(strbef, NULL, NULL, NULL, NULL, rpm -> ndisks)) > 0) {
-	  varystr[nrplts] = strbef;
-	  ++nrplts;
-	}
-	inword = 0;
-      }
-      else if (varyhstr[i+1] == '\0') {
-	
-	if ((ident = get_graphident(strbef, NULL, NULL, NULL, NULL, rpm -> ndisks)) > 0) {
-	  varystr[nrplts] = strbef;
-	  ++nrplts;
-	}
-      }
-    }
-    else if (varyhstr[i] != ' ' && varyhstr[i] != '\t') {
-      if (nrplts < MAXGRAPHS)
-	strbef = varyhstr+i;
-      inword = 1;
-    }
-    ++i;
-  }
-  
-  dev = 1;
-  if (nrplts < 2) {
-    sprintf(mes, "Something wrong with GR_PARMS=, no output");
-    anyout_tir(&dev, mes);
-  }
-  
-  /* Allocate memory for the output */
-  if (!(xarray = (float *) malloc((rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(float))))
-    goto error;
-  
-  if (!(xarray2 = (float *) malloc((rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(float))))
-    goto error;
-  
-  if (!(yarray = (float *) malloc((rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(float))))
-    goto error;
-  
-  if (!(yerrarray = (float *) malloc((rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(float))))
-    goto error;
-  
-  if (!(xlarray = (float *) malloc((rpm -> nr*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(float))))
-    goto error;
-  
-  if (!(ylarray = (float *) malloc((rpm -> nr*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS)*sizeof(float))))
-    goto error;
-  
-  /* We read all values into the outarray */
-  tir_get_grid(log, rpm, log -> outarray);
-  
-  /* Then into the par array */
-  for (j = 0; j < rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++j)
-    rpm -> par[j] = log -> outarray[j];
-  
-  /* Get the reference positions */
-  
-  /* First ask for the reference ring */
-  sprintf(mes, "Position reference ring [1]");
-  def = 2;
-  nel = 1;
-  posrefr = 1;
-  userint_tir(startinfv -> arel, &posrefr, &nel, &def, "GR_PRFR=", mes);
-  if ((posrefr < 1) || (posrefr >  rpm -> nur))
-    posrefr = 1;
-  else
-    --posrefr;
-  
-  /* Then this will be a default for the reference position */
-  sprintf(mes, "Reference Right Ascension [%.3f]",rpm -> par[PXPOS*rpm -> nur+posrefr]);
-  def = 2;
-  nel = 1;
-  xrefp = rpm -> par[PXPOS*rpm -> nur+posrefr];
-  userdble_tir(startinfv -> arel, &xrefp, &nel, &def, "GR_PRFX=", mes);
-  
-  /* Export this to log */
-  log -> xref = xrefp;
-  
-  sprintf(mes, "Reference Declination [%.3f]",rpm -> par[PYPOS*rpm -> nur+posrefr]);
-  def = 2;
-  nel = 1;
-  yrefp = rpm -> par[PYPOS*rpm -> nur+posrefr];
-  userdble_tir(startinfv -> arel, &yrefp, &nel, &def, "GR_PRFY=", mes);
-  
-  /* Export this to log */
-  log -> yref = yrefp;
-  
-  /* Interpolate over */
-  for (i = rpm -> nur*NSSDPARAMS; i < rpm->nur *(NSSDPARAMS+NDPARAMS*rpm->ndisks); ++i)
-    rpm -> chapar[i] = 1;
-    
-  if (changedependent(rpm, rpm -> par, fit -> index, rpm -> chapar) < 0)
-    goto error;
 
-  interpover(rpm, barwidth = dinterntoparam(rpm -> radsep, RADI, hdr, rpm -> ndisks), 0, NULL, fit -> index);
-  
-  /* Now prepare the arrays for x */
-  
-  fillgrapharray(startinfv, hdr, rpm, ident = get_graphident(varystr[0], NULL, NULL, NULL, NULL, rpm -> ndisks), xarray, xlarray, rpm -> ndisks);
-  
-  /* Get the scale and the identity card */
-  gr_fillscaling(log, hdr, get_graphident(varystr[0], bottomdeschi, bottomdesclo, topdesclo, legend, rpm -> ndisks), &btscale, &btzero, rpm -> ndisks);
-  
-  /* Inquire whether to plot subrings */
-  sprintf(mes, "Plot values for subrings 1/0? [1]");
-  def = 2;
-  nel = 1;
-  bars = 1;
-  userint_tir(startinfv -> arel, &bars, &nel, &def, "GR_SBRP=", mes);
-  
-  /* Get min */
-  xmin = xarray[0];
-  for (i = 1; i < rpm -> nur; ++i)
-    xmin = (xmin > xarray[i])?xarray[i]:xmin;
-  if ((bars))
-    for (i = 0; i < rpm -> nr; ++i)
-      xmin = (xmin > xlarray[i])?xlarray[i]:xmin;
-  
-  /* Get max */
-  xmax = xarray[0];
-  for (i = 1; i < rpm -> nur; ++i)
-    xmax = (xmax < xarray[i])?xarray[i]:xmax;
-  if ((bars))
-    for (i = 0; i < rpm -> nr; ++i)
-      xmax = (xmax < xlarray[i])?xlarray[i]:xmax;
-  
-  /* Inquire min and max */
-  sprintf(mes, "Give minimum of x-axis [%f]", xmin);
-  def = 2;
-  nel = 1;
-  userreal_tir(startinfv -> arel, &xmin, &nel, &def, "GR_XMIN=", mes);
-  sprintf(mes, "Give maximum of x-axis [%f]", xmax);
-  def = 2;
-  nel = 1;
-  userreal_tir(startinfv -> arel, &xmax, &nel, &def, "GR_XMAX=", mes);
-  
-  /* Inquire x-axis style */
-  sprintf(mes, "Logarithmic scaling of x-axis? (1/0)");
-  xlog = 0;
-  def = 2;
-  nel = 1;
-  userint_tir(startinfv -> arel, &xlog, &nel, &def, "GR_XLOG=", mes);
-  
-  if ((xlog))
-    xlog = 1;
-  
-  /* In case of SBR, the right hand is SD */
-  if (ident == SBR)
-    gr_fillaxis((NPARAMS+(rpm -> ndisks-1)*NDPARAMS+DENS_GRAPHNR), topdeschi, rpm -> ndisks);
-  else if (ident == XPOS) {
-    gr_fillaxis((NPARAMS+(rpm -> ndisks-1)*NDPARAMS+RASH_GRAPHNR), topdeschi, rpm -> ndisks);
-    xlog = 2;
-  }
-  else if (ident == YPOS) {
-    gr_fillaxis((NPARAMS+(rpm -> ndisks-1)*NDPARAMS+DESH_GRAPHNR), topdeschi, rpm -> ndisks);
-    xlog = 3;
-  }
-  else {
-    gr_fillaxis(ident, topdeschi, rpm -> ndisks);
-  }
-  
-  /* Ask whether to plot a legend */
-  sprintf(mes, "Plot legend (1/0)?");
-  def = 2;
-  nel = 1;
-  pltlegend = 1;
-  userint_tir(startinfv -> arel, &pltlegend, &nel, &def, "GR_LGND=", mes);
-  
-  /* Now initialise the graphics */
-  pgp_opendev(pgdevice);
-  
-  /* Generate the standard frame information */
-  gdsc = pgp_gdsc_default(nrplts-1, 2, (pltlegend)?((nrplts+1)/2):0, 1.0);
-  
-  /* Make the adjustment of left and right frame possible */
-  sprintf(mes, "Give right hand margin");
-  def = 2;
-  nel = 1;
-  userreal_tir(startinfv -> arel, &gdsc -> rightmargin, &nel, &def, "GR_MR=", mes);
-  sprintf(mes, "Give left hand margin");
-  def = 2;
-  nel = 1;
-  userreal_tir(startinfv -> arel, &gdsc -> leftmargin, &nel, &def, "GR_ML=", mes);
-  
-  /* Ask for the height of text and symbols */
-  sprintf(mes, "Give height of Text");
-  def = 2;
-  nel = 1;
-  userreal_tir(startinfv -> arel, &gdsc -> numberheight, &nel, &def, "GR_TXHT=", mes);
-  
-  sprintf(mes, "Give height of symbols");
-  def = 2;
-  nel = 1;
-  userreal_tir(startinfv -> arel, &gdsc -> symbolheight, &nel, &def, "GR_SBHT=", mes);
-  
-  /* Legendheight and axdescheight are 1 by default, we leave it at that */
-  
-  /* Put the x axis descriptor */
-  if ((pltlegend))
-    pgp_legend(gdsc, 1, 1, legend);
-  
-  /* Plot everything */
-  for (i = 1; i < nrplts; ++i) {
-    def = 2;
-    nel = 1;
-    
-    /* Inquire colour */
-    colour = i;
-    sprintf(inqstr, "GR_COL_%i=", i);
-    sprintf(mes, "Give Colour of plot %i", i);
-    userint_tir(startinfv -> arel, &colour, &nel, &def, inqstr, mes);
-    
-    /* Inquire symbol */
-    symb = -1;
-    sprintf(inqstr, "GR_SYMB_%i=", i);
-    sprintf(mes, "Give symbol for plot %i", i);
-    userint_tir(startinfv -> arel, &symb, &nel, &def, inqstr, mes);
-    
-    /* Inquire fill */
-    fill = 0;
-    /*     sprintf(inqstr, "GR_EMTY_%i=", i); */
-    /*     sprintf(mes, "Fill symbol for plot %i? (0)", i); */
-    /*     userint_tir(startinfv -> arel, &fill, &nel, &def, inqstr, mes); */
-    
-    /* Inquire sizer */
-    sizer = 1.0;
-    sprintf(inqstr, "GR_SIZE_%i=", i);
-    sprintf(mes, "Relative size of symbol for plot %i? (0)", i);
-    userreal_tir(startinfv -> arel, &sizer, &nel, &def, inqstr, mes);
-    
-    /* Inquire lines */
-    lines = 0;
-    sprintf(inqstr, "GR_LINES_%i=", i);
-    sprintf(mes, "Plot lines 1/0? [0]");
-    userint_tir(startinfv -> arel, &lines, &nel, &def, inqstr, mes);
-    
-    /* Inquire lines interpolation type */
-    switch (rpm -> smothcar[ident-1+NPARAMS-NDPARAMS]) {
-    case PGP_I_CSPLINE:
-      interp = 1;
-      break;
-    case PGP_I_AKIMA:
-      interp = 2;
-      break;
-    default:
-      interp = 0;
-      break;
-    }
-    sprintf(inqstr, "GR_INTERP_%i=", i);
-    sprintf(mes, "Interpolation 0: linear, 1: cubic spline, 2: Akima [0]");
-    userint_tir(startinfv -> arel, &interp, &nel, &def, inqstr, mes);
-    switch (interp) {
-    case 1:
-      interp = PGP_I_CSPLINE;
-      break;
-    case 2:
-      interp = PGP_I_AKIMA;
-      break;
-    default:
-      interp = PGP_I_LINEAR;
-      break;
-    }
-    
-    /* Inqurie number of small interpolating lines, once for all */
-    gdsc -> interp_numlines = GR_INTERP_NUMLINES_DEFAULT;
-    sprintf(inqstr, "GR_INTERP_NUMLINES=");
-    sprintf(mes, "Number of small straight lines when interpolating [%i]", gdsc -> interp_numlines);
-    userint_tir(startinfv -> arel, &(gdsc -> interp_numlines), &nel, &def, inqstr, mes);
-
-    /* Inquire errorbars */
-    errbars = 0;
-    sprintf(inqstr, "GR_ERRB_%i=", i);
-    sprintf(mes, "Plot errorbars 1/0? [0]");
-    userint_tir(startinfv -> arel, &errbars, &nel, &def, inqstr, mes);
-    
-    /* Inquire logarithmic scaling */
-    ylog = 0;
-    sprintf(inqstr, "GR_YLOG_%i=", i);
-    sprintf(mes, "y-axis logarithmic scaling 1/0? [0]");
-    userint_tir(startinfv -> arel, &ylog, &nel, &def, inqstr, mes);
-    
-    if ((ylog))
-      ylog = 1;
-    
-    /* Get number of vertical lines */
-    verln = 0;
-    nel = 1;
-    sprintf(inqstr, "GR_VERL_%i=", i);
-    sprintf(mes, "How many vertical lines for plot %i?", i);
-    userint_tir(startinfv -> arel, &verln, &nel, &def, inqstr, mes);
-    verln = verln > 0 ? verln : -verln;
-    
-    if ((verln)) {
-      
-      /* allocate */
-      if (!(vertarray = (float *) malloc(verln*sizeof(float))))
-	goto error;
-      
-      if (!(vertcarray = (int *) malloc(verln*sizeof(int))))
-	goto error;
-      
-      for (j = 0; j < verln; ++j)
-	vertarray[j] = 0.0;
-      
-      for (j = 0; j < verln; ++j)
-	vertcarray[j] = 1;
-      
-      sprintf(mes, "Give values for vertical lines");
-      def = 2;
-      nel = verln;
-      sprintf(inqstr, "GR_VLVA_%i=", i);
-      userreal_tir(startinfv -> arel, vertarray, &nel, &def, inqstr, mes);
-      
-      sprintf(mes, "Give colours for vertical lines");
-      def = 2;
-      nel = verln;
-      sprintf(inqstr, "GR_VLCA_%i=", i);
-      userint_tir(startinfv -> arel, vertcarray, &nel, &def, inqstr, mes);
-      
-      for (j = 0; j < verln; ++j)
-	vertcarray[j] = vertcarray[j] > 0 ?  vertcarray[j] : - vertcarray[j];
-    }
-    
-    /* Get number of horizontal lines */
-    horln = 0;
-    nel = 1;
-    sprintf(inqstr, "GR_HORL_%i=", i);
-    sprintf(mes, "How many horizontal lines for plot %i?", i);
-    userint_tir(startinfv -> arel, &horln, &nel, &def, inqstr, mes);
-    horln = horln > 0 ? horln : -horln;
-    
-    if ((horln)) {
-      
-      /* allocate */
-      if (!(horarray = (float *) malloc(horln*sizeof(float))))
-	goto error;
-      
-      if (!(horcarray = (int *) malloc(horln*sizeof(int))))
-	goto error;
-      
-      for (j = 0; j < horln; ++j)
-	horarray[j] = 0.0;
-      
-      for (j = 0; j < horln; ++j)
-	horcarray[j] = 1;
-      
-      sprintf(mes, "Give values for horizontal lines of plot %i",i);
-      sprintf(inqstr, "GR_HLVA_%i=", i);
-      def = 2;
-      nel = horln;
-      userreal_tir(startinfv -> arel, horarray, &nel, &def, inqstr, mes);
-      
-      sprintf(mes, "Give colours for horizontal lines of plot %i", i);
-      def = 2;
-      nel = horln;
-      sprintf(inqstr, "GR_HLCA_%i=", i);
-      userint_tir(startinfv -> arel, horcarray, &nel, &def, inqstr, mes);
-      
-      for (j = 0; j < verln; ++j)
-	horcarray[j] = horcarray[j] > 0 ?  horcarray[j] : - horcarray[j];
-    }
-    
-    /* Fill yerrarray */
-    if ((errbars)) {
-      
-      /* We read all values into the outarray */
-      tir_get_radius(log, rpm, log -> outarray);
-      
-      for (j = 0; j < rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++j)
-	rpm -> par[j] = log -> outarray[j];
-      
-      fillgrapharray(startinfv, hdr, rpm, ident, yerrarray, ylarray, rpm -> ndisks);
-      
-      /* Give the user the possibility to put own errorbars */
-      def = 2;
-      nel = rpm -> nur;
-      sprintf(mes, "Give own errorbars");
-      sprintf(inqstr, "GR_ERRV_%i=", i);
-      userreal_tir(startinfv -> arel, yerrarray, &nel, &def, inqstr, mes);
-    }
-    else {
-      for (j = 0; j < rpm -> nur; ++j)
-	yerrarray[j] = 0;
-    }      
-    
-    /* Fill yarray */
-    
-    /* We read all values into the outarray */
-    tir_get_grid(log, rpm, log -> outarray);
-    
-    for (j = 0; j < rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++j)
-      rpm -> par[j] = log -> outarray[j];
-    
-    /* Central coordinates get the head cut off */
-    /*     for (j = 0; j < rpm -> nur; ++j) { */
-    /*       rpm -> par[PXPOS*rpm -> nur+j] = rpm -> par[PXPOS*rpm -> nur+j]-((int) rpm -> par[(PXPOS+1)*rpm -> nur-1]); */
-    /*       rpm -> par[PYPOS*rpm -> nur+j] = rpm -> par[PYPOS*rpm -> nur+j]-((int) rpm -> par[(PYPOS+1)*rpm -> nur-1]); */
-    /*     } */
-    
-    fillgrapharray(startinfv, hdr, rpm, ident = get_graphident(varystr[i], NULL, NULL, NULL, NULL, rpm -> ndisks), yarray, ylarray, rpm -> ndisks);
-    
-    /* Inquire number of additional arrays */
-    sprintf(mes, "Give number of additional rows for plot %i: [0]", i);
-    sprintf(inqstr, "GR_NRAD_%i=", i);
-    def = 2;
-    nel = 1;
-    nradd = 0;
-    userint_tir(startinfv -> arel, &nradd, &nel, &def, inqstr, mes);
-
-    /* Reserve memory */
-    if (nradd > 0) {
-      if (!(npadd = (int *) malloc(nradd*sizeof(int))))
-	goto error;
-      if (!(erad = (int *) malloc(nradd*sizeof(int))))
-	goto error;
-      if (!(adcol = (int *) malloc(nradd*sizeof(int))))
-	goto error;
-      if (!(adsymb = (int *) malloc(nradd*sizeof(int))))
-	goto error;
-      if (!(adfill = (int *) malloc(nradd*sizeof(int))))
-	goto error;
-      if (!(adlines = (int *) malloc(nradd*sizeof(int))))
-	goto error;
-      if (!(adinterp = (int *) malloc(nradd*sizeof(int))))
-	goto error;
-      if (!(adsizer = (float *) malloc(nradd*sizeof(float))))
-	goto error;
-      if (!(xval = (float **) malloc(nradd*sizeof(float *))))
-	goto error;
-      for (k = 0; k < nradd; ++k) {
-	xval[k] = NULL;
-      }
-      if (!(yval = (float **) malloc(nradd*sizeof(float *))))
-	goto error;
-      for (k = 0; k < nradd; ++k) {
-	yval[k] = NULL;
-      }
-      if (!(errb = (float **) malloc(nradd*sizeof(float *))))
-	goto error;
-      for (k = 0; k < nradd; ++k) {
-	errb[k] = NULL;
-      }
-    }
-    
-    /* Now get the info about all the additional points */
-    for (k = 0; k < nradd; ++k) {
-      
-      /* Inquire number of additional points */
-      sprintf(mes, "Give number of additional points for plot %i (%i): [0]", i, k+1);
-      sprintf(inqstr, "GR_NPAD_%i_%i=", i, k+1);
-      
-      npadd[k] = -1;
-      while(npadd[k] < 0) {
-	def = 4;
-	nel = 1;
-	npadd[k] = 0;
-	userint_tir(startinfv -> arel, npadd+k, &nel, &def, inqstr, mes);
-	if (npadd[k] < 0) {
-	  sprintf(mes, "Must be at least 0");
-	  anyout_tir(&nel, mes);
-	  cancel_tir(startinfv -> arel, inqstr, 2);
-	}
-      }
-      
-      if ((npadd[k])) {
-	
-	/* Reserve memory */
-	if (!(xval[k] = (float *) malloc(npadd[k]*sizeof(float))))
-	  goto error;
-	if (!(yval[k] = (float *) malloc(npadd[k]*sizeof(float))))
-	  goto error;
-	if (!(errb[k] = (float *) malloc(npadd[k]*sizeof(float))))
-	  goto error;
-	
-	/* Inquire points */
-	sprintf(mes, "Give additional points, x axis for plot %i (%i):", i, k+1);
-	sprintf(inqstr, "GR_XPAD_%i_%i=", i, k+1);
-	def = 4;
-	nel = npadd[k];
-	userreal_tir(startinfv -> arel, xval[k], &nel, &def, inqstr, mes);
-	
-	sprintf(mes, "Give additional points, y axis for plot %i (%i):", i, k+1);
-	sprintf(inqstr, "GR_YPAD_%i_%i=", i, k+1);
-	userreal_tir(startinfv -> arel, yval[k], &nel, &def, inqstr, mes);
-	
-	/* Inquire errorbars */
-	sprintf(mes, "Errorbars to additional points of plot %i (%i) (1/0)?", i, k+1);
-	sprintf(inqstr, "GR_ERAD_%i_%i=", i, k+1);
-	def = 2;
-	nel = 1;
-	erad[k] = 0;
-	userint_tir(startinfv -> arel, &erad[k], &nel, &def, inqstr, mes);
-	
-	if ((erad[k])) {
-	  
-	  /* Get the errorbars */
-	  sprintf(mes, "Give errorbars for additional points of plot %i (%i):", i, k+1);
-	  sprintf(inqstr, "GR_EBAD_%i_%i=", i, k+1);
-	  def = 4;
-	  nel = npadd[k];
-	  userreal_tir(startinfv -> arel, errb[k], &nel, &def, inqstr, mes);
-	}
-	else {
-	  for (j = 0; j < npadd[k]; ++j)
-	    (errb[k])[j] = 0;
-	}
-	
-	/* Inquire colour */
-	sprintf(mes, "Give colour of additional points of plot %i (%i):", i, k+1);
-	sprintf(inqstr, "GR_COAD_%i_%i", i, k+1);
-	def = 2;
-	nel = 1;
-	adcol[k] = i;
-	userint_tir(startinfv -> arel, adcol+k, &nel, &def, inqstr, mes);
-	
-	/* Inquire symbol */
-	sprintf(mes, "Give symbol of additional points of plot %i (-1):", i);
-	sprintf(inqstr, "GR_SYAD_%i_%i", i, k+1);
-	def = 2;
-	nel = 1;
-	adsymb[k] = -1;
-	userint_tir(startinfv -> arel, adsymb+k, &nel, &def, inqstr, mes);
-	
-	/* Inquire emptyness */
-	sprintf(mes, "Symbols of additional points of plot %i empty: (1)", i);
-	sprintf(inqstr, "GR_EMAD_%i_%i", i, k+1);
-	def = 2;
-	nel = 1;
-	adfill[k] = 0;
-	/*  userint_tir(startinfv -> arel, adfill+k, &nel, &def, inqstr, mes); */
-	
-	/* Inquire sizer */
-	sprintf(mes, "Size of additional points relative to standard size");
-	sprintf(inqstr, "GR_SIAD_%i_%i", i, k+1);
-	def = 2;
-	nel = 1;
-	adsizer[k] = 1.0;
-	userreal_tir(startinfv -> arel, adsizer+k, &nel, &def, inqstr, mes);
-	
-	/* Inquire lines */
-	sprintf(mes, "Draw lines between additional points of plot %i (%i) (1/0)?", i, k+1);
-	sprintf(inqstr, "GR_LIAD_%i_%i", i, k+1);
-	def = 2;
-	nel = 1;
-	adlines[k] = 0;
-	userint_tir(startinfv -> arel, adlines+k, &nel, &def, inqstr, mes);
-	
-	switch (interp) {
-	case PGP_I_CSPLINE:
-	  adinterp[k] = 1;
-	  break;
-	case PGP_I_AKIMA:
-	  adinterp[k] = 2;
-	  break;
-	default:
-	  adinterp[k] = 0;
-	  break;
-	}
-	/***/
-	/***/
-	/***/
-	/*	fprintf(stderr,"Got here"); */
-	/***/
-	sprintf(inqstr, "GR_INTERPAD_%i_%i=", i, k+1);
-	sprintf(mes, "Interpolation between additional points plot %i (%i), 0: linear, 1: cubic spline, 2: Akima [0]", i, k+1);
-	userint_tir(startinfv -> arel, adinterp+k, &nel, &def, inqstr, mes);
-	switch (adinterp[k]) {
-	case 1:
-	  adinterp[k] = PGP_I_CSPLINE;
-	  break;
-	case 2:
-	  adinterp[k] = PGP_I_AKIMA;
-	  break;
-	default:
-	  adinterp[k] = PGP_I_LINEAR;
-	  break;
-	}
-      }
-    }
-      
-    /* Inquire min and max */
-    ymin = yarray[0]-fabs(yerrarray[0]);
-    for (j = 1; j < rpm -> nur; ++j)
-      ymin = (ymin > (yarray[j]-fabs(yerrarray[j])))?(yarray[j]-fabs(yerrarray[j])):ymin;
-    if ((bars))
-      for (j = 0; j < rpm -> nr; ++j)
-	ymin = (ymin > ylarray[j])?ylarray[j]:ymin;
-    for (k = 0; k < nradd; ++k) {
-      for (j = 0; j < npadd[k]; ++j)
-	ymin = (ymin > ((yval[k])[j]-fabs((errb[k])[j])))?((yval[k])[j]-fabs((errb[k])[j])):ymin;
-    }
-      
-    ymax = yarray[0]+fabs(yerrarray[0]);
-    for (j = 1; j < rpm -> nur; ++j)
-      ymax = (ymax < (yarray[j]+fabs(yerrarray[j])))?(yarray[j]+fabs(yerrarray[j])):ymax;
-    if ((bars))
-      for (j = 0; j < rpm -> nr; ++j)
-	ymax = (ymax < ylarray[j])?ylarray[j]:ymax;
-    for (k = 0; k < nradd; ++k) {
-      for (j = 0; j < npadd[k]; ++j)
-	ymax = (ymax < ((yval[k])[j]+fabs((errb[k])[j])))?((yval[k])[j]+fabs((errb[k])[j])):ymax;
-    }
-    /* Ask */
-    sprintf(inqstr, "GR_YMIN_%i=", i);
-    sprintf(mes, "Give minimum of y-axis %i: [%f]", i, ymin);
-    def = 2;
-    nel = 1;
-    userreal_tir(startinfv -> arel, &ymin, &nel, &def, inqstr, mes);
-    sprintf(inqstr, "GR_YMAX_%i=", i);
-    sprintf(mes, "Give maximum of y-axis %i: [%f]", i, ymax);
-    def = 2;
-    nel = 1;
-    userreal_tir(startinfv -> arel, &ymax, &nel, &def, inqstr, mes);
-      
-    /* Fill the y axis descriptors and scalings */
-    /* Get the scale and the identity card */
-    gr_fillscaling(log, hdr, get_graphident(varystr[i], leftdeschi, leftdesclo, rightdesclo, legend, rpm -> ndisks), &lrscale, &lrzero, rpm -> ndisks);
-      
-    /* In case of SBR, the right hand is SD */
-    if (ident == SBR)
-      gr_fillaxis((NPARAMS+(rpm -> ndisks-1)*NDPARAMS+DENS_GRAPHNR), rightdeschi, rpm -> ndisks);
-    else if (ident == XPOS) {
-      gr_fillaxis((NPARAMS+(rpm -> ndisks-1)*NDPARAMS+RASH_GRAPHNR), rightdeschi, rpm -> ndisks);
-      ylog = 2;
-    }
-    else if (ident == YPOS) {
-      gr_fillaxis((NPARAMS+(rpm -> ndisks-1)*NDPARAMS+DESH_GRAPHNR), rightdeschi, rpm -> ndisks);
-      ylog = 3;
-    }
-    else
-      gr_fillaxis(ident, rightdeschi, rpm -> ndisks);
-      
-    /* Plot the box */
-    pgp_openbox(gdsc, i, xmin, xmax, ymin, ymax, leftdeschi, leftdesclo, rightdeschi, rightdesclo, bottomdeschi, bottomdesclo, topdeschi, topdesclo, lrzero, lrscale, btzero, btscale, xlog, ylog);
-      
-    /* Plot additional points */
-    if (nradd > 0) {
-      for (k = 0; k < nradd; ++k) {
-	if ((npadd[k])) {
-	    
-	  pgp_marker(gdsc, npadd[k], xval[k], yval[k], adcol[k], adfill[k], adsymb[k], adsizer[k]);
-	    
-	  /* Plot errorbars */
-	  if ((erad[k]))
-	    pgp_errby(gdsc, npadd[k], xval[k], yval[k], errb[k], adcol[k]);
-	    
-	  /* Plot lines */
-	  if ((adlines[k])) {
-	    gdsc -> interptype_lines = adinterp[k];
-	    pgp_lines(gdsc, npadd[k], xval[k], yval[k], adcol[k]);
-	  }
-
-	  /* Free memory */
-	  free(xval[k]);
-	  xval[k] = NULL;
-	  free(yval[k]);
-	  yval[k] = NULL;
-	  free(errb[k]);
-	  errb[k] = NULL;
-	}
-      }
-	
-      /* free stuff */
-      free(npadd);
-      free(erad);
-      free(adcol);
-      free(adlines);
-      free(xval);
-      free(yval);
-      free(errb);
-    }
-      
-    /* Plot bars */
-    if ((bars)) 
-      pgp_bars(gdsc, rpm -> nr, xlarray, ylarray, barwidth, colour);
-
-    /* Plot lines */
-    if ((lines)) {
-      gdsc -> interptype_lines = interp;
-      pgp_lines(gdsc, rpm -> nur, xarray, yarray, colour);
-    }
-
-    /* Copy the x array and remove points */
-    for (j = 0; j < rpm -> nur; ++j)
-      xarray2[j] = xarray[j];
-    numplpts = gr_deleteindexed(rpm -> nur, ident, xarray2, yarray, yerrarray, fit -> index, rpm -> ndisks);
-      
-    if (numplpts) {
-	
-      /* Plot errorbars */
-      if ((errbars))
-	pgp_errby(gdsc, numplpts, xarray2, yarray, yerrarray, colour);
-	
-      /* Plot the points */
-      pgp_marker(gdsc, numplpts, xarray2, yarray, colour, fill, symb, sizer);
-    }
-      
-    /* plot horizontal lines */
-    if ((horln)) {
-      for (j = 0; j < horln; ++j) {
-	vhlys[0] = vhlys[1] = horarray[j];
-	  
-	if (xmin == xmax) { 
-	  vhlxs[0] = 1000000.0*xarray[0]+0.1;
-	  vhlxs[1] = -1000000.0*xarray[0]-0.1;
-	}
-	else {
-	  vhlxs[0] = (xmin+xmax)/2.0-1000000.0*(xmax-xmin);
-	  vhlxs[1] = (xmin+xmax)/2.0+1000000.0*(xmax-xmin);
-	}
-	dummy = gdsc -> interptype_lines;
-	gdsc -> interptype_lines = PGP_I_LINEAR;
-	pgp_lines(gdsc, 2, vhlxs, vhlys, horcarray[j]);
-	gdsc -> interptype_lines = dummy;
-      }
-      free(horarray);
-      free(horcarray);
-    }
-      
-    /* plot vertical lines */
-    if ((verln)) {
-      for (j = 0; j < verln; ++j) {
-	vhlxs[0] = vhlxs[1] = vertarray[j];
-	if (ymin == ymax) { 
-	  vhlys[0] = 1000000.0*yarray[0]+0.1;
-	  vhlys[1] = -1000000.0*yarray[0]-0.1;
-	}
-	else {
-	  vhlys[0] = (ymin+ymax)/2.0-1000000.0*(ymax-ymin);
-	  vhlys[1] = (ymin+ymax)/2.0+1000000.0*(ymax-ymin);
-	}
-	/* Switch off interpolation scheme before plotting and reinstate */
-	dummy = gdsc -> interptype_lines;
-	gdsc -> interptype_lines = PGP_I_LINEAR;
-	pgp_lines(gdsc, 2, vhlxs, vhlys, vertcarray[j]);
-	gdsc -> interptype_lines = dummy;
-      }
-      free(vertarray);
-      free(vertcarray);
-    }
-      
-    /* Put the legend line */
-    if ((pltlegend))
-      pgp_legend(gdsc, i%2+1, i/2+1, legend);
-  }
-    
-  /* Free memory */
-  free(varystr);
-  free(varyhstr);
-  free(xarray);
-  free(xarray2);
-  free(yarray);
-  free(yerrarray);
-  free(xlarray);
-  free(ylarray);
-  free(pgdevice);
-    
-  /* Once we got here, we ask the user if to continue */
-  sprintf(mes, "Continue (Press return)?");
-  def = 1;
-  nel = 1;
-  userint_tir(startinfv -> arel, &pltlegend, &nel, &def, "GR_CONT=", mes);
-    
-    
-  /* Then we stop it */
-  pgp_end();
-    
-  return nrplts-1;
-    
- error:
-  if ((varystr))
-    free(varystr);
-  if ((varyhstr))
-    free(varyhstr);
-  if ((xarray))
-    free(xarray);
-  if ((xarray2))
-    free(xarray2);
-  if ((yarray))
-    free(yarray);
-  if ((yerrarray))
-    free(yerrarray);
-  if ((xlarray))
-    free(xlarray);
-  if ((ylarray))
-    free(ylarray);
-    
-  if ((npadd))
-    free(npadd);
-  if ((erad))
-    free(erad);
-  if ((adcol))
-    free(adcol);
-  if ((adsymb))
-    free(adsymb);
-  if ((adfill))
-    free(adfill);
-  if ((adlines))
-    free(adlines);
-  if ((adsizer))
-    free(adsizer);
-  if ((vertarray))
-    free(vertarray);
-  if ((horarray))
-    free(horarray);
-  if ((vertcarray))
-    free(vertcarray);
-  if ((horcarray))
-    free(horcarray);
-    
-  if ((xval)) {
-    for (i = 0; i < nradd; ++i) {
-      if ((xval[i]))
-	free(xval[i]);
-    }
-    free(xval);
-  }
-    
-  if ((yval)) {
-    for (i = 0; i < nradd; ++i) {
-      if ((yval[i]))
-	free(yval[i]);
-    }
-    free(yval);
-  }
-    
-  if ((errb)) {
-    for (i = 0; i < nradd; ++i) {
-      if ((errb[i]))
-	free(errb[i]);
-    }
-    free(errb);
-  }
-    
-  if ((pgdevice))
-    free(pgdevice);
-    
-  return 0;
-}
-  
 /* ------------------------------------------------------------ */
 
 
@@ -20237,17 +19241,17 @@ static int get_graphident(char *string, char *axis, char *unit, char *altunit, c
   /* First check if there is a string */
   if (!string)
     return -1;
-  
+
   /* Now check if it can be identified with a variable parameter itself */
   if(((ident = ftstab_gtitln_(string)) <= 0))
     ident = get_graphnr(string, ndisks);
   else if (ident > (NPARAMS+(ndisks-1)*NDPARAMS))
     return -1;
-  
+
   if (ident == 0)
     return -1;
- 
- 
+
+
   /* Now fill the strings */
   gr_fillaxis(ident, axis, ndisks);
   gr_fillunit(ident, unit, ndisks);
@@ -20637,7 +19641,7 @@ static void gr_fillaxis(int ident, char *string, int ndisks)
       sprintf(string, "RASH");
       return;
     }
-    
+
     for (disk = 1; disk < ndisks; ++disk) {
       if (ident == VROT+PRPARAMS+disk*NDPARAMS) {         sprintf(string, "VROT_%i", disk+1);         return;   }
       if (ident == VRAD+PRPARAMS+disk*NDPARAMS) {         sprintf(string, "VRAD_%i", disk+1);         return;   }
@@ -20731,7 +19735,7 @@ static void gr_fillaxis(int ident, char *string, int ndisks)
 void gr_fillunit(int ident, char *string, int ndisks)
 {
   if ((string)) {
-    
+
     if (ident == RADI) {
       sprintf(string, "arcsec");
       return;
@@ -20932,7 +19936,7 @@ void gr_fillunit(int ident, char *string, int ndisks)
       return;
     case GA1A:
       sprintf(string, "Jy\\.km\\.s\\u-1\\d\\.arcsec\\u-2");
-      return;    
+      return;
     case GA1P:
       sprintf(string, "degree");
       return;
@@ -21031,7 +20035,7 @@ static void gr_fillaltunit(int ident, char *string, int ndisks)
     if (ident == (NPARAMS+(ndisks-1)*NDPARAMS+LON_GRAPHNR)) {
       sprintf(string, "degree");
       return;
-    }    
+    }
 
     ident = (ident-NSSDPARAMS-1)%NDPARAMS + NSSDPARAMS + 1;
     switch (ident) {
@@ -21208,7 +20212,7 @@ static void gr_fillaltunit(int ident, char *string, int ndisks)
       return;
     case GA1A:
       sprintf(string, "cm\\u-2");
-      return;    
+      return;
     case GA1P:
       sprintf(string, "degree");
       return;
@@ -21256,8 +20260,8 @@ static void gr_fillaltunit(int ident, char *string, int ndisks)
       return;
     case INCL:
       sprintf(string, "rad");
-      return;    
-    case PA:  
+      return;
+    case PA:
       sprintf(string, "rad");
       return;
     case XPOS:
@@ -21285,9 +20289,9 @@ static void gr_fillaltunit(int ident, char *string, int ndisks)
 static int gr_deleteindexed(int nur, int ident, float *xarray, float *yarray, float *yerrarray, decomp_inlist *index, int ndisks)
 {
   int i = 0, j , k, l, m, ident2;
-  
+
   ident2 = ident;
-  
+
   if (ident > 0) {
     if (ident == (NPARAMS+(ndisks-1)*NDPARAMS+WA_GRAPHNR) || ident == (NPARAMS+(ndisks-1)*NDPARAMS+WOLD_GRAPHNR) || ident == (NPARAMS+(ndisks-1)*NDPARAMS+TIP_GRAPHNR) || ident == (NPARAMS+(ndisks-1)*NDPARAMS+LON_GRAPHNR)) {
       ident = PA;
@@ -21297,9 +20301,9 @@ static int gr_deleteindexed(int nur, int ident, float *xarray, float *yarray, fl
       ident = ident2 = SBR;
     }
   }
-  
+
   l = nur;
-  
+
   for (i = 0; i < nur; ++i) {
     for (m = 0; m < index -> nuel; ++m) {
       if ((ident-1)*nur+i == index -> ipa[m]) {
@@ -21332,14 +20336,14 @@ static int gr_deleteindexed(int nur, int ident, float *xarray, float *yarray, fl
 static int fillgrapharray(startinf *startinfv, hdrinf *hdr, ringparms *rpm, int ident, float *array, float *larray, int ndisks)
 {
   int i, j;
-  
+
   int def = 2;
   int nel = 1;
   int rring = 5;
   int err = 1;
   int gr_tlr = 0;
   char mes[81];
-  
+
   double br_incl;
   double br_pa;
   double gr_tll;
@@ -21349,13 +20353,13 @@ static int fillgrapharray(startinf *startinfv, hdrinf *hdr, ringparms *rpm, int 
   double vsys, nu;
   double rescval;
   double x,y;
-  
-      
+
+
 
   /* Check if it can be done */
   if (ident > 0) {
     if (ident <= (NPARAMS+(ndisks-1)*NDPARAMS)) {
-      
+
       /* Simply put the values into the arrays */
       for (i = 0; i < rpm -> nur; ++i)
 	array[i] = rpm -> par[(ident-1)*rpm -> nur+i];
@@ -21364,30 +20368,30 @@ static int fillgrapharray(startinf *startinfv, hdrinf *hdr, ringparms *rpm, int 
     }
     else if (ident == (NPARAMS+(rpm -> ndisks-1)*NDPARAMS+WA_GRAPHNR) || ident == (NPARAMS+(rpm -> ndisks-1)*NDPARAMS+WOLD_GRAPHNR)) {
       if (ident == (NPARAMS+(rpm -> ndisks-1)*NDPARAMS+WA_GRAPHNR)) {
-	
+
 	/* Calculate the normal vector of the reference */
 	for (i = 0; i < 3; ++i) {
 	  nrefr[i] = 0;
 	}
-	
+
 	/* Now we calculate the direction of the total angular momentum of the observed component */
 	for (j = 0; j < rpm -> nr; ++j) {
-   
+
 	  /* We don't do a relativistic correction for this */
 	  value = pow(rpm -> modpar[PRADI*rpm -> nr+j],2)*rpm -> modpar[PVROT*rpm -> nr+j]*rpm -> modpar[PSBR*rpm -> nr+j];
 	  nrefr[0] = nrefr[0]+(double) value*sin(DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j])*sin(DEGTORAD*rpm -> modpar[PPA*rpm -> nr+j]);
 	  nrefr[1] = nrefr[1]-(double) value*sin(DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j])*cos(DEGTORAD*rpm -> modpar[PPA*rpm -> nr+j]);
 	  nrefr[2] = nrefr[2]+(double) value*cos(DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j]);
 	}
-	
+
 	value = sqrt(pow(nrefr[0],2)+pow(nrefr[1],2)+pow(nrefr[2],2));
 	nrefr[0] = nrefr[0]/value;
 	nrefr[1] = nrefr[1]/value;
 	nrefr[2] = nrefr[2]/value;
       }
-      
+
       else {
-	
+
 	/* Get the reference ring */
 	sprintf(mes, "Give reference ring for warp angle calculation");
 	while ((err)) {
@@ -21396,51 +20400,51 @@ static int fillgrapharray(startinf *startinfv, hdrinf *hdr, ringparms *rpm, int 
 	    sprintf(mes, "REFRING: impossible number");
 	    cancel_tir(startinfv -> arel, "REFRING=", 2);
 	    def = 4;
-	  } 
+	  }
 	  else
 	    err = 0;
 	}
-	
+
 	/* Now get the normal vector of the reference ring */
 	nrefr[0] = sinf(DEGTORAD*rpm -> par[PINCL*rpm -> nur+rring-1])*sinf(DEGTORAD*rpm -> par[PPA*rpm -> nur+rring-1]);
 	nrefr[1] = -sinf(DEGTORAD*rpm -> par[PINCL*rpm -> nur+rring-1])*cosf(DEGTORAD*rpm -> par[PPA*rpm -> nur+rring-1]);
 	nrefr[2] = cosf(DEGTORAD*rpm -> par[PINCL*rpm -> nur+rring-1]);
       }
-      
+
       /* Now calculate the inclination of the rings with the refring */
       for (j = 0; j < rpm -> nur; ++j) {
 	nv[0] = sin(DEGTORAD*rpm -> par[PINCL*rpm -> nur+j])*sin(DEGTORAD*rpm -> par[PPA*rpm -> nur+j]);
 	nv[1] = -sin(DEGTORAD*rpm -> par[PINCL*rpm -> nur+j])*cos(DEGTORAD*rpm -> par[PPA*rpm -> nur+j]);
 	nv[2] = cos(DEGTORAD*rpm -> par[PINCL*rpm -> nur+j]);
-	
+
 	/* Here is the scalar product with the reference ring */
 	value = nv[0]*nrefr[0]+nv[1]*nrefr[1]+nv[2]*nrefr[2];
-	
+
 	/* This is the arcus */
 	array[j] = value>1?0.0:RADTODEG*acos(value);
       }
-      
+
       /* Now calculate the inclination of the subrings with the refring */
       for (j = 0; j < rpm -> nr; ++j) {
 	nv[0] = sin(DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j])*sin(DEGTORAD*rpm -> modpar[PPA*rpm -> nr+j]);
 	nv[1] = -sin(DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j])*cos(DEGTORAD*rpm -> modpar[PPA*rpm -> nr+j]);
 	nv[2] = cos(DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j]);
-	
+
 	/* Here is the scalar product with the reference ring */
 	value = nv[0]*nrefr[0]+nv[1]*nrefr[1]+nv[2]*nrefr[2];
-	
+
 	/* This is the arcus */
 	larray[j] = value>1?0.0:RADTODEG*acos(value);
       }
     }
     else if (ident == (NPARAMS+(ndisks-1)*NDPARAMS+DENS_GRAPHNR)){
-      
+
       /* We do it properly */
       for (j = 0; j < rpm -> nur; ++j) {
 	vsys = rpm -> par[PVSYS*rpm -> nur+j];
 	nu = (SPEEDOFLIGHT-vsys)*HIRESFREQ/SPEEDOFLIGHT;
 	value = rpm -> par[PSBR*rpm -> nur+j];
-	
+
 	/* The intensity in the restframe scales like */
 	array[j] = hdr -> itou*value*pow(HIRESFREQ/nu,4);
       }
@@ -21448,27 +20452,27 @@ static int fillgrapharray(startinf *startinfv, hdrinf *hdr, ringparms *rpm, int 
 	vsys = rpm -> modpar[PVSYS*rpm -> nr+j];
 	nu = (SPEEDOFLIGHT-vsys)*HIRESFREQ/SPEEDOFLIGHT;
 	value = rpm -> modpar [PSBR*rpm -> nr+j];
-	
+
 	/* The intensity in the restframe scales like */
 	larray[j] = hdr -> itou*value*pow(HIRESFREQ/nu,4);
       }
     }
     else if (ident == (NPARAMS+(ndisks-1)*NDPARAMS+TIP_GRAPHNR) || ident == (NPARAMS+(ndisks-1)*NDPARAMS+LON_GRAPHNR)) {
-      
+
       /* Ask for the reference position angle, default 0 */
       sprintf(mes, "Give Briggs reference position angle");
       br_pa = 0;
       def = 2;
       nel = 1;
       userdble_tir(startinfv -> arel, &br_pa, &nel, &def, "BR_PA=", mes);
-      
+
       /* Ask for the reference inclination, default 0 */
       sprintf(mes, "Give Briggs reference inclination");
       br_incl = 0;
       def = 2;
       nel = 1;
       userdble_tir(startinfv -> arel, &br_incl, &nel, &def, "BR_INCL=", mes);
-      
+
       /* Ask for the angle range, 0: 10-360, 1:-180-180 */
       sprintf(mes, "Give range for tiplon diagram 0: 10-360, 1:-180-180");
       gr_tlr = 0;
@@ -21476,18 +20480,18 @@ static int fillgrapharray(startinf *startinfv, hdrinf *hdr, ringparms *rpm, int 
       nel = 1;
       userint_tir(startinfv -> arel, &gr_tlr, &nel, &def, "GR_TLR=", mes);
 
-      
+
       /* Then get the stuff in radian */
       br_incl = DEGTORAD*br_incl;
       br_pa = DEGTORAD*br_pa;
 
       if (ident == (NPARAMS+(ndisks-1)*NDPARAMS+TIP_GRAPHNR)) {
 	for (j = 0; j < rpm -> nur; ++j) {
-	  
+
 	  /* We get the radian position angle and the radian inclination */
 	  nrefr[0] = DEGTORAD*rpm -> par[PINCL*rpm -> nur+j];
 	  nrefr[1] = DEGTORAD*rpm -> par[PPA*rpm -> nur+j];
-   
+
 	  /* Then we do this: */
 	  value = sin(br_incl)*sin(nrefr[0])*cos(nrefr[1]-br_pa)+cos(br_incl)*cos(nrefr[0]);
 	  array[j] = value>1?0.0:RADTODEG*acos(value);
@@ -21496,50 +20500,50 @@ static int fillgrapharray(startinf *startinfv, hdrinf *hdr, ringparms *rpm, int 
 	  /*     sprintf(obsmes, "tip: %.2f",array[j]);  */
 	  /*     anyout_tir(&obsint, obsmes);  */
 	  /**************/
-	  
+
 	}
 	for (j = 0; j < rpm -> nr; ++j) {
-	  
+
 	  /* We get the radian position angle and the radian inclination */
 	  nrefr[0] = DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j];
 	  nrefr[1] = DEGTORAD*rpm -> modpar[PPA*rpm -> nr+j];
-	  
+
 	  /* Then we do this: */
 	  value = sin(br_incl)*sin(nrefr[0])*cos(nrefr[1]-br_pa)+cos(br_incl)*cos(nrefr[0]);
 	  larray[j] = value>1?0.0:RADTODEG*acos(value);
 	}
       }
       else {
-	
+
 	/* First scan for the first point where pa and incl are different */
 	rescval = 0.0;
-	for (j = 0; j < rpm -> nr; ++j) { 
-	  nrefr[0] = DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j]; 
+	for (j = 0; j < rpm -> nr; ++j) {
+	  nrefr[0] = DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j];
 	  nrefr[1] = DEGTORAD*rpm -> modpar[PPA*rpm -> nr+j];
-	  
+
 	  if (maths_checkeq(nrefr[0], br_incl, 1.0E-6) || maths_checkeq(nrefr[1], br_pa, FLOAT_ACCURACY)) {
-	    
+
 	    x = sin(nrefr[0])*sin(nrefr[1]-br_pa);
 	    y = -cos(br_incl)*sin(nrefr[0])*cos(nrefr[1]-br_pa)+sin(br_incl)*cos(nrefr[0]);
-	    
+
 	    if (y == 0)
 	      y = 1E-15;
-	    
+
 	    rescval = (x/y);
-	    
+
 	    if ((x<=0) && (y > 0))
 	      rescval = -atan(rescval);
 	    if ((x>=0) && (y > 0))
 	      rescval = TWOPI-atan(rescval);
-	    
+
 	    if ((x>=0) && (y < 0))
 	      rescval = TWOPI/2-atan(rescval);
 	    if ((x<=0) && (y < 0))
 	      rescval = TWOPI/2-atan(rescval);
-	    break; 
+	    break;
 	  }
 	}
-	
+
 	/* Ask for the reference LON */
 	sprintf(mes, "Give value for indefinite LON");
 	gr_tll = RADTODEG*rescval;
@@ -21549,24 +20553,24 @@ static int fillgrapharray(startinf *startinfv, hdrinf *hdr, ringparms *rpm, int 
 	rescval = DEGTORAD*gr_tll;
 	/* sprintf(obsmes, "graph: %.2f", gr_tll); */
 	/* anyout_tir(&obsint, obsmes); */
- 
+
 	for (j = 0; j < rpm -> nr; ++j) {
-   
+
 	  /* We get the radian position angle and the radian inclination */
 	  nrefr[0] = DEGTORAD*rpm -> modpar[PINCL*rpm -> nr+j];
 	  nrefr[1] = DEGTORAD*rpm -> modpar[PPA*rpm -> nr+j];
-   
+
 	  /* Then we do this: */
 	  if (maths_checkeq(nrefr[0], br_incl, 1.0E-6) || maths_checkeq(nrefr[1], br_pa, FLOAT_ACCURACY)) {
-     
+
 	    x = sin(nrefr[0])*sin(nrefr[1]-br_pa);
 	    y = -cos(br_incl)*sin(nrefr[0])*cos(nrefr[1]-br_pa)+sin(br_incl)*cos(nrefr[0]);
-     
+
 	    if (y == 0.0)
 	      y = 1E-15;
-     
+
 	    value = (x/y);
-     
+
 	    if ((x<=0) && (y > 0))
 	      value = -atan(value);
 	    if ((x>=0) && (y > 0))
@@ -21575,42 +20579,42 @@ static int fillgrapharray(startinf *startinfv, hdrinf *hdr, ringparms *rpm, int 
 	      value = TWOPI/2-atan(value);
 	    if ((x<=0) && (y < 0))
 	      value = TWOPI/2-atan(value);
-	    else if ((x<=0) && (y == 0)) 
+	    else if ((x<=0) && (y == 0))
 	      value = TWOPI/4;
-	    else if ((x>=0) && (y == 0)) 
+	    else if ((x>=0) && (y == 0))
 	      value = 3*TWOPI/4;
 	  }
-	  else 
+	  else
 	    value = rescval;
-   
+
 	  larray[j] = RADTODEG*value;
 	  if ((gr_tlr)) {
 	    if ((larray[j] > 180))
 	      larray[j] = larray[j]-360.0;
 	  }
-   
+
 	}
 	for (j = 0; j < rpm -> nur; ++j) {
-   
+
 	  /* We get the radian position angle and the radian inclination */
 	  nrefr[0] = DEGTORAD*rpm -> par[PINCL*rpm -> nur+j];
 	  nrefr[1] = DEGTORAD*rpm -> par[PPA*rpm -> nur+j];
-   
+
 	  /* Then we do this: */
 	  if (maths_checkeq(nrefr[0], br_incl, 1.0E-6) || maths_checkeq(nrefr[1], br_pa, FLOAT_ACCURACY)) {
-     
+
 	    x = sin(nrefr[0])*sin(nrefr[1]-br_pa);
 	    y = -cos(br_incl)*sin(nrefr[0])*cos(nrefr[1]-br_pa)+sin(br_incl)*cos(nrefr[0]);
-     
-     
+
+
 	    value = (x/y);
-     
+
 	    /**************/
 	    /**************/
 	    /* sprintf(obsmes, "graph: x: %.2f y: %.2f", x,y); */
 	    /* anyout_tir(&obsint, obsmes); */
 	    /**************/
-     
+
 	    if ((x<=0) && (y > 0))
 	      value = -atan(value);
 	    else if ((x>=0) && (y > 0))
@@ -21619,16 +20623,16 @@ static int fillgrapharray(startinf *startinfv, hdrinf *hdr, ringparms *rpm, int 
 	      value = TWOPI/2-atan(value);
 	    else if ((x<=0) && (y < 0))
 	      value = TWOPI/2-atan(value);
-	    else if ((x<=0) && (y == 0)) 
+	    else if ((x<=0) && (y == 0))
 	      value = TWOPI/4;
-	    else if ((x>=0) && (y == 0)) 
+	    else if ((x>=0) && (y == 0))
 	      value = 3*TWOPI/4;
 	  }
-	  else 
+	  else
 	    value = rescval;
-   
+
 	  array[j] = RADTODEG*value;
-   
+
 	  if ((gr_tlr)) {
 	    if ((array[j] > 180))
 	      array[j] = array[j]-360.0;
@@ -21638,9 +20642,9 @@ static int fillgrapharray(startinf *startinfv, hdrinf *hdr, ringparms *rpm, int 
 	  /*    sprintf(obsmes, "lon: %.2f",array[j]); */
 	  /*    anyout_tir(&obsint, obsmes); */
 	  /**************/
-   
-   
-   
+
+
+
 	}
       }
     }
@@ -21735,7 +20739,7 @@ static void gr_filllegend(int ident, char *string, int ndisks)
     if (ident == (NPARAMS+(ndisks-1)*NDPARAMS+WOLD_GRAPHNR)) {sprintf(string, "WAOL: Warp angle, old definition"          );     return;}
     if (ident == (NPARAMS+(ndisks-1)*NDPARAMS+TIP_GRAPHNR))  {sprintf(string, "TIP: Tip angle"                            );     return;}
     if (ident == (NPARAMS+(ndisks-1)*NDPARAMS+LON_GRAPHNR))  {sprintf(string, "LON: LON angle"                            );     return;}
-    
+
 
     for (disk = 1; disk < ndisks; ++disk) {
       if (ident == VROT+PRPARAMS+disk*NDPARAMS) {         sprintf(string, "VROT_%i Rotation velocity disk %i", disk+1, disk+1                  );     return;}
@@ -21821,7 +20825,7 @@ static void gr_filllegend(int ident, char *string, int ndisks)
 /* Returns the scale for one unit to the alternative unit */
 static void gr_fillscaling(loginf *log, hdrinf *hdr, int ident, float *scale, float *zero, int ndisks)
 {
-  
+
   if (ident == RADI) {
     *scale = 1000.0*log -> distance*TWOPI/(360*60*60);
     *zero = 0.0;
@@ -21854,7 +20858,7 @@ static void gr_fillscaling(loginf *log, hdrinf *hdr, int ident, float *scale, fl
   }
   *scale = 1.0;
   *zero = 0.0;
-  
+
 /*   ident = ident%NDPARAMS?ident%NDPARAMS:NDPARAMS; */
   ident = (ident-NSSDPARAMS-1)%NDPARAMS + NSSDPARAMS + 1;
   switch (ident) {
@@ -21974,7 +20978,7 @@ static void gr_fillscaling(loginf *log, hdrinf *hdr, int ident, float *scale, fl
     return;
   case LC0 :
     *scale = log -> distance*TWOPI/(360.0*60.0*60.0)*1000000.0;
-    *zero = 0.0;    
+    *zero = 0.0;
     return;
   case SBR:
     *scale = hdr -> itou;
@@ -22053,7 +21057,7 @@ static int renzo(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm)
   double point[3];
   int keypres, nread, nreturned;
   char **varystr = NULL;
- 
+
   /* First check if the user wants a renzogram output */
   /* sprintf(mes, "Give inclinogram name:"); */
   /* for (i = 0; i < 200; ++i) */
@@ -22061,16 +21065,16 @@ static int renzo(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm)
   /* renzoname[200] = '\0'; */
   /* def = 2; */
   /* nel = 1; */
-  
+
   /* userchar_tir(renzoname, &nel, &def, "INCLINO=", mes); */
   /* termsinglestr(renzoname); */
-  
+
   /* The default is to do nothing */
    /* cancel_tir(startinfv -> arel, "INCLINO"); */
 
   if (simparse_scn_arel_readval_stringlist(startinfv -> arel, "INCLINO", "Give graphics (pgplot) device.", 0, NULL, 0, -1, 0, 0, &keypres, &nread, &nreturned, &varystr))
     goto error;
-  
+
   if ((varystr[0])) {
     if (!(renzoname = simparse_copystring(varystr[0]))) {
       goto error;
@@ -22081,7 +21085,7 @@ static int renzo(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm)
       goto error;
     }
   }
-  
+
   freeparsed(varystr);
   varystr = NULL;
 
@@ -22089,7 +21093,7 @@ static int renzo(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm)
     free(renzoname);
     return 1;
   }
-  
+
   /* Ask for refinement */
   sprintf(mes, "Give inclinogram refinement:");
   def = 2;
@@ -22130,13 +21134,13 @@ static int renzo(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm)
 
   for (j = 0; j < rpm -> nur*(NPARAMS+(rpm -> ndisks-1)*NDPARAMS)+NSPARAMS; ++j)
     rpm -> par[j] = log -> outarray[j];
-  
+
   /* We convert to internal units and interpolate over */
   changetointern(rpm -> par, rpm -> nur, hdr, rpm -> ndisks);
 
   /* Now se go through the planes, and hence the rings */
   for (i = 0; i < thecube.size_v; ++i) {
-    
+
     /* First calculate the major and the minor half axis */
     majhax = rpm -> par[PRADI*rpm -> nur+i]*refine;
     minhax = fabs(cos(rpm -> par[PINCL*rpm -> nur+i]))*majhax;
@@ -22146,7 +21150,7 @@ static int renzo(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm)
       for (k = 0; k < thecube.size_y; ++k) {
  point[0] = cos(rpm -> par[PPA*rpm -> nur+i])*(((double) j) - ((rpm -> par[PXPOS*rpm -> nur+i]+0.5)*refine-0.5))+sin(rpm -> par[PPA*rpm -> nur+i])*(((double) k) - ((rpm -> par[PYPOS*rpm -> nur+i]+0.5)*refine-0.5));
  point[1] = -sin(rpm -> par[PPA*rpm -> nur+i])*(((double) j) - ((rpm -> par[PXPOS*rpm -> nur+i]+0.5)*refine-0.5))+cos(rpm -> par[PPA*rpm -> nur+i])*(((double) k) - ((rpm -> par[PYPOS*rpm -> nur+i]+0.5)*refine-0.5));
- 
+
  if ((minhax > 0.5)) {
  /* Now check if the position is inside an ellipse, if yes, the point is 1, if not 0 */
  if (((minhax*point[0])*(minhax*point[0])+(majhax*point[1])*(majhax*point[1])) > (minhax*minhax*majhax*majhax))
@@ -22170,10 +21174,10 @@ static int renzo(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm)
     if (majhax < 1)
       thecube.points[roundnormal((rpm -> par[PXPOS*rpm -> nur+i]+0.5)*refine-0.5)+thecube.size_x*(roundnormal((rpm -> par[PYPOS*rpm -> nur+i]+0.5)*refine-0.5)+thecube.size_y*i)] = 1;
   }
-  
+
   /* Output it */
   ftsout_writecube(renzoname, &thecube, header);
-  
+
   /* Deallocate everything */
     ftsout_header_destroy(header);
     free(thecube.points);
@@ -22205,9 +21209,9 @@ static int renzo(startinf *startinfv, loginf *log, hdrinf *hdr, ringparms *rpm)
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 /* Make a qfits header suitable for coolgal output */
-static qfits_header *makerenzohdr(hdrinf *hdr, int planes, int refine) 
+static qfits_header *makerenzohdr(hdrinf *hdr, int planes, int refine)
 {
-  /*  char key[9] */ 
+  /*  char key[9] */
   char value[21];
   /* int j; */
   /* int level = 0; */
@@ -22215,11 +21219,11 @@ static qfits_header *makerenzohdr(hdrinf *hdr, int planes, int refine)
   qfits_header *header = NULL;
 
   /* The bitpix is -32 */
-  if (!(header = ftsout_putcard(header, "BITPIX","-32"))) 
+  if (!(header = ftsout_putcard(header, "BITPIX","-32")))
     goto error;
 
   /* The number of axes is set to three */
-  if (!ftsout_putcard(header, "NAXIS","3")) 
+  if (!ftsout_putcard(header, "NAXIS","3"))
     goto error;
 
   /* Now get the axis numbers */
@@ -22238,7 +21242,7 @@ static qfits_header *makerenzohdr(hdrinf *hdr, int planes, int refine)
   /* May contain an extension */
   if (!ftsout_putcard(header, "EXTEND","T"))
     goto error;
-  
+
   /* These are clear */
   if (!ftsout_putcard(header, "BSCALE","1"))
     goto error;
@@ -22249,7 +21253,7 @@ static qfits_header *makerenzohdr(hdrinf *hdr, int planes, int refine)
   if (!ftsout_putcard(header, "BUNIT","' '"))
     goto error;
 
-  /* The cdelt is taken from the hdr struct, this should be ok with the unit being DEGREE*/  
+  /* The cdelt is taken from the hdr struct, this should be ok with the unit being DEGREE*/
   sprintf(value, "%.12E", hdr -> userglobcdelt[0]/refine);
   if (!ftsout_putcard(header, "CDELT1", value))
     goto error;
@@ -22275,8 +21279,8 @@ static qfits_header *makerenzohdr(hdrinf *hdr, int planes, int refine)
     goto error;
   if (!ftsout_putcard(header, "CUNIT1", "'DEGREE            '"))
     goto error;
-  
-  /* The cdelt is taken from the hdr struct, this should be ok with the unit being DEGREE*/  
+
+  /* The cdelt is taken from the hdr struct, this should be ok with the unit being DEGREE*/
   sprintf(value, "%.12E", hdr -> userglobcdelt[1]/refine);
   if (!ftsout_putcard(header, "CDELT2", value))
     goto error;
@@ -22329,9 +21333,9 @@ static qfits_header *makerenzohdr(hdrinf *hdr, int planes, int refine)
     goto error;
 
   return header;
-  
+
  error:
-  if ((header)) 
+  if ((header))
     ftsout_header_destroy(header);
   header = NULL;
   return header;
@@ -22383,7 +21387,7 @@ static inf_smi *create_inf_smi(void)
   inf_smi *create_inf_smi = NULL;
   if (!(create_inf_smi = (inf_smi *) malloc(sizeof(inf_smi))))
     return create_inf_smi;
-  
+
 /*   create_inf_smi -> randstr = NULL; */
 
   return create_inf_smi;
@@ -22411,112 +21415,112 @@ static int destroy_inf_smi(inf_smi *inf_smiv)
 
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the vm1 struct */    
-static int chkb_smi(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the vm1 struct */
+static int chkb_smi(ringparms *rpm, fitparms *fit)
+{
   int actiflag, disk, srnr;
-  
+
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
-    if (!(rpm -> inf_smiv[disk])) 
-    if (!(rpm -> inf_smiv[disk] = create_inf_smi())) 
+
+    if (!(rpm -> inf_smiv[disk]))
+    if (!(rpm -> inf_smiv[disk] = create_inf_smi()))
       return 1;
-    
+
     actiflag = 0;
 
     /* check out subring calculation and calculation of surface density */
     /* Zeroth order */
-    
+
     /* First order */
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM1A))) { 
-      rpm -> inf_smiv[disk] -> prs1 = rpm -> inf_smiv[disk] -> prc1 = &pr_smi_pas; 
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM1A))) {
+      rpm -> inf_smiv[disk] -> prs1 = rpm -> inf_smiv[disk] -> prc1 = &pr_smi_pas;
       rpm -> inf_smiv[disk] -> srprs1 = rpm -> inf_smiv[disk] -> srprc1 = &srpr_smi_pas;
-    } 
+    }
     else {
       actiflag = 1;
-      rpm -> inf_smiv[disk] -> prs1 = &pr_sm1s_act; 
-      rpm -> inf_smiv[disk] -> prc1 = &pr_sm1c_act; 
+      rpm -> inf_smiv[disk] -> prs1 = &pr_sm1s_act;
+      rpm -> inf_smiv[disk] -> prc1 = &pr_sm1c_act;
       rpm -> inf_smiv[disk] -> srprs1 = &srpr_sm1s_act;
       rpm -> inf_smiv[disk] -> srprc1 = &srpr_sm1c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM1P))) { 
-	rpm -> inf_smiv[disk] -> prs1 = &pr_smi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM1P))) {
+	rpm -> inf_smiv[disk] -> prs1 = &pr_smi_pas;
 	rpm -> inf_smiv[disk] -> srprs1 = &srpr_smi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM1P, PIHALF))) { 
-	rpm -> inf_smiv[disk] -> prc1 = &pr_smi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM1P, PIHALF))) {
+	rpm -> inf_smiv[disk] -> prc1 = &pr_smi_pas;
 	rpm -> inf_smiv[disk] -> srprc1 = &srpr_smi_pas;
       }
     }
-    
+
     /* second order */
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM2A))) { 
-      rpm -> inf_smiv[disk] -> prs2 = rpm -> inf_smiv[disk] -> prc2 = &pr_smi_pas; 
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM2A))) {
+      rpm -> inf_smiv[disk] -> prs2 = rpm -> inf_smiv[disk] -> prc2 = &pr_smi_pas;
       rpm -> inf_smiv[disk] -> srprs2 = rpm -> inf_smiv[disk] -> srprc2 = &srpr_smi_pas;
-    } 
+    }
     else {
       actiflag = 1;
-      rpm -> inf_smiv[disk] -> prs2 = &pr_sm2s_act; 
-      rpm -> inf_smiv[disk] -> prc2 = &pr_sm2c_act; 
+      rpm -> inf_smiv[disk] -> prs2 = &pr_sm2s_act;
+      rpm -> inf_smiv[disk] -> prc2 = &pr_sm2c_act;
       rpm -> inf_smiv[disk] -> srprs2 = &srpr_sm2s_act;
       rpm -> inf_smiv[disk] -> srprc2 = &srpr_sm2c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM2P))) { 
-	rpm -> inf_smiv[disk] -> prs2 = &pr_smi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM2P))) {
+	rpm -> inf_smiv[disk] -> prs2 = &pr_smi_pas;
 	rpm -> inf_smiv[disk] -> srprs2 = &srpr_smi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM2P, PIHALF))) { 
-	rpm -> inf_smiv[disk] -> prs2 = &pr_smi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM2P, PIHALF))) {
+	rpm -> inf_smiv[disk] -> prs2 = &pr_smi_pas;
 	rpm -> inf_smiv[disk] -> srprs2 = &srpr_smi_pas;
       }
     }
-    
+
     /* third order */
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM3A))) { 
-      rpm -> inf_smiv[disk] -> prs3 = rpm -> inf_smiv[disk] -> prc3 = &pr_smi_pas; 
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM3A))) {
+      rpm -> inf_smiv[disk] -> prs3 = rpm -> inf_smiv[disk] -> prc3 = &pr_smi_pas;
       rpm -> inf_smiv[disk] -> srprs3 = rpm -> inf_smiv[disk] -> srprc3 = &srpr_smi_pas;
     }
     else {
       actiflag = 1;
-      rpm -> inf_smiv[disk] -> prs3 = &pr_sm3s_act; 
-      rpm -> inf_smiv[disk] -> prc3 = &pr_sm3c_act; 
+      rpm -> inf_smiv[disk] -> prs3 = &pr_sm3s_act;
+      rpm -> inf_smiv[disk] -> prc3 = &pr_sm3c_act;
       rpm -> inf_smiv[disk] -> srprs3 = &srpr_sm3s_act;
       rpm -> inf_smiv[disk] -> srprc3 = &srpr_sm3c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM3P))) { 
-	rpm -> inf_smiv[disk] -> prs3 = &pr_smi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM3P))) {
+	rpm -> inf_smiv[disk] -> prs3 = &pr_smi_pas;
 	rpm -> inf_smiv[disk] -> srprs3 = &srpr_smi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM3P, PIHALF))) { 
-	rpm -> inf_smiv[disk] -> prc3 = &pr_smi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM3P, PIHALF))) {
+	rpm -> inf_smiv[disk] -> prc3 = &pr_smi_pas;
 	rpm -> inf_smiv[disk] -> srprc3 = &srpr_smi_pas;
       }
     }
-    
+
     /* fourth order */
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM4A))) { 
-      rpm -> inf_smiv[disk] -> prs4 = rpm -> inf_smiv[disk] -> prc4 = &pr_smi_pas; 
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM4A))) {
+      rpm -> inf_smiv[disk] -> prs4 = rpm -> inf_smiv[disk] -> prc4 = &pr_smi_pas;
       rpm -> inf_smiv[disk] -> srprs4 = rpm -> inf_smiv[disk] -> srprc4 = &srpr_smi_pas;
-    } 
+    }
     else {
       actiflag = 1;
-      rpm -> inf_smiv[disk] -> prs4 = &pr_sm4s_act; 
-      rpm -> inf_smiv[disk] -> prc4 = &pr_sm4c_act; 
+      rpm -> inf_smiv[disk] -> prs4 = &pr_sm4s_act;
+      rpm -> inf_smiv[disk] -> prc4 = &pr_sm4c_act;
       rpm -> inf_smiv[disk] -> srprs4 = &srpr_sm4s_act;
       rpm -> inf_smiv[disk] -> srprc4 = &srpr_sm4c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM4P))) { 
-	rpm -> inf_smiv[disk] -> prs4 = &pr_smi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM4P))) {
+	rpm -> inf_smiv[disk] -> prs4 = &pr_smi_pas;
 	rpm -> inf_smiv[disk] -> srprs4 = &srpr_smi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM4P, PIHALF))) { 
-	rpm -> inf_smiv[disk] -> prs4 = &pr_smi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PSM4P, PIHALF))) {
+	rpm -> inf_smiv[disk] -> prs4 = &pr_smi_pas;
 	rpm -> inf_smiv[disk] -> srprs4 = &srpr_smi_pas;
       }
     }
-    
+
     /* we allocate the rng, since we will need it */
     if ((actiflag)) {
 
@@ -22524,7 +21528,7 @@ static int chkb_smi(ringparms *rpm, fitparms *fit)
       if (!(rpm -> sd[disk][srnr].randstr))
 	if (!(rpm -> sd[disk][srnr].randstr = (maths_rstrf *) malloc(sizeof(maths_rstrf))))
 	  goto error;
-      
+
       rpm -> inf_smiv[disk] -> prb0 = &pr_sm0b_act;
       rpm -> inf_smiv[disk] -> srprb0 = &srpr_sm0b_act;
       rpm -> inf_smiv[disk] -> srprsbrmax = &smi_sbrmax_act;
@@ -22549,7 +21553,7 @@ static int chkb_smi(ringparms *rpm, fitparms *fit)
     rpm -> inf_smiv[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
@@ -22723,7 +21727,7 @@ static void smi_getcloudnumber_harm(void *rpm, int srnr, int disk)
     /* This is the integral if there is no negative flux (because the integral of a harmonic function with order > 0 is 0), Kamphuis bugfix */
     /* prm -> sd[disk][srnr].nharmnorm = (long) (ringflux/prm -> cflux[0]); -> */
     prm -> sd[disk][srnr].nharmnorm = (long) (ringflux/prm -> cflux[disk]);
-    
+
     /* correct the point source flux */
     if ((prm -> sd[disk][srnr].nharmnorm))
       prm -> sd[disk][srnr].pf = fabs(ringflux)/prm -> sd[disk][srnr].nharmnorm;
@@ -22742,23 +21746,23 @@ static void smi_getcloudnumber_harm(void *rpm, int srnr, int disk)
     prm -> sd[disk][srnr].srput = &srput_norm;
   }
   else {
-    
+
     /* Normalise to point source number instead of surface brightness */
     /* Kamphuis bugfix */
 /*     nor = prm -> modpar[PRADI*prm -> nr+srnr]*prm -> radsep/prm -> cflux[0]; -> */
     nor = prm -> modpar[PRADI*prm -> nr+srnr]*prm -> radsep/prm -> cflux[disk];
-    
+
     /* Negative flux occurs, which is why we have to calculate the full integral (numerically) */
-    prm -> sd[disk][srnr].nharmnorm = 
+    prm -> sd[disk][srnr].nharmnorm =
       (long) maths_intabsfou4(
-			      nor*prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSBR)*prm -> nr+srnr], 
-			      nor*prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSM1A)*prm -> nr+srnr], 
+			      nor*prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSBR)*prm -> nr+srnr],
+			      nor*prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSM1A)*prm -> nr+srnr],
 			      prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSM1P)*prm -> nr+srnr],
-			      nor*prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSM2A)*prm -> nr+srnr], 
+			      nor*prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSM2A)*prm -> nr+srnr],
 			      prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSM2P)*prm -> nr+srnr],
-			      nor*prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSM3A)*prm -> nr+srnr], 
+			      nor*prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSM3A)*prm -> nr+srnr],
 			      prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSM3P)*prm -> nr+srnr],
-			      nor*prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSM4A)*prm -> nr+srnr], 
+			      nor*prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSM4A)*prm -> nr+srnr],
 			      prm -> modpar[(PRPARAMS+disk*NDPARAMS+PSM4P)*prm -> nr+srnr]
     );
 
@@ -22768,7 +21772,7 @@ static void smi_getcloudnumber_harm(void *rpm, int srnr, int disk)
 
     /* We reset the number of positive and negative point sources */
   }
-  
+
   /* Change the number of point sources */
   prm -> sd[disk][srnr].n += prm -> sd[disk][srnr].nharmnorm;
 
@@ -23012,7 +22016,7 @@ static void smi_getaz_harm(void *rpm, float *az, float *sinaz, float *cosaz, int
     *cosaz = cosf(*az);
     *sinaz = sinf(*az);
 
-    /* Caution!!! This function replaces sbr with the constant value */ 
+    /* Caution!!! This function replaces sbr with the constant value */
     (*(prm -> inf_smiv[disk] -> prb0))(rpm, &sbr, srnr, *sinaz, *cosaz, disk);
 
     /* Caution!!! The following functions add to sbr */
@@ -23038,7 +22042,7 @@ static void smi_getaz_harm(void *rpm, float *az, float *sinaz, float *cosaz, int
 
   if (sbr >= 0)
     *signum = 1;
-  else 
+  else
     *signum = 0;
 
   return;
@@ -23090,31 +22094,31 @@ static void smi_sbrmax_pas(void *rpm, int srnr, int disk)
 
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the vm1 struct */    
-static int chkb_gau(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the vm1 struct */
+static int chkb_gau(ringparms *rpm, fitparms *fit)
+{
   int actiflag, disk, srnr;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    if (!(rpm -> inf_gauv[disk])) 
-      if (!(rpm -> inf_gauv[disk] = create_inf_gau())) 
+    if (!(rpm -> inf_gauv[disk]))
+      if (!(rpm -> inf_gauv[disk] = create_inf_gau()))
 	return 1;
-    
+
     actiflag = 0;
 
     /* check out subring calculation and calculation of surface density */
-    
+
     /* First order */
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PGA1A))) { 
-      rpm -> inf_gauv[disk] -> srpr0 = &srpr_gau_pas; 
-      rpm -> inf_gauv[disk] -> rndmf_init0 = &rndmf_init_gau_pas; 
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PGA1A))) {
+      rpm -> inf_gauv[disk] -> srpr0 = &srpr_gau_pas;
+      rpm -> inf_gauv[disk] -> rndmf_init0 = &rndmf_init_gau_pas;
       rpm -> inf_gauv[disk] -> getcloudnumber0 = gau_getcloudnumber_pas;
-    } 
+    }
     else {
-      rpm -> inf_gauv[disk] -> srpr0 = &srpr_gau_act; 
-      rpm -> inf_gauv[disk] -> rndmf_init0 = &rndmf_init_gau_act; 
+      rpm -> inf_gauv[disk] -> srpr0 = &srpr_gau_act;
+      rpm -> inf_gauv[disk] -> rndmf_init0 = &rndmf_init_gau_act;
       rpm -> inf_gauv[disk] -> getcloudnumber0 = gau_getcloudnumber_act;
       for (srnr = 0; srnr < rpm -> nr; ++srnr) {
       if (!(rpm -> sd[disk][srnr].grandstr[0]))
@@ -23123,32 +22127,32 @@ static int chkb_gau(ringparms *rpm, fitparms *fit)
       }
       actiflag = 1;
     }
-    
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PGA2A))) { 
-      rpm -> inf_gauv[disk] -> srpr1 = &srpr_gau_pas; 
-      rpm -> inf_gauv[disk] -> rndmf_init1 = &rndmf_init_gau_pas; 
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PGA2A))) {
+      rpm -> inf_gauv[disk] -> srpr1 = &srpr_gau_pas;
+      rpm -> inf_gauv[disk] -> rndmf_init1 = &rndmf_init_gau_pas;
       rpm -> inf_gauv[disk] -> getcloudnumber1 = gau_getcloudnumber_pas;
-    } 
+    }
     else {
-      rpm -> inf_gauv[disk] -> srpr1 = &srpr_gau_act; 
-      rpm -> inf_gauv[disk] -> rndmf_init1 = &rndmf_init_gau_act; 
+      rpm -> inf_gauv[disk] -> srpr1 = &srpr_gau_act;
+      rpm -> inf_gauv[disk] -> rndmf_init1 = &rndmf_init_gau_act;
       rpm -> inf_gauv[disk] -> getcloudnumber1 = gau_getcloudnumber_act;
       for (srnr = 0; srnr < rpm -> nr; ++srnr) {
 	if (!(rpm -> sd[disk][srnr].grandstr[1]))
 	  if (!(rpm -> sd[disk][srnr].grandstr[1] = (maths_rstrf *) malloc(sizeof(maths_rstrf))))
 	    goto error;
-      }    
+      }
       actiflag = 1;
     }
-    
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PGA3A))) { 
-      rpm -> inf_gauv[disk] -> srpr2 = &srpr_gau_pas; 
-      rpm -> inf_gauv[disk] -> rndmf_init2 = &rndmf_init_gau_pas; 
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PGA3A))) {
+      rpm -> inf_gauv[disk] -> srpr2 = &srpr_gau_pas;
+      rpm -> inf_gauv[disk] -> rndmf_init2 = &rndmf_init_gau_pas;
       rpm -> inf_gauv[disk] -> getcloudnumber2 = gau_getcloudnumber_pas;
-  } 
+  }
     else {
-      rpm -> inf_gauv[disk] -> srpr2 = &srpr_gau_act; 
-      rpm -> inf_gauv[disk] -> rndmf_init2 = &rndmf_init_gau_act; 
+      rpm -> inf_gauv[disk] -> srpr2 = &srpr_gau_act;
+      rpm -> inf_gauv[disk] -> rndmf_init2 = &rndmf_init_gau_act;
       rpm -> inf_gauv[disk] -> getcloudnumber2 = gau_getcloudnumber_act;
       for (srnr = 0; srnr < rpm -> nr; ++srnr) {
 	if (!(rpm -> sd[disk][srnr].grandstr[2]))
@@ -23157,15 +22161,15 @@ static int chkb_gau(ringparms *rpm, fitparms *fit)
       }
       actiflag = 1;
     }
-    
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PGA4A))) { 
-      rpm -> inf_gauv[disk] -> srpr3 = &srpr_gau_pas; 
-      rpm -> inf_gauv[disk] -> rndmf_init3 = &rndmf_init_gau_pas; 
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PGA4A))) {
+      rpm -> inf_gauv[disk] -> srpr3 = &srpr_gau_pas;
+      rpm -> inf_gauv[disk] -> rndmf_init3 = &rndmf_init_gau_pas;
       rpm -> inf_gauv[disk] -> getcloudnumber3 = gau_getcloudnumber_pas;
-    } 
+    }
     else {
-      rpm -> inf_gauv[disk] -> srpr3 = &srpr_gau_act; 
-      rpm -> inf_gauv[disk] -> rndmf_init3 = &rndmf_init_gau_act; 
+      rpm -> inf_gauv[disk] -> srpr3 = &srpr_gau_act;
+      rpm -> inf_gauv[disk] -> rndmf_init3 = &rndmf_init_gau_act;
       rpm -> inf_gauv[disk] -> getcloudnumber3 = gau_getcloudnumber_act;
       for (srnr = 0; srnr < rpm -> nr; ++srnr) {
 	if (!(rpm -> sd[disk][srnr].grandstr[3]))
@@ -23174,7 +22178,7 @@ static int chkb_gau(ringparms *rpm, fitparms *fit)
       }
       actiflag = 1;
     }
-    
+
     if ((actiflag)) {
       ;
     }
@@ -23187,7 +22191,7 @@ static int chkb_gau(ringparms *rpm, fitparms *fit)
     rpm -> inf_gauv[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
@@ -23316,7 +22320,7 @@ static void gau_getcloudnumber_act(void *rpm, int srnr, int group, int disk)
     if ((prm -> sd[disk][srnr].pf > 0 && ringflux < 0) || (prm -> sd[disk][srnr].pf < 0 && ringflux > 0)) {
         prm -> sd[disk][srnr].gridpoint = &gridpoint_mixed;
 	prm -> sd[disk][srnr].srput = &srput_mixed;
-    } 
+    }
   }
   return;
 }
@@ -23394,57 +22398,57 @@ static int destroy_inf_azi(inf_azi *inf_aziv)
 /* ------------------------------------------------------------ */
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the vm1 struct */    
-static int chkb_azi(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the vm1 struct */
+static int chkb_azi(ringparms *rpm, fitparms *fit)
+{
   int actiflag, disk;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
 
     actiflag = 0;
 
-    if (!(rpm -> inf_aziv[disk])) 
-      if (!(rpm -> inf_aziv[disk] = create_inf_azi())) 
+    if (!(rpm -> inf_aziv[disk]))
+      if (!(rpm -> inf_aziv[disk] = create_inf_azi()))
 	return 1;
-    
-    rpm -> inf_aziv[disk] -> pr0 = &pr_azi_pas; 
-    rpm -> inf_aziv[disk] -> pr1 = &pr_azi_pas; 
+
+    rpm -> inf_aziv[disk] -> pr0 = &pr_azi_pas;
+    rpm -> inf_aziv[disk] -> pr1 = &pr_azi_pas;
 
     /* First range */
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PAZ1W))) { 
-      rpm -> inf_aziv[disk] -> srpr0 = &srpr_azi_pas; 
-    } 
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PAZ1W))) {
+      rpm -> inf_aziv[disk] -> srpr0 = &srpr_azi_pas;
+    }
     else {
-      rpm -> inf_aziv[disk] -> srpr0 = &srpr_azi_act; 
-      rpm -> inf_aziv[disk] -> pr0 = &pr_azi_act; 
+      rpm -> inf_aziv[disk] -> srpr0 = &srpr_azi_act;
+      rpm -> inf_aziv[disk] -> pr0 = &pr_azi_act;
       actiflag = 1;
     }
-    
+
     /* Second range */
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PAZ2W))) { 
-      rpm -> inf_aziv[disk] -> srpr1 = &srpr_azi_pas; 
-    } 
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PAZ2W))) {
+      rpm -> inf_aziv[disk] -> srpr1 = &srpr_azi_pas;
+    }
     else {
       rpm -> inf_aziv[disk] -> srpr1 = &srpr_azi_act;
-      rpm -> inf_aziv[disk] -> pr1 = &pr_azi_act; 
+      rpm -> inf_aziv[disk] -> pr1 = &pr_azi_act;
       actiflag = 1;
     }
-    
-    rpm -> inf_aziv[disk] -> srshape = &srshape_azi_pas; 
-    rpm -> inf_aziv[disk] -> corrp = &corrp_azi_pas; 
-    rpm -> inf_aziv[disk] -> setoutrange = &setoutrange_azi_pas; 
-    
+
+    rpm -> inf_aziv[disk] -> srshape = &srshape_azi_pas;
+    rpm -> inf_aziv[disk] -> corrp = &corrp_azi_pas;
+    rpm -> inf_aziv[disk] -> setoutrange = &setoutrange_azi_pas;
+
     if ((actiflag)) {
-      rpm -> inf_aziv[disk] -> srshape = &srshape_azi_act; 
+      rpm -> inf_aziv[disk] -> srshape = &srshape_azi_act;
       rpm -> inf_aziv[disk] -> corrp = &corrp_azi_act;
-      rpm -> inf_aziv[disk] -> setoutrange = &setoutrange_azi_act; 
+      rpm -> inf_aziv[disk] -> setoutrange = &setoutrange_azi_act;
     }
-  }  
-   
+  }
+
   return 0;
-      
+
 }
 
 /* ------------------------------------------------------------ */
@@ -23458,17 +22462,17 @@ static void srpr_azi_act(void *rpm, int srnr, int number, int disk)
 {
   ringparms *prm;
   float azi;
- 
+
   prm = (ringparms *) rpm;
 
   azi = fmodf(prm -> modpar[(PRPARAMS+disk*NDPARAMS+PAZ1P+2*number)*prm -> nr+srnr],TWOPI);
-  
+
   while (azi < 0.0)
     azi = azi+TWOPI;
-  
+
   prm -> sd[disk][srnr].ranges[number][0] = azi-0.5*prm -> modpar[(PRPARAMS+disk*NDPARAMS+PAZ1W+2*number)*prm -> nr+srnr];
   prm -> sd[disk][srnr].ranges[number][1] = azi+0.5*prm -> modpar[(PRPARAMS+disk*NDPARAMS+PAZ1W+2*number)*prm -> nr+srnr];
-  
+
   if (prm -> sd[disk][srnr].ranges[number][1] > TWOPI) {
     prm -> sd[disk][srnr].ranges[number][2] = prm -> sd[disk][srnr].ranges[number][0]-TWOPI;
     prm -> sd[disk][srnr].ranges[number][3] = prm -> sd[disk][srnr].ranges[number][1]-TWOPI;
@@ -23578,7 +22582,7 @@ static int srshape_azi_act(void *rpm, float *pp, float sinaz, float cosaz, int s
   else {
     srshape(prm, pp, sinaz, cosaz, srnr, disk);
   }
-  
+
   return 0;
 }
 
@@ -23623,7 +22627,7 @@ static int srshape_azi_actcool(void *rpm, float *pp, float sinaz, float cosaz, i
   else {
     srshapecool(prm, pp, sinaz, cosaz, srnr, disk);
   }
-  
+
   return 0;
 }
 
@@ -24204,7 +23208,7 @@ static void pr_dvve_act(void *rpm, float *point, int srnr, int disk)
   ringparms *prm;
 
   prm = (ringparms *) rpm;
-  
+
   /* Now, this should do, the signum of the z-component is the signum of z */
  point[5] = point[5]+prm -> modpar[(PRPARAMS+disk*NDPARAMS+PDVVE)*prm -> nr+srnr]*point[2];
 
@@ -24224,12 +23228,12 @@ static void pr_dvve_act2(void *rpm, float *point, int srnr, int disk)
   ringparms *prm;
 
   prm = (ringparms *) rpm;
-  
+
   /* Now, this should do, the signum of the z-component is the signum of z */
   if (fabs(point[2]) > fabs(prm -> modpar[(PRPARAMS+disk*NDPARAMS+PZDVE)*prm -> nr+srnr])) {
     if (point[2] > 0.0)
       point[5] = point[5]+prm -> modpar[(PRPARAMS+disk*NDPARAMS+PDVVE)*prm -> nr+srnr]*(point[2]-fabs(prm -> modpar[(PRPARAMS+disk*NDPARAMS+PZDVE)*prm -> nr+srnr]));
-    else 
+    else
       point[5] = point[5]+prm -> modpar[(PRPARAMS+disk*NDPARAMS+PDVVE)*prm -> nr+srnr]*(point[2]+fabs(prm -> modpar[(PRPARAMS+disk*NDPARAMS+PZDVE)*prm -> nr+srnr]));
   }
   return;
@@ -25418,7 +24422,7 @@ static  int userdble_tir(simparse_scn_arel **arel, double *anarray, int *element
   4 --- (added to any of the above values) the user is required to enter the exact number of items
   */
 
-  min = *elements; 
+  min = *elements;
   max = *elements;
 
   if (*defaultstat & 1) {
@@ -25458,7 +24462,7 @@ static  int userdble_tir(simparse_scn_arel **arel, double *anarray, int *element
 
 /*  fint felements, fdefaultstat; */
  /*  int userdble_tir; */
-  
+
  /*  felements = (fint) *elements; */
  /*  fdefaultstat = (fint) *defaultstat; */
 
@@ -25497,7 +24501,7 @@ static  int userreal_tir(simparse_scn_arel **arel, float *anarray, int *elements
   4 --- (added to any of the above values) the user is required to enter the exact number of items
   */
 
-  min = *elements; 
+  min = *elements;
   max = *elements;
 
   if (*defaultstat & 1) {
@@ -25537,7 +24541,7 @@ static  int userreal_tir(simparse_scn_arel **arel, float *anarray, int *elements
 
  /*  fint felements, fdefaultstat; */
  /*  int userreal_tir; */
-  
+
  /*  felements = (fint) *elements; */
  /*  fdefaultstat = (fint) *defaultstat; */
 
@@ -25575,7 +24579,7 @@ static  int userint_tir(simparse_scn_arel **arel, int *anarray, int *elements, i
   2 --- user is not prompted and default is taken unless the input was pre-specified
   4 --- (added to any of the above values) the user is required to enter the exact number of items
   */
-  min = *elements; 
+  min = *elements;
   max = *elements;
 
   if (*defaultstat & 1) {
@@ -25624,7 +24628,7 @@ static  int userint_tir(simparse_scn_arel **arel, int *anarray, int *elements, i
  /*  } */
  /*  else  */
  /*    fanarray = NULL; */
-  
+
  /*  for (i = 0; i < *elements; ++i) { */
  /*    fanarray[i] = (fint) anarray[i]; */
  /*  } */
@@ -25732,25 +24736,25 @@ static int chkb_sdis(ringparms *rpm, fitparms *fit)
   int disk, srnr;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
+
     /* We allocate the sdis struct */
     if (!rpm -> inf_sdisv[disk])
       if (!(rpm -> inf_sdisv[disk] = create_inf_sdis()))
 	return 1;
-    
+
     rpm -> inf_sdisv[disk] -> repeater = &sdis_repeater_pas;
     rpm -> inf_sdisv[disk] -> chclfl = &chclfl_sdis_pas;
-    
+
     /* If we fit ... */
     if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PSDIS))) {
-      
+
       /* We point to the right functions */
       rpm -> inf_sdisv[disk] -> rndmf_init = &rndmf_init_sdis_pas;
       rpm -> inf_sdisv[disk] -> pr = &pr_sdis_pas;
       rpm -> inf_sdisv[disk] -> pr_empty = &pr_sdis_empty_pas;
     }
     else {
-      
+
       /* we allocate the rng */
       for (srnr = 0; srnr < rpm -> nr; ++srnr) {
 	if (!(rpm -> sd[disk][srnr].srandstr))
@@ -25762,7 +24766,7 @@ static int chkb_sdis(ringparms *rpm, fitparms *fit)
       rpm -> inf_sdisv[disk] -> rndmf_init = &rndmf_init_sdis_act;
       rpm -> inf_sdisv[disk] -> pr = &pr_sdis_act;
       rpm -> inf_sdisv[disk] -> pr_empty = &pr_sdis_empty_act;
-      
+
       /* Do we fit more than one subcloud ? */
       if (!(chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PCLNR))) {
 	rpm -> inf_sdisv[disk] -> repeater = &sdis_repeater_act;
@@ -25792,28 +24796,28 @@ static int chkb_vrad(ringparms *rpm, fitparms *fit)
   int disk;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
+
     /* We allocate the vrad struct */
 
     if (!(rpm -> inf_vradv[disk]))
       if (!(rpm -> inf_vradv[disk] = create_inf_vrad()))
 	goto error;
-    
+
     /* If we fit ... */
     if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVRAD))) {
       /* We point to the right functions */
       rpm -> inf_vradv[disk] -> pr = &pr_vrad_pas;
-      
+
     }
     else {
-      
+
       /* We point to the right functions */
     rpm -> inf_vradv[disk] -> pr = &pr_vrad_act;
     }
   }
 
   return 0;
- 
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_vrad(rpm -> inf_vradv[disk]);
@@ -25835,13 +24839,13 @@ static int chkb_vver(ringparms *rpm, fitparms *fit)
   int disk;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
+
     /* We allocate the vver struct */
     if (!(rpm -> inf_vverv[disk])) {
       if (!(rpm -> inf_vverv[disk] = create_inf_vver()))
 	goto error;
     }
-    
+
     /* If we fit ... */
     if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVVER))) {
       /* We point to the right functions */
@@ -25849,12 +24853,12 @@ static int chkb_vver(ringparms *rpm, fitparms *fit)
       rpm -> inf_vverv[disk] -> pr_rota = &pr_vver_rota_pas;
     }
     else {
-      
+
       /* We point to the right functions */
       rpm -> inf_vverv[disk] -> pr = &pr_vver_act;
       rpm -> inf_vverv[disk] -> pr_rota = &pr_vver_rota_act;
     }
-    
+
   }
     return 0;
 
@@ -25879,21 +24883,21 @@ static int chkb_dvro(ringparms *rpm, fitparms *fit)
   int disk;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
+
     /* We allocate the dvro struct */
     if (!(rpm -> inf_dvrov[disk]))
       if (!(rpm -> inf_dvrov[disk] = create_inf_dvro()))
 	goto error;
-    
+
     /* If we fit ... */
     if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PDVRO))) {
 
     /* We point to the right functions */
       rpm -> inf_dvrov[disk] -> pr = &pr_dvro_pas;
-      
+
     }
     else {
-      
+
       /* If we fit with an inner flat part */
 
       if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PZDRO))) {
@@ -25926,26 +24930,26 @@ static int chkb_dvra(ringparms *rpm, fitparms *fit)
   int disk;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
+
     /* We allocate the vrad struct */
     if (!(rpm -> inf_dvrav[disk]))
       if (!(rpm -> inf_dvrav[disk] = create_inf_dvra()))
 	goto error;
-    
+
     /* If we fit ... */
     if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PDVRA))) {
       /* We point to the right functions */
       rpm -> inf_dvrav[disk] -> pr = &pr_dvra_pas;
-      
+
     }
     else {
-      
+
       if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PZDRA))) {
       /* We point to the right functions */
 	rpm -> inf_dvrav[disk] -> pr = &pr_dvra_act;
       }
       else {
-	rpm -> inf_dvrav[disk] -> pr = &pr_dvra_act2;	
+	rpm -> inf_dvrav[disk] -> pr = &pr_dvra_act2;
       }
     }
   }
@@ -25970,21 +24974,21 @@ static int chkb_dvve(ringparms *rpm, fitparms *fit)
   int disk;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
+
     /* We allocate the vrad struct */
     if (!(rpm -> inf_dvvev[disk]))
       if (!(rpm -> inf_dvvev[disk] = create_inf_dvve()))
 	goto error;
-    
+
     /* If we fit ... */
     if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PDVVE))) {
-      
+
       /* We point to the right functions */
       rpm -> inf_dvvev[disk] -> pr = &pr_dvve_pas;
-      
+
     }
     else {
-      
+
       if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PZDVE))) {
 
 	/* We point to the right functions */
@@ -26042,27 +25046,27 @@ static int chkb_vm0(ringparms *rpm, fitparms *fit)
   int disk;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
+
     /* We allocate the vm0 struct */
     if (!(rpm -> inf_vm0v[disk]))
       if (!(rpm -> inf_vm0v[disk] = create_inf_vm0()))
 	goto error;
-    
+
   /* If we fit ... */
     if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM0A))) {
       /* We point to the right functions */
       rpm -> inf_vm0v[disk] -> pr = &pr_vmi_pas;
-      
+
     }
     else {
-      
+
     /* We point to the right functions */
 
       rpm -> inf_vm0v[disk] -> pr = &pr_vm0_act;
     }
   }
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_vm0(rpm -> inf_vm0v[disk]);
@@ -26075,184 +25079,184 @@ static int chkb_vm0(ringparms *rpm, fitparms *fit)
 
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the vm1 struct */    
-static int chkb_vm1(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the vm1 struct */
+static int chkb_vm1(ringparms *rpm, fitparms *fit)
+{
   int disk;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
-    if (!(rpm -> inf_vm1v[disk])) 
-      if (!(rpm -> inf_vm1v[disk] = create_inf_vm1())) 
-	goto error; 
 
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM1A))) { 
-      rpm -> inf_vm1v[disk] -> prs = rpm -> inf_vm1v[disk] -> prc = &pr_vmi_pas; 
+    if (!(rpm -> inf_vm1v[disk]))
+      if (!(rpm -> inf_vm1v[disk] = create_inf_vm1()))
+	goto error;
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM1A))) {
+      rpm -> inf_vm1v[disk] -> prs = rpm -> inf_vm1v[disk] -> prc = &pr_vmi_pas;
       rpm -> inf_vm1v[disk] -> srprs = rpm -> inf_vm1v[disk] -> srprc = &srpr_vmi_pas;
-    } 
+    }
     else {
-      rpm -> inf_vm1v[disk] -> prs = &pr_vm1s_act; 
-      rpm -> inf_vm1v[disk] -> prc = &pr_vm1c_act; 
+      rpm -> inf_vm1v[disk] -> prs = &pr_vm1s_act;
+      rpm -> inf_vm1v[disk] -> prc = &pr_vm1c_act;
       rpm -> inf_vm1v[disk] -> srprs = &srpr_vm1s_act;
       rpm -> inf_vm1v[disk] -> srprc = &srpr_vm1c_act;
 
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM1P))) { 
-	rpm -> inf_vm1v[disk] -> prs = &pr_vmi_pas; 
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM1P))) {
+	rpm -> inf_vm1v[disk] -> prs = &pr_vmi_pas;
 	rpm -> inf_vm1v[disk] -> srprs = &srpr_vmi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM1P, PIHALF))) { 
-	rpm -> inf_vm1v[disk] -> prc = &pr_vmi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM1P, PIHALF))) {
+	rpm -> inf_vm1v[disk] -> prc = &pr_vmi_pas;
 	rpm -> inf_vm1v[disk] -> srprc = &srpr_vmi_pas;
       }
     }
   }
 
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_vm1(rpm -> inf_vm1v[disk]);
       rpm -> inf_vm1v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the vm2 struct */    
-static int chkb_vm2(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the vm2 struct */
+static int chkb_vm2(ringparms *rpm, fitparms *fit)
+{
   int disk;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
-    if (!(rpm -> inf_vm2v[disk])) 
-      if (!(rpm -> inf_vm2v[disk] = create_inf_vm2())) 
+
+    if (!(rpm -> inf_vm2v[disk]))
+      if (!(rpm -> inf_vm2v[disk] = create_inf_vm2()))
 	goto error;
- 
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM2A))) { 
-      rpm -> inf_vm2v[disk] -> prs = rpm -> inf_vm2v[disk] -> prc = &pr_vmi_pas; 
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM2A))) {
+      rpm -> inf_vm2v[disk] -> prs = rpm -> inf_vm2v[disk] -> prc = &pr_vmi_pas;
     rpm -> inf_vm2v[disk] -> srprs = rpm -> inf_vm2v[disk] -> srprc = &srpr_vmi_pas;
-    } 
+    }
     else {
-      rpm -> inf_vm2v[disk] -> prs = &pr_vm2s_act; 
-      rpm -> inf_vm2v[disk] -> prc = &pr_vm2c_act; 
+      rpm -> inf_vm2v[disk] -> prs = &pr_vm2s_act;
+      rpm -> inf_vm2v[disk] -> prc = &pr_vm2c_act;
       rpm -> inf_vm2v[disk] -> srprs = &srpr_vm2s_act;
       rpm -> inf_vm2v[disk] -> srprc = &srpr_vm2c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM2P))) { 
-      rpm -> inf_vm2v[disk] -> prs = &pr_vmi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM2P))) {
+      rpm -> inf_vm2v[disk] -> prs = &pr_vmi_pas;
       rpm -> inf_vm2v[disk] -> srprs = &srpr_vmi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM2P, PIHALF))) { 
-	rpm -> inf_vm2v[disk] -> prs = &pr_vmi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM2P, PIHALF))) {
+	rpm -> inf_vm2v[disk] -> prs = &pr_vmi_pas;
 	rpm -> inf_vm2v[disk] -> srprs = &srpr_vmi_pas;
       }
     }
   }
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_vm2(rpm -> inf_vm2v[disk]);
     rpm -> inf_vm2v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the vm3 struct */    
-static int chkb_vm3(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the vm3 struct */
+static int chkb_vm3(ringparms *rpm, fitparms *fit)
+{
   int disk;
-  
+
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
-    if (!(rpm -> inf_vm3v[disk])) 
-      if (!(rpm -> inf_vm3v[disk] = create_inf_vm3())) 
+
+    if (!(rpm -> inf_vm3v[disk]))
+      if (!(rpm -> inf_vm3v[disk] = create_inf_vm3()))
 	goto error;
- 
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM3A))) { 
-      rpm -> inf_vm3v[disk] -> prs = rpm -> inf_vm3v[disk] -> prc = &pr_vmi_pas; 
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM3A))) {
+      rpm -> inf_vm3v[disk] -> prs = rpm -> inf_vm3v[disk] -> prc = &pr_vmi_pas;
       rpm -> inf_vm3v[disk] -> srprs = rpm -> inf_vm3v[disk] -> srprc = &srpr_vmi_pas;
-    } 
+    }
     else {
-      rpm -> inf_vm3v[disk] -> prs = &pr_vm3s_act; 
-      rpm -> inf_vm3v[disk] -> prc = &pr_vm3c_act; 
+      rpm -> inf_vm3v[disk] -> prs = &pr_vm3s_act;
+      rpm -> inf_vm3v[disk] -> prc = &pr_vm3c_act;
       rpm -> inf_vm3v[disk] -> srprs = &srpr_vm3s_act;
       rpm -> inf_vm3v[disk] -> srprc = &srpr_vm3c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM3P))) { 
-	rpm -> inf_vm3v[disk] -> prs = &pr_vmi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM3P))) {
+	rpm -> inf_vm3v[disk] -> prs = &pr_vmi_pas;
 	rpm -> inf_vm3v[disk] -> srprs = &srpr_vmi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM3P, PIHALF))) { 
-	rpm -> inf_vm3v[disk] -> prc = &pr_vmi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM3P, PIHALF))) {
+	rpm -> inf_vm3v[disk] -> prc = &pr_vmi_pas;
 	rpm -> inf_vm3v[disk] -> srprc = &srpr_vmi_pas;
       }
     }
   }
   return 0;
- 
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_vm3(rpm -> inf_vm3v[disk]);
     rpm -> inf_vm3v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the vm4 struct */    
-static int chkb_vm4(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the vm4 struct */
+static int chkb_vm4(ringparms *rpm, fitparms *fit)
+{
   int disk;
-  
+
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
-    if (!(rpm -> inf_vm4v[disk])) 
-      if (!(rpm -> inf_vm4v[disk] = create_inf_vm4())) 
+
+    if (!(rpm -> inf_vm4v[disk]))
+      if (!(rpm -> inf_vm4v[disk] = create_inf_vm4()))
 	goto error;
-    
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM4A))) { 
-      rpm -> inf_vm4v[disk] -> prs = rpm -> inf_vm4v[disk] -> prc = &pr_vmi_pas; 
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM4A))) {
+      rpm -> inf_vm4v[disk] -> prs = rpm -> inf_vm4v[disk] -> prc = &pr_vmi_pas;
       rpm -> inf_vm4v[disk] -> srprs = rpm -> inf_vm4v[disk] -> srprc = &srpr_vmi_pas;
-    } 
+    }
     else {
-      rpm -> inf_vm4v[disk] -> prs = &pr_vm4s_act; 
-      rpm -> inf_vm4v[disk] -> prc = &pr_vm4c_act; 
+      rpm -> inf_vm4v[disk] -> prs = &pr_vm4s_act;
+      rpm -> inf_vm4v[disk] -> prc = &pr_vm4c_act;
       rpm -> inf_vm4v[disk] -> srprs = &srpr_vm4s_act;
       rpm -> inf_vm4v[disk] -> srprc = &srpr_vm4c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM4P))) { 
-	rpm -> inf_vm4v[disk] -> prs = &pr_vmi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM4P))) {
+	rpm -> inf_vm4v[disk] -> prs = &pr_vmi_pas;
 	rpm -> inf_vm4v[disk] -> srprs = &srpr_vmi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM4P, PIHALF))) { 
-	rpm -> inf_vm4v[disk] -> prs = &pr_vmi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PVM4P, PIHALF))) {
+	rpm -> inf_vm4v[disk] -> prs = &pr_vmi_pas;
 	rpm -> inf_vm4v[disk] -> srprs = &srpr_vmi_pas;
       }
     }
   }
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_vm4(rpm -> inf_vm4v[disk]);
     rpm -> inf_vm4v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
@@ -26282,365 +25286,365 @@ static int chkb_vm4(ringparms *rpm, fitparms *fit)
 
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the ra1 struct */    
-static int chkb_ra1(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the ra1 struct */
+static int chkb_ra1(ringparms *rpm, fitparms *fit)
+{
   int disk;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
-    if (!(rpm -> inf_ra1v[disk])) 
-      if (!(rpm -> inf_ra1v[disk] = create_inf_ra1())) 
-	goto error; 
 
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA1A))) { 
-      rpm -> inf_ra1v[disk] -> prs = rpm -> inf_ra1v[disk] -> prc = &pr_rai_pas; 
+    if (!(rpm -> inf_ra1v[disk]))
+      if (!(rpm -> inf_ra1v[disk] = create_inf_ra1()))
+	goto error;
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA1A))) {
+      rpm -> inf_ra1v[disk] -> prs = rpm -> inf_ra1v[disk] -> prc = &pr_rai_pas;
       rpm -> inf_ra1v[disk] -> srprs = rpm -> inf_ra1v[disk] -> srprc = &srpr_rai_pas;
-    } 
+    }
     else {
-      rpm -> inf_ra1v[disk] -> prs = &pr_ra1s_act; 
-      rpm -> inf_ra1v[disk] -> prc = &pr_ra1c_act; 
+      rpm -> inf_ra1v[disk] -> prs = &pr_ra1s_act;
+      rpm -> inf_ra1v[disk] -> prc = &pr_ra1c_act;
       rpm -> inf_ra1v[disk] -> srprs = &srpr_ra1s_act;
       rpm -> inf_ra1v[disk] -> srprc = &srpr_ra1c_act;
 
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA1P))) { 
-	rpm -> inf_ra1v[disk] -> prs = &pr_rai_pas; 
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA1P))) {
+	rpm -> inf_ra1v[disk] -> prs = &pr_rai_pas;
 	rpm -> inf_ra1v[disk] -> srprs = &srpr_rai_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA1P, PIHALF))) { 
-	rpm -> inf_ra1v[disk] -> prc = &pr_rai_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA1P, PIHALF))) {
+	rpm -> inf_ra1v[disk] -> prc = &pr_rai_pas;
 	rpm -> inf_ra1v[disk] -> srprc = &srpr_rai_pas;
       }
     }
   }
 
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_ra1(rpm -> inf_ra1v[disk]);
       rpm -> inf_ra1v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the ra2 struct */    
-static int chkb_ra2(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the ra2 struct */
+static int chkb_ra2(ringparms *rpm, fitparms *fit)
+{
   int disk;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
-    if (!(rpm -> inf_ra2v[disk])) 
-      if (!(rpm -> inf_ra2v[disk] = create_inf_ra2())) 
+
+    if (!(rpm -> inf_ra2v[disk]))
+      if (!(rpm -> inf_ra2v[disk] = create_inf_ra2()))
 	goto error;
- 
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA2A))) { 
-      rpm -> inf_ra2v[disk] -> prs = rpm -> inf_ra2v[disk] -> prc = &pr_rai_pas; 
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA2A))) {
+      rpm -> inf_ra2v[disk] -> prs = rpm -> inf_ra2v[disk] -> prc = &pr_rai_pas;
     rpm -> inf_ra2v[disk] -> srprs = rpm -> inf_ra2v[disk] -> srprc = &srpr_rai_pas;
-    } 
+    }
     else {
-      rpm -> inf_ra2v[disk] -> prs = &pr_ra2s_act; 
-      rpm -> inf_ra2v[disk] -> prc = &pr_ra2c_act; 
+      rpm -> inf_ra2v[disk] -> prs = &pr_ra2s_act;
+      rpm -> inf_ra2v[disk] -> prc = &pr_ra2c_act;
       rpm -> inf_ra2v[disk] -> srprs = &srpr_ra2s_act;
       rpm -> inf_ra2v[disk] -> srprc = &srpr_ra2c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA2P))) { 
-      rpm -> inf_ra2v[disk] -> prs = &pr_rai_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA2P))) {
+      rpm -> inf_ra2v[disk] -> prs = &pr_rai_pas;
       rpm -> inf_ra2v[disk] -> srprs = &srpr_rai_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA2P, PIHALF))) { 
-	rpm -> inf_ra2v[disk] -> prs = &pr_rai_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA2P, PIHALF))) {
+	rpm -> inf_ra2v[disk] -> prs = &pr_rai_pas;
 	rpm -> inf_ra2v[disk] -> srprs = &srpr_rai_pas;
       }
     }
   }
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_ra2(rpm -> inf_ra2v[disk]);
     rpm -> inf_ra2v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the ra3 struct */    
-static int chkb_ra3(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the ra3 struct */
+static int chkb_ra3(ringparms *rpm, fitparms *fit)
+{
   int disk;
-  
+
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
-    if (!(rpm -> inf_ra3v[disk])) 
-      if (!(rpm -> inf_ra3v[disk] = create_inf_ra3())) 
+
+    if (!(rpm -> inf_ra3v[disk]))
+      if (!(rpm -> inf_ra3v[disk] = create_inf_ra3()))
 	goto error;
- 
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA3A))) { 
-      rpm -> inf_ra3v[disk] -> prs = rpm -> inf_ra3v[disk] -> prc = &pr_rai_pas; 
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA3A))) {
+      rpm -> inf_ra3v[disk] -> prs = rpm -> inf_ra3v[disk] -> prc = &pr_rai_pas;
       rpm -> inf_ra3v[disk] -> srprs = rpm -> inf_ra3v[disk] -> srprc = &srpr_rai_pas;
-    } 
+    }
     else {
-      rpm -> inf_ra3v[disk] -> prs = &pr_ra3s_act; 
-      rpm -> inf_ra3v[disk] -> prc = &pr_ra3c_act; 
+      rpm -> inf_ra3v[disk] -> prs = &pr_ra3s_act;
+      rpm -> inf_ra3v[disk] -> prc = &pr_ra3c_act;
       rpm -> inf_ra3v[disk] -> srprs = &srpr_ra3s_act;
       rpm -> inf_ra3v[disk] -> srprc = &srpr_ra3c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA3P))) { 
-	rpm -> inf_ra3v[disk] -> prs = &pr_rai_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA3P))) {
+	rpm -> inf_ra3v[disk] -> prs = &pr_rai_pas;
 	rpm -> inf_ra3v[disk] -> srprs = &srpr_rai_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA3P, PIHALF))) { 
-	rpm -> inf_ra3v[disk] -> prc = &pr_rai_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA3P, PIHALF))) {
+	rpm -> inf_ra3v[disk] -> prc = &pr_rai_pas;
 	rpm -> inf_ra3v[disk] -> srprc = &srpr_rai_pas;
       }
     }
   }
   return 0;
- 
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_ra3(rpm -> inf_ra3v[disk]);
     rpm -> inf_ra3v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the ra4 struct */    
-static int chkb_ra4(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the ra4 struct */
+static int chkb_ra4(ringparms *rpm, fitparms *fit)
+{
   int disk;
-  
+
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
-    if (!(rpm -> inf_ra4v[disk])) 
-      if (!(rpm -> inf_ra4v[disk] = create_inf_ra4())) 
+
+    if (!(rpm -> inf_ra4v[disk]))
+      if (!(rpm -> inf_ra4v[disk] = create_inf_ra4()))
 	goto error;
-    
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA4A))) { 
-      rpm -> inf_ra4v[disk] -> prs = rpm -> inf_ra4v[disk] -> prc = &pr_rai_pas; 
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA4A))) {
+      rpm -> inf_ra4v[disk] -> prs = rpm -> inf_ra4v[disk] -> prc = &pr_rai_pas;
       rpm -> inf_ra4v[disk] -> srprs = rpm -> inf_ra4v[disk] -> srprc = &srpr_rai_pas;
-    } 
+    }
     else {
-      rpm -> inf_ra4v[disk] -> prs = &pr_ra4s_act; 
-      rpm -> inf_ra4v[disk] -> prc = &pr_ra4c_act; 
+      rpm -> inf_ra4v[disk] -> prs = &pr_ra4s_act;
+      rpm -> inf_ra4v[disk] -> prc = &pr_ra4c_act;
       rpm -> inf_ra4v[disk] -> srprs = &srpr_ra4s_act;
       rpm -> inf_ra4v[disk] -> srprc = &srpr_ra4c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA4P))) { 
-	rpm -> inf_ra4v[disk] -> prs = &pr_rai_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA4P))) {
+	rpm -> inf_ra4v[disk] -> prs = &pr_rai_pas;
 	rpm -> inf_ra4v[disk] -> srprs = &srpr_rai_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA4P, PIHALF))) { 
-	rpm -> inf_ra4v[disk] -> prs = &pr_rai_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRA4P, PIHALF))) {
+	rpm -> inf_ra4v[disk] -> prs = &pr_rai_pas;
 	rpm -> inf_ra4v[disk] -> srprs = &srpr_rai_pas;
       }
     }
   }
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_ra4(rpm -> inf_ra4v[disk]);
     rpm -> inf_ra4v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the ro1 struct */    
-static int chkb_ro1(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the ro1 struct */
+static int chkb_ro1(ringparms *rpm, fitparms *fit)
+{
   int disk;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
-    if (!(rpm -> inf_ro1v[disk])) 
-      if (!(rpm -> inf_ro1v[disk] = create_inf_ro1())) 
-	goto error; 
 
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO1A))) { 
-      rpm -> inf_ro1v[disk] -> prs = rpm -> inf_ro1v[disk] -> prc = &pr_roi_pas; 
+    if (!(rpm -> inf_ro1v[disk]))
+      if (!(rpm -> inf_ro1v[disk] = create_inf_ro1()))
+	goto error;
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO1A))) {
+      rpm -> inf_ro1v[disk] -> prs = rpm -> inf_ro1v[disk] -> prc = &pr_roi_pas;
       rpm -> inf_ro1v[disk] -> srprs = rpm -> inf_ro1v[disk] -> srprc = &srpr_roi_pas;
-    } 
+    }
     else {
-      rpm -> inf_ro1v[disk] -> prs = &pr_ro1s_act; 
-      rpm -> inf_ro1v[disk] -> prc = &pr_ro1c_act; 
+      rpm -> inf_ro1v[disk] -> prs = &pr_ro1s_act;
+      rpm -> inf_ro1v[disk] -> prc = &pr_ro1c_act;
       rpm -> inf_ro1v[disk] -> srprs = &srpr_ro1s_act;
       rpm -> inf_ro1v[disk] -> srprc = &srpr_ro1c_act;
 
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO1P))) { 
-	rpm -> inf_ro1v[disk] -> prs = &pr_roi_pas; 
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO1P))) {
+	rpm -> inf_ro1v[disk] -> prs = &pr_roi_pas;
 	rpm -> inf_ro1v[disk] -> srprs = &srpr_roi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO1P, PIHALF))) { 
-	rpm -> inf_ro1v[disk] -> prc = &pr_roi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO1P, PIHALF))) {
+	rpm -> inf_ro1v[disk] -> prc = &pr_roi_pas;
 	rpm -> inf_ro1v[disk] -> srprc = &srpr_roi_pas;
       }
     }
   }
 
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_ro1(rpm -> inf_ro1v[disk]);
       rpm -> inf_ro1v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the ro2 struct */    
-static int chkb_ro2(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the ro2 struct */
+static int chkb_ro2(ringparms *rpm, fitparms *fit)
+{
   int disk;
 
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
-    if (!(rpm -> inf_ro2v[disk])) 
-      if (!(rpm -> inf_ro2v[disk] = create_inf_ro2())) 
+
+    if (!(rpm -> inf_ro2v[disk]))
+      if (!(rpm -> inf_ro2v[disk] = create_inf_ro2()))
 	goto error;
- 
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO2A))) { 
-      rpm -> inf_ro2v[disk] -> prs = rpm -> inf_ro2v[disk] -> prc = &pr_roi_pas; 
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO2A))) {
+      rpm -> inf_ro2v[disk] -> prs = rpm -> inf_ro2v[disk] -> prc = &pr_roi_pas;
     rpm -> inf_ro2v[disk] -> srprs = rpm -> inf_ro2v[disk] -> srprc = &srpr_roi_pas;
-    } 
+    }
     else {
-      rpm -> inf_ro2v[disk] -> prs = &pr_ro2s_act; 
-      rpm -> inf_ro2v[disk] -> prc = &pr_ro2c_act; 
+      rpm -> inf_ro2v[disk] -> prs = &pr_ro2s_act;
+      rpm -> inf_ro2v[disk] -> prc = &pr_ro2c_act;
       rpm -> inf_ro2v[disk] -> srprs = &srpr_ro2s_act;
       rpm -> inf_ro2v[disk] -> srprc = &srpr_ro2c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO2P))) { 
-      rpm -> inf_ro2v[disk] -> prs = &pr_roi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO2P))) {
+      rpm -> inf_ro2v[disk] -> prs = &pr_roi_pas;
       rpm -> inf_ro2v[disk] -> srprs = &srpr_roi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO2P, PIHALF))) { 
-	rpm -> inf_ro2v[disk] -> prs = &pr_roi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO2P, PIHALF))) {
+	rpm -> inf_ro2v[disk] -> prs = &pr_roi_pas;
 	rpm -> inf_ro2v[disk] -> srprs = &srpr_roi_pas;
       }
     }
   }
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_ro2(rpm -> inf_ro2v[disk]);
     rpm -> inf_ro2v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the ro3 struct */    
-static int chkb_ro3(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the ro3 struct */
+static int chkb_ro3(ringparms *rpm, fitparms *fit)
+{
   int disk;
-  
+
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
-    if (!(rpm -> inf_ro3v[disk])) 
-      if (!(rpm -> inf_ro3v[disk] = create_inf_ro3())) 
+
+    if (!(rpm -> inf_ro3v[disk]))
+      if (!(rpm -> inf_ro3v[disk] = create_inf_ro3()))
 	goto error;
- 
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO3A))) { 
-      rpm -> inf_ro3v[disk] -> prs = rpm -> inf_ro3v[disk] -> prc = &pr_roi_pas; 
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO3A))) {
+      rpm -> inf_ro3v[disk] -> prs = rpm -> inf_ro3v[disk] -> prc = &pr_roi_pas;
       rpm -> inf_ro3v[disk] -> srprs = rpm -> inf_ro3v[disk] -> srprc = &srpr_roi_pas;
-    } 
+    }
     else {
-      rpm -> inf_ro3v[disk] -> prs = &pr_ro3s_act; 
-      rpm -> inf_ro3v[disk] -> prc = &pr_ro3c_act; 
+      rpm -> inf_ro3v[disk] -> prs = &pr_ro3s_act;
+      rpm -> inf_ro3v[disk] -> prc = &pr_ro3c_act;
       rpm -> inf_ro3v[disk] -> srprs = &srpr_ro3s_act;
       rpm -> inf_ro3v[disk] -> srprc = &srpr_ro3c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO3P))) { 
-	rpm -> inf_ro3v[disk] -> prs = &pr_roi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO3P))) {
+	rpm -> inf_ro3v[disk] -> prs = &pr_roi_pas;
 	rpm -> inf_ro3v[disk] -> srprs = &srpr_roi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO3P, PIHALF))) { 
-	rpm -> inf_ro3v[disk] -> prc = &pr_roi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO3P, PIHALF))) {
+	rpm -> inf_ro3v[disk] -> prc = &pr_roi_pas;
 	rpm -> inf_ro3v[disk] -> srprc = &srpr_roi_pas;
       }
     }
   }
   return 0;
- 
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_ro3(rpm -> inf_ro3v[disk]);
     rpm -> inf_ro3v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the ro4 struct */    
-static int chkb_ro4(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the ro4 struct */
+static int chkb_ro4(ringparms *rpm, fitparms *fit)
+{
   int disk;
-  
+
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
-    if (!(rpm -> inf_ro4v[disk])) 
-      if (!(rpm -> inf_ro4v[disk] = create_inf_ro4())) 
+
+    if (!(rpm -> inf_ro4v[disk]))
+      if (!(rpm -> inf_ro4v[disk] = create_inf_ro4()))
 	goto error;
-    
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO4A))) { 
-      rpm -> inf_ro4v[disk] -> prs = rpm -> inf_ro4v[disk] -> prc = &pr_roi_pas; 
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO4A))) {
+      rpm -> inf_ro4v[disk] -> prs = rpm -> inf_ro4v[disk] -> prc = &pr_roi_pas;
       rpm -> inf_ro4v[disk] -> srprs = rpm -> inf_ro4v[disk] -> srprc = &srpr_roi_pas;
-    } 
+    }
     else {
-      rpm -> inf_ro4v[disk] -> prs = &pr_ro4s_act; 
-      rpm -> inf_ro4v[disk] -> prc = &pr_ro4c_act; 
+      rpm -> inf_ro4v[disk] -> prs = &pr_ro4s_act;
+      rpm -> inf_ro4v[disk] -> prc = &pr_ro4c_act;
       rpm -> inf_ro4v[disk] -> srprs = &srpr_ro4s_act;
       rpm -> inf_ro4v[disk] -> srprc = &srpr_ro4c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO4P))) { 
-	rpm -> inf_ro4v[disk] -> prs = &pr_roi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO4P))) {
+	rpm -> inf_ro4v[disk] -> prs = &pr_roi_pas;
 	rpm -> inf_ro4v[disk] -> srprs = &srpr_roi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO4P, PIHALF))) { 
-	rpm -> inf_ro4v[disk] -> prs = &pr_roi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PRO4P, PIHALF))) {
+	rpm -> inf_ro4v[disk] -> prs = &pr_roi_pas;
 	rpm -> inf_ro4v[disk] -> srprs = &srpr_roi_pas;
       }
     }
   }
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_ro4(rpm -> inf_ro4v[disk]);
     rpm -> inf_ro4v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
@@ -26652,14 +25656,14 @@ static int chkb_ro4(ringparms *rpm, fitparms *fit)
 static int chkb_wm0(ringparms *rpm, fitparms *fit)
 {
   int disk;
-  
+
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    
+
     /* We allocate the wm0 struct */
     if (!(rpm -> inf_wm0v[disk]))
       if (!(rpm -> inf_wm0v[disk] = create_inf_wm0()))
 	goto error;
-    
+
     /* If we fit ... */
     if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM0A))) {
       /* We point to the right functions */
@@ -26667,13 +25671,13 @@ static int chkb_wm0(ringparms *rpm, fitparms *fit)
 
     }
     else {
-      
+
       /* We point to the right functions */
       rpm -> inf_wm0v[disk] -> pr = &pr_wm0_act;
     }
   }
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_wm0(rpm -> inf_wm0v[disk]);
@@ -26684,241 +25688,241 @@ static int chkb_wm0(ringparms *rpm, fitparms *fit)
 
 /* ------------------------------------------------------------ */
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the wm1 struct */    
-static int chkb_wm1(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the wm1 struct */
+static int chkb_wm1(ringparms *rpm, fitparms *fit)
+{
   int disk;
-  
-  for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    if (!(rpm -> inf_wm1v[disk])) 
-      if (!(rpm -> inf_wm1v[disk] = create_inf_wm1())) 
-	goto error; 
 
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM1A))) { 
-      rpm -> inf_wm1v[disk] -> prs = rpm -> inf_wm1v[disk] -> prc = &pr_wmi_pas; 
+  for (disk = 0; disk < rpm -> ndisks; ++ disk) {
+    if (!(rpm -> inf_wm1v[disk]))
+      if (!(rpm -> inf_wm1v[disk] = create_inf_wm1()))
+	goto error;
+
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM1A))) {
+      rpm -> inf_wm1v[disk] -> prs = rpm -> inf_wm1v[disk] -> prc = &pr_wmi_pas;
       rpm -> inf_wm1v[disk] -> srprs = rpm -> inf_wm1v[disk] -> srprc = &srpr_wmi_pas;
-    } 
+    }
     else {
-      rpm -> inf_wm1v[disk] -> prs = &pr_wm1s_act; 
-      rpm -> inf_wm1v[disk] -> prc = &pr_wm1c_act; 
+      rpm -> inf_wm1v[disk] -> prs = &pr_wm1s_act;
+      rpm -> inf_wm1v[disk] -> prc = &pr_wm1c_act;
       rpm -> inf_wm1v[disk] -> srprs = &srpr_wm1s_act;
       rpm -> inf_wm1v[disk] -> srprc = &srpr_wm1c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM1P))) { 
-	rpm -> inf_wm1v[disk] -> prs = &pr_wmi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM1P))) {
+	rpm -> inf_wm1v[disk] -> prs = &pr_wmi_pas;
 	rpm -> inf_wm1v[disk] -> srprs = &srpr_wmi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM1P, PIHALF))) { 
-	rpm -> inf_wm1v[disk] -> prc = &pr_wmi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM1P, PIHALF))) {
+	rpm -> inf_wm1v[disk] -> prc = &pr_wmi_pas;
 	rpm -> inf_wm1v[disk] -> srprc = &srpr_wmi_pas;
       }
     }
   }
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_wm1(rpm -> inf_wm1v[disk]);
     rpm -> inf_wm1v[disk] = NULL;
   }
   return 1;
-}    
-  
-/* ------------------------------------------------------------ */
-  
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+}
 
-/* Optionally allocates and puts correct switches in the wm2 struct */    
-static int chkb_wm2(ringparms *rpm, fitparms *fit) 
-{ 
+/* ------------------------------------------------------------ */
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+/* Optionally allocates and puts correct switches in the wm2 struct */
+static int chkb_wm2(ringparms *rpm, fitparms *fit)
+{
   int disk;
-  
+
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    if (!(rpm -> inf_wm2v[disk])) 
-      if (!(rpm -> inf_wm2v[disk] = create_inf_wm2())) 
-	goto error; 
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM2A))) { 
-      rpm -> inf_wm2v[disk] -> prs = rpm -> inf_wm2v[disk] -> prc = &pr_wmi_pas; 
+    if (!(rpm -> inf_wm2v[disk]))
+      if (!(rpm -> inf_wm2v[disk] = create_inf_wm2()))
+	goto error;
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM2A))) {
+      rpm -> inf_wm2v[disk] -> prs = rpm -> inf_wm2v[disk] -> prc = &pr_wmi_pas;
       rpm -> inf_wm2v[disk] -> srprs = rpm -> inf_wm2v[disk] -> srprc = &srpr_wmi_pas;
-    } 
+    }
     else {
-      rpm -> inf_wm2v[disk] -> prs = &pr_wm2s_act; 
-      rpm -> inf_wm2v[disk] -> prc = &pr_wm2c_act; 
+      rpm -> inf_wm2v[disk] -> prs = &pr_wm2s_act;
+      rpm -> inf_wm2v[disk] -> prc = &pr_wm2c_act;
       rpm -> inf_wm2v[disk] -> srprs = &srpr_wm2s_act;
       rpm -> inf_wm2v[disk] -> srprc = &srpr_wm2c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM2P))) { 
-	rpm -> inf_wm2v[disk] -> prs = &pr_wmi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM2P))) {
+	rpm -> inf_wm2v[disk] -> prs = &pr_wmi_pas;
 	rpm -> inf_wm2v[disk] -> srprs = &srpr_wmi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM2P, PIHALF))) { 
-	rpm -> inf_wm2v[disk] -> prs = &pr_wmi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM2P, PIHALF))) {
+	rpm -> inf_wm2v[disk] -> prs = &pr_wmi_pas;
 	rpm -> inf_wm2v[disk] -> srprs = &srpr_wmi_pas;
       }
     }
   }
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_wm2(rpm -> inf_wm2v[disk]);
     rpm -> inf_wm2v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the wm3 struct */    
-static int chkb_wm3(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the wm3 struct */
+static int chkb_wm3(ringparms *rpm, fitparms *fit)
+{
   int disk;
-  
+
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    if (!(rpm -> inf_wm3v[disk])) 
-      if (!(rpm -> inf_wm3v[disk] = create_inf_wm3())) 
-	goto error; 
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM3A))) { 
-      rpm -> inf_wm3v[disk] -> prs = rpm -> inf_wm3v[disk] -> prc = &pr_wmi_pas; 
+    if (!(rpm -> inf_wm3v[disk]))
+      if (!(rpm -> inf_wm3v[disk] = create_inf_wm3()))
+	goto error;
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM3A))) {
+      rpm -> inf_wm3v[disk] -> prs = rpm -> inf_wm3v[disk] -> prc = &pr_wmi_pas;
       rpm -> inf_wm3v[disk] -> srprs = rpm -> inf_wm3v[disk] -> srprc = &srpr_wmi_pas;
-    } 
+    }
     else {
-      rpm -> inf_wm3v[disk] -> prs = &pr_wm3s_act; 
-      rpm -> inf_wm3v[disk] -> prc = &pr_wm3c_act; 
+      rpm -> inf_wm3v[disk] -> prs = &pr_wm3s_act;
+      rpm -> inf_wm3v[disk] -> prc = &pr_wm3c_act;
       rpm -> inf_wm3v[disk] -> srprs = &srpr_wm3s_act;
       rpm -> inf_wm3v[disk] -> srprc = &srpr_wm3c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM3P))) { 
-	rpm -> inf_wm3v[disk] -> prs = &pr_wmi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM3P))) {
+	rpm -> inf_wm3v[disk] -> prs = &pr_wmi_pas;
 	rpm -> inf_wm3v[disk] -> srprs = &srpr_wmi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM3P, PIHALF))) { 
-	rpm -> inf_wm3v[disk] -> prc = &pr_wmi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM3P, PIHALF))) {
+	rpm -> inf_wm3v[disk] -> prc = &pr_wmi_pas;
 	rpm -> inf_wm3v[disk] -> srprc = &srpr_wmi_pas;
       }
     }
   }
   return 0;
-  
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_wm3(rpm -> inf_wm3v[disk]);
     rpm -> inf_wm3v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the wm4 struct */    
-static int chkb_wm4(ringparms *rpm, fitparms *fit) 
-{ 
+/* Optionally allocates and puts correct switches in the wm4 struct */
+static int chkb_wm4(ringparms *rpm, fitparms *fit)
+{
   int disk;
-  
+
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    if (!(rpm -> inf_wm4v[disk])) 
-      if (!(rpm -> inf_wm4v[disk] = create_inf_wm4())) 
-	goto error; 
-    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM4A))) { 
-      rpm -> inf_wm4v[disk] -> prs = rpm -> inf_wm4v[disk] -> prc = &pr_wmi_pas; 
+    if (!(rpm -> inf_wm4v[disk]))
+      if (!(rpm -> inf_wm4v[disk] = create_inf_wm4()))
+	goto error;
+    if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM4A))) {
+      rpm -> inf_wm4v[disk] -> prs = rpm -> inf_wm4v[disk] -> prc = &pr_wmi_pas;
       rpm -> inf_wm4v[disk] -> srprs = rpm -> inf_wm4v[disk] -> srprc = &srpr_wmi_pas;
-    } 
+    }
     else {
-      rpm -> inf_wm4v[disk] -> prs = &pr_wm4s_act; 
-      rpm -> inf_wm4v[disk] -> prc = &pr_wm4c_act; 
+      rpm -> inf_wm4v[disk] -> prs = &pr_wm4s_act;
+      rpm -> inf_wm4v[disk] -> prc = &pr_wm4c_act;
       rpm -> inf_wm4v[disk] -> srprs = &srpr_wm4s_act;
       rpm -> inf_wm4v[disk] -> srprc = &srpr_wm4c_act;
-      
-      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM4P))) { 
-      rpm -> inf_wm4v[disk] -> prs = &pr_wmi_pas; 
+
+      if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM4P))) {
+      rpm -> inf_wm4v[disk] -> prs = &pr_wmi_pas;
       rpm -> inf_wm4v[disk] -> srprs = &srpr_wmi_pas;
       }
-      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM4P, PIHALF))) { 
-	rpm -> inf_wm4v[disk] -> prs = &pr_wmi_pas; 
+      else if ((chkb_val(rpm, fit, PRPARAMS+disk*NDPARAMS+PWM4P, PIHALF))) {
+	rpm -> inf_wm4v[disk] -> prs = &pr_wmi_pas;
 	rpm -> inf_wm4v[disk] -> srprs = &srpr_wmi_pas;
       }
     }
   }
   return 0;
-  
+
   error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_wm4(rpm -> inf_wm4v[disk]);
     rpm -> inf_wm4v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the ls0  struct */    
-static int chkb_ls0 (ringparms *rpm, fitparms *fit)    
-{    
+/* Optionally allocates and puts correct switches in the ls0  struct */
+static int chkb_ls0 (ringparms *rpm, fitparms *fit)
+{
   int disk;
-  
+
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
     if (!(rpm -> inf_ls0v[disk]))
       if (!(rpm -> inf_ls0v[disk]  = create_inf_ls0 ()))
-	goto error;    
+	goto error;
 
     if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PLS0 ))) {
-      rpm -> inf_ls0v[disk]  -> pr = &pr_ls0_pas;     
-    }    
+      rpm -> inf_ls0v[disk]  -> pr = &pr_ls0_pas;
+    }
     else {
-      rpm -> inf_ls0v[disk]  -> pr = &pr_ls0_act;     
-    }   
-  } 
-  return 0;    
-  
+      rpm -> inf_ls0v[disk]  -> pr = &pr_ls0_act;
+    }
+  }
+  return 0;
+
  error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_ls0(rpm -> inf_ls0v[disk]);
     rpm -> inf_ls0v[disk] = NULL;
   }
   return 1;
-}    
+}
 
 /* ------------------------------------------------------------ */
 
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-/* Optionally allocates and puts correct switches in the lc0  struct */    
-static int chkb_lc0 (ringparms *rpm, fitparms *fit)    
-{    
+/* Optionally allocates and puts correct switches in the lc0  struct */
+static int chkb_lc0 (ringparms *rpm, fitparms *fit)
+{
   int disk;
-  
+
   for (disk = 0; disk < rpm -> ndisks; ++ disk) {
-    if (!(rpm -> inf_lc0v[disk]))    
-      if (!(rpm -> inf_lc0v[disk]  = create_inf_lc0 ()))    
-	goto error;    
+    if (!(rpm -> inf_lc0v[disk]))
+      if (!(rpm -> inf_lc0v[disk]  = create_inf_lc0 ()))
+	goto error;
     if ((chkb_zero(rpm, fit, PRPARAMS+disk*NDPARAMS+PLC0 ))) {
-      rpm -> inf_lc0v[disk]  -> pr = &pr_lc0_pas;     
-    }    
-    else {   
-      rpm -> inf_lc0v[disk]  -> pr = &pr_lc0_act;  
+      rpm -> inf_lc0v[disk]  -> pr = &pr_lc0_pas;
+    }
+    else {
+      rpm -> inf_lc0v[disk]  -> pr = &pr_lc0_act;
     }
   }
-  return 0;  
-  
+  return 0;
+
   error:
   for (disk = 0; disk < rpm -> ndisks; ++disk) {
     destroy_inf_lc0(rpm -> inf_lc0v[disk]);
     rpm -> inf_lc0v[disk] = NULL;
   }
   return 1;
-} 
+}
 
 /* ------------------------------------------------------------ */
 
@@ -27028,7 +26032,7 @@ static int reg_cont_destr(reg_cont **reg_contv)
   }
 
   free(reg_contv);
-  
+
   return 0;
 }
 
@@ -27041,9 +26045,9 @@ static int reg_cont_destr(reg_cont **reg_contv)
 static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm, fitparms *fit)
 {
   reg_cont **reg_cont_get = NULL;
-  
+
   /**************/
-   /**************/ 
+   /**************/
 /*   int obsint = 0; */
 /*   char obsmes[200]; */
 /*   double *obsdouble; */
@@ -27053,7 +26057,7 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
   int nel, def, i, j, k;
   char mes[81];  /* Any message */
   int errcode = 1, outside = 0; /* another error code */
-  
+
   char *varyhstr= NULL;
   char **varystr = NULL;
   char *dummystr = NULL;
@@ -27067,9 +26071,9 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
   int maxorder;
   int nregs;
   int anint;
-  
+
   double *regthre = NULL, *regwidt = NULL, *regampl = NULL, *regaste = NULL, *regampd = NULL;
-  
+
   int nreadl, nreturned, keypres;
 
   /* The complicated varystr */
@@ -27077,27 +26081,27 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
   /*     goto error; */
   /* if (!(varyhstr = getfcharray(VARYHSTRELES, NULL))) */
   /*   goto error; */
-  
+
   /* get the dcp control structure */
   if (!(decomp_controlv = decomp_init()))
     goto error;
-  
+
   /* Fill the dcp control structure with parameter information */
   if ((dec_fill(rpm, decomp_controlv)))
     goto error;
-  
+
   /* First we fetch the list of parameters that should be regulated */
   errcode = 1;
-  
+
   /* Get the array */
   while (errcode) {
-    
+
     nel = 0;
     def = 1;
-    
+
     if (errcode == 2)
       cancel_tir(startinfv -> arel, "REGPARA=", 2);
-    
+
     /* sprintf(mes, "Give parameters to regularise"); */
     /* flushfcharray(VARYHSTRELES, varyhstr); */
     /* nel = usertext_tir(varyhstr, &def, "REGPARA=", mes); */
@@ -27107,7 +26111,7 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
     }
     if (simparse_scn_arel_readval_string(startinfv -> arel, "REGPARA", "Give parameters to regularise.", 0, "", 0, -1, 0, 0, &keypres, &nreadl, &nreturned, &varyhstr))
       goto error;
-    
+
     /* Interlude: Change the case if it is lower case */
     i = 0;
     while (varyhstr[i]) {
@@ -27116,12 +26120,12 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
       }
       ++i;
     }
-    
+
     decomp_putsep(decomp_controlv, ',', '\0', ':');
     if ((decomp_listelvact))
       decomp_list_dest(decomp_listelvact);
     decomp_listelvact = NULL;
-    
+
     /* Interpret this */
     if ((errcode = decomp_get(decomp_controlv, varyhstr, &decomp_listelvact, 0))){
       if (errcode == 1)
@@ -27133,11 +26137,11 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	anyout_tir(&def, mes);
       }
     }
-    
+
     /* Now do a sanity check: no group is allowed to point to intrinsically different elements */
-    
+
     outside = 0;
-    
+
     if (decomp_listelvact) {
       i = 0;
       nregs = 0;
@@ -27158,49 +26162,49 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
     else {
       nregs = 0;
     }
-    
+
     if ((outside)) {
       sprintf(mes,"REGPARA: one parameter only between commas.");
       anyout_tir(&def, mes);
       errcode |= 2;
     }
   }
-  
+
   /* Provide an array of reg_conts */
   if (!(reg_cont_get = reg_cont_const(nregs)))
     goto error;
-  
+
   /* proceed if there is more than 0 elements */
   if ((nregs)) {
     /* Now read in the lists */
-    
+
     /* calculate the maximum order */
     maxorder = rpm -> nur/2;
-    
+
     /* Read in an array of arrays from den */
-    
-    
+
+
     /* Reallocate the thingy */
     decomp_dest(decomp_controlv);
     if (!(decomp_controlv = decomp_init()))
       goto error;
-    
+
     /* Feed it with exactly one thing */
     /*     if ((decomp_inp(decomp_controlv, "D", 0, maxorder)))  */
     if ((decomp_inp(decomp_controlv, "D", 1, maxorder)))
       goto error;
     decomp_putsep(decomp_controlv, '\0', '\0', ':');
-    
+
     errcode = 3;
     def = 1;
-    
+
     while (errcode) {
-      
+
       if (errcode != 3)
 	cancel_tir(startinfv -> arel, "REGDENO=", 2);
-      
+
       errcode = 0;
-      
+
       sprintf(mes, "Enter denominator");
       /* flushfcharray(VARYHSTRELES, varyhstr); */
       /* nel = usertext_tir(varyhstr, &def, "REGDENO=", mes); */
@@ -27220,18 +26224,18 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	/* 	  free(varystr[i]); */
 	/* 	  ++i; */
 	/* 	} */
-	
+
 	/* 	free(varystr); */
 	varystr = NULL;
       }
-      
+
       if (!(varystr = sparsenext(",", "", "\t", "", "", "", -1, &varyhstr, &anint, 0, 1))) {
 	sprintf(mes,"Please enter sufficient parameters for REGDENO.");
 	anyout_tir(&def, mes);
 	errcode = 1;
       }
       else {
-	
+
 	/* It has to have exactly nreg elements, and determine the maximum length of the arrays */
 	i = 0;
 	j = 0;
@@ -27241,17 +26245,17 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	  }
 	  ++i;
 	}
-	
+
 	if (i != nregs) {
 	  sprintf(mes,"Please enter sufficient parameters for REGDENO.");
 	  anyout_tir(&def, mes);
 	  errcode = 1;
 	}
 	else {
-	  
+
 	  if (!(decomp_listelvden = (decomp_listel *) malloc((nregs+1)*sizeof(decomp_listel))))
 	    goto error;
-	  
+
 	  /* Now read in the single arrays for regd */
 	  if ((dummystr)) {
 	    free(dummystr);
@@ -27259,17 +26263,17 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	  }
 	  if (!(dummystr = (char *) malloc((j+3)*sizeof(char))))
 	    goto error;
-	  
+
 	  for (i = 0; i < nregs; ++i) {
 	    sprintf(dummystr,"D ");
 	    sprintf(dummystr+2,"%s",varystr[i]);
-	    
-	    
+
+
 	    if ((decomp_listelvdum)) {
 	      free(decomp_listelvdum);
 	      decomp_listelvdum = NULL;
 	    }
-	    
+
 	    if ((errcode = decomp_get(decomp_controlv, dummystr, &decomp_listelvdum, 1))){
 	      if (errcode == 1)
 		goto error;
@@ -27298,13 +26302,13 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 		  anyout_tir(&def, mes);
 		}
 	      }
-	    }	    
+	    }
 	    if ((errcode)) {
 	      break;
 	    }
 	    (decomp_listelvden+i) -> nuel = decomp_listelvdum -> nuel;
 	    (decomp_listelvden+i) -> poli = decomp_listelvdum -> poli;
-	  }	  
+	  }
 	  while (i < nregs) {
 	    (decomp_listelvden+i) -> nuel = 0;
 	    (decomp_listelvden+i) -> poli = NULL;
@@ -27315,19 +26319,19 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	}
       }
     }
-    
-    
+
+
     errcode = 3;
-    
+
     while (errcode) {
-      
+
       if (errcode != 3)
 	cancel_tir(startinfv -> arel, "REGNUME=", 2);
-      
+
       errcode = 0;
       /* flushfcharray(VARYHSTRELES, varyhstr); */
       /* nel = usertext_tir(varyhstr, &def, "REGNUME=", mes); */
-      
+
       if ((varyhstr)) {
 	free(varyhstr);
 	varyhstr = NULL;
@@ -27335,7 +26339,7 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
       sprintf(mes,"Please enter sufficient parameters for REGNUME.");
       if (simparse_scn_arel_readval_string(startinfv -> arel, "REGNUME", mes, 0, "", 0, -1, 0, 0, &keypres, &nreadl, &nreturned, &varyhstr))
 	goto error;
-      
+
       /* Is this empty? */
       if ((varystr)) {
 	freeparsed(varystr);
@@ -27344,19 +26348,19 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	/* 	  free(varystr[i]); */
 	/* 	  ++i; */
 	/* 	} */
-	
+
 	/* 	free(varystr); */
 	varystr = NULL;
       }
-      
-      
+
+
       if (!(varystr = sparsenext(",", "", "\t", "", "", "", -1, &varyhstr, &anint, 0, 1))) {
 	sprintf(mes,"Please enter sufficient parameters for REGNUME.");
 	anyout_tir(&def, mes);
 	errcode = 1;
       }
       else {
-	
+
 	/* It has to have exactly nreg elements, and determine the maximum length of the arrays */
 	i = 0;
 	j = 0;
@@ -27372,11 +26376,11 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	  errcode = 1;
 	}
 	else {
-	  
-	  
+
+
 	  if (!(decomp_listelvnum = (decomp_listel *) malloc((nregs+1)*sizeof(decomp_listel))))
 	    goto error;
-	  
+
 	  /* Now read in the single arrays for regd */
 	  if ((dummystr)) {
 	    free(dummystr);
@@ -27384,16 +26388,16 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	  }
 	  if (!(dummystr = (char *) malloc((j+3)*sizeof(char))))
 	    goto error;
-	  
+
 	  for (i = 0; i < nregs; ++i) {
 	    sprintf(dummystr,"D ");
 	    sprintf(dummystr+2,"%s",varystr[i]);
-	    
+
 	    if ((decomp_listelvdum)) {
 	      free(decomp_listelvdum);
 	      decomp_listelvdum = NULL;
 	    }
-	    
+
 	    if ((errcode = decomp_get(decomp_controlv, dummystr, &decomp_listelvdum, 1))){
 	      if (errcode == 1)
 		goto error;
@@ -27423,7 +26427,7 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 		}
 	      }
 	    }
-	    
+
 	    if ((errcode)) {
 	      break;
 	    }
@@ -27440,7 +26444,7 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	}
       }
     }
-    
+
 
     /* Allocate and read in the three additional quantities */
     if (!(regthre = (double *) malloc(nregs*sizeof(double))))
@@ -27453,9 +26457,9 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
     goto error;
     if (!(regampd = (double *) malloc(nregs*sizeof(double))))
     goto error;
-    
+
     def = 0;
-    
+
     /* Get the regthre */
     errcode = 1;
     sprintf(mes, "Give ratio threshold (in the same order)");
@@ -27472,7 +26476,7 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	++nel;
       }
     }
-    
+
     /* Get the regwidt */
     errcode = 1;
     sprintf(mes, "Give ratio step width (in the same order)");
@@ -27489,7 +26493,7 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	++nel;
       }
     }
-    
+
     /* Get the regampl */
     errcode = 1;
     sprintf(mes, "Give parameter step amplitude (in the same order)");
@@ -27506,7 +26510,7 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	++nel;
       }
     }
-    
+
     /* Get the regaste */
     errcode = 1;
     /* Notice that this is additive; the chisquared of an empty cube is N_x*N_y*N_v */
@@ -27523,7 +26527,7 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	regaste[nel] = regaste[nel-1];
 	++nel;
       }
-    }    
+    }
 
     /* Get the regampd */
     errcode = 1;
@@ -27541,31 +26545,31 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 	regampd[nel] = regampd[nel-1];
 	++nel;
       }
-    }    
+    }
   }
-  
+
   /* Now that we have the three arrays of listels, we continue with filling and initialising the fourat structure */
   for (i = 0; i < nregs; ++i) {
     fourat_put_length(reg_cont_get[i] -> fc, rpm -> nur, (decomp_listelvact+i) -> nuel, (decomp_listelvnum+i) -> nuel, (decomp_listelvden+i) -> nuel, HUGE_DBL);
-    
+
     if (fourat_meminit(reg_cont_get[i] -> fc)) {
       goto error;
     }
-    
+
     /* Put the position of the first element into the struct */
     reg_cont_get[i] -> posoffirst = ((decomp_listelvact+i) -> poli[0]/rpm -> nur)*rpm -> nur;
     reg_cont_get[i] -> first = rpm -> par + reg_cont_get[i] -> posoffirst;
-    
+
     /* Recalculate the numbers from the active parameters to the relative positions w.r.t. the first element */
     for (j = 0; j < (decomp_listelvact+i) -> nuel; ++j)
       (decomp_listelvact+i) -> poli[j] = (decomp_listelvact+i) -> poli[j] % rpm -> nur;
-    
+
     /* Then read in the vectors */
     fourat_put_vectors(reg_cont_get[i] -> fc, reg_cont_get[i] -> first, (decomp_listelvact+i) -> poli, (decomp_listelvnum+i) -> poli, (decomp_listelvden+i) -> poli);
-    
+
     /* Initialise again */
     fourat_init(reg_cont_get[i] -> fc);
-    
+
     /* clear up the other parameters */
     reg_cont_get[i] -> regthre = regthre[i];
     reg_cont_get[i] -> regwidt = regwidt[i];
@@ -27580,12 +26584,12 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
       reg_cont_get[i] -> regampd = regampd[i];
     }
   }
-  
+
   if ((varyhstr))
     free(varyhstr);
   if ((varystr))
     freeparsed(varystr);
-  if ((decomp_controlv)) 
+  if ((decomp_controlv))
     decomp_dest(decomp_controlv);
   if ((decomp_listelvact))
     decomp_list_dest(decomp_listelvact);
@@ -27605,11 +26609,11 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
     free(regaste);
   if ((regampd))
     free(regampd);
-  
+
   /**********/
   /**********/
   /**********/
-  
+
   /* Provide an overview, testing only */
 
 /*   sprintf(obsmes,"Testing things"); */
@@ -27627,7 +26631,7 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
 
 /*     sprintf(obsmes, "Group %i, parameter ", i); */
 
-     /* what is the name of the first element? */ 
+     /* what is the name of the first element? */
 /*     ftstab_putcoltitl(obsmes+strlen(obsmes), reg_cont_get[i] -> posoffirst/rpm -> nur+1); */
 /*     anyout_tir(&obsint, obsmes); */
 
@@ -27692,7 +26696,7 @@ static reg_cont **reg_cont_get(startinf *startinfv, hdrinf *hdr, ringparms *rpm,
    free(varyhstr);
   if ((varystr))
     freeparsed(varystr);
-  if ((decomp_controlv)) 
+  if ((decomp_controlv))
     decomp_dest(decomp_controlv);
   if ((decomp_listelvact))
     decomp_list_dest(decomp_listelvact);
@@ -27733,7 +26737,7 @@ static double reg_do(reg_cont **reg_contv, int loopnr, double chisquare)
   char mes[100];
 
   /**************/
-   /**************/ 
+   /**************/
 /*   int obsint = 0; */
 /*   char obsmes[200]; */
   /**************/
@@ -27786,7 +26790,7 @@ static double reg_do(reg_cont **reg_contv, int loopnr, double chisquare)
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 static int dec_fill(ringparms *rpm, decomp_control *decomp_controlv)
-{  
+{
   int disk;
   char placer[9];
 
@@ -28045,7 +27049,7 @@ static char *gluetodecomp(char **inputofvarymult, char **inputofvarysing)
     ++i;
   }
 
-  
+
   if (strlen(returnstring))
     returnstring[0] = ' ';
 
@@ -28210,7 +27214,7 @@ static void chkb_pbcorr(hdrinf *hdr, ringparms *rpm)
 
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    $Log: tirific_new.c,v $
    Revision 1.26  2011/05/25 22:25:26  jozsa

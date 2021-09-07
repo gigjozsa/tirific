@@ -42,9 +42,6 @@ GSLDIR = /dop237_1/jozsa/libs/include
 # This is the directory in which the wcs include files reside
 WCSDIR = /usr/local/include/wcslib
 
-# Pgplot directory
-PGPDIR = /dop237_1/jozsa/software/pgplot
-
 # external libraries
 
 # The math library

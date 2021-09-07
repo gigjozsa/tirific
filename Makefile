@@ -14,7 +14,7 @@ ifeq ($(OPENMP),YES)
 	OMPENGALINC = -I$(FFTWDIR)
 	OMPENGALLIB = -lfftw3f_threads
 else
-	OPENMPFLAG = 
+	OPENMPFLAG =
 	OPENMPLIB =
 	OMPENGALINC =
 	OMPENGALLIB =
@@ -25,28 +25,28 @@ OPENMPFFT = NO
 ifeq ($(OPENMPFFT),YES)
 	OPENMPFFTFLAG = -DOPENMPFFT
 else
-	OPENMPFFTFLAG = 
+	OPENMPFFTFLAG =
 endif
 
 # include pbcorr
 ifeq ($(PBCORR),YES)
 	PBCORRFLAG = -DPBCORR
 else
-	PBCORRFLAG = 
+	PBCORRFLAG =
 endif
 
 # external includes
 MATHINC = -I$(MATHDIR)
 FFTWINC = -I$(FFTWDIR)
 GSLINC = -I$(GSLDIR)
-PGPINC = -I$(PGPDIR)
+#PGPINC = -I$(PGPDIR)
 WCSINC = -I$(WCSDIR)
 
 # GSL not really required
 ifeq ($(GSLDIR),'')
-GSLINC = 
-GSLFLAG = 
-GSLLIBR = 
+GSLINC =
+GSLFLAG =
+GSLLIBR =
 else
 GSLINC = -I$(GSLDIR)
 GSLFLAG = -DGFT_GSL_PRESENT
@@ -90,12 +90,12 @@ PROGS = $(BIN)tirific
 DOCU = $(DIR)rawdocu/
 DOCUSOURCES = $(shell ls) $(DIR)src/*.c $(DIR)include/*.h $(DIR)rawdocu/doxy.start $(DIR)rawdocu/maindocu.h
 
-# This will generate all        
+# This will generate all
 all: $(PROGS)
 
 # Object files
 
-$(SRC)simparse.o: $(SRC)simparse.c $(LOCINCDIR)simparse.h 
+$(SRC)simparse.o: $(SRC)simparse.c $(LOCINCDIR)simparse.h
 	@echo '#####################'
 	@echo '# starting simparse.o #'
 	@echo '#####################'
@@ -104,7 +104,7 @@ $(SRC)simparse.o: $(SRC)simparse.c $(LOCINCDIR)simparse.h
 	@echo '# simparse.o finished #'
 	@echo '#####################'
 
-$(SRC)tirific.o: $(SRC)tirific.c $(LOCINCDIR)engalmod.h $(LOCINCDIR)ftstab.h $(LOCINCDIR)pgp.h $(LOCINCDIR)maths.h $(LOCINCDIR)cubarithm.h $(MATHDIR)math.h $(FFTWDIR)fftw3.h $(GFTDIR)gft.h $(DIR)settings 
+$(SRC)tirific.o: $(SRC)tirific.c $(LOCINCDIR)engalmod.h $(LOCINCDIR)ftstab.h $(LOCINCDIR)maths.h $(LOCINCDIR)cubarithm.h $(MATHDIR)math.h $(FFTWDIR)fftw3.h $(GFTDIR)gft.h $(DIR)settings
 	@echo '###########################'
 	@echo '# starting tirific.o #'
 	@echo '###########################'
@@ -122,7 +122,7 @@ $(SRC)ftstab.o: $(SRC)ftstab.c $(LOCINCDIR)ftstab.h  $(QFITSDIR)qfits.h $(QFITSD
 	@echo '# ftstab.o finished #'
 	@echo '#####################'
 
-$(SRC)maths.o: $(SRC)maths.c $(LOCINCDIR)maths.h 
+$(SRC)maths.o: $(SRC)maths.c $(LOCINCDIR)maths.h
 	@echo '####################'
 	@echo '# starting maths.o #'
 	@echo '####################'
@@ -131,7 +131,7 @@ $(SRC)maths.o: $(SRC)maths.c $(LOCINCDIR)maths.h
 	@echo '# maths.o finished #'
 	@echo '####################'
 
-$(SRC)cubarithm.o: $(SRC)cubarithm.c $(LOCINCDIR)cubarithm.h  $(LOCINCDIR)maths.h 
+$(SRC)cubarithm.o: $(SRC)cubarithm.c $(LOCINCDIR)cubarithm.h  $(LOCINCDIR)maths.h
 	@echo '########################'
 	@echo '# starting cubarithm.o #'
 	@echo '########################'
@@ -140,29 +140,29 @@ $(SRC)cubarithm.o: $(SRC)cubarithm.c $(LOCINCDIR)cubarithm.h  $(LOCINCDIR)maths.
 	@echo '# cubarithm.o finished #'
 	@echo '########################'
 
-$(SRC)pgp.o: $(SRC)pgp.c $(LOCINCDIR)pgp.h $(PGPDIR)/cpgplot.h
-	@echo '##################'
-	@echo '# starting pgp.o #'
-	@echo '##################'
-	$(CC) $(CFLAGS) -c -o $@ $< $(LOCINC) $(PGPINC) $(MATHINC)
-	@echo '##################'
-	@echo '# pgp.o finished #'
-	@echo '##################'
+#$(SRC)pgp.o: $(SRC)pgp.c $(LOCINCDIR)pgp.h $(PGPDIR)/cpgplot.h
+#	@echo '##################'
+#	@echo '# starting pgp.o #'
+#	@echo '##################'
+#	$(CC) $(CFLAGS) -c -o $@ $< $(LOCINC) $(PGPINC) $(MATHINC)
+#	@echo '##################'
+#	@echo '# pgp.o finished #'
+#	@echo '##################'
 
 $(SRC)engalmod.o: $(SRC)engalmod.c $(LOCINCDIR)engalmod.h  $(LOCINCDIR)maths.h $(MATHDIR)math.h $(FFTWDIR)fftw3.h
 	@echo '#######################'
 	@echo '# starting engalmod.o #'
 	@echo '#######################'
-	$(CC) $(CFLAGS) -c -o $@ $< $(LOCINC) $(QFITSINC) $(MATHINC) $(FFTWINC) $(OMPGALINC) $(OPENMPFLAG) $(OPENMPFFTFLAG) 
+	$(CC) $(CFLAGS) -c -o $@ $< $(LOCINC) $(QFITSINC) $(MATHINC) $(FFTWINC) $(OMPGALINC) $(OPENMPFLAG) $(OPENMPFFTFLAG)
 	@echo '#######################'
 	@echo '# engalmod.o finished #'
 	@echo '#######################'
 
-$(SRC)fourat.o: $(SRC)fourat.c $(LOCINCDIR)fourat.h $(FFTWDIR)fftw3.h 
+$(SRC)fourat.o: $(SRC)fourat.c $(LOCINCDIR)fourat.h $(FFTWDIR)fftw3.h
 	@echo '#####################'
 	@echo '# starting fourat.o #'
 	@echo '#####################'
-	$(CC) $(CFLAGS) -c -o $@ $< $(LOCINC) $(MATHINC) $(FFTWINC) $(OMPGALINC) $(OPENMPFLAG) 
+	$(CC) $(CFLAGS) -c -o $@ $< $(LOCINC) $(MATHINC) $(FFTWINC) $(OMPGALINC) $(OPENMPFLAG)
 	@echo '#####################'
 	@echo '# fourat.o finished #'
 	@echo '#####################'
@@ -211,7 +211,6 @@ OBJTIRIFIC = $(SRC)maths.o\
              $(SRC)engalmod.o\
              $(SRC)cubarithm.o\
              $(SRC)simparse.o\
-             $(SRC)pgp.o\
              $(SRC)fourat.o\
              $(SRC)tirific_defaults.o\
 	     $(GFTDIR)gft.o\
@@ -219,11 +218,11 @@ OBJTIRIFIC = $(SRC)maths.o\
              $(GFTDIR)pswarm.o
 
 
-$(BIN)tirific: $(QFITS) $(OBJTIRIFIC) 
+$(BIN)tirific: $(QFITS) $(OBJTIRIFIC)
 	@echo '#########################'
 	@echo '# starting tirific #'
 	@echo '#########################'
-	$(CC) $(CFLAGS) -o $@ $(OBJTIRIFIC) $(WCSLIB) $(FFTWLIB) $(OMPENGALLIB) $(PGPLIB) $(QFITSLIB) $(MATHLIB) $(OPENMPLIB) $(READLINELIB) $(GSLLIBR)
+	$(CC) $(CFLAGS) -o $@ $(OBJTIRIFIC) $(WCSLIB) $(FFTWLIB) $(OMPENGALLIB) $(QFITSLIB) $(MATHLIB) $(OPENMPLIB) $(READLINELIB) $(GSLLIBR)
 	@echo '#########################'
 	@echo '# tirific finished #'
 	@echo '#########################'
