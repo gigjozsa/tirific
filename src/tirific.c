@@ -432,7 +432,7 @@ This was commented hdu stuff
 /*
                tirific.dc1
 
-Program:       TIRIFIC (Version 2.3.11)
+Program:       TIRIFIC (Version 2.3.11_fat)
 
 Purpose:       Fit a tilted-ring model to a datacube
 
@@ -6301,9 +6301,9 @@ int main(int argc, char *argv[])
   char mes[81];
 
   printf("\n");
-  printf("#####################\n");
-  printf("# TiRiFiC v. 2.3.11 #\n");
-  printf("#####################\n");
+  printf("########################\n");
+  printf("# TiRiFiC v. 2.3.11_fat#\n");
+  printf("########################\n");
   printf("\n");
 
   if (!(startinfv = get_startinf(argc, argv)))
