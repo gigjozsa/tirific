@@ -1415,16 +1415,16 @@ typedef struct srd
 
 #ifdef PBCORR
   /** @brief method to grid the point sources */
-  void (*gridpoint)(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
+  void (*gridpoint)(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
 
   /** @brief method to put the point sources onto the cube */
-  int (*srput)(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long grid), struct srd **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
+  int (*srput)(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long grid), struct srd **sd, double *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
 #else
   /** @brief method to grid the point sources */
-  void (*gridpoint)(hdrinf *hdr, float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
+  void (*gridpoint)(hdrinf *hdr, double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
 
   /** @brief method to put the point sources onto the cube */
-  int (*srput)(struct srd **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
+  int (*srput)(struct srd **sd, double *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
 #endif
 
   /** @brief Flux of one pointsource */
@@ -2063,9 +2063,9 @@ typedef struct ringparms
 
   /** @brief number of subrings */
   int nr;
-
+  /* This one has to be double as GSL is in double precision and otherwise we can run into problems in the outer ring*/
   /** @brief big version of par, for all subrings */
-  float *modpar;
+  double *modpar;
 
   /** @brief array of interpolation objects, for each parameter class one */
   gsl_interp **gsl_interparray;
@@ -3789,15 +3789,15 @@ static void srshape(ringparms *rpm, float *pp, float sinaz, float cosaz, int srn
 */
 /* ------------------------------------------------------------ */
 #ifdef PBCORR
-static void gridpoint_norm(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
+static void gridpoint_norm(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
 #else
-static void gridpoint_norm(hdrinf *hdr, float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
+static void gridpoint_norm(hdrinf *hdr, double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
 #endif
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
-  @fn static void gridpoint_mixed(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, float *primbeam, struct srd **sd, int disk, int srnr, long *pnr, int *grid), float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
+  @fn static void gridpoint_mixed(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, float *primbeam, struct srd **sd, int disk, int srnr, long *pnr, int *grid), double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
   @brief Grids a point to a pointsource list
 
   Grids the point point (6 phase-space coords) in a list of pointers
@@ -3809,7 +3809,7 @@ static void gridpoint_norm(hdrinf *hdr, float *modpar, int nr, struct srd **sd, 
   beginning of the pl array, negative clouds at the end.
 
   @param hdr    (hdrinf *)    Properly configured hdrinf struct
-  @param modpar (float *)     Properly configured array of subring descriptors
+  @param modpar (double *)     Properly configured array of subring descriptors
   @param nr     (int *)       Properly number of subrings
   @param sd     (srd **)       Properly configured subring descriptor
   @param srnr   (int)         Number of the subring (start with 0)
@@ -3823,15 +3823,15 @@ static void gridpoint_norm(hdrinf *hdr, float *modpar, int nr, struct srd **sd, 
 */
 /* ------------------------------------------------------------ */
 #ifdef PBCORR
-static void gridpoint_mixed(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
+static void gridpoint_mixed(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
 #else
-static void gridpoint_mixed(hdrinf *hdr, float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
+static void gridpoint_mixed(hdrinf *hdr, double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
 #endif
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
-  @fn static int srput_norm(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long *pnr, long grid), struct sdr **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
+  @fn static int srput_norm(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long *pnr, long grid), struct sdr **sd, double *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
   @brief Puts a pointsource list on a cube
 
   Puts the srnrth pointsource list in rpm on the cube by adding the
@@ -3839,7 +3839,7 @@ static void gridpoint_mixed(hdrinf *hdr, float *modpar, int nr, struct srd **sd,
 
   @param hdr    (hdrinf *) Properly configured hdrinf struct
   @param sd     (srd **)    Properly configured subring descriptor
-  @param modpar (float *)  Properly configured subring parameter array
+  @param modpar (double *)  Properly configured subring parameter array
   @param nr     (int)      Number of subrings
   @param cflux  (double *) Cloudflux as determined in the ringparms struct
   @param radsep (double)   Separation of subrings in pixel
@@ -3850,15 +3850,15 @@ static void gridpoint_mixed(hdrinf *hdr, float *modpar, int nr, struct srd **sd,
 */
 /* ------------------------------------------------------------ */
 #ifdef PBCORR
-static int srput_norm(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long grid), struct srd **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
+static int srput_norm(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long grid), struct srd **sd, double *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
 #else
-static int srput_norm(struct srd **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
+static int srput_norm(struct srd **sd, double *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
 #endif
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /**
-  @fn static int srput_mixed(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long *pnr, long grid), struct sdr **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
+  @fn static int srput_mixed(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long *pnr, long grid), struct sdr **sd, double *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
   @brief Puts a pointsource list on a cube
 
   Puts the srnrth pointsource list in rpm on the cube by adding the
@@ -3866,7 +3866,7 @@ static int srput_norm(struct srd **sd, float *modpar, int nr, double *cflux, dou
 
   @param hdr    (hdrinf *) Properly configured hdrinf struct
   @param sd     (srd *)    Properly configured subring descriptor
-  @param modpar (float *)  Properly configured subring parameter array
+  @param modpar (double *)  Properly configured subring parameter array
   @param nr     (int)      Number of subrings
   @param cflux  (double *)   Cloudflux as determined in the ringparms struct
   @param radsep (double)   Separation of subrings in pixel
@@ -3877,9 +3877,9 @@ static int srput_norm(struct srd **sd, float *modpar, int nr, double *cflux, dou
 */
 /* ------------------------------------------------------------ */
 #ifdef PBCORR
-static int srput_mixed(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long grid), struct srd **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
+static int srput_mixed(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long grid), struct srd **sd, double *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
 #else
-static int srput_mixed(struct srd **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
+static int srput_mixed(struct srd **sd, double *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk);
 #endif
 
 
@@ -6272,14 +6272,14 @@ static int srshape_azi_pascool(void *rpm, float *pp, float sinaz, float cosaz, i
 static int srshape_azi_actcool(void *rpm, float *pp, float sinaz, float cosaz, int srnr, int outofrange, int disk);
 static void srshapecool(ringparms *rpm, float *pp, float sinaz, float cosaz, int srnr, int disk);
 #ifdef PBCORR
-static void gridpoint_mixedcool(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
+static void gridpoint_mixedcool(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
 #else
-static void gridpoint_mixedcool(hdrinf *hdr, float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
+static void gridpoint_mixedcool(hdrinf *hdr, double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
 #endif
 #ifdef PBCORR
-static void gridpoint_normcool(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
+static void gridpoint_normcool(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
 #else
-static void gridpoint_normcool(hdrinf *hdr, float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
+static void gridpoint_normcool(hdrinf *hdr, double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk);
 #endif
 static void sdis_repeater_actcool(void *rpm, float *pp, float vold, int srnr, hdrinf *hdr, long *j, int signum, long *npoints, int disk);
 static void sdis_repeater_pascool(void *rpm, float *pp, float vold, int srnr, hdrinf *hdr, long *j, int signum, long *npoints, int disk);
@@ -8820,7 +8820,7 @@ static ringparms *get_ringparms(startinf *startinfv, loginf *log, hdrinf *hdr, r
 
 		  /* ndisk construction */
 		  /* Allocation of subring array */
-		  if (!(rpm -> modpar = (float *) malloc((NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nr*sizeof(float))))
+		  if (!(rpm -> modpar = (double *) malloc((NPARAMS+(rpm -> ndisks-1)*NDPARAMS)*rpm -> nr*sizeof(double))))
 			 goto error;
 
 		  err = 1;
@@ -13045,7 +13045,7 @@ static void interpinit(ringparms *rpm, double radsep, int disk)
 
       for (k = n1; k <= n2; ++k) {
 	/* for each parameter the intepolation is done */
-	rpm -> modpar[PRADI*rpm -> nr+k] = ((float) k)*radsep+radsep/2.0;
+	rpm -> modpar[PRADI*rpm -> nr+k] = ((double) k)*radsep+radsep/2.0;
 	/* Obsolete when using GSL */
 	/* dr = rpm -> modpar[PRADI*rpm -> nr+k]-rpm -> par[PRADI*rpm -> nur+i-1];  */
 	/* rpm -> modpar[j*rpm -> nr+k] = rpm -> par[j*rpm -> nur+i-1]+dpardr[jp]*dr;  */
@@ -13302,9 +13302,9 @@ static void srprep(ringparms *rpm, int srnr, long mode, int disk)
 
 /* Grids a point to a pointsource list */
 #ifdef PBCORR
-static void gridpoint_norm(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
+static void gridpoint_norm(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
 #else
-static void gridpoint_norm(hdrinf *hdr, float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
+static void gridpoint_norm(hdrinf *hdr, double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
 #endif
 {
   int grid[3];
@@ -13359,9 +13359,9 @@ static void gridpoint_norm(hdrinf *hdr, float *modpar, int nr, struct srd **sd, 
 
 /* Grids a point to a pointsource list */
 #ifdef PBCORR
-static void gridpoint_mixed(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
+static void gridpoint_mixed(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
 #else
-static void gridpoint_mixed(hdrinf *hdr, float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
+static void gridpoint_mixed(hdrinf *hdr, double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
 #endif
 {
   int grid[3];
@@ -13439,9 +13439,9 @@ static void gridpoint_mixed(hdrinf *hdr, float *modpar, int nr, struct srd **sd,
 
 /* Grids a point to a pointsource list */
 #ifdef PBCORR
-static void gridpoint_normcool(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
+static void gridpoint_normcool(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
 #else
-static void gridpoint_normcool(hdrinf *hdr, float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
+static void gridpoint_normcool(hdrinf *hdr, double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
 #endif
 {
   int grid[3];
@@ -13496,9 +13496,9 @@ static void gridpoint_normcool(hdrinf *hdr, float *modpar, int nr, struct srd **
 
 /* Grids a point to a pointsource list */
 #ifdef PBCORR
-static void gridpoint_mixedcool(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
+static void gridpoint_mixedcool(hdrinf *hdr, void (*fill_pbcfac)(hdrinf *hdr, struct srd **sd, int disk, int srnr, long *pnr, int *grid), double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
 #else
-static void gridpoint_mixedcool(hdrinf *hdr, float *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
+static void gridpoint_mixedcool(hdrinf *hdr, double *modpar, int nr, struct srd **sd, int srnr, long *pnr, float *pp, int signum, long *npoints, int disk)
 #endif
 {
   int grid[3];
@@ -13576,9 +13576,9 @@ static void gridpoint_mixedcool(hdrinf *hdr, float *modpar, int nr, struct srd *
 
 /* Grids a point to a pointsource list */
 #ifdef PBCORR
-static int srput_mixed(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long grid), struct srd **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
+static int srput_mixed(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long grid), struct srd **sd, double *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
 #else
-static int srput_mixed(struct srd **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
+static int srput_mixed(struct srd **sd, double *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
 #endif
 {
   long i;
@@ -13640,9 +13640,9 @@ static int srput_mixed(struct srd **sd, float *modpar, int nr, double *cflux, do
 
 /* Grids a point to a pointsource list */
 #ifdef PBCORR
-static int srput_norm(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long grid), struct srd **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
+static int srput_norm(void (*corr_pbcfac)(struct srd **sd, int disk, int srnr, long grid), struct srd **sd, double *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
 #else
-static int srput_norm(struct srd **sd, float *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
+static int srput_norm(struct srd **sd, double *modpar, int nr, double *cflux, double radsep, int srnr, long *fluxpoints, int disk)
 #endif
 {
   long i;
