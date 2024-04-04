@@ -34,6 +34,14 @@ bin/tirific
 bin/data.log
 bin/eso121-g6_out_00.def
 bin/eso121-g6_out_00.fits
+qfits-6.2.0/main/.deps/
+qfits-6.2.0/saft/.deps/
+qfits-6.2.0/src/.deps/
+qfits-6.2.0/test/.deps/
+qfits-6.2.0/main/.deps/*
+qfits-6.2.0/saft/.deps/*
+qfits-6.2.0/src/.deps/*
+qfits-6.2.0/test/.deps/*
 qfits-6.2.0/Makefile
 qfits-6.2.0/config.h
 qfits-6.2.0/config.h.in
