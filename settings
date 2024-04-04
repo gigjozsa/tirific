@@ -28,19 +28,19 @@ OPENMPLIB = -fopenmp
 # external directories containing include files
 
 # This is the standard include 
-STDDIR = /usr/local/include/
+STDDIR = /usr/include/
 
 # This is the math library include file and most probably at this location
-MATHDIR = /Users/peter/Github/tirific/
+MATHDIR = /usr/include/
 
 # This is the fftw include directory. It should contain the file fftw3.h
-FFTWDIR = /usr/local/include/
+FFTWDIR = /usr/include/
 
 # This is the position of the parent directory of the gsl directory
-GSLDIR = /usr/local/include/
+GSLDIR = /usr/include/
 
 # This is the directory in which the wcs include files reside
-WCSDIR = /usr/local/include/wcslib
+WCSDIR = /usr/include/wcslib
 
 # The math library
 MATHLIB = -lm
@@ -53,6 +53,8 @@ FFTWLIB = -L/usr/local/lib/ -lfftw3f -lfftw3
 GSLLIB = -L/usr/local/lib/ -lgsl -lgslcblas
 
 # The wcs library
+
+
 WCSLIB = -L/usr/local/lib/ -lwcs
 
 # Pgplot linker flags, for Mac OS, maybe -L$(PGPDIR) -lcpgplot -lpgplot $(X11LIB) -lpng -laquaterm -Wl,-framework -Wl,Foundation  -W1,-AppKit 
