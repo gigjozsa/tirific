@@ -188,6 +188,10 @@ qfits-6.2.0/src/qfits_tools.lo
 qfits-6.2.0/src/qfits_tools.o
 qfits-6.2.0/stamp-h1
 qfits-6.2.0/test/Makefile
+Makefile
+qfits-6.2.0/main/dtfits.c
+qfits-6.2.0/main/qextract.c
+settings
 
 # Packages #
 ############

@@ -11,6 +11,9 @@
    $Revision: 1.4 $
    $Author: jozsa $
    $Log: simparse.c,v $
+   Revision 2024/11/06 P. Kamphuis
+   add ctype.h include
+
    Revision 1.4  2011/05/25 22:25:26  jozsa
    Left work
 
@@ -71,7 +74,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-
+#include <ctype.h>
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /* INTERNAL INCLUDES */
