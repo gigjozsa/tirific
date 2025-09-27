@@ -14,6 +14,9 @@
    $Revision: 1.6 $
    $Author: jozsa $
    $Log: cubarithm.c,v $
+   Revision 1.7  2025/09/27 22:57:45  peter
+   Allow for VRAD and VOPT in addition to VELO, FELO, and FREQ in CTYPE3
+   
    Revision 1.6  2011/05/25 22:25:26  jozsa
    Left work
 
@@ -1328,11 +1331,13 @@ int cubarithm_readcube(const char *filename, Cube **cubename, char *errorstr)
 
   if (strncmp("VELO",cardvalue+1,4))
     if (strncmp("FELO",cardvalue+1,4))
-      if (strncmp("FREQ",cardvalue+1,4)) {
+      if (strncmp("FREQ",cardvalue+1,4)) 
+        if (strncmp("VRAD",cardvalue+1,4))
+          if (strncmp("VOPT",cardvalue+1,4)) {
 	errorval = CUBARITHM_CUBE_ERROR_WRONGCTYPEI;
 	sprintf(errormes, "%.40s: CTYPE%i has the wrong value (should be VELO, FELO, or FREQ...).", filename, 3);   
 	goto error;
-      }
+  }
   
   strcpy(cubenamehook -> type_v, cardvalue);
   
