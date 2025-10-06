@@ -472,6 +472,7 @@ jozsa@astron.nl
 /* EXTERNAL INCLUDES */
 /* ------------------------------------------------------------ */
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <float.h>
 #include <limits.h>
@@ -503,6 +504,7 @@ jozsa@astron.nl
 #include <simparse.h>
 #include <fourat.h>
 #include "opsystems.h"
+#include "version.h"
 #include <tirific_identifyers.h>
 #include <tirific_defaults.h>
 
@@ -6300,10 +6302,16 @@ int main(int argc, char *argv[])
   int nrplts;
   char mes[81];
 
+  /* Check for version flag */
+  for (i = 1; i < argc; i++) {
+    if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
+      printf("TiRiFiC v. %s\n", get_tirific_version());
+      exit(0);
+    }
+  }
+
   printf("\n");
-  printf("########################\n");
-  printf("# TiRiFiC v. 2.3.12_fat#\n");
-  printf("########################\n");
+  printf("%s\n", get_tirific_version_banner());
   printf("\n");
 
   if (!(startinfv = get_startinf(argc, argv)))
